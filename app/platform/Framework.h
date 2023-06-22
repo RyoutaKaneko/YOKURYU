@@ -20,7 +20,10 @@
 #include<d3dcompiler.h>
 #include<DirectXMath.h>
 #include<dinput.h>
+#pragma warning(push)
+#pragma warning(disable:26813)
 #include<DirectXTex.h>
+#pragma warning(pop)
 
 #pragma comment(lib,"d3dcompiler.lib")
 #pragma comment(lib,"dxguid.lib")

@@ -85,7 +85,7 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	model = FbxLoader::GetInstance()->LoadModelFlomFile("cube");
 	obj->SetModel(model);
 	obj->SetPosition(Vector3(1, 0, -10));
-	obj->SetScale(Vector3(0.01, 0.01, 0.01));
+	obj->SetScale(Vector3((float)0.01, (float)0.01, (float)0.01));
 }
 
 ///-----XVˆ—-----///

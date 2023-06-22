@@ -1,7 +1,10 @@
 #include "Model.h"
 
 #include <d3dcompiler.h>
-#include <DirectXTex.h>
+#pragma warning(push)
+#pragma warning(disable:26813)
+#include<DirectXTex.h>
+#pragma warning(pop)
 #include <fstream>
 #include <sstream>
 #include <vector>

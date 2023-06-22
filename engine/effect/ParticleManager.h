@@ -73,9 +73,9 @@ private: // メンバ変数
 	XMFLOAT3 scale = { 1,1,1 };
 
 	//DirectXMathを使ったViewProjection
-	XMViewProjection* xmViewProjection;
+	XMViewProjection* xmViewProjection = nullptr;
 	//パーティクル
-	Particle* particle;
+	Particle* particle = nullptr;
 
 public://setter
 	//パーティクルモデル

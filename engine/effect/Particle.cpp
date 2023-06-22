@@ -1,5 +1,8 @@
 #include "Particle.h"
-#include <DirectXTex.h>
+#pragma warning(push)
+#pragma warning(disable:26813)
+#include<DirectXTex.h>
+#pragma warning(pop)
 #include <Windows.h>
 #include <cassert>
 #include <sstream>

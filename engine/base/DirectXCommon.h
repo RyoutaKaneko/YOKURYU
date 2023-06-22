@@ -6,7 +6,10 @@
 #include <chrono>
 #include <thread>
 
-#include <DirectXTex.h>
+#pragma warning(push)
+#pragma warning(disable:26813)
+#include<DirectXTex.h>
+#pragma warning(pop)
 
 #include "WinApp.h"
 

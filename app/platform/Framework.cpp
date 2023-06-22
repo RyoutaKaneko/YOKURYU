@@ -15,6 +15,10 @@ void Framework::Run()
 			// ゲームループを抜ける
 			break;
 		}
+		if (input->TriggerKey(DIK_ESCAPE)) {
+			// ゲームループを抜ける
+			break;
+		}
 
 		// 描画
 		Draw();

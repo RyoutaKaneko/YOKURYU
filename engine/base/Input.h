@@ -57,6 +57,7 @@ public: // メンバ関数
 	/// </param name="keyNumber">キー番号( DIK_0 等)</param>
 	/// <reutrns>トリガーか</params>
 	bool TriggerKey(BYTE keyNumber);
+	bool AnyKey();
 
 private:
 	Input() = default;

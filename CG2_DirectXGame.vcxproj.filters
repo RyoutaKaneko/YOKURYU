@@ -90,9 +90,6 @@
     <ClCompile Include="engine\2d\Sprite.cpp">
       <Filter>ソースファイル\Engine\2d</Filter>
     </ClCompile>
-    <ClCompile Include="engine\base\WinApp.cpp">
-      <Filter>ソースファイル\Engine\Base</Filter>
-    </ClCompile>
     <ClCompile Include="engine\3d\Object3d.cpp">
       <Filter>ソースファイル\Engine\3d</Filter>
     </ClCompile>
@@ -146,6 +143,18 @@
     </ClCompile>
     <ClCompile Include="app\platform\Framework.cpp">
       <Filter>ソースファイル\Application\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\RailCamera.cpp">
+      <Filter>ソースファイル\Engine\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\WinApp.cpp">
+      <Filter>ソースファイル\Engine\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\math\Spline.cpp">
+      <Filter>ソースファイル\Engine\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\Player.cpp">
+      <Filter>ソースファイル\Engine\3d</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -266,6 +275,15 @@
     </ClInclude>
     <ClInclude Include="app\scene\BaseScene.h">
       <Filter>ヘッダー ファイル\Application\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\RailCamera.h">
+      <Filter>ヘッダー ファイル\Engine\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\math\Spline.h">
+      <Filter>ヘッダー ファイル\Engine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\Player.h">
+      <Filter>ヘッダー ファイル\Engine\3d</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -72,3 +72,14 @@ bool Input::TriggerKey(BYTE keyNumber)
 	
 	return false;
 }
+
+bool Input::AnyKey()
+{
+	for (int i = 0; i < sizeof(key); i++) {
+		if (key[i] && keyPre[i] == false) {
+			return true;
+		}
+	}
+
+	return false;
+}

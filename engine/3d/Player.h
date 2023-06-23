@@ -39,8 +39,8 @@ private:
 	//パーティクル
 	Particle* particle = nullptr;
 	//HP
-	int hp;
+	int hp = 3;
 
-	float len;
+	float len = 6;
 
 };

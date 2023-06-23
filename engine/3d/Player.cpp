@@ -20,7 +20,7 @@ bool Player::PlayerInitialize() {
 	Create();
 	// オブジェクトにモデルをひも付ける
 	SetModel(playerModel);
-	SetPosition(Vector3(0, 0, -790));
+	SetPosition(Vector3(0, 0, 0));
 
 	hp = 3;
 	len = 6.0f;
@@ -28,11 +28,11 @@ bool Player::PlayerInitialize() {
 	return true;
 }
 
-void Player::Update(std::vector <Vector3>& point)
+void Player::Update()
 {
 	input = Input::GetInstance();
 
-	
+	worldTransform_.UpdateMatrix();
 }
 
 void Player::Move(std::vector <Vector3>& point)

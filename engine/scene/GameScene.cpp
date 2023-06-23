@@ -17,10 +17,8 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	input = Input::GetInstance();
 	
 	//player
-	playerModel = Model::LoadFromOBJ("triangle_mat");
-	player = Object3d::Create();
-	player->SetModel(playerModel);
-	player->SetPosition(Vector3(0, 0, 0));
+	player = new Player;
+	player->PlayerInitialize();
 	//test
 	testModel = Model::LoadFromOBJ("ironSphere");
 	test = Object3d::Create();

@@ -16,7 +16,7 @@ public:
 	//初期化
 	bool PlayerInitialize();
 
-	void Update(std::vector <Vector3>& point);
+	void Update();
 
 	void Move(std::vector <Vector3>& point);
 

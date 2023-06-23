@@ -13,6 +13,7 @@
 #include "ParticleManager.h"
 #include "FbxObject3d.h"
 #include "FbxModel.h"
+#include "Player.h"
 
 class GameScene {
 public:
@@ -39,8 +40,7 @@ private:
 	Sprite reimu;
 	//オブジェクトのポインタ
 	//3Dオブジェクト生成
-	Model* playerModel = nullptr;
-	Object3d* player = nullptr;
+	Player* player = nullptr;
 	Model* testModel = nullptr;
 	Object3d* test = nullptr;
 	//カメラ

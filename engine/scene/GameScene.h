@@ -14,6 +14,7 @@
 #include "FbxObject3d.h"
 #include "FbxModel.h"
 #include "Player.h"
+#include "RailCamera.h"
 
 class GameScene {
 public:
@@ -27,6 +28,8 @@ public:
 	void Update();
 
 	void Draw();
+
+	void LoadStage(int stageNum);
 
 private:
 	DirectXCommon* dxCommon = nullptr;
@@ -46,6 +49,7 @@ private:
 	//カメラ
 	ViewProjection* viewProjection = nullptr;
 	XMViewProjection* xmViewProjection = nullptr;
+	RailCamera* railCamera = nullptr;
 	//パーティクル
 	Particle* particle = nullptr;
 	ParticleManager* pm = nullptr;
@@ -55,6 +59,9 @@ private:
 	//FBX
 	FbxModel* model = nullptr;
 	FbxObject3d* obj = nullptr;
+	//カメラ移動用レール
+	std::vector<Vector3> points{};
+	int stageNum = 0;
 	
 
 };

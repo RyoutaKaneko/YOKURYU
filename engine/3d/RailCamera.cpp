@@ -15,8 +15,8 @@ void RailCamera::Initialize() {
 	input = Input::GetInstance();
 	viewProjection->Initialize();
 	camera = Object3d::Create();
-	viewProjection->eye = { 0, 5, -800 };
-	viewProjection->target = { 0,-5,-750 };
+	viewProjection->eye = { 0, 3, -30 };
+	viewProjection->target = { 0,0,0 };
 	camera->SetPosition(viewProjection->eye);
 	camera->SetRotation(Vector3(0, 0, 0));
 	oldCamera = { 0,0,0 };

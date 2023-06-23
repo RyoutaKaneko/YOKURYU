@@ -2,6 +2,10 @@
 #include "FbxLoader.h"
 #include "FbxObject3d.h"
 
+#include <cassert>
+#include <fstream>
+#include <sstream>
+
 GameScene::GameScene() {
 	
 }
@@ -29,6 +33,9 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	viewProjection->Initialize();
 	viewProjection->eye = { 0, 3, -30 };
 	viewProjection->target = { 0, 0, 0 };
+
+	railCamera = new RailCamera;
+	railCamera->Initialize();
 
 	xmViewProjection = new XMViewProjection;
 
@@ -84,6 +91,11 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	obj->SetModel(model);
 	obj->SetPosition(Vector3(1, 0, -10));
 	obj->SetScale(Vector3((float)0.01, (float)0.01, (float)0.01));
+
+	//スプライン制御点の読み込み
+	stageNum = 1;
+	LoadStage(stageNum);
+
 }
 
 ///-----更新処理-----///
@@ -142,6 +154,7 @@ void GameScene::Update() {
 	//更新
 	player->Update();
 	test->Update();
+	railCamera->ViewUpdate();
 	viewProjection->UpdateMatrix();
 	pm->Update();
 	pm_->Update();
@@ -154,8 +167,8 @@ void GameScene::Draw() {
 // 3Dオブジェクト描画前処理
 	Object3d::PreDraw(dxCommon->GetCommandList());
 
-	player->Draw(viewProjection);
-	test->Draw(viewProjection);
+	player->Draw(railCamera->GetView());
+	test->Draw(railCamera->GetView());
 
 	// 3Dオブジェクト描画後処理
 	Object3d::PostDraw();
@@ -167,7 +180,7 @@ void GameScene::Draw() {
 	// 3Dオブジェクト描画前処理
 	FbxObject3d::PreDraw(dxCommon->GetCommandList());
 
-	obj->Draw(viewProjection);
+	obj->Draw(railCamera->GetView());
 
 	// 3Dオブジェクト描画後処理
 	FbxObject3d::PostDraw();
@@ -200,4 +213,66 @@ void GameScene::Draw() {
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
+}
+
+void GameScene::LoadStage(int stageNum) {
+	points.clear();
+
+	//ファイルを開く
+	std::ifstream file;
+	file.open("Resources/csv/stagePop.csv");
+	assert(file.is_open());
+
+	HRESULT result = S_FALSE;
+
+	std::string num;
+	num = stageNum + 48;
+
+	// １行ずつ読み込む
+	string line;
+	while (getline(file, line)) {
+
+		// １行分の文字列をストリームに変換して解析しやすくする
+		std::istringstream line_stream(line);
+
+		// 半角スパース区切りで行の先頭文字列を取得
+		string key;
+		getline(line_stream, key, ' ');
+
+
+		// 先頭文字列がｖなら頂点座標
+		if (key == "st" + num) {
+			// X,Y,Z座標読み込み
+			Vector3 position{};
+			line_stream >> position.x;
+			line_stream >> position.y;
+			line_stream >> position.z;
+			// 座標データに追加
+			points.emplace_back(position);
+		}
+		if (stageNum == 10) {
+			if (key == "st10") {
+				// X,Y,Z座標読み込み
+				Vector3 position{};
+				line_stream >> position.x;
+				line_stream >> position.y;
+				line_stream >> position.z;
+				// 座標データに追加
+				points.emplace_back(position);
+			}
+		}
+		else if (stageNum > 10) {
+			if (key == "st1" + stageNum - 10) {
+				// X,Y,Z座標読み込み
+				Vector3 position{};
+				line_stream >> position.x;
+				line_stream >> position.y;
+				line_stream >> position.z;
+				// 座標データに追加
+				points.emplace_back(position);
+			}
+		}
+	}
+	// ファイルと閉じる
+	file.close();
 }

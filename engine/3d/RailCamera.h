@@ -13,7 +13,7 @@ public:
 	RailCamera();
 	~RailCamera();
 	//‰Šú‰»
-	void Initialize();
+	void Initialize(Player* player_);
 	//XV
 	void Update(Player* player_, std::vector<Vector3>& point);
 	void ViewUpdate();
@@ -48,5 +48,7 @@ private:
 	Vector3 oldCamera = { 0,0,0 };
 
 	bool isEnd;
+	float camera_t = 0.0f;
+	float target_t = 0.0f;
 };
 

@@ -44,8 +44,8 @@ private:
 	//オブジェクトのポインタ
 	//3Dオブジェクト生成
 	Player* player = nullptr;
-	Model* testModel = nullptr;
-	Object3d* test = nullptr;
+	Model* skyModel = nullptr;
+	Object3d* sky = nullptr;
 	//カメラ
 	ViewProjection* viewProjection = nullptr;
 	XMViewProjection* xmViewProjection = nullptr;

@@ -23,19 +23,14 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	//player
 	player = new Player;
 	player->PlayerInitialize();
-	//test
-	testModel = Model::LoadFromOBJ("ironSphere");
-	test = Object3d::Create();
-	test->SetModel(testModel);
-	test->SetPosition(Vector3(-3, 0, -15));
-	//カメラ
-	viewProjection = new ViewProjection;
-	viewProjection->Initialize();
-	viewProjection->eye = { 0, 3, -30 };
-	viewProjection->target = { 0, 0, 0 };
+	//sky
+	skyModel = Model::LoadFromOBJ("skydome");
+	sky = Object3d::Create();
+	sky->SetModel(skyModel);
+	sky->SetScale(Vector3(5,5,5));
 
 	railCamera = new RailCamera;
-	railCamera->Initialize();
+	railCamera->Initialize(player);
 
 	xmViewProjection = new XMViewProjection;
 
@@ -102,20 +97,6 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 void GameScene::Update() {
 	input->Update();
 
-	//player移動
-	if (input->PushKey(DIK_W)) {
-		player->SetPosition(player->GetPosition() + Vector3(0, 0, 0.1f));
-	}
-	if (input->PushKey(DIK_A)) {
-		player->SetPosition(player->GetPosition() + Vector3(-0.1f, 0, 0));
-	}
-	if (input->PushKey(DIK_D)) {
-		player->SetPosition(player->GetPosition() + Vector3(0.1f, 0, 0));
-	}
-	if (input->PushKey(DIK_S)) {
-		player->SetPosition(player->GetPosition() + Vector3(0, 0, -0.1f));
-	}
-
 	//パーティクル
 	if (input->PushKey(DIK_SPACE))
 	{
@@ -123,39 +104,13 @@ void GameScene::Update() {
 		pm_->Fire(particle_, 30, 0.2f, 0, 1, { 8.0f, 0.0f });
 	}
 
-	//カメラ 
-	if (input->PushKey(DIK_RIGHT)) {
-		viewProjection->eye += Vector3(0.1f, 0, 0);
-	}
-	if (input->PushKey(DIK_LEFT)) {
-		viewProjection->eye += Vector3(-0.1f, 0, 0);
-	}
-	if (input->PushKey(DIK_UP)) {
-		viewProjection->eye += Vector3(0, 0, 0.1f);
-	}
-	if (input->PushKey(DIK_DOWN)) {
-		viewProjection->eye += Vector3(0, 0, -0.1f);
-	}
-	//視点移動
-	if (input->PushKey(DIK_J)) {
-		viewProjection->target += Vector3(-0.1f, 0, 0);
-	}
-	if (input->PushKey(DIK_L)) {
-		viewProjection->target += Vector3(0.1f, 0, 0);
-	}
-	if (input->PushKey(DIK_I)) {
-		viewProjection->target += Vector3(0, 0.1f, 0);
-	}
-	if (input->PushKey(DIK_K)) {
-		viewProjection->target += Vector3(0, -0.1f, 0);
-	}
-
 
 	//更新
+	if (railCamera->GetIsEnd() == false) {
+		railCamera->Update(player, points);
+	}
 	player->Update();
-	test->Update();
-	railCamera->ViewUpdate();
-	viewProjection->UpdateMatrix();
+	sky->Update();
 	pm->Update();
 	pm_->Update();
 	obj->Update();
@@ -168,7 +123,7 @@ void GameScene::Draw() {
 	Object3d::PreDraw(dxCommon->GetCommandList());
 
 	player->Draw(railCamera->GetView());
-	test->Draw(railCamera->GetView());
+	sky->Draw(railCamera->GetView());
 
 	// 3Dオブジェクト描画後処理
 	Object3d::PostDraw();

@@ -10,17 +10,20 @@ RailCamera::~RailCamera() {
 }
 
 //初期化
-void RailCamera::Initialize() {
+void RailCamera::Initialize(Player* player_) {
 	viewProjection = new ViewProjection;
 	input = Input::GetInstance();
 	viewProjection->Initialize();
 	camera = Object3d::Create();
-	viewProjection->eye = { 0, 3, -30 };
+	viewProjection->eye = { 0, 0, -30 };
 	viewProjection->target = { 0,0,0 };
 	camera->SetPosition(viewProjection->eye);
 	camera->SetRotation(Vector3(0, 0, 0));
+	SetPlayer(player_);
 	oldCamera = { 0,0,0 };
 	isEnd = false;
+	camera_t = 1.1f;
+	target_t = 1.15f;
 }
 
 void RailCamera::ViewUpdate() {
@@ -30,8 +33,8 @@ void RailCamera::ViewUpdate() {
 //更新
 void RailCamera::Update(Player* player_, std::vector<Vector3>& point) {
 
-	Vector3 target_ = spline_.Update(point, (float)0.00001);
-	camera->SetPosition(splineCam.Update(point, (float)0.1));
+	Vector3 target_ = spline_.Update(point,target_t);
+	camera->SetPosition(splineCam.Update(point,camera_t));
 	//最初の1ループのみ現在位置を入れる
 	if (oldCamera.x == 0 && oldCamera.y == 0 && oldCamera.z == 0) {
 		oldCamera = camera->GetPosition();
@@ -62,12 +65,12 @@ void RailCamera::Update(Player* player_, std::vector<Vector3>& point) {
 
 	viewProjection->UpdateMatrix();
 	oldCamera = camera->GetPosition();
+	camera_t += 0.002f;
+	target_t += 0.002f;
 }
 
 void RailCamera::TitleR(Player* player_)
 {
-	//player_->worldTransform_.ResetParent();
-	//camera->worldTransform_.SetParent3d(&player_->worldTransform_);
 	viewProjection->eye.z -= 1.5;
 }
 
@@ -99,6 +102,7 @@ void RailCamera::GetVec(Vector3 a, Vector3 b) {
 void RailCamera::SetPlayer(Player* player_) {
 	//拡大回転座標変換
 	player_->SetPosition(Vector3(0, 0, 0));
+	player_->SetScale(Vector3(0.3f, 0.3f, 0.3f));
 	//親子構造のセット
 	player_->worldTransform_.SetParent3d(&camera->worldTransform_);
 }

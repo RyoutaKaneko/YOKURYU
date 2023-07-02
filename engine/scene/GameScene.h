@@ -15,6 +15,7 @@
 #include "FbxModel.h"
 #include "Player.h"
 #include "RailCamera.h"
+#include "Enemy.h"
 
 class GameScene {
 public:
@@ -31,6 +32,7 @@ public:
 	void Reset();
 
 	void LoadStage(int stageNum);
+	void LoadEnemy(int stageNum);
 
 private:
 	DirectXCommon* dxCommon = nullptr;
@@ -45,6 +47,7 @@ private:
 	//オブジェクトのポインタ
 	//3Dオブジェクト生成
 	Player* player = nullptr;
+	Enemy* enemy = nullptr;
 	Model* skyModel = nullptr;
 	Object3d* sky = nullptr;
 	Model* floorModel = nullptr;
@@ -58,12 +61,15 @@ private:
 	ParticleManager* pm = nullptr;
 	Particle* particle_ = nullptr;
 	ParticleManager* pm_ = nullptr;
+	std::list<std::unique_ptr<Enemy>> enemys_;
 
 	//FBX
 	FbxModel* model = nullptr;
 	FbxObject3d* obj = nullptr;
 	//カメラ移動用レール
 	std::vector<Vector3> points{};
+	std::vector<Vector3> pointsL;
+	std::vector<Vector3> pointsR;
 	int stageNum = 0;
 	
 

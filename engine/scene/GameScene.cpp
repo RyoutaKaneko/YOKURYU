@@ -97,6 +97,7 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	//スプライン制御点の読み込み
 	stageNum = 1;
 	LoadStage(stageNum);
+	LoadEnemy(stageNum);
 
 }
 
@@ -121,6 +122,14 @@ void GameScene::Update() {
 	}
 	/*railCamera->ViewUpdate();*/
 	player->Update(railCamera->GetCameraPos(), railCamera->GetFrontVec());
+	//敵キャラの更新
+	//デスフラグの立った敵を削除
+	enemys_.remove_if([](std::unique_ptr < Enemy>& enemy_) {
+		return enemy_->GetIsDead();
+		});
+	for (const std::unique_ptr<Enemy>& enemy : enemys_) {
+		enemy->Update();
+	}
 	sky->Update();
 	floor->Update();
 	pm->Update();
@@ -136,6 +145,10 @@ void GameScene::Draw() {
 
 	sky->Draw(railCamera->GetView());
 	floor->Draw(railCamera->GetView());
+	//敵キャラの描画
+	for (const std::unique_ptr<Enemy>& enemy : enemys_) {
+		enemy->Draw(railCamera->GetView());
+	}
 	player->PlayerDraw(railCamera->GetView());
 
 	// 3Dオブジェクト描画後処理
@@ -248,6 +261,7 @@ void GameScene::LoadStage(int stageNum) {
 void GameScene::Reset() {
 	delete player;
 	delete railCamera;
+	delete enemy;
 
 	//player
 	player = new Player;
@@ -255,4 +269,86 @@ void GameScene::Reset() {
 
 	railCamera = new RailCamera;
 	railCamera->Initialize(player);
+	LoadEnemy(stageNum);
+}
+
+void GameScene::LoadEnemy(int stageNum) {
+
+	Spline spline;
+	spline.Initialize();
+
+	pointsL = points;
+	pointsR = points;
+
+	for (int i = 0; i < points.size(); i++)
+	{
+		pointsL[i] += Vector3(-4, 0, 0);
+		pointsR[i] += Vector3(4, 0, 0);
+	}
+
+	enemys_.clear();
+
+	//ファイルを開く
+	std::ifstream file;
+	file.open("Resources/csv/EnemyPop.csv");
+	assert(file.is_open());
+
+	HRESULT result = S_FALSE;
+
+	std::string num;
+	num = stageNum + 48;
+
+	// １行ずつ読み込む
+	string line;
+	while (getline(file, line)) {
+
+		// １行分の文字列をストリームに変換して解析しやすくする
+		std::istringstream line_stream(line);
+
+		// 半角スパース区切りで行の先頭文字列を取得
+		string key;
+		getline(line_stream, key, ' ');
+
+		string word;
+		getline(line_stream, word, ' ');
+
+		if (stageNum < 10) {
+			// 先頭文字列がｖなら頂点座標
+			if (key == "ea" + num) {
+				//敵の生成
+				std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
+				//敵の初期化
+				newEnemy->EnemyInitialize();
+				////コライダーの追加
+				//newEnemy->SetCollider(new SphereCollider(Vector3(0, 0, 0), 2.0f));
+				// X,Y,Z座標読み込み
+				Vector3 position{};
+				float t;
+
+				if (word.find("L") == 0)
+				{
+					line_stream >> t;
+					position = spline.EnemyPosition(pointsL, t);
+				}
+				else if (word.find("M") == 0)
+				{
+					line_stream >> t;
+					position = spline.EnemyPosition(points, t);
+				}
+				else if (word.find("R") == 0)
+				{
+					line_stream >> t;
+					position = spline.EnemyPosition(pointsR, t);
+				}
+
+				// 座標データに追加
+				newEnemy->SetPosition(position);
+				newEnemy->SetScale({ 0.6f,0.6f,0.6f });
+				//登録
+				enemys_.push_back(std::move(newEnemy));
+			}
+		}
+	}
+	// ファイルと閉じる
+	file.close();
 }

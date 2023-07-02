@@ -51,5 +51,6 @@ private:
 	int hp = 3;
 	int coolTime = 0;
 	float len = 6;
+	int pTimer = 0;
 
 };

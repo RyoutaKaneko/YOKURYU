@@ -171,6 +171,9 @@
     <ClCompile Include="engine\3d\PlayerBullet.cpp">
       <Filter>ソースファイル\Engine\GameObj</Filter>
     </ClCompile>
+    <ClCompile Include="engine\3d\Enemy.cpp">
+      <Filter>ソースファイル\Engine\GameObj</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -301,6 +304,9 @@
       <Filter>ヘッダー ファイル\Engine\Camera</Filter>
     </ClInclude>
     <ClInclude Include="engine\3d\PlayerBullet.h">
+      <Filter>ヘッダー ファイル\Engine\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\Enemy.h">
       <Filter>ヘッダー ファイル\Engine\GameObj</Filter>
     </ClInclude>
   </ItemGroup>

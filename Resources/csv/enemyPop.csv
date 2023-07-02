@@ -1,0 +1,39 @@
+//STAGE1
+
+ea1 L 2.5
+ea1 R 2.5
+
+ea1 M 3.2
+
+ea1 L 3.9
+ea1 M 3.9
+
+ea1 L 4.5
+ea1 M 4.5
+ea1 R 4.5
+
+ea1 L 5.5
+ea1 M 5.5
+ea1 R 5.5
+
+ea1 L 5.9
+ea1 M 5.9
+
+ea1 M 6.2
+ea1 R 6.2
+
+ea1 M 6.5
+ea1 R 6.5
+
+ea1 M 7.3
+
+ea1 L 7.7
+ea1 R 7.7
+
+ea1 L 8.5
+ea1 M 8.5
+ea1 R 8.5
+
+ea1 L 8.9
+ea1 M 8.9
+ea1 R 8.9

@@ -26,6 +26,7 @@ bool Player::PlayerInitialize() {
 	hp = 3;
 	coolTime = 0;
 	len = 6.0f;
+	pTimer = 0;
 
 	return true;
 }
@@ -36,13 +37,28 @@ void Player::Update(Vector3 cameraPos,Vector3 velo)
 
 	Move();
 	Attack(cameraPos,velo);
+	//デスフラグの立った敵を削除
+	bullets_.remove_if([](std::unique_ptr < PlayerBullet>& bullets_) {
+		return bullets_->IsDead();
+		});
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		if (bullet->IsDead() == false) {
 			bullet->Update();
 		}
 	}
+	//playerふわふわ
+	if (pTimer < 75) {
+		SetPosition(GetPosition() + Vector3(0, 0.005f, 0));
+	}
+	else if (pTimer < 150) {
+		SetPosition(GetPosition() + Vector3(0, -0.005f, 0));
+	}
+	else {
+		pTimer = 0;
+	}
 
 	worldTransform_.UpdateMatrix();
+	pTimer++;
 }
 
 void Player::Move()

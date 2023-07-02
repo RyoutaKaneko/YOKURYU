@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "string.h"
+#include "RailCamera.h"
 
 //デストラクタ
 Player::~Player() {
@@ -23,16 +24,30 @@ bool Player::PlayerInitialize() {
 	SetPosition(Vector3(0, 0, 0));
 
 	hp = 3;
+	coolTime = 0;
 	len = 6.0f;
 
 	return true;
 }
 
-void Player::Update()
+void Player::Update(Vector3 cameraPos,Vector3 velo)
 {
 	input = Input::GetInstance();
 
-	Vector3 move = {0,0,0};
+	Move();
+	Attack(cameraPos,velo);
+	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
+		if (bullet->IsDead() == false) {
+			bullet->Update();
+		}
+	}
+
+	worldTransform_.UpdateMatrix();
+}
+
+void Player::Move()
+{
+	Vector3 move = { 0,0,0 };
 
 	//player移動
 	if (input->PushKey(DIK_W)) {
@@ -65,7 +80,7 @@ void Player::Update()
 	else if (input->PushKey(DIK_S)) {
 		move = { 0, -0.03f, 0 };
 	}
-	
+
 	Vector3 tmp = GetPosition() + move;
 	//
 	if (abs(tmp.x) <= 3.5f) {
@@ -73,11 +88,45 @@ void Player::Update()
 			SetPosition(GetPosition() + move);
 		}
 	}
-
-	worldTransform_.UpdateMatrix();
 }
 
-void Player::Move(std::vector <Vector3>& point)
-{
+void Player::Attack(Vector3 cameraPos ,Vector3 velo) {
 	
+	if (input->PushKey(DIK_SPACE)) {
+		if (coolTime == 0) {
+			//弾を生成し初期化
+		//複数
+			std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
+
+			//単発
+			/*PlayerBullet* newBullet = new PlayerBullet();*/
+			newBullet->BulletInitialize(GetPosition(),velo);
+
+			//弾の登録										 
+		   //複数
+			newBullet->SetPosition(cameraPos + Vector3{-worldTransform_.position_.x * 1.5f,worldTransform_.position_.y,worldTransform_.position_.z });
+			newBullet->SetScale({ 0.3f,0.3f,0.3f });
+			bullets_.push_back(std::move(newBullet));
+
+			//単発
+			/*bullet_.reset(newBullet);*/
+
+			//クールタイムを設定
+			coolTime = 10;
+		}
+		else if (coolTime > 0) {
+			coolTime--;
+		}
+
+	}
+}
+
+void Player::PlayerDraw(ViewProjection* viewProjection_) {
+	Draw(viewProjection_);
+	//弾描画
+	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
+		if (bullet->IsDead() == false) {
+			bullet->Draw(viewProjection_);
+		}
+	}
 }

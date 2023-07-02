@@ -28,6 +28,13 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	sky = Object3d::Create();
 	sky->SetModel(skyModel);
 	sky->SetScale(Vector3(5,5,5));
+	sky->SetRotation(Vector3(0, 180, 0));
+	//floor
+	floorModel = Model::LoadFromOBJ("floor");
+	floor = Object3d::Create();
+	floor->SetModel(floorModel);
+	floor->SetPosition({ 0,-20,0 });
+	floor->SetScale(Vector3(500, 500, 500));
 
 	railCamera = new RailCamera;
 	railCamera->Initialize(player);
@@ -97,11 +104,14 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 void GameScene::Update() {
 	input->Update();
 
-	//パーティクル
-	if (input->PushKey(DIK_SPACE))
-	{
-		pm->Fire(particle, 30, 0.2f, 0, 2, { 8.0f, 0.0f });
-		pm_->Fire(particle_, 30, 0.2f, 0, 1, { 8.0f, 0.0f });
+	////パーティクル
+	//if (input->PushKey(DIK_SPACE))
+	//{
+	//	pm->Fire(particle, 30, 0.2f, 0, 2, { 8.0f, 0.0f });
+	//	pm_->Fire(particle_, 30, 0.2f, 0, 1, { 8.0f, 0.0f });
+	//}
+	if (input->TriggerKey(DIK_R)) {
+		Reset();
 	}
 
 
@@ -109,8 +119,10 @@ void GameScene::Update() {
 	if (railCamera->GetIsEnd() == false) {
 		railCamera->Update(player, points);
 	}
-	player->Update();
+	/*railCamera->ViewUpdate();*/
+	player->Update(railCamera->GetCameraPos(), railCamera->GetFrontVec());
 	sky->Update();
+	floor->Update();
 	pm->Update();
 	pm_->Update();
 	obj->Update();
@@ -122,8 +134,9 @@ void GameScene::Draw() {
 // 3Dオブジェクト描画前処理
 	Object3d::PreDraw(dxCommon->GetCommandList());
 
-	player->Draw(railCamera->GetView());
 	sky->Draw(railCamera->GetView());
+	floor->Draw(railCamera->GetView());
+	player->PlayerDraw(railCamera->GetView());
 
 	// 3Dオブジェクト描画後処理
 	Object3d::PostDraw();
@@ -163,8 +176,8 @@ void GameScene::Draw() {
 	Sprite::PreDraw(dxCommon->GetCommandList(), spriteCommon_);
 
 	///=== スプライト描画 ===///
-	wood.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), wood.vbView);
-	reimu.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), reimu.vbView);
+	/*wood.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), wood.vbView);
+	reimu.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), reimu.vbView);*/
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -230,4 +243,16 @@ void GameScene::LoadStage(int stageNum) {
 	}
 	// ファイルと閉じる
 	file.close();
+}
+
+void GameScene::Reset() {
+	delete player;
+	delete railCamera;
+
+	//player
+	player = new Player;
+	player->PlayerInitialize();
+
+	railCamera = new RailCamera;
+	railCamera->Initialize(player);
 }

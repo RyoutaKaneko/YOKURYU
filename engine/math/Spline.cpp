@@ -10,33 +10,33 @@ void Spline::Initialize() {
 
 Vector3 Spline::Update(std::vector<Vector3>& points, float val) {
 
-	//t = t + val;
+	t = t + val;
 
-	////timeRateが1.0f以上になったら、次の区間に進む
-	//if (t >= 1.0f) {
-	//	if (startIndex < points.size() - 3) {
+	//timeRateが1.0f以上になったら、次の区間に進む
+	if (t >= 1.0f) {
+		if (startIndex < points.size() - 3) {
 
-	//		startIndex++;
+			startIndex++;
 
-	//		t -= 1.0f;
-	//	}
-	//	else {
-	//		isEnd = true;
-	//		t = 1.0f;
-	//	}
-	//}
-
-	//Vector3 pos = SplinePosition(points, startIndex, t);
-
-	//t += (float)0.002;
-	float integer = (float)floor(val);
-	float few = (float)fmod(val, 1);
-
-	Vector3 pos = SplinePosition(points, (size_t)integer, few);
-
-	if (integer >= (float)points.size() - 3.0f) {
-		isEnd = true;
+			t -= 1.0f;
+		}
+		else {
+			isEnd = true;
+			t = 1.0f;
+		}
 	}
+
+	Vector3 pos = SplinePosition(points, startIndex, t);
+
+	t += (float)0.002;
+	//float integer = (float)floor(val);
+	//float few = (float)fmod(val, 1);
+
+	//Vector3 pos = SplinePosition(points, (size_t)integer, few);
+
+	//if (integer >= (float)points.size() - 3.0f) {
+	//	isEnd = true;
+	//}
 	
 	return pos;
 }

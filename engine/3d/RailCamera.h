@@ -30,8 +30,10 @@ public:
 
 	ViewProjection* GetView() { return viewProjection; }
 	bool GetIsEnd() { return isEnd; }
+	Vector3 GetFrontVec() { return frontVec; }
 
 	Object3d* GetCamera() { return camera; }
+	Vector3 GetCameraPos() { return camera->worldTransform_.position_; }
 private:
 	Input* input_ = nullptr;
 	ViewProjection* viewProjection = nullptr;
@@ -44,11 +46,9 @@ private:
 
 	Vector3 rightVec = { 0, 0, 0 };
 	Vector3 leftVec = { 0, 0, 0 };
-	Vector3 frontVec = { 0, 0, 0 };
+	Vector3 frontVec = { 0,0,0 };
 	Vector3 oldCamera = { 0,0,0 };
 
 	bool isEnd;
-	float camera_t = 0.0f;
-	float target_t = 0.0f;
 };
 

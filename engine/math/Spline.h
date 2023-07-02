@@ -19,6 +19,7 @@ public:
 
 	//描画
 	void Draw();
+	void Reset() { t = 0; }
 
 	//制御点の集合(vectorコンテナ)、補間する区間の添字、時間経過率
 	Vector3 SplinePosition(const std::vector<Vector3>& point, size_t startIndex, float t);

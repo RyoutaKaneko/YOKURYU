@@ -158,6 +158,7 @@
     <ClCompile Include="app\platform\Framework.cpp" />
     <ClCompile Include="app\scene\BaseScene.cpp" />
     <ClCompile Include="engine\3d\Player.cpp" />
+    <ClCompile Include="engine\3d\PlayerBullet.cpp" />
     <ClCompile Include="engine\3d\RailCamera.cpp" />
     <ClCompile Include="engine\base\DirectXCommon.cpp" />
     <ClCompile Include="engine\base\Input.cpp" />
@@ -261,6 +262,7 @@
     <ClInclude Include="app\platform\Framework.h" />
     <ClInclude Include="app\scene\BaseScene.h" />
     <ClInclude Include="engine\3d\Player.h" />
+    <ClInclude Include="engine\3d\PlayerBullet.h" />
     <ClInclude Include="engine\3d\RailCamera.h" />
     <ClInclude Include="engine\base\DirectXCommon.h" />
     <ClInclude Include="engine\base\Input.h" />

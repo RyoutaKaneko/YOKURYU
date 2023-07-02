@@ -28,6 +28,7 @@ public:
 	void Update();
 
 	void Draw();
+	void Reset();
 
 	void LoadStage(int stageNum);
 
@@ -46,6 +47,8 @@ private:
 	Player* player = nullptr;
 	Model* skyModel = nullptr;
 	Object3d* sky = nullptr;
+	Model* floorModel = nullptr;
+	Object3d* floor = nullptr;
 	//ÉJÉÅÉâ
 	ViewProjection* viewProjection = nullptr;
 	XMViewProjection* xmViewProjection = nullptr;

@@ -88,6 +88,12 @@
     <Filter Include="ヘッダー ファイル\Engine\Camera">
       <UniqueIdentifier>{564b3b6e-4c8d-4015-879a-b2fe90bba468}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\Engine\Collision">
+      <UniqueIdentifier>{6d468e4a-84a8-4f43-aa92-3bd8a1d2e728}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Collision">
+      <UniqueIdentifier>{9db64233-bb0d-4897-ba7c-418dd1007c1e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

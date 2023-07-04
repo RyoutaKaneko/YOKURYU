@@ -161,7 +161,7 @@ void GameScene::Draw() {
 	// 3Dオブジェクト描画前処理
 	FbxObject3d::PreDraw(dxCommon->GetCommandList());
 
-	obj->Draw(railCamera->GetView());
+	/*obj->Draw(railCamera->GetView());*/
 
 	// 3Dオブジェクト描画後処理
 	FbxObject3d::PostDraw();

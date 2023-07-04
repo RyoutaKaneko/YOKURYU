@@ -17,23 +17,24 @@ public:
 	//初期化
 	bool PlayerInitialize();
 
-	void Update(Vector3 cameraPos,Vector3 velo);
+	void Update(Vector3 velo);
 
 	void Move();
 	///</summary>
-	void Attack(Vector3 cameraPos,Vector3 velo);
+	void Attack(Vector3 velo);
 	void PlayerDraw(ViewProjection* viewProjection_);
 
 	//衝突時コールバック関数
-	/*void OnCollision(const CollisionInfo& info) override;
-	void OffCollision(const CollisionInfo& info) override;*/
+	void OnCollision(const CollisionInfo& info) override;
 
 
+	/////getter/////
 	//hp
 	int GetHP() { return hp; }
-
 	//fever
 	float GetLen() { return len; }
+	//ワールド座標取得
+	Vector3 GetWorldPos();
 
 	//弾リストを取得
 	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }

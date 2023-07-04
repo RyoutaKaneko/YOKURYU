@@ -1,6 +1,9 @@
 #include "GameScene.h"
 #include "FbxLoader.h"
 #include "FbxObject3d.h"
+#include "SphereCollider.h"
+#include "CollisionManager.h"
+
 
 #include <cassert>
 #include <fstream>
@@ -19,10 +22,13 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	dxCommon = DirectXCommon::GetInstance();
 	winApp = WinApp::GetInstance();
 	input = Input::GetInstance();
+	//当たり判定
+	collisionManager = CollisionManager::GetInstance();
 	
 	//player
 	player = new Player;
 	player->PlayerInitialize();
+	player->SetCollider(new SphereCollider);
 	//sky
 	skyModel = Model::LoadFromOBJ("skydome");
 	sky = Object3d::Create();
@@ -111,22 +117,25 @@ void GameScene::Update() {
 	//	pm->Fire(particle, 30, 0.2f, 0, 2, { 8.0f, 0.0f });
 	//	pm_->Fire(particle_, 30, 0.2f, 0, 1, { 8.0f, 0.0f });
 	//}
+
+	//リセット
 	if (input->TriggerKey(DIK_R)) {
 		Reset();
 	}
 
+	//当たり判定チェック
+	collisionManager->CheckAllCollisions();
 
 	//更新
 	if (railCamera->GetIsEnd() == false) {
 		railCamera->Update(player, points);
 	}
-	/*railCamera->ViewUpdate();*/
-	player->Update(railCamera->GetCameraPos(), railCamera->GetFrontVec());
-	//敵キャラの更新
+	player->Update(railCamera->GetFrontVec());
 	//デスフラグの立った敵を削除
 	enemys_.remove_if([](std::unique_ptr < Enemy>& enemy_) {
 		return enemy_->GetIsDead();
 		});
+	//敵キャラの更新
 	for (const std::unique_ptr<Enemy>& enemy : enemys_) {
 		enemy->Update();
 	}
@@ -320,7 +329,7 @@ void GameScene::LoadEnemy(int stageNum) {
 				//敵の初期化
 				newEnemy->EnemyInitialize();
 				////コライダーの追加
-				//newEnemy->SetCollider(new SphereCollider(Vector3(0, 0, 0), 2.0f));
+				newEnemy->SetCollider(new SphereCollider());
 				// X,Y,Z座標読み込み
 				Vector3 position{};
 				float t;

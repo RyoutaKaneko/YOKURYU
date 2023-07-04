@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "string.h"
 #include "RailCamera.h"
+#include "SphereCollider.h"
 
 //デストラクタ
 Player::~Player() {
@@ -31,21 +32,19 @@ bool Player::PlayerInitialize() {
 	return true;
 }
 
-void Player::Update(Vector3 cameraPos,Vector3 velo)
+void Player::Update(Vector3 velo)
 {
 	input = Input::GetInstance();
 
 	Move();
-	Attack(cameraPos,velo);
+	Attack(velo);
+	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
+		bullet->Update();
+	}
 	//デスフラグの立った敵を削除
 	bullets_.remove_if([](std::unique_ptr < PlayerBullet>& bullets_) {
 		return bullets_->IsDead();
 		});
-	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
-		if (bullet->IsDead() == false) {
-			bullet->Update();
-		}
-	}
 	//playerふわふわ
 	if (pTimer < 75) {
 		SetPosition(GetPosition() + Vector3(0, 0.005f, 0));
@@ -58,6 +57,11 @@ void Player::Update(Vector3 cameraPos,Vector3 velo)
 	}
 
 	worldTransform_.UpdateMatrix();
+	//当たり判定更新
+	if (collider)
+	{
+		collider->Update();
+	}
 	pTimer++;
 }
 
@@ -106,7 +110,7 @@ void Player::Move()
 	}
 }
 
-void Player::Attack(Vector3 cameraPos ,Vector3 velo) {
+void Player::Attack(Vector3 velo) {
 	
 	if (input->PushKey(DIK_SPACE)) {
 		if (coolTime == 0) {
@@ -114,21 +118,19 @@ void Player::Attack(Vector3 cameraPos ,Vector3 velo) {
 		//複数
 			std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
 
-			//単発
-			/*PlayerBullet* newBullet = new PlayerBullet();*/
+			//単発													   
 			newBullet->BulletInitialize(GetPosition(),velo);
+			newBullet->SetCollider(new SphereCollider());
 
 			//弾の登録										 
 		   //複数
-			newBullet->SetPosition(cameraPos + Vector3{-worldTransform_.position_.x * 1.5f,worldTransform_.position_.y,worldTransform_.position_.z });
+			newBullet->SetPosition(GetWorldPos());
 			newBullet->SetScale({ 0.3f,0.3f,0.3f });
 			bullets_.push_back(std::move(newBullet));
 
-			//単発
-			/*bullet_.reset(newBullet);*/
 
 			//クールタイムを設定
-			coolTime = 10;
+			coolTime = 12;
 		}
 		else if (coolTime > 0) {
 			coolTime--;
@@ -141,8 +143,28 @@ void Player::PlayerDraw(ViewProjection* viewProjection_) {
 	Draw(viewProjection_);
 	//弾描画
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
-		if (bullet->IsDead() == false) {
-			bullet->Draw(viewProjection_);
-		}
+		bullet->Draw(viewProjection_);
+	}
+}
+
+Vector3 Player::GetWorldPos() {
+	Vector3 worldPos{ 0,0,0 };
+
+	//ワールド行列から座標を取得
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
+
+	return worldPos;
+}
+
+void Player::OnCollision(const CollisionInfo& info)
+{
+	//衝突相手の名前
+	const char* str1 = "class Enemy";
+
+	//相手がenemy
+	if (strcmp(toCollisionName, str1) == 0) {
+		int a = 0;
 	}
 }

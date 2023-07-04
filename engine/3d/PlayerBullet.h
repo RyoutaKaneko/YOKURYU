@@ -22,12 +22,11 @@ class PlayerBullet : public Object3d
 
 
 	//衝突を検出したら呼び出されるコールバック関数
-	void OnCollision();
+	void OnCollision(const CollisionInfo& info) override;
 
 
   public:
 	bool IsDead() const { return isDead_; }
-	int GetR() { return r; }
 	WorldTransform* GetWorldTransForm() { return &worldTransform_; }
 
   private:
@@ -39,10 +38,9 @@ class PlayerBullet : public Object3d
 	
 	//寿命
 	static const int32_t kLifeTime = 60 * 3;
-	//デス大麻
+	//デスタイマー
 	int32_t deathTimer_ = kLifeTime;
 	//デスフラグ
 	bool isDead_ = false;
-	int r = 2;
 	
 };

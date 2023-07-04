@@ -9,6 +9,7 @@
 #include "WorldTransform.h"
 #include "ViewProjection.h"
 #include "Model.h"
+#include "CollisionInfo.h"
 
 class BaseCollider;
 
@@ -52,6 +53,9 @@ public: // メンバ関数
 	//コンストラクタ
 	Object3d() = default;
 
+	//デストラクタ
+	virtual ~Object3d();
+
 	//初期化
 	virtual bool Initialize();
 
@@ -68,6 +72,13 @@ public: // メンバ関数
 	// モデルの設定
 	void SetModel(Model* model) { this->model = model; }
 
+	//コライダーのセット
+	void SetCollider(BaseCollider* collider);
+
+	//衝突時コールバック関数
+	virtual void OnCollision(const CollisionInfo& info) {}
+	virtual void OffCollision(const CollisionInfo& info) {}
+
 	// オブジェクトの座標
 	const Vector3& GetPosition() const { return worldTransform_.position_; }
 	const float& GetPositionZ() const { return worldTransform_.position_.z; }
@@ -81,9 +92,11 @@ public: // メンバ関数
 	void SetRotationX(const float& rotation) { this->worldTransform_.rotation_.x = rotation; }
 	void SetRotationY(const float& rotation) { this->worldTransform_.rotation_.y = rotation; }
 
+	const char* GetName() const { return name; }
 public:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
+	const char* toCollisionName = nullptr;
 
 protected: // メンバ変数
 	//クラス名

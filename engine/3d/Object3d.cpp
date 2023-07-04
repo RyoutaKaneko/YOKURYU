@@ -7,6 +7,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <CollisionManager.h>
 
 #pragma comment(lib, "d3dcompiler.lib")
 
@@ -22,6 +23,16 @@ ID3D12GraphicsCommandList* Object3d::cmdList = nullptr;
 ComPtr<ID3D12RootSignature> Object3d::rootsignature;
 ComPtr<ID3D12PipelineState> Object3d::pipelinestate;
 
+Object3d::~Object3d()
+{
+	if (collider)
+	{
+		//コリジョンマネージャから登録を解除する
+		CollisionManager::GetInstance()->RemoveCollider(collider);
+
+		delete collider;
+	}
+}
 
 void Object3d::StaticInitialize(ID3D12Device * device, int window_width, int window_height)
 {
@@ -248,6 +259,12 @@ void Object3d::Update()
 	// ワールドトランスフォームの行列更新と転送
 	worldTransform_.UpdateMatrix();
 
+	//当たり判定更新
+	if (collider)
+	{
+		collider->Update();
+	}
+
 }
 
 void Object3d::Draw(ViewProjection* viewProjection)
@@ -286,4 +303,14 @@ void Object3d::Draw(ViewProjection* viewProjection,float alpha_)
 
 	// モデルを描画
 	model->Draw(cmdList, 1,alpha_);
+}
+
+void Object3d::SetCollider(BaseCollider* collider)
+{
+	collider->SetObject(this);
+	this->collider = collider;
+	//コリジョンマネージャに登録
+	CollisionManager::GetInstance()->AddCollider(collider);
+	//コライダーを更新しておく
+	collider->Update();
 }

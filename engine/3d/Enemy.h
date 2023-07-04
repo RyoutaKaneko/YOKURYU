@@ -6,7 +6,7 @@
 #include <list>
 
 //GameSceneの前方宣言
-class GamePlayScene;
+class GameScene;
 
 class Enemy : public Object3d
 {
@@ -19,19 +19,14 @@ public:
 	//敵リスト
 	const std::list<std::unique_ptr<Enemy>>& GetEnemys() { return enemys_; }
 
-	//gameSceneのsetter
-	void SetGameScene(GamePlayScene* gameScene) { gameScene_ = gameScene; }
 
 	bool GetIsDead() const { return isDead_; }
 	
 	void Update();
 
-	/*void OnCollision(const CollisionInfo& info) override;
-	void OffCollision(const CollisionInfo& info) override;*/
+	void OnCollision(const CollisionInfo& info) override;
 
 private:
-	//ゲームシーン
-	GamePlayScene* gameScene_ = nullptr;
 
 	//デスフラグ
 	bool isDead_ = false;

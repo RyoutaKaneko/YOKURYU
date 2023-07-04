@@ -16,6 +16,8 @@
 #include "Player.h"
 #include "RailCamera.h"
 #include "Enemy.h"
+#include "CollisionManager.h"
+
 
 class GameScene {
 public:
@@ -35,6 +37,7 @@ public:
 	void LoadEnemy(int stageNum);
 
 private:
+	//base
 	DirectXCommon* dxCommon = nullptr;
 	WinApp* winApp = nullptr;
 	//入力のポインタ
@@ -61,8 +64,10 @@ private:
 	ParticleManager* pm = nullptr;
 	Particle* particle_ = nullptr;
 	ParticleManager* pm_ = nullptr;
+	//enemy
 	std::list<std::unique_ptr<Enemy>> enemys_;
-
+	//当たり判定
+	CollisionManager* collisionManager = nullptr;
 	//FBX
 	FbxModel* model = nullptr;
 	FbxObject3d* obj = nullptr;
@@ -70,6 +75,7 @@ private:
 	std::vector<Vector3> points{};
 	std::vector<Vector3> pointsL;
 	std::vector<Vector3> pointsR;
+	//ステージ
 	int stageNum = 0;
 	
 

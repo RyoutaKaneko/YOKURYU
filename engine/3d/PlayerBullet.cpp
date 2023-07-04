@@ -1,4 +1,5 @@
 #include "PlayerBullet.h"
+#include "BaseCollider.h"
 
 void PlayerBullet::BulletInitialize(const Vector3& position, const Vector3& velocity) {
 
@@ -19,6 +20,12 @@ void PlayerBullet::Update() {
 	SetPosition(GetPosition() + velocity_);
 
 	worldTransform_.UpdateMatrix();
+
+	//当たり判定更新
+	if (collider)
+	{
+		collider->Update();
+	}
 	//時間経過でデス
 	if (--deathTimer_ <= 0) {
 		isDead_ = true;
@@ -26,7 +33,15 @@ void PlayerBullet::Update() {
 
 }
 
-void PlayerBullet::OnCollision() {
-	//デスフラグ
-	isDead_ = true;
+void PlayerBullet::OnCollision(const CollisionInfo& info)
+{
+	//衝突相手の名前
+	const char* str1 = "class Enemy";
+
+	//相手がenemy
+	if (strcmp(toCollisionName, str1) == 0) {
+		if (isDead_ == false) {
+			isDead_ = true;
+		}
+	}
 }

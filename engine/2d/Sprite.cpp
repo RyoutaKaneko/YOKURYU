@@ -198,7 +198,7 @@ PipelineSet Sprite::SpriteCreateGraphicsPipeline(ID3D12Device* device)
 }
 
 void Sprite::SpriteCreate(ID3D12Device* dev, int window_width, int window_height, 
-	UINT texNumber, const SpriteCommon& spriteCommon, Vector2 anchorpoint, bool isFlipX, bool isFlipY) {
+	UINT texNumber, Vector2 anchorpoint, bool isFlipX, bool isFlipY) {
 
 	HRESULT result = S_FALSE;
 
@@ -233,9 +233,9 @@ void Sprite::SpriteCreate(ID3D12Device* dev, int window_width, int window_height
 	assert(SUCCEEDED(result));
 
 	// 指定番号の画像が読み込み済みなら
-	if (spriteCommon.texBuff[this->texNumber]) {
+	if (spriteCommon_.texBuff[this->texNumber]) {
 		// テクスチャ情報取得
-		D3D12_RESOURCE_DESC resDesc = spriteCommon.texBuff[this->texNumber]->GetDesc();
+		D3D12_RESOURCE_DESC resDesc = spriteCommon_.texBuff[this->texNumber]->GetDesc();
 		// スプライトの大きさを画像の解像度に合わせる
 		scale = { (float)resDesc.Width,(float)resDesc.Height };
 		// テクスチャ情報取得
@@ -342,7 +342,7 @@ void Sprite::SpriteDraw(ID3D12GraphicsCommandList* cmdList_, const SpriteCommon&
 	cmdList->DrawInstanced(4, 1, 0, 0);
 }
 
-SpriteCommon Sprite::SpriteCommonCreate(ID3D12Device* dev, int window_width, int window_height) 
+SpriteCommon Sprite::SpriteCommonCreate(ID3D12Device* dev) 
 {
 	HRESULT result = S_FALSE;
 
@@ -352,7 +352,7 @@ SpriteCommon Sprite::SpriteCommonCreate(ID3D12Device* dev, int window_width, int
 	// スプライト用パイプライン生成
 	spriteCommon.pipelineSet = SpriteCreateGraphicsPipeline(dev);
 
-	spriteCommon.matProjection.identity();
+	spriteCommon.matProjection = Matrix4::identity();
 
 	// 座標変換
 	spriteCommon.matProjection.m[0][0] = 2.0f / WinApp::window_width;
@@ -470,7 +470,7 @@ void Sprite::LoadTexture(SpriteCommon& spriteCommon, UINT texnumber, const wchar
 	);
 }
 
-void Sprite::SpriteTransferVertexBuffer(const Sprite& sprite, const SpriteCommon& spriteCommon, uint32_t texIndex)
+void Sprite::SpriteTransferVertexBuffer(const Sprite& sprite, uint32_t texIndex)
 {
 	HRESULT result = S_FALSE;
 
@@ -514,9 +514,9 @@ void Sprite::SpriteTransferVertexBuffer(const Sprite& sprite, const SpriteCommon
 
 	// UV計算
 	// 指定番号の画像が読み込み済みなら
-	if (spriteCommon.texBuff[sprite.texIndex_]) {
+	if (spriteCommon_.texBuff[sprite.texIndex_]) {
 		// テクスチャ情報取得
-		resDesc = spriteCommon.texBuff[sprite.texIndex_]->GetDesc();
+		resDesc = spriteCommon_.texBuff[sprite.texIndex_]->GetDesc();
 
 		float tex_left = sprite.texLeftTop_.x / resDesc.Width;
 		float tex_right = (sprite.texLeftTop_.x + sprite.texSize_.x) / resDesc.Width;

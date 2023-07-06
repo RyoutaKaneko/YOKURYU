@@ -37,6 +37,30 @@ void Input::Initialize(WinApp* winApp)
 	// 排他制御レベルのセット
 	result = keyboard->SetCooperativeLevel(winApp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(result));
+
+	//マウスデバイスのセット
+	result = directInput->CreateDevice(GUID_SysMouse, &mouse, NULL);
+	assert(SUCCEEDED(result));
+
+	// 入力データ形式のセット
+	result = mouse->SetDataFormat(&c_dfDIMouse); // 標準形式
+	assert(SUCCEEDED(result));
+	
+	// 排他制御レベルのセット
+	result = keyboard->SetCooperativeLevel(winApp->GetHwnd(), DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
+	assert(SUCCEEDED(result));
+
+	//デバイスの設定
+	DIPROPDWORD diprop;
+	diprop.diph.dwSize = sizeof(diprop);
+	diprop.diph.dwHeaderSize = sizeof(diprop.diph);
+	diprop.diph.dwObj = 0;
+	diprop.diph.dwHow = DIPH_DEVICE;
+	diprop.dwData = DIPROPAXISMODE_REL;
+
+	result = mouse->SetProperty(DIPROP_AXISMODE, &diprop.diph);
+	assert(SUCCEEDED(result));
+	
 }
 
 void Input::Update()
@@ -52,6 +76,60 @@ void Input::Update()
 	// 全キーの入力状態を取得する
 	/*BYTE key[256] = {};*/
 	result = keyboard->GetDeviceState(sizeof(key), key);
+
+	//マウス制御開始
+	memcpy(&mouseState_bak, &mouseState, sizeof(mouseState_bak));
+	mouse->Acquire();
+
+	result = mouse->GetDeviceState(sizeof(DIMOUSESTATE), &mouseState);
+}
+
+//マウス左
+bool Input::PushMouseLeft()
+{
+	if (mouseState.rgbButtons[0] != 0) {
+		return true;
+	}
+	return false;
+}
+
+bool Input::TriggerMouseLeft()
+{
+	if (mouseState.rgbButtons[0] > 0 && mouseState_bak.rgbButtons[0] == 0) {
+		return true;
+	}
+	return false;
+}
+
+bool Input::PushMouseRight()
+{
+	if (mouseState.rgbButtons[1] > 0) {
+		return true;
+	}
+	return false;
+}
+
+bool Input::TriggerMouseRight()
+{
+	if (mouseState.rgbButtons[1] > 0 && mouseState_bak.rgbButtons[1] == 0) {
+		return true;
+	}
+	return false;
+}
+
+Vector3 Input::GetMousePos()
+{
+	POINT p;
+	GetCursorPos(&p);
+	ScreenToClient(winApp->GetHwnd(), &p);
+
+	//z成分を0で返す
+	return Vector3((float)p.x,(float)p.y,0.0f);
+}
+
+Vector3 Input::GetMouseVelo()
+{
+	return Vector3((float)mouseState.lX*0.05f,(float)mouseState.lY*0.05f,0.0f);
 }
 
 bool Input::PushKey(BYTE keyNumber) 

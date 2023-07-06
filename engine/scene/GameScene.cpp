@@ -56,28 +56,28 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	// スプライトの初期化
 	// スプライト
 	sprite = new Sprite();
-	spriteCommon_ = sprite->SpriteCommonCreate(dxCommon->GetDevice(), 1280, 720);
+	spriteCommon_ = sprite->SpriteCommonCreate(dxCommon->GetDevice());
 	// スプライト用パイプライン生成呼び出し
-	PipelineSet spritePipelineSet = sprite->SpriteCreateGraphicsPipeline(dxCommon->GetDevice());
+	/*PipelineSet spritePipelineSet = sprite->SpriteCreateGraphicsPipeline(dxCommon->GetDevice());*/
 
 	//木の画像
 	wood.LoadTexture(spriteCommon_, 0, L"Resources/wood.png", dxCommon->GetDevice());
 	wood.SetColor(Vector4(1, 1, 1, 1));
-	wood.SpriteCreate(dxCommon->GetDevice(), 50, 50, 0, spriteCommon, Vector2(0.0f, 0.0f), false, false);
+	wood.SpriteCreate(dxCommon->GetDevice(), 50, 50, 0, Vector2(0.0f, 0.0f), false, false);
 	wood.SetPosition(Vector3(0, 0, 0));
 	wood.SetScale(Vector2(128 * 1, 128 * 1));
 	wood.SetRotation(0.0f);
-	wood.SpriteTransferVertexBuffer(wood, spriteCommon, 0);
+	wood.SpriteTransferVertexBuffer(wood, 0);
 	wood.SpriteUpdate(wood, spriteCommon_);
 
 	//霊夢の画像
 	reimu.LoadTexture(spriteCommon_, 1, L"Resources/reimu.png", dxCommon->GetDevice());
 	reimu.SetColor(Vector4(1, 1, 1, 1));
-	reimu.SpriteCreate(dxCommon->GetDevice(), 50, 50, 1, spriteCommon, Vector2(0.0f, 0.0f), false, false);
+	reimu.SpriteCreate(dxCommon->GetDevice(), 50, 50, 1, Vector2(0.0f, 0.0f), false, false);
 	reimu.SetPosition(Vector3(1100, 0, 0));
 	reimu.SetScale(Vector2(128 * 1, 128 * 1));
 	reimu.SetRotation(0.0f);
-	reimu.SpriteTransferVertexBuffer(reimu, spriteCommon, 1);
+	reimu.SpriteTransferVertexBuffer(reimu, 1);
 	reimu.SpriteUpdate(reimu, spriteCommon_);
 
 	//パーティクル初期化
@@ -122,6 +122,19 @@ void GameScene::Update() {
 	if (input->TriggerKey(DIK_R)) {
 		Reset();
 	}
+	//デバックカメラ
+	/*if (input->PushMouseRight()) {
+		Vector3 v = input->GetMouseVelo();
+		v.x *= -1;
+		railCamera->GetView()->SetTarget(railCamera->GetView()->GetTarget() + v);
+	}*/
+
+	Vector3 v = input->GetMousePos();
+	if (input->TriggerMouseRight()) {
+		reimu.SetPosition(v);
+		reimu.SpriteUpdate(reimu, spriteCommon_);
+		reimu.SpriteTransferVertexBuffer(reimu, 1);
+	}
 
 	//当たり判定チェック
 	collisionManager->CheckAllCollisions();
@@ -130,6 +143,7 @@ void GameScene::Update() {
 	if (railCamera->GetIsEnd() == false) {
 		railCamera->Update(player, points);
 	}
+	/*railCamera->ViewUpdate();*/
 	player->Update(railCamera->GetFrontVec());
 	//デスフラグの立った敵を削除
 	enemys_.remove_if([](std::unique_ptr < Enemy>& enemy_) {
@@ -198,8 +212,8 @@ void GameScene::Draw() {
 	Sprite::PreDraw(dxCommon->GetCommandList(), spriteCommon_);
 
 	///=== スプライト描画 ===///
-	/*wood.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), wood.vbView);
-	reimu.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), reimu.vbView);*/
+	wood.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), wood.vbView);
+	reimu.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), reimu.vbView);
 
 	// スプライト描画後処理
 	Sprite::PostDraw();

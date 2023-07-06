@@ -8,6 +8,7 @@
 #include <wrl/client.h>
 #include <random>
 #include <xinput.h>
+#include "Vector3.h"
 
 #pragma comment(lib,"d3d11.lib")
 #pragma comment(lib,"d2d1.lib")
@@ -31,7 +32,7 @@ public:
 		XINPUT_VIBRATION vibration;  // バイブレーション
 		//bool Connected;
 	};
-	CountrolerState GamePad;
+	/*CountrolerState GamePad;*/
 
 public:
 	// namespace
@@ -43,6 +44,15 @@ public: // メンバ関数
 
 	// 更新
 	void Update();
+
+	//マウス
+	bool PushMouseLeft();
+	bool TriggerMouseLeft();
+	bool PushMouseRight();
+	bool TriggerMouseRight();
+	//座標
+	Vector3 GetMousePos();
+	Vector3 GetMouseVelo();
 
 	/// <summary>
 	/// キーの押下をチェック
@@ -68,12 +78,17 @@ private:
 private: // メンバ変数
 	// キーボードのデバイス
 	ComPtr<IDirectInputDevice8> keyboard;
+	//マウスのデバイス
+	ComPtr<IDirectInputDevice8> mouse;
 	// DirectInputのインスタンス
 	ComPtr<IDirectInput8> directInput;
 	// 全キーの状態
 	BYTE key[256] = {};
 	// 前回の全キーの状態
 	BYTE keyPre[256] = {};
+	//マウスの状態
+	DIMOUSESTATE mouseState = {};
+	DIMOUSESTATE mouseState_bak = {};	// マウス情報(変化検知用)
 	// WindowsAPI
 	WinApp* winApp = nullptr;
 };

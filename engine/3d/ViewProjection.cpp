@@ -18,6 +18,18 @@ void ViewProjection::Initialize()
 	UpdateMatrix();
 }
 
+void ViewProjection::SetEye(Vector3 eye_)
+{
+	eye = eye_;
+	UpdateMatrix();
+}
+
+void ViewProjection::SetTarget(Vector3 target_)
+{
+	target = target_;
+	UpdateMatrix();
+}
+
 void ViewProjection::CreateConstBuffer()
 {
 	HRESULT result;

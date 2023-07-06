@@ -71,7 +71,7 @@ public:
 	~Sprite();
 
 	/// スプライト共通データ生成
-	SpriteCommon SpriteCommonCreate(ID3D12Device* dev, int window_width, int window_height);
+	SpriteCommon SpriteCommonCreate(ID3D12Device* dev);
 
 	/// 3Dオブジェクト用パイプライン生成
 	PipelineSet SpriteCreateGraphicsPipeline(ID3D12Device* device);
@@ -82,10 +82,10 @@ public:
 
 	/// スプライト生成
 	void SpriteCreate(ID3D12Device* dev, int window_width, int window_height, 
-		UINT texNumber, const SpriteCommon& spriteCommon, Vector2 anchorpoint, bool isFlipX, bool FlipY);
+		UINT texNumber, Vector2 anchorpoint, bool isFlipX, bool FlipY);
 
 	/// スプライト単体頂点バッファの転送
-	void SpriteTransferVertexBuffer(const Sprite& sprite, const SpriteCommon& spriteCommon, uint32_t texIndex_ = UINT32_MAX);
+	void SpriteTransferVertexBuffer(const Sprite& sprite, uint32_t texIndex_ = UINT32_MAX);
 
 	/// スプライト単体更新
 	void SpriteUpdate(Sprite& sprite, const SpriteCommon& spriteCommon);

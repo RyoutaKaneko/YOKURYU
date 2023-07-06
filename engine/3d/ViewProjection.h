@@ -22,6 +22,12 @@ public:// メンバ関数
 	/// 初期化
 	void Initialize();
 
+	void SetEye(Vector3 eye_);
+	Vector3 GetEye() { return eye; }
+	void SetTarget(Vector3 terget_);
+	Vector3 GetTarget() { return target; }
+
+
 	/// 行列を更新する
 	void UpdateMatrix();
 

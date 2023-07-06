@@ -156,9 +156,6 @@
     <ClCompile Include="app\platform\Framework.cpp">
       <Filter>ソースファイル\Application\platform</Filter>
     </ClCompile>
-    <ClCompile Include="engine\base\WinApp.cpp">
-      <Filter>ソースファイル\Engine\Effect</Filter>
-    </ClCompile>
     <ClCompile Include="engine\math\Spline.cpp">
       <Filter>ソースファイル\Engine\Math</Filter>
     </ClCompile>
@@ -191,6 +188,9 @@
     </ClCompile>
     <ClCompile Include="engine\collision\SphereCollider.cpp">
       <Filter>ソースファイル\Engine\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\WinApp.cpp">
+      <Filter>ソースファイル\Engine\Base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

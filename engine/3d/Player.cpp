@@ -112,7 +112,7 @@ void Player::Move()
 
 void Player::Attack(Vector3 velo) {
 	
-	if (input->PushKey(DIK_SPACE)) {
+	if (input->PushMouseLeft()) {
 		if (coolTime == 0) {
 			//’e‚ğ¶¬‚µ‰Šú‰»
 		//•¡”

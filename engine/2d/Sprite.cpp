@@ -387,7 +387,8 @@ void Sprite::SpriteUpdate(Sprite& sprite, const SpriteCommon& spriteCommon)
 	matTrans.translate(position);
 
 	// ワールド行列の更新
-	sprite.matWorld.identity();
+	Matrix4 mat;
+	sprite.matWorld = mat.identity();
 	// Z軸回転
 	sprite.matWorld *= matRot;
 	// 平行移動

@@ -26,6 +26,8 @@ public:// メンバ関数
 	Vector3 GetEye() { return eye; }
 	void SetTarget(Vector3 terget_);
 	Vector3 GetTarget() { return target; }
+	Matrix4 GetMatView() { return matView; }
+	Matrix4 GetMatProjection() { return matProjection; }
 
 
 	/// 行列を更新する

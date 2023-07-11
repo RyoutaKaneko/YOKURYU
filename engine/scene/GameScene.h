@@ -36,6 +36,8 @@ public:
 	void LoadStage(int stageNum);
 	void LoadEnemy(int stageNum);
 
+	Vector3 GetScreenToWorldPos(Sprite& sprite_, RailCamera* rail);
+
 private:
 	//base
 	DirectXCommon* dxCommon = nullptr;

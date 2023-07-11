@@ -75,7 +75,7 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	reimu.SetColor(Vector4(1, 1, 1, 1));
 	reimu.SpriteCreate(dxCommon->GetDevice(), 50, 50, 1, Vector2(0.0f, 0.0f), false, false);
 	reimu.SetPosition(Vector3(1100, 0, 0));
-	reimu.SetScale(Vector2(128 * 1, 128 * 1));
+	reimu.SetScale(Vector2(64 * 1, 64 * 1));
 	reimu.SetRotation(0.0f);
 	reimu.SpriteTransferVertexBuffer(reimu, 1);
 	reimu.SpriteUpdate(reimu, spriteCommon_);
@@ -130,11 +130,9 @@ void GameScene::Update() {
 	}*/
 
 	Vector3 v = input->GetMousePos();
-	if (input->TriggerMouseRight()) {
-		reimu.SetPosition(v);
-		reimu.SpriteUpdate(reimu, spriteCommon_);
-		reimu.SpriteTransferVertexBuffer(reimu, 1);
-	}
+	reimu.SetPosition( v - Vector3(32, 32, 0));
+	reimu.SpriteUpdate(reimu, spriteCommon_);
+	reimu.SpriteTransferVertexBuffer(reimu, 1);
 
 	//当たり判定チェック
 	collisionManager->CheckAllCollisions();
@@ -144,7 +142,11 @@ void GameScene::Update() {
 		railCamera->Update(player, points);
 	}
 	/*railCamera->ViewUpdate();*/
-	player->Update(railCamera->GetFrontVec());
+	Vector3 shotVec = { 0,0,0 };
+	if (input->PushMouseLeft()) {
+		shotVec = GetScreenToWorldPos(reimu, railCamera);
+	}
+	player->Update(shotVec);
 	//デスフラグの立った敵を削除
 	enemys_.remove_if([](std::unique_ptr < Enemy>& enemy_) {
 		return enemy_->GetIsDead();
@@ -374,4 +376,47 @@ void GameScene::LoadEnemy(int stageNum) {
 	}
 	// ファイルと閉じる
 	file.close();
+}
+
+Vector3 GameScene::GetScreenToWorldPos(Sprite& sprite_, RailCamera* rail)
+{
+	if (rail == nullptr) {
+		return Vector3(0,0,1);
+	}
+
+	//ビューポート行列生成
+	Matrix4 viewPort = viewPort.identity();
+	viewPort.m[0][0] = WinApp::window_width;
+	viewPort.m[1][1] = WinApp::window_height;
+	viewPort.m[2][2] = 1;
+	viewPort.m[3][0] = WinApp::window_width;
+	viewPort.m[3][1] = WinApp::window_height;
+	viewPort.m[3][2] = 0;
+
+	//ビュープロジェクションビューポート合成行列
+	Matrix4 invViewPort = viewPort.MakeInverse();
+	Matrix4 invProjection = rail->GetView()->GetMatProjection().MakeInverse();
+	Matrix4 invView = rail->GetView()->GetMatView().MakeInverse();
+	//合成行列の逆行列を計算する
+	Matrix4 matInverseVPV = invViewPort * invProjection * invView;
+
+	//スクリーン座標
+	Vector3 posNear = Vector3(sprite_.GetPosition().x, sprite_.GetPosition().y,0 );
+	Vector3 posFar = Vector3(sprite_.GetPosition().x, sprite_.GetPosition().y, 1);
+
+	//スクリーン座標系からワールド座標系
+	Matrix4 mat1,mat2;
+	posNear = mat1.transform(posNear, matInverseVPV);
+	posFar = mat2.transform(posFar, matInverseVPV);
+
+	//マウスレイの方向
+	Vector3 mouseDirection = posFar - posNear;
+	mouseDirection = mouseDirection.normalize();
+	//カメラから照準オブジェクトの距離
+	const float kDistanceTestObject = 0.1f;
+
+	Vector3 translate = (mouseDirection) * kDistanceTestObject;
+	translate *= Vector3(1, 1, 1);
+
+	return translate;
 }

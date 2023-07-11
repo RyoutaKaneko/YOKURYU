@@ -128,6 +128,8 @@ public: // ゲッター
 	Vector3 GetPosition() const { return position; }
 	// サイズ
 	Vector2 GetScale() const { return scale; }
+	//ワールド行列
+	Matrix4 GetMat() { return constMap->mat; }
 	// 回転
 	float GetRotation() const { return rotation; }
 	// 番号

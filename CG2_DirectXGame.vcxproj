@@ -177,7 +177,6 @@
     <ClCompile Include="engine\effect\Particle.cpp" />
     <ClCompile Include="engine\effect\ParticleManager.cpp" />
     <ClCompile Include="engine\2d\Sprite.cpp" />
-    <ClCompile Include="engine\2d\SpriteCommon.cpp" />
     <ClCompile Include="engine\math\Vector2.cpp" />
     <ClCompile Include="engine\math\Vector3.cpp" />
     <ClCompile Include="engine\math\Vector4.cpp" />
@@ -294,7 +293,6 @@
     <ClInclude Include="engine\effect\Particle.h" />
     <ClInclude Include="engine\effect\ParticleManager.h" />
     <ClInclude Include="engine\2d\Sprite.h" />
-    <ClInclude Include="engine\2d\SpriteCommon.h" />
     <ClInclude Include="engine\math\Spline.h" />
     <ClInclude Include="engine\math\Vector2.h" />
     <ClInclude Include="engine\math\Vector3.h" />

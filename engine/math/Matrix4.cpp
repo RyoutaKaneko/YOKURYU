@@ -80,6 +80,7 @@ Matrix4 Matrix4::MakeInverse()
 			}
 		}
 
+		float a = abs(mat[maxIndex][n]);
 		//最大の絶対値が0だったら逆行列は求められない
 		if (abs(mat[maxIndex][n]) <= EPSILON) {
 			return temp; //とりあえず単位行列返しちゃう

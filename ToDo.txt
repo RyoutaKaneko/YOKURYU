@@ -1,0 +1,5 @@
+playerの移動速度調整
+HP表示
+
+viewportを作っては見たが数値がおかしい。
+変換の順序は viewport -> (w除算) -> projection -> view

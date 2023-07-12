@@ -49,6 +49,7 @@ private:
 	SpriteCommon spriteCommon_;
 	Sprite wood;
 	Sprite reimu;
+	Sprite hp[5];
 	//オブジェクトのポインタ
 	//3Dオブジェクト生成
 	Player* player = nullptr;

@@ -82,33 +82,33 @@ void Player::Move()
 	//playerˆÚ“®
 	if (input->PushKey(DIK_W)) {
 		if (input->PushKey(DIK_A) == true && input->PushKey(DIK_D) == false) {
-			move = { -0.02f, 0.02f, 0 };
+			move = { -0.03f, 0.03f, 0 };
 		}
 		else if (input->PushKey(DIK_A) == false && input->PushKey(DIK_D) == true) {
-			move = { 0.02f, 0.02f, 0 };
+			move = { 0.03f, 0.03f, 0 };
 		}
 		else {
-			move = { 0, 0.03f, 0 };
+			move = { 0, 0.04f, 0 };
 		}
 	}
 	else if (input->PushKey(DIK_A)) {
 		if (input->PushKey(DIK_S) == true && input->PushKey(DIK_W) == false) {
-			move = { -0.02f, -0.02f, 0 };
+			move = { -0.03f, -0.03f, 0 };
 		}
 		else {
-			move = { -0.03f, 0, 0 };
+			move = { -0.04f, 0, 0 };
 		}
 	}
 	else if (input->PushKey(DIK_D)) {
 		if (input->PushKey(DIK_S) == true && input->PushKey(DIK_W) == false) {
-			move = { 0.02f, -0.02f, 0 };
+			move = { 0.03f, -0.03f, 0 };
 		}
 		else {
-			move = { 0.03f, 0, 0 };
+			move = { 0.04f, 0, 0 };
 		}
 	}
 	else if (input->PushKey(DIK_S)) {
-		move = { 0, -0.03f, 0 };
+		move = { 0, -0.04f, 0 };
 	}
 
 	Vector3 tmp = GetPosition() + move;

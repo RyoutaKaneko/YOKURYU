@@ -28,7 +28,7 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	//player
 	player = new Player;
 	player->PlayerInitialize();
-	player->SetCollider(new SphereCollider);
+	player->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 0.7f));
 	//sky
 	skyModel = Model::LoadFromOBJ("skydome");
 	sky = Object3d::Create();
@@ -57,8 +57,6 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	// スプライト
 	sprite = new Sprite();
 	spriteCommon_ = sprite->SpriteCommonCreate(dxCommon->GetDevice());
-	// スプライト用パイプライン生成呼び出し
-	/*PipelineSet spritePipelineSet = sprite->SpriteCreateGraphicsPipeline(dxCommon->GetDevice());*/
 
 	//木の画像
 	wood.LoadTexture(spriteCommon_, 0, L"Resources/wood.png", dxCommon->GetDevice());
@@ -79,6 +77,18 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	reimu.SetRotation(0.0f);
 	reimu.SpriteTransferVertexBuffer(reimu, 1);
 	reimu.SpriteUpdate(reimu, spriteCommon_);
+
+	//HP用画像
+	for (int i = 0; i < 5; i++) {
+		hp[i].LoadTexture(spriteCommon_, 2, L"Resources/hitPoint.png", dxCommon->GetDevice());
+		hp[i].SetColor(Vector4(1, 1, 1, 1));
+		hp[i].SpriteCreate(dxCommon->GetDevice(), 50, 50, 2, Vector2(0.0f, 0.0f), false, false);
+		hp[i].SetPosition(Vector3(0 + i * 68.0f, 0, 0));
+		hp[i].SetScale(Vector2(64 * 1, 64 * 1));
+		hp[i].SetRotation(0.0f);
+		hp[i].SpriteTransferVertexBuffer(hp[i], 2);
+		hp[i].SpriteUpdate(hp[i], spriteCommon_);
+	}
 
 	//パーティクル初期化
 	particle = Particle::LoadParticleTexture("wood.png");
@@ -218,7 +228,10 @@ void GameScene::Draw() {
 	Sprite::PreDraw(dxCommon->GetCommandList(), spriteCommon_);
 
 	///=== スプライト描画 ===///
-	wood.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), wood.vbView);
+	/*wood.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), wood.vbView);*/
+	for (int i = 0; i < player->GetHP(); i++) {
+		hp[i].SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), hp[i].vbView);
+	}
 	reimu.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), reimu.vbView);
 
 	// スプライト描画後処理
@@ -295,7 +308,7 @@ void GameScene::Reset() {
 	//player
 	player = new Player;
 	player->PlayerInitialize();
-	player->SetCollider(new SphereCollider);
+	player->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 0.1f));
 
 	railCamera = new RailCamera;
 	railCamera->Initialize(player);

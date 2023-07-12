@@ -47,16 +47,6 @@ void Player::Update(Vector3 velo)
 	bullets_.remove_if([](std::unique_ptr < PlayerBullet>& bullets_) {
 		return bullets_->IsDead();
 		});
-	//player‚Ó‚í‚Ó‚í
-	if (pTimer < 75) {
-		SetPosition(GetPosition() + Vector3(0, 0.005f, 0));
-	}
-	else if (pTimer < 150) {
-		SetPosition(GetPosition() + Vector3(0, -0.005f, 0));
-	}
-	else {
-		pTimer = 0;
-	}
 
 	if (isHit == true) {
 		hitTime++;
@@ -72,7 +62,6 @@ void Player::Update(Vector3 velo)
 	{
 		collider->Update();
 	}
-	pTimer++;
 }
 
 void Player::Move()
@@ -111,13 +100,25 @@ void Player::Move()
 		move = { 0, -0.04f, 0 };
 	}
 
+	//player‚Ó‚í‚Ó‚í
+	if (pTimer < 75) {
+		move += Vector3(0, 0.005f, 0);
+	}
+	else if (pTimer < 150) {
+		move += Vector3(0, -0.005f, 0);
+	}
+	else {
+		pTimer = 0;
+	}
+
 	Vector3 tmp = GetPosition() + move;
 	//
-	if (abs(tmp.x) <= 3.5f) {
-		if (abs(tmp.y) <= 2.0f) {
+	if (abs(tmp.x) <= 3.0f) {
+		if (tmp.y >= -1.5f && tmp.y <= 2.0f) {
 			SetPosition(GetPosition() + move);
 		}
 	}
+	pTimer++;
 }
 
 void Player::Attack(Vector3 velo) {

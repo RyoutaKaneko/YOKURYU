@@ -97,7 +97,7 @@ void RailCamera::GetVec(Vector3 a, Vector3 b) {
 
 void RailCamera::SetPlayer(Player* player_) {
 	//拡大回転座標変換
-	player_->SetPosition(Vector3(0, 0, -1));
+	player_->SetPosition(Vector3(0, 0, -1.5f));
 	player_->SetScale(Vector3(0.3f, 0.3f, 0.3f));
 	//親子構造のセット
 	player_->worldTransform_.SetParent3d(&camera->worldTransform_);

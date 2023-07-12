@@ -18,7 +18,7 @@ void EnemyBullet::BulletInitialize(const Vector3& position) {
 
 void EnemyBullet::Update(const Vector3& playerPos_) {
 	if (bulletTime < 40) {
-		velocity = (playerPos_ - GetPosition()) * 0.02f;
+		velocity = (playerPos_ - GetPosition()) * 0.05f;
 		bulletTime++;
 	}
 

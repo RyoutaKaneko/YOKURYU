@@ -48,7 +48,7 @@ private:
 	Sprite* sprite = new Sprite;
 	SpriteCommon spriteCommon_;
 	Sprite wood;
-	Sprite reimu;
+	Sprite crosshair;
 	Sprite hp[5];
 	//オブジェクトのポインタ
 	//3Dオブジェクト生成

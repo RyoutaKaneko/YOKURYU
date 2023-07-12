@@ -49,4 +49,5 @@ private:
 	float stagePoint;
 
 	bool isAttack;
+	int timeCount;
 };

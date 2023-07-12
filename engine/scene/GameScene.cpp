@@ -68,15 +68,15 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	wood.SpriteTransferVertexBuffer(wood, 0);
 	wood.SpriteUpdate(wood, spriteCommon_);
 
-	//霊夢の画像
-	reimu.LoadTexture(spriteCommon_, 1, L"Resources/reimu.png", dxCommon->GetDevice());
-	reimu.SetColor(Vector4(1, 1, 1, 1));
-	reimu.SpriteCreate(dxCommon->GetDevice(), 50, 50, 1, Vector2(0.0f, 0.0f), false, false);
-	reimu.SetPosition(Vector3(1100, 0, 0));
-	reimu.SetScale(Vector2(64 * 1, 64 * 1));
-	reimu.SetRotation(0.0f);
-	reimu.SpriteTransferVertexBuffer(reimu, 1);
-	reimu.SpriteUpdate(reimu, spriteCommon_);
+	//クロスヘアの画像
+	crosshair.LoadTexture(spriteCommon_, 1, L"Resources/crosshair.png", dxCommon->GetDevice());
+	crosshair.SetColor(Vector4(1, 1, 1, 1));
+	crosshair.SpriteCreate(dxCommon->GetDevice(), 50, 50, 1, Vector2(0.0f, 0.0f), false, false);
+	crosshair.SetPosition(Vector3(1100, 0, 0));
+	crosshair.SetScale(Vector2(64 * 1, 64 * 1));
+	crosshair.SetRotation(0.0f);
+	crosshair.SpriteTransferVertexBuffer(crosshair, 1);
+	crosshair.SpriteUpdate(crosshair, spriteCommon_);
 
 	//HP用画像
 	for (int i = 0; i < 5; i++) {
@@ -93,7 +93,7 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	//パーティクル初期化
 	particle = Particle::LoadParticleTexture("wood.png");
 	pm_ = ParticleManager::Create();
-	particle_ = Particle::LoadParticleTexture("reimu.png");
+	particle_ = Particle::LoadParticleTexture("crosshair.png");
 	pm = ParticleManager::Create();
 	//オブジェクトにモデルを紐付ける
 	pm->SetParticleModel(particle);
@@ -139,10 +139,11 @@ void GameScene::Update() {
 		railCamera->GetView()->SetTarget(railCamera->GetView()->GetTarget() + v);
 	}*/
 
+	//マウスカーソルの場所にクロスヘアを表示
 	Vector3 v = input->GetMousePos();
-	reimu.SetPosition( v - Vector3(32, 32, 0));
-	reimu.SpriteUpdate(reimu, spriteCommon_);
-	reimu.SpriteTransferVertexBuffer(reimu, 1);
+	crosshair.SetPosition( v - Vector3(32, 32, 0));
+	crosshair.SpriteUpdate(crosshair, spriteCommon_);
+	crosshair.SpriteTransferVertexBuffer(crosshair, 1);
 
 	//当たり判定チェック
 	collisionManager->CheckAllCollisions();
@@ -158,7 +159,7 @@ void GameScene::Update() {
 	/*railCamera->ViewUpdate();*/
 	Vector3 shotVec = { 0,0,0 };
 	if (input->PushMouseLeft()) {
-		shotVec = GetScreenToWorldPos(reimu, railCamera);
+		shotVec = GetScreenToWorldPos(crosshair, railCamera);
 	}
 	player->Update(shotVec);
 	//デスフラグの立った敵を削除
@@ -232,7 +233,7 @@ void GameScene::Draw() {
 	for (int i = 0; i < player->GetHP(); i++) {
 		hp[i].SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), hp[i].vbView);
 	}
-	reimu.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), reimu.vbView);
+	crosshair.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), crosshair.vbView);
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -308,7 +309,7 @@ void GameScene::Reset() {
 	//player
 	player = new Player;
 	player->PlayerInitialize();
-	player->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 0.1f));
+	player->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 0.7f));
 
 	railCamera = new RailCamera;
 	railCamera->Initialize(player);
@@ -325,8 +326,8 @@ void GameScene::LoadEnemy(int stageNum) {
 
 	for (int i = 0; i < points.size(); i++)
 	{
-		pointsL[i] += Vector3(-4, 0, 0);
-		pointsR[i] += Vector3(4, 0, 0);
+		pointsL[i] += Vector3(-2, 0, 0);
+		pointsR[i] += Vector3(2, 0, 0);
 	}
 
 	enemys_.clear();

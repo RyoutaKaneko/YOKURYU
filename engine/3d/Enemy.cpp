@@ -22,24 +22,46 @@ void Enemy::EnemyInitialize()
 	isDead_ = false;
 	timer = 0;
 	isAttack = false;
+	timeCount = 0;
 }
 
 void Enemy::Update(Vector3 velo,float t) {
+	float moveX;
+	if (timeCount == 0) {
+		moveX = -0.05f;
+	}
+	else if (timeCount == 1) {
+		moveX = 0.05f;
+	}
+	else if (timeCount == 2) {
+		moveX = 0.05f;
+	}
+	else {
+		moveX = -0.05f;
+	}
+
 	if (timer < 75) {
-		SetPosition(GetPosition() + Vector3( 0, 0.005f, 0 ));
+		SetPosition(GetPosition() + Vector3(moveX, 0.005f, 0 ));
 	}
 	else if (timer < 150) {
-		SetPosition(GetPosition() + Vector3(0, -0.005f, 0));
+		SetPosition(GetPosition() + Vector3(moveX, -0.005f, 0));
 	}
 	else {
 		timer = 0;
+		if (timeCount == 4) {
+			timeCount = 0;
+		}
+		else {
+			timeCount++;
+		}
 	}
+	//playerÇ™ìGÇí«Ç¢âzÇµÇΩÇÁçUåÇÇµÇ»Ç¢
 	if (stagePoint < t + 1.0f) {
 		if (isAttack == true) {
 			isAttack = false;
 		}
 	}
-
+	//çUåÇ
 	if (isAttack == false) {
 		Vector3 playerVec = velo - GetPosition();
 		float len = playerVec.length();
@@ -89,7 +111,7 @@ void Enemy::Attack() {
 
 			//íPî≠													   
 			newBullet->BulletInitialize(GetPosition());
-			newBullet->SetCollider(new SphereCollider(Vector3{0,0,0},0.1f));
+			newBullet->SetCollider(new SphereCollider(Vector3{0,0,0},0.5f));
 
 			//íeÇÃìoò^										 
 		   //ï°êî

@@ -1,6 +1,7 @@
 #include "Enemy.h"
 #include "string.h"
 #include "BaseCollider.h"
+#include "SphereCollider.h"
 
 //デストラクタ
 Enemy::~Enemy() {
@@ -18,12 +19,12 @@ void Enemy::EnemyInitialize()
 	Create();
 	// オブジェクトにモデルをひも付ける
 	SetModel(enemyModel);
-	/*SetCollider(new SphereCollider);*/
 	isDead_ = false;
 	timer = 0;
+	isAttack = false;
 }
 
-void Enemy::Update() {
+void Enemy::Update(Vector3 velo,float t) {
 	if (timer < 75) {
 		SetPosition(GetPosition() + Vector3( 0, 0.005f, 0 ));
 	}
@@ -33,6 +34,30 @@ void Enemy::Update() {
 	else {
 		timer = 0;
 	}
+	if (stagePoint < t + 1.0f) {
+		if (isAttack == true) {
+			isAttack = false;
+		}
+	}
+
+	if (isAttack == false) {
+		Vector3 playerVec = velo - GetPosition();
+		float len = playerVec.length();
+		if (len < 70.0f) {
+			isAttack = true;
+		}
+	}
+	else {
+		Attack();
+	}
+
+	for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
+		bullet->Update(velo);
+	}
+	//デスフラグの立った敵を削除
+	bullets_.remove_if([](std::unique_ptr <EnemyBullet>& bullets_) {
+		return bullets_->IsDead();
+		});
 	//当たり判定更新
 	if (collider)
 	{
@@ -52,5 +77,40 @@ void Enemy::OnCollision(const CollisionInfo& info)
 		if (isDead_ == false) {
 			isDead_ = true;
 		}
+	}
+}
+
+void Enemy::Attack() {
+
+		if (coolTime == 0) {
+			//弾を生成し初期化
+		//複数
+			std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
+
+			//単発													   
+			newBullet->BulletInitialize(GetPosition());
+			newBullet->SetCollider(new SphereCollider(Vector3{0,0,0},0.1f));
+
+			//弾の登録										 
+		   //複数
+			newBullet->SetPosition(GetPosition());
+			newBullet->SetScale({ 0.3f,0.3f,0.3f });
+			bullets_.push_back(std::move(newBullet));
+
+
+			//クールタイムを設定
+			coolTime = 100;
+		}
+		else if (coolTime > 0) {
+			coolTime--;
+		}
+
+}
+
+void Enemy::EnemyDraw(ViewProjection* viewProjection_) {
+	Draw(viewProjection_);
+	//弾描画
+	for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
+		bullet->Draw(viewProjection_);
 	}
 }

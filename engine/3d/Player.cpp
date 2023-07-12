@@ -24,10 +24,12 @@ bool Player::PlayerInitialize() {
 	SetModel(playerModel);
 	SetPosition(Vector3(0, 0, 0));
 
-	hp = 3;
+	hp = 5;
 	coolTime = 0;
 	len = 6.0f;
 	pTimer = 0;
+	isHit = false;
+	hitTime = 0;
 
 	return true;
 }
@@ -54,6 +56,14 @@ void Player::Update(Vector3 velo)
 	}
 	else {
 		pTimer = 0;
+	}
+
+	if (isHit == true) {
+		hitTime++;
+		if (hitTime == 50) {
+			hitTime = 0;
+			isHit = false;
+		}
 	}
 
 	worldTransform_.UpdateMatrix();
@@ -140,7 +150,9 @@ void Player::Attack(Vector3 velo) {
 }
 
 void Player::PlayerDraw(ViewProjection* viewProjection_) {
-	Draw(viewProjection_);
+	if (hitTime % 5 == 0) {
+		Draw(viewProjection_);
+	}
 	//’e•`‰æ
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		bullet->Draw(viewProjection_);
@@ -162,9 +174,16 @@ void Player::OnCollision(const CollisionInfo& info)
 {
 	//Õ“Ë‘Šè‚Ì–¼‘O
 	const char* str1 = "class Enemy";
+	const char* str2 = "class EnemyBullet";
 
 	//‘Šè‚ªenemy
 	if (strcmp(toCollisionName, str1) == 0) {
-		int a = 0;
+	}
+	//‘Šè‚ªenemy‚Ì’e
+	if (strcmp(toCollisionName, str2) == 0) {
+		if (isHit == false) {
+			hp--;
+			isHit = true;
+		}
 	}
 }

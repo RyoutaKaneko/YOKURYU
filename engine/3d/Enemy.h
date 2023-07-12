@@ -4,6 +4,7 @@
 #include "Vector3.h"
 #include "Model.h"
 #include <list>
+#include "EnemyBullet.h"
 
 //GameScene‚Ì‘O•ûéŒ¾
 class GameScene;
@@ -16,15 +17,19 @@ public:
 	//‰Šú‰»
 	void EnemyInitialize();
 
-	//“GƒŠƒXƒg
-	const std::list<std::unique_ptr<Enemy>>& GetEnemys() { return enemys_; }
-
 
 	bool GetIsDead() const { return isDead_; }
 	
-	void Update();
+	void Update(Vector3 velo,float t);
+	void EnemyDraw(ViewProjection* viewProjection_);
+
+	void Attack();
 
 	void OnCollision(const CollisionInfo& info) override;
+	void SetStagePoint(float pos_) { stagePoint = pos_; }
+
+	//’eƒŠƒXƒg‚ğæ“¾
+	const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets_; }
 
 private:
 
@@ -32,7 +37,7 @@ private:
 	bool isDead_ = false;
 
 	//“G
-	std::list<std::unique_ptr<Enemy>> enemys_;
+	std::list<std::unique_ptr<EnemyBullet>> bullets_;
 
 	// ƒ‚ƒfƒ‹
 	Model* enemyModel = nullptr;
@@ -40,4 +45,8 @@ private:
 	//”¼Œa
 	int timer;
 	float radius = 1.0f;
+	int coolTime = 0;
+	float stagePoint;
+
+	bool isAttack;
 };

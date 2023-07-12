@@ -137,6 +137,10 @@ void GameScene::Update() {
 	//当たり判定チェック
 	collisionManager->CheckAllCollisions();
 
+	if (player->GetHP() == 0) {
+		Reset();
+	}
+
 	//更新
 	if (railCamera->GetIsEnd() == false) {
 		railCamera->Update(player, points);
@@ -153,7 +157,7 @@ void GameScene::Update() {
 		});
 	//敵キャラの更新
 	for (const std::unique_ptr<Enemy>& enemy : enemys_) {
-		enemy->Update();
+		enemy->Update(player->GetWorldPos(),railCamera->GetPasPoint());
 	}
 	sky->Update();
 	floor->Update();
@@ -172,7 +176,7 @@ void GameScene::Draw() {
 	floor->Draw(railCamera->GetView());
 	//敵キャラの描画
 	for (const std::unique_ptr<Enemy>& enemy : enemys_) {
-		enemy->Draw(railCamera->GetView());
+		enemy->EnemyDraw(railCamera->GetView());
 	}
 	player->PlayerDraw(railCamera->GetView());
 
@@ -291,6 +295,7 @@ void GameScene::Reset() {
 	//player
 	player = new Player;
 	player->PlayerInitialize();
+	player->SetCollider(new SphereCollider);
 
 	railCamera = new RailCamera;
 	railCamera->Initialize(player);
@@ -353,16 +358,19 @@ void GameScene::LoadEnemy(int stageNum) {
 				if (word.find("L") == 0)
 				{
 					line_stream >> t;
+					newEnemy->SetStagePoint(t);
 					position = spline.EnemyPosition(pointsL, t);
 				}
 				else if (word.find("M") == 0)
 				{
 					line_stream >> t;
+					newEnemy->SetStagePoint(t);
 					position = spline.EnemyPosition(points, t);
 				}
 				else if (word.find("R") == 0)
 				{
 					line_stream >> t;
+					newEnemy->SetStagePoint(t);
 					position = spline.EnemyPosition(pointsR, t);
 				}
 

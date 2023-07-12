@@ -34,6 +34,7 @@ public:
 
 	Object3d* GetCamera() { return camera; }
 	Vector3 GetCameraPos() { return camera->worldTransform_.position_; }
+	float GetPasPoint() { return splineCam.GetT(); }
 private:
 	Input* input_ = nullptr;
 	ViewProjection* viewProjection = nullptr;

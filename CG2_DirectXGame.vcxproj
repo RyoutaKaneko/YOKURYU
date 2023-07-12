@@ -160,6 +160,7 @@
     <ClCompile Include="app\platform\Framework.cpp" />
     <ClCompile Include="app\scene\BaseScene.cpp" />
     <ClCompile Include="engine\3d\Enemy.cpp" />
+    <ClCompile Include="engine\3d\EnemyBullet.cpp" />
     <ClCompile Include="engine\3d\Player.cpp" />
     <ClCompile Include="engine\3d\PlayerBullet.cpp" />
     <ClCompile Include="engine\3d\RailCamera.cpp" />
@@ -274,6 +275,7 @@
     <ClInclude Include="app\platform\Framework.h" />
     <ClInclude Include="app\scene\BaseScene.h" />
     <ClInclude Include="engine\3d\Enemy.h" />
+    <ClInclude Include="engine\3d\EnemyBullet.h" />
     <ClInclude Include="engine\3d\Player.h" />
     <ClInclude Include="engine\3d\PlayerBullet.h" />
     <ClInclude Include="engine\3d\RailCamera.h" />

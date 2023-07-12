@@ -19,6 +19,7 @@ Vector3 Spline::Update(std::vector<Vector3>& points, float val) {
 			startIndex++;
 
 			t -= 1.0f;
+			integer += 1.0f;
 		}
 		else {
 			isEnd = true;

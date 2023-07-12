@@ -49,9 +49,11 @@ private:
 	//弾 
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
 	//HP
-	int hp = 3;
+	int hp = 5;
 	int coolTime = 0;
 	float len = 6;
 	int pTimer = 0;
+	bool isHit;
+	int hitTime;
 
 };

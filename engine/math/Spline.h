@@ -25,6 +25,7 @@ public:
 	Vector3 SplinePosition(const std::vector<Vector3>& point, size_t startIndex, float t);
 
 	bool GetIsEnd() { return isEnd; }
+	float GetT() { return t + integer; }
 
 private:
 	//時間計算に必要なデータ
@@ -38,6 +39,7 @@ private:
 	size_t startIndex = 1;
 	bool isEnd = false;
 	float t = 0;
+	float integer = 0;
 
 
 	//球の位置

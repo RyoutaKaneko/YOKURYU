@@ -126,9 +126,6 @@
     <ClCompile Include="engine\math\Vector4.cpp">
       <Filter>ソースファイル\Engine\Math</Filter>
     </ClCompile>
-    <ClCompile Include="engine\2d\SpriteCommon.cpp">
-      <Filter>ソースファイル\Engine\2d</Filter>
-    </ClCompile>
     <ClCompile Include="engine\3d\WorldTransform.cpp">
       <Filter>ソースファイル\Engine\3d</Filter>
     </ClCompile>
@@ -191,6 +188,9 @@
     </ClCompile>
     <ClCompile Include="engine\base\WinApp.cpp">
       <Filter>ソースファイル\Engine\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\3d\EnemyBullet.cpp">
+      <Filter>ソースファイル\Engine\GameObj</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -270,9 +270,6 @@
     <ClInclude Include="engine\3d\Model.h">
       <Filter>ヘッダー ファイル\Engine\3d</Filter>
     </ClInclude>
-    <ClInclude Include="engine\2d\SpriteCommon.h">
-      <Filter>ヘッダー ファイル\Engine\2d</Filter>
-    </ClInclude>
     <ClInclude Include="engine\math\Vector2.h">
       <Filter>ヘッダー ファイル\Engine\Math</Filter>
     </ClInclude>
@@ -350,6 +347,9 @@
     </ClInclude>
     <ClInclude Include="engine\collision\SphereCollider.h">
       <Filter>ヘッダー ファイル\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\EnemyBullet.h">
+      <Filter>ヘッダー ファイル\Engine\GameObj</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

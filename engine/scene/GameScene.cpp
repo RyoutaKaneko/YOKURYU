@@ -142,6 +142,7 @@ void GameScene::Update() {
 	//マウスカーソルの場所にクロスヘアを表示
 	Vector3 v = input->GetMousePos();
 	crosshair.SetPosition( v - Vector3(32, 32, 0));
+	/*crosshair.SetPosition(Vector3(640, 360, 0));*/
 	crosshair.SpriteUpdate(crosshair, spriteCommon_);
 	crosshair.SpriteTransferVertexBuffer(crosshair, 1);
 
@@ -407,27 +408,29 @@ Vector3 GameScene::GetScreenToWorldPos(Sprite& sprite_, RailCamera* rail)
 	}
 
 	//ビューポート行列生成
-	Matrix4 viewPort = viewPort.identity();
-	viewPort.m[0][0] = WinApp::window_width;
-	viewPort.m[1][1] = WinApp::window_height;
-	viewPort.m[2][2] = 1;
-	viewPort.m[3][0] = WinApp::window_width;
-	viewPort.m[3][1] = WinApp::window_height;
-	viewPort.m[3][2] = 0;
+	Matrix4 viewPort = viewPort.ViewPortMat(WinApp::window_width,WinApp::window_height,Vector2(0.0f,0.0f));
 
 	//ビュープロジェクションビューポート合成行列
-	Matrix4 invViewPort = viewPort.MakeInverse();
-	Matrix4 invProjection = rail->GetView()->GetMatProjection().MakeInverse();
-	Matrix4 invView = rail->GetView()->GetMatView().MakeInverse();
-	//合成行列の逆行列を計算する
+	Matrix4 invViewPort = viewPort;
+	invViewPort.MakeInverse();
+	//プロジェクション行列//
+	float fovAngleY = 45.0f * (3.141592f / 180.0f);;
+	float aspectRatio = (float)WinApp::window_width / WinApp::window_height;
+	//プロジェクション行列生成
+	Matrix4 projection = projection.ProjectionMat(fovAngleY, aspectRatio, 0.1f, 200.0f);
+	Matrix4 invProjection = projection;
+	invProjection.MakeInverse();
+	//ビュー行列//
+	Matrix4 view = railCamera->GetView()->GetMatView();
+	Matrix4 invView = view;
+	invView.MakeInverse();
+	////合成行列の逆行列を計算する
 	Matrix4 matInverseVPV = invViewPort * invProjection * invView;
-
-	//スクリーン座標
-	Vector3 posNear = Vector3(sprite_.GetPosition().x, sprite_.GetPosition().y,0 );
-	Vector3 posFar = Vector3(sprite_.GetPosition().x, sprite_.GetPosition().y, 1);
-
 	//スクリーン座標系からワールド座標系
-	Matrix4 mat1,mat2;
+	Matrix4 mat1, mat2;
+	//w除算
+	Vector3 posNear = Vector3(sprite_.GetPosition().x, sprite_.GetPosition().y, 0);
+	Vector3 posFar = Vector3(sprite_.GetPosition().x, sprite_.GetPosition().y, 1);
 	posNear = mat1.transform(posNear, matInverseVPV);
 	posFar = mat2.transform(posFar, matInverseVPV);
 
@@ -435,10 +438,10 @@ Vector3 GameScene::GetScreenToWorldPos(Sprite& sprite_, RailCamera* rail)
 	Vector3 mouseDirection = posFar - posNear;
 	mouseDirection = mouseDirection.normalize();
 	//カメラから照準オブジェクトの距離
-	const float kDistanceTestObject = 0.1f;
+	const float kDistanceTestObject = 0.01f;
 
-	Vector3 translate = (mouseDirection) * kDistanceTestObject;
-	translate *= Vector3(1, 1, 1);
+	Vector3 pos = player->GetWorldPos();
+	Vector3 translate = (posFar - posNear) * kDistanceTestObject;
 
 	return translate;
 }

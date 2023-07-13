@@ -129,11 +129,11 @@ void Player::Attack(Vector3 velo) {
 		//ï°êî
 			std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
 
-			//íPî≠													   
+			//íPî≠
 			newBullet->BulletInitialize(GetPosition(),velo);
 			newBullet->SetCollider(new SphereCollider());
 
-			//íeÇÃìoò^										 
+			//íeÇÃìoò^
 		   //ï°êî
 			newBullet->SetPosition(GetWorldPos());
 			newBullet->SetScale({ 0.3f,0.3f,0.3f });
@@ -141,7 +141,7 @@ void Player::Attack(Vector3 velo) {
 
 
 			//ÉNÅ[ÉãÉ^ÉCÉÄÇê›íË
-			coolTime = 12;
+			coolTime = 8;
 		}
 		else if (coolTime > 0) {
 			coolTime--;

@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Vector3.h"
+#include "Vector2.h"
 
 class Matrix4
 {
@@ -47,6 +48,7 @@ public:
 
 	// 射影行列作成
 	Matrix4 ProjectionMat(float fovAngleY, float aspectRatio, float nearZ, float farZ);
+	Matrix4 ViewPortMat(float width, float height, Vector2 offset);
 
 	// 代入演算子オーバーロード
 	Matrix4& operator*=(const Matrix4& m1);

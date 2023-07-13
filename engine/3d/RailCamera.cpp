@@ -22,6 +22,7 @@ void RailCamera::Initialize(Player* player_) {
 	SetPlayer(player_);
 	oldCamera = { 0,0,0 };
 	isEnd = false;
+	OnRail = true;
 }
 
 void RailCamera::ViewUpdate() {
@@ -31,38 +32,43 @@ void RailCamera::ViewUpdate() {
 //更新
 void RailCamera::Update(Player* player_, std::vector<Vector3>& point) {
 
-	Vector3 target_ = spline_.Update(point, 0.00001f);
-	camera->SetPosition(splineCam.Update(point, 0.0f));
-	//最初の1ループのみ現在位置を入れる
-	if (oldCamera.x == 0 && oldCamera.y == 0 && oldCamera.z == 0) {
+	if (OnRail == true) {
+		Vector3 target_ = spline_.Update(point, 0.00001f);
+		camera->SetPosition(splineCam.Update(point, 0.0f));
+		//最初の1ループのみ現在位置を入れる
+		if (oldCamera.x == 0 && oldCamera.y == 0 && oldCamera.z == 0) {
+			oldCamera = camera->GetPosition();
+		}
+
+		float eyeAd = camera->GetPosition().y - oldCamera.y;
+
+		//方向ベクトルの取得
+		GetVec(camera->GetPosition(), target_);
+
+		//カメラ方向に合わせてY軸の回転
+		float radY = std::atan2(frontVec.x, frontVec.z);
+		camera->SetRotationY(radY * 180.0f / 3.1415f);
+		//カメラ方向に合わせてX軸の回転
+		Vector3 rotaVec = { frontVec.x,0,frontVec.z };
+		float length = rotaVec.length();
+		float radX = std::atan2(-frontVec.y, length);
+		camera->SetRotationX(radX * 180.0f / 3.1415f);
+
+		if (spline_.GetIsEnd() == true) {
+			OnRail = false;
+		}
+		//更新
+		camera->Update();
+		viewProjection->target = (target_ + frontVec * 5);
+		viewProjection->eye = (camera->GetPosition() - frontVec * player_->GetLen());
+		viewProjection->eye.y = (camera->GetPosition().y + 1 - (eyeAd * 5));
+
+		viewProjection->UpdateMatrix();
 		oldCamera = camera->GetPosition();
 	}
-	
-	float eyeAd = camera->GetPosition().y - oldCamera.y;
-
-	//方向ベクトルの取得
-	GetVec(camera->GetPosition(), target_);
-
-	//カメラ方向に合わせてY軸の回転
-	float radY = std::atan2(frontVec.x, frontVec.z);
-	camera->SetRotationY(radY * 180.0f / 3.1415f);
-	//カメラ方向に合わせてX軸の回転
-	Vector3 rotaVec = { frontVec.x,0,frontVec.z };
-	float length = rotaVec.length();
-	float radX = std::atan2(-frontVec.y, length);
-	camera->SetRotationX(radX * 180.0f / 3.1415f);
-	//更新
-	camera->Update();
-	viewProjection->target = (target_ + frontVec * 5);
-	viewProjection->eye = (camera->GetPosition() - frontVec * player_->GetLen());
-	viewProjection->eye.y = (camera->GetPosition().y + 1 - (eyeAd * 5));
-
-	if (spline_.GetIsEnd() == true) {
-		isEnd = true;
+	else {
+		viewProjection->UpdateMatrix();
 	}
-
-	viewProjection->UpdateMatrix();
-	oldCamera = camera->GetPosition();
 }
 
 void RailCamera::TitleR(Player* player_)

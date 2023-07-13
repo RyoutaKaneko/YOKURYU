@@ -30,6 +30,7 @@ public:
 
 	ViewProjection* GetView() { return viewProjection; }
 	bool GetIsEnd() { return isEnd; }
+	bool GetOnRail() { return OnRail; }
 	Vector3 GetFrontVec() { return frontVec; }
 
 	Object3d* GetCamera() { return camera; }
@@ -51,5 +52,6 @@ private:
 	Vector3 oldCamera = { 0,0,0 };
 
 	bool isEnd;
+	bool OnRail;
 };
 

@@ -192,6 +192,9 @@
     <ClCompile Include="engine\3d\EnemyBullet.cpp">
       <Filter>ソースファイル\Engine\GameObj</Filter>
     </ClCompile>
+    <ClCompile Include="engine\3d\Boss.cpp">
+      <Filter>ソースファイル\Engine\GameObj</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -349,6 +352,9 @@
       <Filter>ヘッダー ファイル\Collision</Filter>
     </ClInclude>
     <ClInclude Include="engine\3d\EnemyBullet.h">
+      <Filter>ヘッダー ファイル\Engine\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\Boss.h">
       <Filter>ヘッダー ファイル\Engine\GameObj</Filter>
     </ClInclude>
   </ItemGroup>

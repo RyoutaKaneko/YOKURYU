@@ -159,6 +159,7 @@
   <ItemGroup>
     <ClCompile Include="app\platform\Framework.cpp" />
     <ClCompile Include="app\scene\BaseScene.cpp" />
+    <ClCompile Include="engine\3d\Boss.cpp" />
     <ClCompile Include="engine\3d\Enemy.cpp" />
     <ClCompile Include="engine\3d\EnemyBullet.cpp" />
     <ClCompile Include="engine\3d\Player.cpp" />
@@ -274,6 +275,7 @@
   <ItemGroup>
     <ClInclude Include="app\platform\Framework.h" />
     <ClInclude Include="app\scene\BaseScene.h" />
+    <ClInclude Include="engine\3d\Boss.h" />
     <ClInclude Include="engine\3d\Enemy.h" />
     <ClInclude Include="engine\3d\EnemyBullet.h" />
     <ClInclude Include="engine\3d\Player.h" />

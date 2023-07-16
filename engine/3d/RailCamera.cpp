@@ -68,6 +68,7 @@ void RailCamera::Update(Player* player_, std::vector<Vector3>& point) {
 	}
 	else {
 		viewProjection->UpdateMatrix();
+		camera->Update();
 	}
 }
 
@@ -125,8 +126,8 @@ void RailCamera::ShakeCamera() {
 	//—”¶¬‘•’u
 	std::random_device seed_gen;
 	std::mt19937_64 engine(seed_gen());
-	std::uniform_real_distribution<float>dist(-1.5f, 1.5f);
-	std::uniform_real_distribution<float>dist2(-1.5f, 1.5f);
+	std::uniform_real_distribution<float>dist(-0.2f, 0.2f);
+	std::uniform_real_distribution<float>dist2(-0.2f, 0.2f);
 
 
 	viewProjection->eye = viewProjection->eye + Vector3(dist(engine), dist2(engine), dist2(engine));

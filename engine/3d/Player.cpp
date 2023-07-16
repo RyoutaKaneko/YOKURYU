@@ -50,7 +50,7 @@ void Player::Update(Vector3 velo)
 
 	if (isHit == true) {
 		hitTime++;
-		if (hitTime == 50) {
+		if (hitTime == 15) {
 			hitTime = 0;
 			isHit = false;
 		}

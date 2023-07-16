@@ -17,6 +17,7 @@
 #include "RailCamera.h"
 #include "Enemy.h"
 #include "CollisionManager.h"
+#include "Boss.h"
 
 
 class GameScene {
@@ -47,9 +48,11 @@ private:
 	//スプライトのポインタ
 	Sprite* sprite = new Sprite;
 	SpriteCommon spriteCommon_;
-	Sprite wood;
+	Sprite titleGH;
 	Sprite crosshair;
 	Sprite hp[5];
+	Sprite clearGH;
+	Sprite overGH;
 	//オブジェクトのポインタ
 	//3Dオブジェクト生成
 	Player* player = nullptr;
@@ -58,6 +61,7 @@ private:
 	Object3d* sky = nullptr;
 	Model* floorModel = nullptr;
 	Object3d* floor = nullptr;
+	Boss* boss = nullptr;
 	//カメラ
 	ViewProjection* viewProjection = nullptr;
 	XMViewProjection* xmViewProjection = nullptr;
@@ -80,6 +84,14 @@ private:
 	std::vector<Vector3> pointsR;
 	//ステージ
 	int stageNum = 0;
-	
+	bool isCheckPoint = false;
+	bool isPlayable = false;
 
+	enum Scene {
+		TITLE,
+		GAME,
+		CLEAR,
+		OVER
+	};
+	Scene sceneNum;
 };

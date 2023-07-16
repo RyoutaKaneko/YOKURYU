@@ -51,6 +51,10 @@ private:
 	Vector3 frontVec = { 0,0,0 };
 	Vector3 oldCamera = { 0,0,0 };
 
+	//tmp
+	Vector3 eyeTmp{};
+	Vector3 targetTmp{};
+
 	bool isEnd;
 	bool OnRail;
 };

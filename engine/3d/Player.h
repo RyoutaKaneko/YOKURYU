@@ -31,6 +31,7 @@ public:
 	/////getter/////
 	//hp
 	int GetHP() { return hp; }
+	bool GetIsHit() { return isHit; }
 	//fever
 	float GetLen() { return len; }
 	//ワールド座標取得

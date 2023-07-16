@@ -58,19 +58,15 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	sprite = new Sprite();
 	spriteCommon_ = sprite->SpriteCommonCreate(dxCommon->GetDevice());
 
-	//木の画像
-	wood.LoadTexture(spriteCommon_, 0, L"Resources/wood.png", dxCommon->GetDevice());
-	wood.SetColor(Vector4(1, 1, 1, 1));
-	wood.SpriteCreate(dxCommon->GetDevice(), 50, 50, 0, Vector2(0.0f, 0.0f), false, false);
-	wood.SetPosition(Vector3(0, 0, 0));
-	wood.SetScale(Vector2(128 * 1, 128 * 1));
-	wood.SetRotation(0.0f);
-	wood.SpriteTransferVertexBuffer(wood, 0);
-	wood.SpriteUpdate(wood, spriteCommon_);
+	//titleの画像
+	titleGH.LoadTexture(spriteCommon_, 0, L"Resources/title.png", dxCommon->GetDevice());
+	titleGH.SpriteCreate(dxCommon->GetDevice(), 50, 50, 0, Vector2(0.0f, 0.0f), false, false);
+	titleGH.SetScale(Vector2(1280 * 1, 720 * 1));
+	titleGH.SpriteTransferVertexBuffer(titleGH, 0);
+	titleGH.SpriteUpdate(titleGH, spriteCommon_);
 
 	//クロスヘアの画像
 	crosshair.LoadTexture(spriteCommon_, 1, L"Resources/crosshair.png", dxCommon->GetDevice());
-	crosshair.SetColor(Vector4(1, 1, 1, 1));
 	crosshair.SpriteCreate(dxCommon->GetDevice(), 50, 50, 1, Vector2(0.0f, 0.0f), false, false);
 	crosshair.SetPosition(Vector3(1100, 0, 0));
 	crosshair.SetScale(Vector2(64 * 1, 64 * 1));
@@ -81,7 +77,6 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	//HP用画像
 	for (int i = 0; i < 5; i++) {
 		hp[i].LoadTexture(spriteCommon_, 2, L"Resources/hitPoint.png", dxCommon->GetDevice());
-		hp[i].SetColor(Vector4(1, 1, 1, 1));
 		hp[i].SpriteCreate(dxCommon->GetDevice(), 50, 50, 2, Vector2(0.0f, 0.0f), false, false);
 		hp[i].SetPosition(Vector3(0 + i * 68.0f, 0, 0));
 		hp[i].SetScale(Vector2(64 * 1, 64 * 1));
@@ -89,6 +84,20 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 		hp[i].SpriteTransferVertexBuffer(hp[i], 2);
 		hp[i].SpriteUpdate(hp[i], spriteCommon_);
 	}
+
+	//gameclearの画像
+	clearGH.LoadTexture(spriteCommon_, 3, L"Resources/clear.png", dxCommon->GetDevice());
+	clearGH.SpriteCreate(dxCommon->GetDevice(), 1280, 720, 3, Vector2(0.0f, 0.0f), false, false);
+	clearGH.SetScale(Vector2(1280 * 1, 720 * 1));
+	clearGH.SpriteTransferVertexBuffer(clearGH, 3);
+	clearGH.SpriteUpdate(clearGH, spriteCommon_);
+
+	//gameoverの画像
+	overGH.LoadTexture(spriteCommon_, 4, L"Resources/over.png", dxCommon->GetDevice());
+	overGH.SpriteCreate(dxCommon->GetDevice(), 1280, 720, 4, Vector2(0.0f, 0.0f), false, false);
+	overGH.SetScale(Vector2(1280 * 1, 720 * 1));
+	overGH.SpriteTransferVertexBuffer(overGH, 4);
+	overGH.SpriteUpdate(overGH, spriteCommon_);
 
 	//パーティクル初期化
 	particle = Particle::LoadParticleTexture("wood.png");
@@ -110,72 +119,127 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	obj->SetPosition(Vector3(1, 0, -10));
 	obj->SetScale(Vector3((float)0.01, (float)0.01, (float)0.01));
 
+	//boss
+	boss = new Boss;
+	boss->BossInitialize();
+	boss->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 10.0f));
+
+
 	//スプライン制御点の読み込み
 	stageNum = 1;
 	LoadStage(stageNum);
 	LoadEnemy(stageNum);
-
+	//
+	isCheckPoint = false;
+	isPlayable = true;
+	 //
+	sceneNum = TITLE;
 }
 
 ///-----更新処理-----///
 void GameScene::Update() {
 	input->Update();
-
-	////パーティクル
-	//if (input->PushKey(DIK_SPACE))
-	//{
-	//	pm->Fire(particle, 30, 0.2f, 0, 2, { 8.0f, 0.0f });
-	//	pm_->Fire(particle_, 30, 0.2f, 0, 1, { 8.0f, 0.0f });
-	//}
+	Vector3 v = input->GetMousePos();
 
 	//リセット
 	if (input->TriggerKey(DIK_R)) {
 		Reset();
 	}
-	//デバックカメラ
-	/*if (input->PushMouseRight()) {
-		Vector3 v = input->GetMouseVelo();
-		v.x *= -1;
-		railCamera->GetView()->SetTarget(railCamera->GetView()->GetTarget() + v);
-	}*/
 
-	//マウスカーソルの場所にクロスヘアを表示
-	Vector3 v = input->GetMousePos();
-	crosshair.SetPosition( v - Vector3(32, 32, 0));
-	/*crosshair.SetPosition(Vector3(640, 360, 0));*/
-	crosshair.SpriteUpdate(crosshair, spriteCommon_);
-	crosshair.SpriteTransferVertexBuffer(crosshair, 1);
-
-	//当たり判定チェック
-	collisionManager->CheckAllCollisions();
-
-	if (player->GetHP() == 0) {
-		Reset();
-	}
-
-	//更新
-	if (railCamera->GetIsEnd() == false) {
-		railCamera->Update(player, points);
-	}
-	/*railCamera->ViewUpdate();*/
 	Vector3 shotVec = { 0,0,0 };
-	if (input->PushMouseLeft()) {
-		shotVec = GetScreenToWorldPos(crosshair, railCamera);
+	switch (sceneNum)
+	{
+	case GameScene::TITLE:
+		if (input->TriggerKey(DIK_SPACE)) {
+			sceneNum = GAME;
+		}
+		break;
+
+	case GameScene::GAME:
+		//マウスカーソルの場所にクロスヘアを表示
+		crosshair.SetPosition(v - Vector3(32, 32, 0));
+		crosshair.SpriteUpdate(crosshair, spriteCommon_);
+		crosshair.SpriteTransferVertexBuffer(crosshair, 1);
+
+		//当たり判定チェック
+		collisionManager->CheckAllCollisions();
+
+		//boss
+		if (railCamera->GetOnRail() == false) {
+			if (isCheckPoint == false) {
+				isCheckPoint = true;
+				boss->Pop();
+			}
+			else {
+				if (boss->GetTimer() > 0) {
+					if (isPlayable == true) {
+						isPlayable = false;
+					}
+					railCamera->GetView()->SetTarget(boss->GetPosition());
+					railCamera->GetView()->SetEye(Vector3(0, 5, -150));
+				}
+				else {
+					if (isPlayable == false) {
+						railCamera->GetView()->SetEye(Vector3(0, 10, -90));
+						railCamera->GetCamera()->SetPosition(Vector3(0, 9, -95));
+						railCamera->GetCamera()->SetRotation(Vector3(0, 180, 0));
+						isPlayable = true;
+					}
+				}
+			}
+		}
+
+		//clear
+		if (player->GetHP() == 0) {
+			sceneNum = OVER;
+		}
+		//over
+		if (boss->GetIsDead() == true) {
+			sceneNum = CLEAR;
+		}
+		//更新
+		if (railCamera->GetIsEnd() == false) {
+			railCamera->Update(player, points);
+		}
+		if (player->GetIsHit() == true) {
+			railCamera->ShakeCamera();
+		}
+		if (input->PushMouseLeft()) {
+			shotVec = GetScreenToWorldPos(crosshair, railCamera);
+		}
+		if (isPlayable == true) {
+			player->Update(shotVec);
+		}
+		//デスフラグの立った敵を削除
+		enemys_.remove_if([](std::unique_ptr < Enemy>& enemy_) {
+			return enemy_->GetIsDead();
+			});
+		//敵キャラの更新
+		for (const std::unique_ptr<Enemy>& enemy : enemys_) {
+			enemy->Update(player->GetWorldPos(), railCamera->GetPasPoint());
+		}
+		sky->Update();
+		floor->Update();
+		pm->Update();
+		pm_->Update();
+		obj->Update();
+		boss->Update();
+		break;
+
+	case GameScene::CLEAR:
+		if (input->TriggerKey(DIK_SPACE)) {
+			Reset();
+			sceneNum = TITLE;
+		}
+		break;
+
+	case GameScene::OVER:
+		if (input->TriggerKey(DIK_SPACE)) {
+			Reset();
+			sceneNum = TITLE;
+		}
+		break;
 	}
-	player->Update(shotVec);
-	//デスフラグの立った敵を削除
-	enemys_.remove_if([](std::unique_ptr < Enemy>& enemy_) {
-		return enemy_->GetIsDead();
-		});
-	//敵キャラの更新
-	for (const std::unique_ptr<Enemy>& enemy : enemys_) {
-		enemy->Update(player->GetWorldPos(),railCamera->GetPasPoint());
-	}
-	sky->Update();
-	floor->Update();
-	pm->Update();
-	pm_->Update();
-	obj->Update();
 }
 
 void GameScene::Draw() {
@@ -184,13 +248,16 @@ void GameScene::Draw() {
 // 3Dオブジェクト描画前処理
 	Object3d::PreDraw(dxCommon->GetCommandList());
 
-	sky->Draw(railCamera->GetView());
-	floor->Draw(railCamera->GetView());
-	//敵キャラの描画
-	for (const std::unique_ptr<Enemy>& enemy : enemys_) {
-		enemy->EnemyDraw(railCamera->GetView());
+	if (sceneNum == GAME) {
+		sky->Draw(railCamera->GetView());
+		floor->Draw(railCamera->GetView());
+		//敵キャラの描画
+		for (const std::unique_ptr<Enemy>& enemy : enemys_) {
+			enemy->EnemyDraw(railCamera->GetView());
+		}
+		boss->Draw(railCamera->GetView(), boss->GetAlpha());
+		player->PlayerDraw(railCamera->GetView());
 	}
-	player->PlayerDraw(railCamera->GetView());
 
 	// 3Dオブジェクト描画後処理
 	Object3d::PostDraw();
@@ -216,8 +283,8 @@ void GameScene::Draw() {
 
 	///==== パーティクル描画 ====///
 	//パーティクル
-	pm->Draw();
-	pm_->Draw();
+	/*pm->Draw();
+	pm_->Draw();*/
 
 	// パーティクル描画後処理
 	ParticleManager::PostDraw();
@@ -230,11 +297,29 @@ void GameScene::Draw() {
 	Sprite::PreDraw(dxCommon->GetCommandList(), spriteCommon_);
 
 	///=== スプライト描画 ===///
-	/*wood.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), wood.vbView);*/
-	for (int i = 0; i < player->GetHP(); i++) {
-		hp[i].SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), hp[i].vbView);
+	switch (sceneNum)
+	{
+	case GameScene::TITLE:
+		titleGH.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), titleGH.vbView);
+		break;
+
+	case GameScene::GAME:
+		for (int i = 0; i < player->GetHP(); i++) {
+			hp[i].SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), hp[i].vbView);
+		}
+		if (isPlayable == true) {
+			crosshair.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), crosshair.vbView);
+		}
+		break;
+
+	case GameScene::CLEAR:
+		clearGH.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), clearGH.vbView);
+		break;
+
+	case GameScene::OVER:
+		overGH.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), overGH.vbView);
+		break;
 	}
-	crosshair.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), crosshair.vbView);
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -306,15 +391,22 @@ void GameScene::Reset() {
 	delete player;
 	delete railCamera;
 	delete enemy;
+	delete boss;
 
 	//player
 	player = new Player;
 	player->PlayerInitialize();
 	player->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 0.7f));
 
+	boss = new Boss;
+	boss->BossInitialize();
+	boss->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 10.0f));
+
 	railCamera = new RailCamera;
 	railCamera->Initialize(player);
 	LoadEnemy(stageNum);
+	isCheckPoint = false;
+	isPlayable = true;
 }
 
 void GameScene::LoadEnemy(int stageNum) {

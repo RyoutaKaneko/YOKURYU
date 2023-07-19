@@ -55,6 +55,7 @@ private:
 	Sprite hp[5];
 	Sprite clearGH;
 	Sprite overGH;
+	Sprite lock;
 	//オブジェクトのポインタ
 	//3Dオブジェクト生成
 	Player* player = nullptr;

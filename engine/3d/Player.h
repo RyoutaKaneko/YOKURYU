@@ -34,8 +34,6 @@ public:
 	bool GetIsHit() { return isHit; }
 	//fever
 	float GetLen() { return len; }
-	//ワールド座標取得
-	Vector3 GetWorldPos();
 
 	//弾リストを取得
 	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }

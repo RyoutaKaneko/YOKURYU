@@ -98,7 +98,7 @@ public:
 
 	/// スプライト単体描画
 	void SpriteDraw(ID3D12GraphicsCommandList* cmdList_, const SpriteCommon& spriteCommon, 
-		ID3D12Device* dev,D3D12_VERTEX_BUFFER_VIEW& vbView);
+		ID3D12Device* dev);
 
 	/// 終了処理
 	void Finalize();

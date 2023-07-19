@@ -80,6 +80,7 @@ public: // メンバ関数
 	virtual void OffCollision(const CollisionInfo& info) {}
 
 	// オブジェクトの座標
+	Vector3 GetWorldPos();
 	const Vector3& GetPosition() const { return worldTransform_.position_; }
 	const float& GetPositionZ() const { return worldTransform_.position_.z; }
 	void SetPosition(const Vector3& position) { this->worldTransform_.position_ = position; }

@@ -315,7 +315,7 @@ void Sprite::PostDraw()
 }
 
 void Sprite::SpriteDraw(ID3D12GraphicsCommandList* cmdList_, const SpriteCommon& spriteCommon, 
-	ID3D12Device* dev,D3D12_VERTEX_BUFFER_VIEW& vbView) 
+	ID3D12Device* dev) 
 {
 	// ”ñ•\Ž¦ƒtƒ‰ƒO‚ªtrue‚È‚ç
 	if (isInvisible) {

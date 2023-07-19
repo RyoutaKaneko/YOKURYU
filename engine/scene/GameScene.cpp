@@ -99,6 +99,12 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	overGH.SpriteTransferVertexBuffer(overGH, 4);
 	overGH.SpriteUpdate(overGH, spriteCommon_);
 
+	lock.LoadTexture(spriteCommon_, 1, L"Resources/crosshair.png", dxCommon->GetDevice());
+	lock.SpriteCreate(dxCommon->GetDevice(), 50, 50, 1, Vector2(0.0f, 0.0f), false, false);
+	lock.SetScale(Vector2(64 * 1, 64 * 1));
+	lock.SpriteTransferVertexBuffer(lock, 1);
+	lock.SpriteUpdate(lock, spriteCommon_);
+
 	//パーティクル初期化
 	particle = Particle::LoadParticleTexture("wood.png");
 	pm_ = ParticleManager::Create();
@@ -160,6 +166,11 @@ void GameScene::Update() {
 		crosshair.SetPosition(v - Vector3(32, 32, 0));
 		crosshair.SpriteUpdate(crosshair, spriteCommon_);
 		crosshair.SpriteTransferVertexBuffer(crosshair, 1);
+		//
+		lock.SetScale(GetWorldToScreenScale(boss, railCamera));
+		lock.SetPosition(GetWorldToScreenPos(boss->GetWorldPos(), railCamera) - (Vector3(lock.GetScale().x,lock.GetScale().y,0) / 2));
+		lock.SpriteUpdate(lock, spriteCommon_);
+		lock.SpriteTransferVertexBuffer(lock, 1);
 
 		//当たり判定チェック
 		collisionManager->CheckAllCollisions();
@@ -300,24 +311,25 @@ void GameScene::Draw() {
 	switch (sceneNum)
 	{
 	case GameScene::TITLE:
-		titleGH.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), titleGH.vbView);
+		titleGH.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
 		break;
 
 	case GameScene::GAME:
 		for (int i = 0; i < player->GetHP(); i++) {
-			hp[i].SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), hp[i].vbView);
+			hp[i].SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
 		}
 		if (isPlayable == true) {
-			crosshair.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), crosshair.vbView);
+			crosshair.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
 		}
+		lock.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
 		break;
 
 	case GameScene::CLEAR:
-		clearGH.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), clearGH.vbView);
+		clearGH.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
 		break;
 
 	case GameScene::OVER:
-		overGH.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice(), overGH.vbView);
+		overGH.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
 		break;
 	}
 
@@ -570,34 +582,15 @@ Vector2 GameScene::GetWorldToScreenScale(Object3d* obj, RailCamera* rail)
 		return Vector2(0, 0);
 	}
 
-	//ビュー行列//
-	Matrix4 view = railCamera->GetView()->GetMatView();
-	//プロジェクション行列//
-	float fovAngleY = 45.0f * (3.141592f / 180.0f);;
-	float aspectRatio = (float)WinApp::window_width / WinApp::window_height;
-	//プロジェクション行列生成
-	Matrix4 projection = projection.ProjectionMat(fovAngleY, aspectRatio, 0.1f, 200.0f);
-	//ビューポート行列生成
-	Matrix4 viewPort = viewPort.ViewPortMat(WinApp::window_width, WinApp::window_height, Vector2(0.0f, 0.0f));
+	Vector3 v = obj->GetPosition() - rail->GetView()->GetEye();
+	v.normalize();
+	float len = v.length();
 
-	Matrix4 matVPV = view * projection * viewPort;
+	float x = 64;
+	x *= obj->GetScale().x / 2;
+	float y = 64;
+	y *= obj->GetScale().y / 2;
 
-	//w除算
-	Matrix4 mat1, mat2;
-	Vector3 posNear = Vector3(obj->GetPosition().x, obj->GetPosition().y, 0);
-	Vector3 posFar = Vector3(obj->GetPosition().x, obj->GetPosition().y, 1);
-	posNear = mat1.transform(posNear, matVPV);
-	posFar = mat2.transform(posFar, matVPV);
 
-	//マウスレイの方向
-	Vector3 mouseDirection = posFar - posNear;
-	mouseDirection = mouseDirection.normalize();
-	//カメラから照準オブジェクトの距離
-
-	Vector3 translate = (posFar - posNear);
-
-	float x = crosshair.GetScale().x * translate.x * obj->GetScale().x;
-	float y = crosshair.GetScale().y * translate.y * obj->GetScale().y;
-
-	return Vector2(x, y);
+	return Vector2(x, y) / len;
 }

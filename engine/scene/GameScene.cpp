@@ -266,7 +266,7 @@ void GameScene::Draw() {
 		for (const std::unique_ptr<Enemy>& enemy : enemys_) {
 			enemy->EnemyDraw(railCamera->GetView());
 		}
-		boss->Draw(railCamera->GetView());
+		boss->Draw(railCamera->GetView(), boss->GetAlpha());
 		player->PlayerDraw(railCamera->GetView());
 	}
 
@@ -592,5 +592,5 @@ Vector2 GameScene::GetWorldToScreenScale(Object3d* obj, RailCamera* rail)
 	y *= obj->GetScale().y / 2;
 
 
-	return Vector2(x, y) * len;
+	return Vector2(x, y) / len;
 }

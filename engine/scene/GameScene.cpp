@@ -537,3 +537,67 @@ Vector3 GameScene::GetScreenToWorldPos(Sprite& sprite_, RailCamera* rail)
 
 	return translate;
 }
+
+Vector3 GameScene::GetWorldToScreenPos(Vector3 pos_, RailCamera* rail)
+{
+	if (rail == nullptr) {
+		return Vector3(0, 0, 0);
+	}
+
+	//ビュー行列//
+	Matrix4 view = railCamera->GetView()->GetMatView();
+	//プロジェクション行列//
+	float fovAngleY = 45.0f * (3.141592f / 180.0f);;
+	float aspectRatio = (float)WinApp::window_width / WinApp::window_height;
+	//プロジェクション行列生成
+	Matrix4 projection = projection.ProjectionMat(fovAngleY, aspectRatio, 0.1f, 200.0f);
+	//ビューポート行列生成
+	Matrix4 viewPort = viewPort.ViewPortMat(WinApp::window_width, WinApp::window_height, Vector2(0.0f, 0.0f));
+
+	Matrix4 matVPV = view * projection * viewPort;
+
+	Matrix4 mat;
+	Vector3 posScreen = pos_;
+	posScreen = mat.transform(posScreen, matVPV);
+	posScreen.z = 0;
+
+	return posScreen;
+}
+
+Vector2 GameScene::GetWorldToScreenScale(Object3d* obj, RailCamera* rail)
+{
+	if (rail == nullptr) {
+		return Vector2(0, 0);
+	}
+
+	//ビュー行列//
+	Matrix4 view = railCamera->GetView()->GetMatView();
+	//プロジェクション行列//
+	float fovAngleY = 45.0f * (3.141592f / 180.0f);;
+	float aspectRatio = (float)WinApp::window_width / WinApp::window_height;
+	//プロジェクション行列生成
+	Matrix4 projection = projection.ProjectionMat(fovAngleY, aspectRatio, 0.1f, 200.0f);
+	//ビューポート行列生成
+	Matrix4 viewPort = viewPort.ViewPortMat(WinApp::window_width, WinApp::window_height, Vector2(0.0f, 0.0f));
+
+	Matrix4 matVPV = view * projection * viewPort;
+
+	//w除算
+	Matrix4 mat1, mat2;
+	Vector3 posNear = Vector3(obj->GetPosition().x, obj->GetPosition().y, 0);
+	Vector3 posFar = Vector3(obj->GetPosition().x, obj->GetPosition().y, 1);
+	posNear = mat1.transform(posNear, matVPV);
+	posFar = mat2.transform(posFar, matVPV);
+
+	//マウスレイの方向
+	Vector3 mouseDirection = posFar - posNear;
+	mouseDirection = mouseDirection.normalize();
+	//カメラから照準オブジェクトの距離
+
+	Vector3 translate = (posFar - posNear);
+
+	float x = crosshair.GetScale().x * translate.x * obj->GetScale().x;
+	float y = crosshair.GetScale().y * translate.y * obj->GetScale().y;
+
+	return Vector2(x, y);
+}

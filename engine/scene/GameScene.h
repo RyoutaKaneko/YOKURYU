@@ -38,6 +38,8 @@ public:
 	void LoadEnemy(int stageNum);
 
 	Vector3 GetScreenToWorldPos(Sprite& sprite_, RailCamera* rail);
+	Vector3 GetWorldToScreenPos(Vector3 pos_, RailCamera* rail);
+	Vector2 GetWorldToScreenScale(Object3d* obj, RailCamera* rail);
 
 private:
 	//base

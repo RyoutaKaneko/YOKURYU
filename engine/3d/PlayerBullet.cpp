@@ -37,7 +37,7 @@ void PlayerBullet::Update() {
 void PlayerBullet::HomingVec(Vector3 pos)
 {
 	if (isHoming == true) {
-		velocity_ = lockObj->GetWorldPos() - pos;
+		velocity_ = lockObj->GetWorldPos() - GetPosition();
 		velocity_ = velocity_ * 0.1f;
 	}
 }

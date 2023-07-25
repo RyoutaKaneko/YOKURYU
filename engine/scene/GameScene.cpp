@@ -107,7 +107,7 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	for (int i = 0; i < 10; i++) {
 		lock[i].LoadTexture(spriteCommon_, 1, L"Resources/crosshair.png", dxCommon->GetDevice());
 		lock[i].SpriteCreate(dxCommon->GetDevice(), 50, 50, 1, Vector2(0.0f, 0.0f), false, false);
-		lock[i].SetScale(Vector2(64 * 1, 64 * 1));
+		lock[i].SetScale(Vector2(128 * 1, 128 * 1));
 		lock[i].SpriteTransferVertexBuffer(lock[i], 1);
 		lock[i].SpriteUpdate(lock[i], spriteCommon_);
 	}
@@ -174,13 +174,6 @@ void GameScene::Update() {
 		crosshair.SetPosition(v - Vector3(32, 32, 0));
 		crosshair.SpriteUpdate(crosshair, spriteCommon_);
 		crosshair.SpriteTransferVertexBuffer(crosshair, 1);
-		//
-		for (int i = 0; i < infos.size(); i++) {
-			lock[i].SetScale(GetWorldToScreenScale(infos[i].obj, railCamera));
-			lock[i].SetPosition(GetWorldToScreenPos(infos[i].obj->GetWorldPos(), railCamera) - (Vector3(lock[i].GetScale().x, lock[i].GetScale().y, 0) / 2));
-			lock[i].SpriteUpdate(lock[i], spriteCommon_);
-			lock[i].SpriteTransferVertexBuffer(lock[i], 1);
-		}
 
 		//当たり判定チェック
 		collisionManager->CheckAllCollisions();
@@ -229,6 +222,13 @@ void GameScene::Update() {
 			shotVec = GetScreenToWorldPos(crosshair, railCamera);
 		}
 		SerchEnemy();
+		//ロックオン画像の更新
+		for (int i = 0; i < infos.size(); i++) {
+			lock[i].SetScale(GetWorldToScreenScale(infos[i].obj, railCamera));
+			lock[i].SetPosition(GetWorldToScreenPos(infos[i].obj->GetWorldPos(), railCamera) - (Vector3(lock[i].GetScale().x, lock[i].GetScale().y, 0) / 2));
+			lock[i].SpriteUpdate(lock[i], spriteCommon_);
+			lock[i].SpriteTransferVertexBuffer(lock[i], 1);
+		}
 		if (isPlayable == true) {
 			player->Update(shotVec,infos);
 			LockedClear();
@@ -524,7 +524,7 @@ void GameScene::SerchEnemy()
 	if (input->PushKey(DIK_LSHIFT)) {
 		Vector3 epos1 = GetWorldToScreenPos(boss->GetWorldPos(), railCamera);
 		Vector3 cur = input->GetMousePos();
-		if (pow((epos1.x - cur.x), 2) + pow((epos1.y - cur.y), 2) < 15) {
+		if (pow((epos1.x - cur.x), 2) + pow((epos1.y - cur.y), 2) < 30) {
 			if (boss->GetIsLocked() == false && infos.size() < 10) {
 				LockInfo info;
 				info.vec = boss->GetWorldPos();
@@ -536,7 +536,9 @@ void GameScene::SerchEnemy()
 
 		for (const std::unique_ptr<Enemy>& enemy : enemys_) {
 			Vector3 epos2 = GetWorldToScreenPos(enemy->GetWorldPos(), railCamera);
-			if (pow((epos2.x - cur.x), 2) + pow((epos2.y - cur.y), 2) < 15) {
+			Vector3 len = enemy->GetWorldPos() - player->GetWorldPos();
+			float len_ = len.length();
+			if (pow((epos2.x - cur.x), 2) + pow((epos2.y - cur.y), 2) < (85 - len_)) {
 				if (enemy->GetIsLocked() == false && infos.size() < 10) {
 					LockInfo info;
 					info.vec = enemy->GetWorldPos();
@@ -647,10 +649,10 @@ Vector2 GameScene::GetWorldToScreenScale(Object3d* obj, RailCamera* rail)
 	float len = v.length();
 
 	float x = 64;
-	x *= obj->GetScale().x / 2;
+	x *= obj->GetScale().x;
 	float y = 64;
-	y *= obj->GetScale().y / 2;
+	y *= obj->GetScale().y;
 
 
-	return Vector2(x, y) / len;
+	return Vector2(x / len, y /len);
 }

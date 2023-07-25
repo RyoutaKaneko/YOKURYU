@@ -29,18 +29,27 @@ bool Player::PlayerInitialize() {
 	len = 6.0f;
 	pTimer = 0;
 	isHit = false;
+	isShooted = false;
 	hitTime = 0;
 
 	return true;
 }
 
-void Player::Update(Vector3 velo)
+void Player::Update(Vector3 velo, std::vector<LockInfo>& info)
 {
 	input = Input::GetInstance();
+	if (isShooted == true) {
+		isShooted = false;
+	}
+
 
 	Move();
+	LockAttack(info);
 	Attack(velo);
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
+		if (bullet->GetIsHoming() == true) {
+			bullet->HomingVec(GetWorldPos());
+		}
 		bullet->Update();
 	}
 	//ƒfƒXƒtƒ‰ƒO‚Ì—§‚Á‚½“G‚ğíœ
@@ -130,7 +139,7 @@ void Player::Attack(Vector3 velo) {
 			std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
 
 			//’P”­
-			newBullet->BulletInitialize(GetPosition(),velo);
+			newBullet->BulletInitialize(velo);
 			newBullet->SetCollider(new SphereCollider());
 
 			//’e‚Ì“o˜^
@@ -147,6 +156,31 @@ void Player::Attack(Vector3 velo) {
 			coolTime--;
 		}
 
+	}
+}
+
+void Player::LockAttack(std::vector<LockInfo>& info)
+{
+	if (input->GetInstance()->TriggerMouseRight()) {
+		for (int i = 0; i < info.size(); i++) {
+			//’e‚ğ¶¬‚µ‰Šú‰»
+			std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
+			Vector3 shotVec = (info[i].vec - GetWorldPos());
+			shotVec = shotVec * 0.05f;
+			//’P”­
+			newBullet->BulletInitialize(shotVec);
+			newBullet->SetCollider(new SphereCollider());
+
+			//’e‚Ì“o˜^
+		   //•¡”
+			newBullet->SetPosition(GetWorldPos());
+			newBullet->SetScale({ 0.3f,0.3f,0.3f });
+			newBullet->SetLock(info[i].obj);
+			newBullet->SetisHoming(true);
+			bullets_.push_back(std::move(newBullet));
+		}
+		info.clear();
+		isShooted = true;
 	}
 }
 

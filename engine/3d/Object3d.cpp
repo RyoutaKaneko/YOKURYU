@@ -251,6 +251,8 @@ bool Object3d::Initialize()
 	//クラス名の文字列を取得
 	name = typeid(*this).name();
 
+	isLocked = false;
+
 	return true;
 }
 

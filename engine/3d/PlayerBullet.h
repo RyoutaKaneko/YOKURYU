@@ -13,12 +13,13 @@ class PlayerBullet : public Object3d
 	///< summary>
 	///初期化
 	///</summary>
-	void BulletInitialize(const Vector3& position, const Vector3& velocity);
+	void BulletInitialize(const Vector3& velocity);
 
 	///< summary>
 	///初期化
 	///</summary>
 	void Update();
+	void HomingVec(Vector3 pos);
 
 
 	//衝突を検出したら呼び出されるコールバック関数
@@ -28,6 +29,9 @@ class PlayerBullet : public Object3d
   public:
 	bool IsDead() const { return isDead_; }
 	WorldTransform* GetWorldTransForm() { return &worldTransform_; }
+	bool GetIsHoming() { return isHoming; }
+	void SetisHoming(bool isHoming_) { isHoming = isHoming_; }
+	void SetLock(Object3d* obj) { lockObj = obj; }
 
   private:
 	//モデル
@@ -42,5 +46,6 @@ class PlayerBullet : public Object3d
 	int32_t deathTimer_ = kLifeTime;
 	//デスフラグ
 	bool isDead_ = false;
-	
+	bool isHoming = false;
+	Object3d* lockObj = nullptr;
 };

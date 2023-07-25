@@ -8,6 +8,10 @@
 #include "Particle.h"
 #include "PlayerBullet.h"
 
+struct LockInfo {
+	Vector3 vec = {0,0,0};
+	 Object3d* obj = nullptr;
+};
 
 class Player : public Object3d
 {
@@ -17,11 +21,12 @@ public:
 	//初期化
 	bool PlayerInitialize();
 
-	void Update(Vector3 velo);
+	void Update(Vector3 velo, std::vector<LockInfo>& info);
 
 	void Move();
 	///</summary>
 	void Attack(Vector3 velo);
+	void LockAttack(std::vector<LockInfo>& info);
 	void PlayerDraw(ViewProjection* viewProjection_);
 
 	//衝突時コールバック関数
@@ -32,6 +37,7 @@ public:
 	//hp
 	int GetHP() { return hp; }
 	bool GetIsHit() { return isHit; }
+	bool GetIsShooted() { return isShooted; }
 	//fever
 	float GetLen() { return len; }
 
@@ -53,6 +59,7 @@ private:
 	float len = 6;
 	int pTimer = 0;
 	bool isHit;
+	bool isShooted;
 	int hitTime;
 
 };

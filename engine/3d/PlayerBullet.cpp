@@ -1,7 +1,7 @@
 #include "PlayerBullet.h"
 #include "BaseCollider.h"
 
-void PlayerBullet::BulletInitialize(const Vector3& position, const Vector3& velocity) {
+void PlayerBullet::BulletInitialize(const Vector3& velocity) {
 
 	Initialize();
 
@@ -17,6 +17,7 @@ void PlayerBullet::BulletInitialize(const Vector3& position, const Vector3& velo
 }
 
 void PlayerBullet::Update() {
+
 	SetPosition(GetPosition() + velocity_);
 
 	worldTransform_.UpdateMatrix();
@@ -31,6 +32,14 @@ void PlayerBullet::Update() {
 		isDead_ = true;
 	}
 
+}
+
+void PlayerBullet::HomingVec(Vector3 pos)
+{
+	if (isHoming == true) {
+		velocity_ = lockObj->GetWorldPos() - pos;
+		velocity_ = velocity_ * 0.1f;
+	}
 }
 
 void PlayerBullet::OnCollision(const CollisionInfo& info)

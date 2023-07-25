@@ -82,6 +82,8 @@ public: // メンバ関数
 	// オブジェクトの座標
 	Vector3 GetWorldPos();
 	const Vector3& GetPosition() const { return worldTransform_.position_; }
+	bool GetIsLocked() { return isLocked; }
+	void SetIsLocked(bool isLock) { isLocked = isLock; }
 	const float& GetPositionZ() const { return worldTransform_.position_.z; }
 	void SetPosition(const Vector3& position) { this->worldTransform_.position_ = position; }
 	// オブジェクトの大きさ
@@ -108,6 +110,7 @@ protected: // メンバ変数
 	Model* model = nullptr;
 	// ローカルワールド変換行列
 	Matrix4 matWorld;
-	
+	//ロックされているかどうか
+	bool isLocked;
 };
 

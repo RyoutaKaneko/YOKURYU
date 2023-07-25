@@ -27,6 +27,7 @@ public:
 
 	void OnCollision(const CollisionInfo& info) override;
 	void SetStagePoint(float pos_) { stagePoint = pos_; }
+	Object3d* GetPointer() { return this; }
 
 	//’eƒŠƒXƒg‚ðŽæ“¾
 	const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets_; }

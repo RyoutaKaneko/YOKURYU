@@ -36,6 +36,8 @@ public:
 
 	void LoadStage(int stageNum);
 	void LoadEnemy(int stageNum);
+	void SerchEnemy();
+	void LockedClear();
 
 	Vector3 GetScreenToWorldPos(Sprite& sprite_, RailCamera* rail);
 	Vector3 GetWorldToScreenPos(Vector3 pos_, RailCamera* rail);
@@ -55,7 +57,7 @@ private:
 	Sprite hp[5];
 	Sprite clearGH;
 	Sprite overGH;
-	Sprite lock;
+	Sprite lock[10];
 	//オブジェクトのポインタ
 	//3Dオブジェクト生成
 	Player* player = nullptr;
@@ -89,6 +91,8 @@ private:
 	int stageNum = 0;
 	bool isCheckPoint = false;
 	bool isPlayable = false;
+
+	std::vector<LockInfo> infos;
 
 	enum Scene {
 		TITLE,

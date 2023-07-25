@@ -101,4 +101,5 @@ private:
 		OVER
 	};
 	Scene sceneNum;
+	int gameTime;
 };

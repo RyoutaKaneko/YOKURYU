@@ -40,6 +40,7 @@ public:
 	bool GetIsShooted() { return isShooted; }
 	//fever
 	float GetLen() { return len; }
+	void SetAlpha(float a) { alpha = a; }
 
 	//弾リストを取得
 	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
@@ -61,5 +62,5 @@ private:
 	bool isHit;
 	bool isShooted;
 	int hitTime;
-
+	float alpha;
 };

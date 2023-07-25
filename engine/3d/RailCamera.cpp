@@ -57,11 +57,15 @@ void RailCamera::Update(Player* player_, std::vector<Vector3>& point) {
 		if (spline_.GetIsEnd() == true) {
 			OnRail = false;
 		}
+		Vector3 eyeTmp = camera->GetPosition() - frontVec * player_->GetLen();
+
 		//更新
 		camera->Update();
 		viewProjection->target = (target_ + frontVec * 5);
 		viewProjection->eye = (camera->GetPosition() - frontVec * player_->GetLen());
-		viewProjection->eye.y = (camera->GetPosition().y + 1 - (eyeAd * 5));
+		if (viewProjection->eye.y > (eyeTmp.y + 1)) {
+			viewProjection->eye.y += 0.05f;
+		}
 
 		viewProjection->UpdateMatrix();
 		oldCamera = camera->GetPosition();
@@ -103,11 +107,11 @@ void RailCamera::GetVec(Vector3 a, Vector3 b) {
 }
 
 void RailCamera::SetPlayer(Player* player_) {
+	//親子構造のセット
+	player_->worldTransform_.SetParent3d(&camera->worldTransform_);
 	//拡大回転座標変換
 	player_->SetPosition(Vector3(0, 0, -1.5f));
 	player_->SetScale(Vector3(0.3f, 0.3f, 0.3f));
-	//親子構造のセット
-	player_->worldTransform_.SetParent3d(&camera->worldTransform_);
 }
 
 void RailCamera::SetEye(Vector3 view) {

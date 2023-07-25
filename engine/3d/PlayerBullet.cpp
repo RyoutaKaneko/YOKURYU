@@ -57,7 +57,7 @@ void PlayerBullet::OnCollision(const CollisionInfo& info)
 
 	//‘ŠŽè‚ªenemy‚Ì’e
 	if (strcmp(toCollisionName, str2) == 0) {
-		if (isDead_ == false) {
+		if (isDead_ == false && isHoming == false) {
 			isDead_ = true;
 		}
 	}

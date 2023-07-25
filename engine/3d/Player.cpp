@@ -31,6 +31,7 @@ bool Player::PlayerInitialize() {
 	isHit = false;
 	isShooted = false;
 	hitTime = 0;
+	alpha = 1.0f;
 
 	return true;
 }
@@ -70,6 +71,9 @@ void Player::Update(Vector3 velo, std::vector<LockInfo>& info)
 	if (collider)
 	{
 		collider->Update();
+	}
+	if (alpha < 1.0f) {
+		alpha += 0.01f;
 	}
 }
 
@@ -124,6 +128,9 @@ void Player::Move()
 	//
 	if (abs(tmp.x) <= 3.0f) {
 		if (tmp.y >= -1.5f && tmp.y <= 2.0f) {
+			if (GetPosition().z < -1.6f) {
+				move.z += 0.05f;
+			}
 			SetPosition(GetPosition() + move);
 		}
 	}
@@ -186,7 +193,7 @@ void Player::LockAttack(std::vector<LockInfo>& info)
 
 void Player::PlayerDraw(ViewProjection* viewProjection_) {
 	if (hitTime % 5 == 0) {
-		Draw(viewProjection_);
+		Draw(viewProjection_,alpha);
 	}
 	//’e•`‰æ
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {

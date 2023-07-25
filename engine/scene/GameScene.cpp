@@ -148,6 +148,8 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	 //
 	sceneNum = TITLE;
 	infos.clear();
+	//
+	gameTime = 0;
 }
 
 ///-----更新処理-----///
@@ -158,6 +160,8 @@ void GameScene::Update() {
 	//リセット
 	if (input->TriggerKey(DIK_R)) {
 		Reset();
+		player->SetPosition(Vector3(0, 0, -5.5f));
+		player->SetAlpha(0.0f);
 	}
 
 	Vector3 shotVec = { 0,0,0 };
@@ -166,6 +170,9 @@ void GameScene::Update() {
 	case GameScene::TITLE:
 		if (input->TriggerKey(DIK_SPACE)) {
 			sceneNum = GAME;
+			gameTime = 150;
+			railCamera->GetView()->SetEye(Vector3(2, 1.0f, 0.0f));
+			railCamera->GetView()->SetTarget(Vector3(0, 0.5f, 0));
 		}
 		break;
 
@@ -175,64 +182,79 @@ void GameScene::Update() {
 		crosshair.SpriteUpdate(crosshair, spriteCommon_);
 		crosshair.SpriteTransferVertexBuffer(crosshair, 1);
 
-		//当たり判定チェック
-		collisionManager->CheckAllCollisions();
+		if (gameTime == 0) {
 
-		//boss
-		if (railCamera->GetOnRail() == false) {
-			if (isCheckPoint == false) {
-				isCheckPoint = true;
-				boss->Pop();
-			}
-			else {
-				if (boss->GetTimer() > 0) {
-					if (isPlayable == true) {
-						isPlayable = false;
-					}
-					railCamera->GetView()->SetTarget(boss->GetPosition());
-					railCamera->GetView()->SetEye(Vector3(0, 5, -150));
+			//当たり判定チェック
+			collisionManager->CheckAllCollisions();
+
+			//boss
+			if (railCamera->GetOnRail() == false) {
+				if (isCheckPoint == false) {
+					isCheckPoint = true;
+					boss->Pop();
 				}
 				else {
-					if (isPlayable == false) {
-						railCamera->GetView()->SetEye(Vector3(0, 10, -90));
-						railCamera->GetCamera()->SetPosition(Vector3(0, 9, -95));
-						railCamera->GetCamera()->SetRotation(Vector3(0, 180, 0));
-						isPlayable = true;
+					if (boss->GetTimer() > 0) {
+						if (isPlayable == true) {
+							isPlayable = false;
+						}
+						railCamera->GetView()->SetTarget(boss->GetPosition());
+						railCamera->GetView()->SetEye(Vector3(0, 5, -150));
+					}
+					else {
+						if (isPlayable == false) {
+							railCamera->GetView()->SetEye(Vector3(0, 10, -90));
+							railCamera->GetCamera()->SetPosition(Vector3(0, 9, -95));
+							railCamera->GetCamera()->SetRotation(Vector3(0, 180, 0));
+							isPlayable = true;
+						}
 					}
 				}
 			}
+
+			//clear
+			if (player->GetHP() == 0) {
+				sceneNum = OVER;
+			}
+			//over
+			if (boss->GetIsDead() == true) {
+				sceneNum = CLEAR;
+			}
+			//更新
+			if (railCamera->GetIsEnd() == false) {
+				railCamera->Update(player, points);
+			}
+			if (player->GetIsHit() == true) {
+				railCamera->ShakeCamera();
+			}
+			if (input->PushMouseLeft()) {
+				shotVec = GetScreenToWorldPos(crosshair, railCamera);
+			}
+			SerchEnemy();
+			//ロックオン画像の更新
+			for (int i = 0; i < infos.size(); i++) {
+				lock[i].SetScale(GetWorldToScreenScale(infos[i].obj, railCamera));
+				lock[i].SetPosition(GetWorldToScreenPos(infos[i].obj->GetWorldPos(), railCamera) - (Vector3(lock[i].GetScale().x, lock[i].GetScale().y, 0) / 2));
+				lock[i].SpriteUpdate(lock[i], spriteCommon_);
+				lock[i].SpriteTransferVertexBuffer(lock[i], 1);
+			}
+			if (isPlayable == true) {
+				player->Update(shotVec, infos);
+				LockedClear();
+			}
+		}
+		else {
+			railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() - Vector3(0, 0.0f, 0.05f));
+			gameTime--;
+			if (gameTime == 0) {
+				player->SetPosition(Vector3(0, -1.0f, -5.5f));
+				player->SetAlpha(0.0f);
+			}
+			player->worldTransform_.UpdateMatrix();
 		}
 
-		//clear
-		if (player->GetHP() == 0) {
-			sceneNum = OVER;
-		}
-		//over
-		if (boss->GetIsDead() == true) {
-			sceneNum = CLEAR;
-		}
-		//更新
-		if (railCamera->GetIsEnd() == false) {
-			railCamera->Update(player, points);
-		}
-		if (player->GetIsHit() == true) {
-			railCamera->ShakeCamera();
-		}
-		if (input->PushMouseLeft()) {
-			shotVec = GetScreenToWorldPos(crosshair, railCamera);
-		}
-		SerchEnemy();
-		//ロックオン画像の更新
-		for (int i = 0; i < infos.size(); i++) {
-			lock[i].SetScale(GetWorldToScreenScale(infos[i].obj, railCamera));
-			lock[i].SetPosition(GetWorldToScreenPos(infos[i].obj->GetWorldPos(), railCamera) - (Vector3(lock[i].GetScale().x, lock[i].GetScale().y, 0) / 2));
-			lock[i].SpriteUpdate(lock[i], spriteCommon_);
-			lock[i].SpriteTransferVertexBuffer(lock[i], 1);
-		}
-		if (isPlayable == true) {
-			player->Update(shotVec,infos);
-			LockedClear();
-		}
+		
+	
 		//デスフラグの立った敵を削除
 		enemys_.remove_if([](std::unique_ptr < Enemy>& enemy_) {
 			return enemy_->GetIsDead();
@@ -538,7 +560,7 @@ void GameScene::SerchEnemy()
 			Vector3 epos2 = GetWorldToScreenPos(enemy->GetWorldPos(), railCamera);
 			Vector3 len = enemy->GetWorldPos() - player->GetWorldPos();
 			float len_ = len.length();
-			if (pow((epos2.x - cur.x), 2) + pow((epos2.y - cur.y), 2) < (85 - len_)) {
+			if (pow((epos2.x - cur.x), 2) + pow((epos2.y - cur.y), 2) < (100 - len_)) {
 				if (enemy->GetIsLocked() == false && infos.size() < 10) {
 					LockInfo info;
 					info.vec = enemy->GetWorldPos();

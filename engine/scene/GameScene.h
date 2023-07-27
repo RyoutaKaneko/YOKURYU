@@ -102,7 +102,4 @@ private:
 	};
 	Scene sceneNum;
 	int gameTime;
-	Vector3 mPos;
-	Vector3 mPosPre;
-	Vector3 mouseDiff;
 };

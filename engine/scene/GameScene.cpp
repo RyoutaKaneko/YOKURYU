@@ -150,16 +150,12 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	infos.clear();
 	//
 	gameTime = 0;
-	mPos = { 0,0,0 };
 }
 
 ///-----更新処理-----///
 void GameScene::Update() {
 	input->Update();
-	mPos = input->GetMousePos();
-	if (mPosPre.x == 0 && mPosPre.y == 0) {
-		mPosPre = input->GetMousePos();
-	}
+	Vector3 mPos = input->GetMousePos();
 
 
 	//リセット
@@ -302,7 +298,6 @@ void GameScene::Update() {
 		pm_->Update();
 		obj->Update();
 		boss->Update();
-		mPosPre = input->GetMousePos();
 		break;
 
 	case GameScene::CLEAR:
@@ -491,7 +486,6 @@ void GameScene::Reset() {
 	LoadEnemy(stageNum);
 	isCheckPoint = false;
 	isPlayable = true;
-	mPos = { 0,0,0 };
 }
 
 void GameScene::LoadEnemy(int stageNum) {
@@ -666,7 +660,7 @@ Vector3 GameScene::GetScreenToWorldPos(Sprite& sprite_, RailCamera* rail)
 	const float kDistanceTestObject = 0.01f;
 
 	Vector3 pos = player->GetWorldPos();
-	Vector3 translate = (posFar - posNear) * kDistanceTestObject;
+	Vector3 translate = (posFar - pos) * kDistanceTestObject;
 
 	return translate;
 }

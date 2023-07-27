@@ -71,13 +71,14 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	titleGH.SpriteUpdate(titleGH, spriteCommon_);
 
 	//クロスヘアの画像
-	crosshair.LoadTexture(spriteCommon_, 1, L"Resources/crosshair.png", dxCommon->GetDevice());
-	crosshair.SpriteCreate(dxCommon->GetDevice(), 50, 50, 1, Vector2(0.0f, 0.0f), false, false);
-	crosshair.SetPosition(Vector3(1100, 0, 0));
-	crosshair.SetScale(Vector2(64 * 1, 64 * 1));
-	crosshair.SetRotation(0.0f);
-	crosshair.SpriteTransferVertexBuffer(crosshair, 1);
-	crosshair.SpriteUpdate(crosshair, spriteCommon_);
+	for (int i = 0; i < 4; i++) {
+		crosshair[i].LoadTexture(spriteCommon_, 1, L"Resources/crosshair.png", dxCommon->GetDevice());
+		crosshair[i].SpriteCreate(dxCommon->GetDevice(), 1280, 720, 1, Vector2(0.5f, 0.5f), false, false);
+		crosshair[i].SetPosition(Vector3(1100, 0, 0));
+		crosshair[i].SetScale(Vector2(24.0f * (i + 1.0f), 24.0f * (i + 1.0f)));
+		crosshair[i].SpriteTransferVertexBuffer(crosshair[i], 1);
+		crosshair[i].SpriteUpdate(crosshair[i], spriteCommon_);
+	}
 
 	//HP用画像
 	for (int i = 0; i < 5; i++) {
@@ -85,7 +86,6 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 		hp[i].SpriteCreate(dxCommon->GetDevice(), 50, 50, 2, Vector2(0.0f, 0.0f), false, false);
 		hp[i].SetPosition(Vector3(0 + i * 68.0f, 0, 0));
 		hp[i].SetScale(Vector2(64 * 1, 64 * 1));
-		hp[i].SetRotation(0.0f);
 		hp[i].SpriteTransferVertexBuffer(hp[i], 2);
 		hp[i].SpriteUpdate(hp[i], spriteCommon_);
 	}
@@ -150,18 +150,26 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	infos.clear();
 	//
 	gameTime = 0;
+	mPos = { 0,0,0 };
 }
 
 ///-----更新処理-----///
 void GameScene::Update() {
 	input->Update();
-	Vector3 v = input->GetMousePos();
+	mPos = input->GetMousePos();
+	if (mPosPre.x == 0 && mPosPre.y == 0) {
+		mPosPre = input->GetMousePos();
+	}
+
 
 	//リセット
 	if (input->TriggerKey(DIK_R)) {
 		Reset();
-		player->SetPosition(Vector3(0, 0, -5.5f));
+		player->SetPosition(Vector3(0, -1.0f, -5.5f));
 		player->SetAlpha(0.0f);
+		Vector3 cursor = GetWorldToScreenPos(player->GetWorldPos(), railCamera);
+		input->SetMousePos({ cursor.x,cursor.y });
+		mPos = { 0,0,0 };
 	}
 
 	Vector3 shotVec = { 0,0,0 };
@@ -173,14 +181,39 @@ void GameScene::Update() {
 			gameTime = 150;
 			railCamera->GetView()->SetEye(Vector3(2, 1.0f, 0.0f));
 			railCamera->GetView()->SetTarget(Vector3(0, 0.5f, 0));
+			mPos = { 0,0,0 };
+			Vector3 cursor = GetWorldToScreenPos(player->GetWorldPos(), railCamera);
+			input->SetMousePos({ cursor.x,cursor.y });
 		}
 		break;
 
 	case GameScene::GAME:
 		//マウスカーソルの場所にクロスヘアを表示
-		crosshair.SetPosition(v - Vector3(32, 32, 0));
-		crosshair.SpriteUpdate(crosshair, spriteCommon_);
-		crosshair.SpriteTransferVertexBuffer(crosshair, 1);
+		for (int i = 0; i < 4; i++) {
+			if (i == 0) {
+				crosshair[i].SetPosition(mPos);
+			}
+			else if (i == 1) {
+				crosshair[i].SetPosition(mPos - (mPos - GetWorldToScreenPos(player->GetWorldPos(),railCamera)) * 0.25);
+			}
+			else if(i == 2){
+				crosshair[i].SetPosition(mPos - (mPos - GetWorldToScreenPos(player->GetWorldPos(), railCamera)) * 0.5);
+			}
+			else if (i == 3) {
+				crosshair[i].SetPosition(mPos - (mPos - GetWorldToScreenPos(player->GetWorldPos(), railCamera)) * 0.75);
+			}
+			if (i % 2 == 0) {
+				crosshair[i].SetRotation(crosshair[i].GetRotation() + 0.001f);
+			}
+			else {
+				crosshair[i].SetRotation(crosshair[i].GetRotation() - 0.001f);
+			}
+			if (crosshair[i].GetRotation() == 1.0f) {
+				crosshair[i].SetRotation(0.0f);
+			}
+			crosshair[i].SpriteTransferVertexBuffer(crosshair[i], 1);
+			crosshair[i].SpriteUpdate(crosshair[i], spriteCommon_);
+		}
 
 		if (gameTime == 0) {
 
@@ -228,7 +261,7 @@ void GameScene::Update() {
 				railCamera->ShakeCamera();
 			}
 			if (input->PushMouseLeft()) {
-				shotVec = GetScreenToWorldPos(crosshair, railCamera);
+				shotVec = GetScreenToWorldPos(crosshair[0], railCamera);
 			}
 			SerchEnemy();
 			//ロックオン画像の更新
@@ -269,6 +302,7 @@ void GameScene::Update() {
 		pm_->Update();
 		obj->Update();
 		boss->Update();
+		mPosPre = input->GetMousePos();
 		break;
 
 	case GameScene::CLEAR:
@@ -353,7 +387,9 @@ void GameScene::Draw() {
 			hp[i].SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
 		}
 		if (isPlayable == true) {
-			crosshair.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
+			for (int i = 0; i < 4; i++) {
+				crosshair[i].SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
+			}
 		}
 		for (int i = 0; i < infos.size(); i++) {
 			lock[i].SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
@@ -455,6 +491,7 @@ void GameScene::Reset() {
 	LoadEnemy(stageNum);
 	isCheckPoint = false;
 	isPlayable = true;
+	mPos = { 0,0,0 };
 }
 
 void GameScene::LoadEnemy(int stageNum) {

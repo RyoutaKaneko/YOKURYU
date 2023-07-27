@@ -53,7 +53,7 @@ private:
 	Sprite* sprite = new Sprite;
 	SpriteCommon spriteCommon_;
 	Sprite titleGH;
-	Sprite crosshair;
+	Sprite crosshair[4];
 	Sprite hp[5];
 	Sprite clearGH;
 	Sprite overGH;
@@ -102,4 +102,7 @@ private:
 	};
 	Scene sceneNum;
 	int gameTime;
+	Vector3 mPos;
+	Vector3 mPosPre;
+	Vector3 mouseDiff;
 };

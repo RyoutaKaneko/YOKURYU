@@ -61,7 +61,7 @@ void Input::Initialize(WinApp* winApp)
 	result = mouse->SetProperty(DIPROP_AXISMODE, &diprop.diph);
 	assert(SUCCEEDED(result));
 	//マウスカーソルを隠す
-	ShowCursor(FALSE);
+	/*ShowCursor(FALSE);*/
 }
 
 void Input::Update()
@@ -130,7 +130,13 @@ Vector3 Input::GetMousePos()
 
 Vector3 Input::GetMouseVelo()
 {
-	return Vector3((float)mouseState.lX*0.05f,(float)mouseState.lY*0.05f,0.0f);
+	return Vector3((float)mouseState.lX - mouseState_bak.lX,(float)mouseState.lY - mouseState_bak.lY,0);
+}
+
+void Input::SetMousePos(Vector2 pos)
+{
+	POINT p{ (long)pos.x,(long)pos.y };
+	SetCursorPos(p.x,p.y);
 }
 
 bool Input::PushKey(BYTE keyNumber) 

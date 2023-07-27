@@ -9,6 +9,7 @@
 #include <random>
 #include <xinput.h>
 #include "Vector3.h"
+#include "Vector2.h"
 
 #pragma comment(lib,"d3d11.lib")
 #pragma comment(lib,"d2d1.lib")
@@ -53,6 +54,8 @@ public: // メンバ関数
 	//座標
 	Vector3 GetMousePos();
 	Vector3 GetMouseVelo();
+
+	void SetMousePos(Vector2 pos);
 
 	/// <summary>
 	/// キーの押下をチェック

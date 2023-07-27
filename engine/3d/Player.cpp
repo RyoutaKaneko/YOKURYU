@@ -146,7 +146,7 @@ void Player::Attack(Vector3 velo) {
 			std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
 
 			//’P”­
-			newBullet->BulletInitialize(velo);
+			newBullet->BulletInitialize(velo + Vector3(0,0.05f,0));
 			newBullet->SetCollider(new SphereCollider());
 
 			//’e‚Ì“o˜^
@@ -173,7 +173,7 @@ void Player::LockAttack(std::vector<LockInfo>& info)
 			//’e‚ğ¶¬‚µ‰Šú‰»
 			std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
 			Vector3 shotVec = (info[i].vec - GetWorldPos());
-			shotVec = shotVec * 0.05f;
+			shotVec = shotVec * 0.1f;
 			//’P”­
 			newBullet->BulletInitialize(shotVec);
 			newBullet->SetCollider(new SphereCollider());

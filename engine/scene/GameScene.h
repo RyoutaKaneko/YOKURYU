@@ -38,6 +38,7 @@ public:
 	void LoadEnemy(int stageNum);
 	void SerchEnemy();
 	void LockedClear();
+	void GetCrosshair();
 
 	Vector3 GetScreenToWorldPos(Sprite& sprite_, RailCamera* rail);
 	Vector3 GetWorldToScreenPos(Vector3 pos_, RailCamera* rail);
@@ -102,4 +103,5 @@ private:
 	};
 	Scene sceneNum;
 	int gameTime;
+	float cursorRotate;
 };

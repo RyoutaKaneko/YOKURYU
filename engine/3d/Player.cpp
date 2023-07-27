@@ -157,7 +157,7 @@ void Player::Attack(Vector3 velo) {
 
 
 			//クールタイムを設定
-			coolTime = 8;
+			coolTime = 6;
 		}
 		else if (coolTime > 0) {
 			coolTime--;
@@ -173,7 +173,6 @@ void Player::LockAttack(std::vector<LockInfo>& info)
 			//弾を生成し初期化
 			std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
 			Vector3 shotVec = (info[i].vec - GetWorldPos());
-			shotVec = shotVec * 0.1f;
 			//単発
 			newBullet->BulletInitialize(shotVec);
 			newBullet->SetCollider(new SphereCollider());
@@ -186,7 +185,6 @@ void Player::LockAttack(std::vector<LockInfo>& info)
 			newBullet->SetisHoming(true);
 			bullets_.push_back(std::move(newBullet));
 		}
-		info.clear();
 		isShooted = true;
 	}
 }

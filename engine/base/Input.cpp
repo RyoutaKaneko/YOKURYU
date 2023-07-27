@@ -61,7 +61,7 @@ void Input::Initialize(WinApp* winApp)
 	result = mouse->SetProperty(DIPROP_AXISMODE, &diprop.diph);
 	assert(SUCCEEDED(result));
 	//マウスカーソルを隠す
-	/*ShowCursor(FALSE);*/
+	ShowCursor(FALSE);
 }
 
 void Input::Update()

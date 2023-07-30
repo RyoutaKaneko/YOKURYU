@@ -112,6 +112,16 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 		lock[i].SpriteUpdate(lock[i], spriteCommon_);
 	}
 
+	//fade
+	fade.LoadTexture(spriteCommon_, 5, L"Resources/black.png", dxCommon->GetDevice());
+	fade.SpriteCreate(dxCommon->GetDevice(), 1280, 720, 5, Vector2(0.0f, 0.0f), false, false);
+	fade.SetScale(Vector2(1280 * 1, 720 * 1));
+	fade.SpriteTransferVertexBuffer(fade, 5);
+	fade.SpriteUpdate(fade, spriteCommon_);
+	//alpha
+	fadeAlpha = 0.0f;
+	fade.SetAlpha(fade,fadeAlpha);
+
 	//パーティクル初期化
 	particle = Particle::LoadParticleTexture("blue.png");
 	pm_ = ParticleManager::Create();
@@ -201,18 +211,29 @@ void GameScene::Update() {
 					if (boss->GetTimer() > 0) {
 						if (isPlayable == true) {
 							isPlayable = false;
+							railCamera->GetView()->SetEye(Vector3(0, 5, -150));
 						}
 						railCamera->GetView()->SetTarget(boss->GetPosition());
-						railCamera->GetView()->SetEye(Vector3(0, 5, -150));
+						if (boss->GetTimer() == 150 ) {
+							railCamera->GetView()->SetEye(Vector3(-20, 5, -300));
+						}
+						else if (boss->GetTimer() < 150) {
+							railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() + Vector3(0.5f,0.0f,0.05f));
+						}
 					}
 					else {
 						if (isPlayable == false) {
-							railCamera->GetView()->SetEye(Vector3(0, 10, -90));
-							railCamera->GetCamera()->SetPosition(Vector3(0, 9, -95));
+							railCamera->GetView()->SetEye(Vector3(60, 9, -90));
+							railCamera->GetCamera()->SetPosition(Vector3(60, 9, -95));
 							railCamera->GetCamera()->SetRotation(Vector3(0, 180, 0));
 							player->SetPosition(Vector3(0, -1.0f, -5.5f));
 							player->SetAlpha(0.0f);
+							fadeAlpha = 1.0f;
+							fade.SetAlpha(fade, fadeAlpha);
 							isPlayable = true;
+						}
+						else {
+							
 						}
 					}
 				}
@@ -258,7 +279,7 @@ void GameScene::Update() {
 			}
 		}
 		else {
-			railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() - Vector3(0, 0.0f, 0.05f));
+			railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() + Vector3(0, 0.0f, -0.05f));
 			gameTime--;
 			if (gameTime == 0) {
 				player->SetPosition(Vector3(0, -1.0f, -5.5f));
@@ -266,8 +287,11 @@ void GameScene::Update() {
 			}
 			player->worldTransform_.UpdateMatrix();
 		}
-
-		
+		//fadein
+		if (fadeAlpha > 0.0f) {
+			fadeAlpha -= 0.005f;
+			fade.SetAlpha(fade, fadeAlpha);
+		}
 	
 		//デスフラグの立った敵を削除
 		enemys_.remove_if([](std::unique_ptr < Enemy>& enemy_) {
@@ -363,6 +387,7 @@ void GameScene::Draw() {
 		break;
 
 	case GameScene::GAME:
+		fade.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
 		for (int i = 0; i < player->GetHP(); i++) {
 			hp[i].SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
 		}

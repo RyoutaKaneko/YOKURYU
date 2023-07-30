@@ -195,6 +195,9 @@
     <ClCompile Include="engine\3d\Boss.cpp">
       <Filter>ソースファイル\Engine\GameObj</Filter>
     </ClCompile>
+    <ClCompile Include="engine\base\FPSFixed.cpp">
+      <Filter>ソースファイル\Engine\Base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -356,6 +359,9 @@
     </ClInclude>
     <ClInclude Include="engine\3d\Boss.h">
       <Filter>ヘッダー ファイル\Engine\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\base\FPSFixed.h">
+      <Filter>ヘッダー ファイル\Engine\Base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

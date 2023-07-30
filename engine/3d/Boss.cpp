@@ -10,13 +10,12 @@ void Boss::BossInitialize()
 {
 	Initialize();
 	// OBJからモデルデータを読み込む
-	bossModel = Model::LoadFromOBJ("triangle_mat");
-	bossModel->LoadTexture("Resources/red.png");
+	bossModel = Model::LoadFromOBJ("fighter");
 	// 3Dオブジェクト生成
 	Create();
 	// オブジェクトにモデルをひも付ける
 	SetModel(bossModel);
-	SetPosition({ 0,15,-200 });
+	SetPosition({ -15,15,-200 });
 	SetScale({ 10,10,10 });
 	isDead_ = false;
 	isInvisible = true;
@@ -28,14 +27,13 @@ void Boss::BossInitialize()
 void Boss::Update()
 {
 	if (bossTimer > 0) {
-		SetPosition(GetPosition() + Vector3(0, -0.1f, 0));
+		if (bossTimer > 150) {
+			SetPosition(GetPosition() + Vector3(0.5f, -0.1f, 0));
+		}
 		if (bossTimer > 100) {
 			bossAlpha += 0.02f;
 		}
 		bossTimer--;
-	}
-	else {
-		int a = 0;
 	}
 	worldTransform_.UpdateMatrix();
 	//当たり判定更新
@@ -50,7 +48,7 @@ void Boss::Pop()
 	if (isInvisible == true) {
 		isInvisible = false;
 	}
-	bossTimer = 150;
+	bossTimer = 300;
 
 }
 

@@ -24,6 +24,9 @@ void DirectXCommon::Initialize(WinApp* winApp)
 	// メンバ変数に記録
 	this->winApp = winApp;
 
+	// FPS固定初期化
+	fpsFixed = new FPSFixed();
+	fpsFixed->InitializeFixFPS();
 	// デバイスの生成
 	InitializeDevice();
 	// コマンド関連の初期化
@@ -380,6 +383,8 @@ void DirectXCommon::PostDraw()
 		CloseHandle(event);
 	}
 
+	// FPS固定
+	fpsFixed->UpdateFixFPS();
 
 	// キューをクリア
 	result = commandAllocator->Reset();
@@ -388,4 +393,9 @@ void DirectXCommon::PostDraw()
 	// 再びコマンドリストを貯める準備
 	result = commandList->Reset(commandAllocator.Get(), nullptr);
 	assert(SUCCEEDED(result));
+}
+
+void DirectXCommon::fpsFixedFinalize()
+{
+	safe_delete(fpsFixed);
 }

@@ -12,6 +12,7 @@
 #pragma warning(pop)
 
 #include "WinApp.h"
+#include "FPSFixed.h"
 
 using namespace Microsoft::WRL;
 
@@ -37,6 +38,8 @@ public: // メンバ関数
 	void PreDraw();
 	// 描画後処理
 	void PostDraw();
+	// 終了処理
+	void fpsFixedFinalize();
 
 private: // メンバ関数
 	template <class T>
@@ -66,6 +69,8 @@ public: // Getter
 private: 
 	// WindowsAPI
 	WinApp* winApp = nullptr;
+	// FPS
+	FPSFixed* fpsFixed = nullptr;
 
 	HRESULT result;
 	// DirectX12デバイス

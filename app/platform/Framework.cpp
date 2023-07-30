@@ -93,5 +93,8 @@ void Framework::Finalize()
 	FbxLoader::GetInstance()->Finalize();
 	// WindowsAPI‚ÌI—¹ˆ—
 	winApp->Finalize();
+
+	// DirectX‰ð•ú
+	dXCommon->fpsFixedFinalize();
 	
 }

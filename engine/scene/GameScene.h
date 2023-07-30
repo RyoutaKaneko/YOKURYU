@@ -59,6 +59,8 @@ private:
 	Sprite clearGH;
 	Sprite overGH;
 	Sprite lock[10];
+	Sprite fade;
+	float fadeAlpha;
 	//オブジェクトのポインタ
 	//3Dオブジェクト生成
 	Player* player = nullptr;

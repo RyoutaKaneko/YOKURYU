@@ -24,7 +24,8 @@ public:
 	void OnCollision(const CollisionInfo& info) override;
 	bool GetIsInvisible() { return isInvisible; }
 	float GetAlpha() { return bossAlpha; }
-	int GetTimer() { return bossTimer; }
+	int GetTimer() { return appearTimer; }
+	float GetHP() { return hp; }
 	
 
 private:
@@ -33,8 +34,13 @@ private:
 	bool isDead_ = false;
 	bool isInvisible = true;
 	//タイマー
-	int bossTimer = 0;
+	int appearTimer = 0;
 	float bossAlpha = 0.0f;
+	float hp;
+	bool isHit;
+	int hitTimer;
+	int timeCount;
+	int timer;
 
 	// モデル
 	Model* bossModel = nullptr;

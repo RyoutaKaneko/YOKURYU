@@ -61,6 +61,7 @@ private:
 	Sprite lock[10];
 	Sprite fade;
 	float fadeAlpha;
+	Sprite bossHP;
 	//オブジェクトのポインタ
 	//3Dオブジェクト生成
 	Player* player = nullptr;

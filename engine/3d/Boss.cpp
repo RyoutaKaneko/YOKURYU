@@ -20,20 +20,38 @@ void Boss::BossInitialize()
 	isDead_ = false;
 	isInvisible = true;
 	//タイマー
-	bossTimer = 0;
+	appearTimer = 0;
 	bossAlpha = 0.0f;
+	hp = 30;
+	isHit = false;
+	hitTimer = 0;
+	timer = 0;
+	timeCount = 0;
 }
 
 void Boss::Update()
 {
-	if (bossTimer > 0) {
-		if (bossTimer > 150) {
+	if (appearTimer > 0) {
+		if (appearTimer > 150) {
 			SetPosition(GetPosition() + Vector3(0.5f, -0.1f, 0));
 		}
-		if (bossTimer > 100) {
+		if (appearTimer > 100) {
 			bossAlpha += 0.02f;
 		}
-		bossTimer--;
+		appearTimer--;
+	}
+	//ボス登場後
+	else {
+		
+	}
+	if (hitTimer > 0) {
+		hitTimer--;
+		if (hitTimer == 0) {
+			isHit = false;
+		}
+	}
+	if (hp == 0) {
+		isDead_ = true;
 	}
 	worldTransform_.UpdateMatrix();
 	//当たり判定更新
@@ -48,7 +66,7 @@ void Boss::Pop()
 	if (isInvisible == true) {
 		isInvisible = false;
 	}
-	bossTimer = 300;
+	appearTimer = 300;
 
 }
 
@@ -59,8 +77,10 @@ void Boss::OnCollision(const CollisionInfo& info)
 
 	//相手がplayerの弾
 	if (strcmp(toCollisionName, str1) == 0) {
-		if (isDead_ == false) {
-			isDead_ = true;
+		if (isHit == false && isInvisible == false) {
+			isHit = true;
+			hitTimer = 30;
+			hp--;
 		}
 	}
 }

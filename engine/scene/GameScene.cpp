@@ -84,7 +84,7 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	for (int i = 0; i < 5; i++) {
 		hp[i].LoadTexture(spriteCommon_, 2, L"Resources/hitPoint.png", dxCommon->GetDevice());
 		hp[i].SpriteCreate(dxCommon->GetDevice(), 50, 50, 2, Vector2(0.0f, 0.0f), false, false);
-		hp[i].SetPosition(Vector3(0 + i * 68.0f, 0, 0));
+		hp[i].SetPosition(Vector3(0 + i * 68.0f, 650, 0));
 		hp[i].SetScale(Vector2(64 * 1, 64 * 1));
 		hp[i].SpriteTransferVertexBuffer(hp[i], 2);
 		hp[i].SpriteUpdate(hp[i], spriteCommon_);
@@ -121,6 +121,14 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	//alpha
 	fadeAlpha = 0.0f;
 	fade.SetAlpha(fade,fadeAlpha);
+	//boosHP
+	bossHP.LoadTexture(spriteCommon_, 6, L"Resources/hp.png", dxCommon->GetDevice());
+	bossHP.SpriteCreate(dxCommon->GetDevice(), 1280, 720, 6, Vector2(0.0f, 0.5f), false, false);
+	bossHP.SetPosition(Vector3(260,100,0));
+	bossHP.SetScale(Vector2(24 * 1, 64 * 1));
+	bossHP.SpriteTransferVertexBuffer(bossHP, 6);
+	bossHP.SpriteUpdate(bossHP, spriteCommon_);
+	
 
 	//パーティクル初期化
 	particle = Particle::LoadParticleTexture("blue.png");
@@ -292,6 +300,21 @@ void GameScene::Update() {
 			fadeAlpha -= 0.005f;
 			fade.SetAlpha(fade, fadeAlpha);
 		}
+		if (isCheckPoint == true) {
+			if (boss->GetTimer() == 0) {
+				Vector2 hp_ = bossHP.GetScale();
+				if ((hp_.x / 24) < boss->GetHP()) {
+					bossHP.SetScale(Vector2(hp_.x + 24, 64.0f));
+					bossHP.SpriteTransferVertexBuffer(bossHP, 6);
+					bossHP.SpriteUpdate(bossHP, spriteCommon_);
+				}
+				else if ((hp_.x / 24) > boss->GetHP()) {
+					bossHP.SetScale(Vector2(hp_.x - 24, 64.0f));
+					bossHP.SpriteTransferVertexBuffer(bossHP, 6);
+					bossHP.SpriteUpdate(bossHP, spriteCommon_);
+				}
+			}
+		}
 	
 		//デスフラグの立った敵を削除
 		enemys_.remove_if([](std::unique_ptr < Enemy>& enemy_) {
@@ -398,6 +421,11 @@ void GameScene::Draw() {
 		}
 		for (int i = 0; i < infos.size(); i++) {
 			lock[i].SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
+		}
+		if (railCamera->GetOnRail() == false) {
+			if (boss->GetTimer() == 0) {
+				bossHP.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
+			}
 		}
 		break;
 

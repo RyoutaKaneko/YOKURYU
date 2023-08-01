@@ -70,7 +70,7 @@ void Enemy::Update(Vector3 velo,float t) {
 		}
 	}
 	else {
-	/*	Attack();*/
+		Attack();
 	}
 
 	for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {

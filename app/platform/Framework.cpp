@@ -51,6 +51,8 @@ void Framework::Initialize()
 	FbxLoader::GetInstance()->Initialize(dXCommon->GetDevice());
 	//
 	FbxObject3d::StaticInitialize(dXCommon->GetDevice());
+
+	postEffect.Initialize(dXCommon->GetDevice());
 #pragma endregion Šî”ÕƒVƒXƒeƒ€‚Ì‰Šú‰»
 
 	//ƒQ[ƒ€ƒV[ƒ“
@@ -78,10 +80,13 @@ void Framework::Draw()
 #pragma endregion
 
 #pragma region •`‰æ
+	postEffect.PreDrawScene(dXCommon->GetCommandList());
+	gameScene->Draw();
+	postEffect.PostDrawScene(dXCommon->GetCommandList());
 	// •`‰æ‘Oˆ—
 	dXCommon->PreDraw();
 	//=== ƒQ[ƒ€ƒV[ƒ“•`‰æ ===//
-	gameScene->Draw();
+	postEffect.Draw(dXCommon->GetCommandList());
 	// •`‰æŒãˆ—
 	dXCommon->PostDraw();
 #pragma endregion

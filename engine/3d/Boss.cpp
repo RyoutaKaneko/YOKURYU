@@ -41,8 +41,35 @@ void Boss::Update()
 		appearTimer--;
 	}
 	//É{ÉXìoèÍå„
-	else {
-		
+	if(isInvisible == false) {
+		float moveX;
+		if (timeCount == 0) {
+			moveX = -0.05f;
+		}
+		else if (timeCount == 1) {
+			moveX = 0.05f;
+		}
+		else if (timeCount == 2) {
+			moveX = 0.05f;
+		}
+		else if(timeCount == 3){
+			moveX = -0.05f;
+		}
+
+		if (timer < 75) {
+			SetPosition(GetPosition() + Vector3(moveX, 0.01f, 0));
+		}
+		else if (timer < 150) {
+			SetPosition(GetPosition() + Vector3(moveX, -0.01f, 0));
+		}
+		else {
+			timer = 0;
+			timeCount++;
+			if (timeCount == 4) {
+				timeCount = 0;
+			}
+		}
+		timer++;
 	}
 	if (hitTimer > 0) {
 		hitTimer--;

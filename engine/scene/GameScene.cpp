@@ -231,8 +231,9 @@ void GameScene::Update() {
 					}
 					else {
 						if (isPlayable == false) {
-							railCamera->GetView()->SetEye(Vector3(60, 9, -90));
-							railCamera->GetCamera()->SetPosition(Vector3(60, 9, -95));
+							railCamera->GetView()->SetEye(Vector3(60, 9, -40));
+							railCamera->GetView()->SetTarget(Vector3(60, 2, -200));
+							railCamera->GetCamera()->SetPosition(Vector3(60, 9, -45));
 							railCamera->GetCamera()->SetRotation(Vector3(0, 180, 0));
 							player->SetPosition(Vector3(0, -1.0f, -5.5f));
 							player->SetAlpha(0.0f);
@@ -617,13 +618,15 @@ void GameScene::SerchEnemy()
 	if (input->PushKey(DIK_LSHIFT)) {
 		Vector3 epos1 = GetWorldToScreenPos(boss->GetWorldPos(), railCamera);
 		Vector3 cur = input->GetMousePos();
-		if (pow((epos1.x - cur.x), 2) + pow((epos1.y - cur.y), 2) < 30) {
-			if (boss->GetIsLocked() == false && infos.size() < 10) {
-				LockInfo info;
-				info.vec = boss->GetWorldPos();
-				info.obj = boss;
-				infos.push_back(info);
-				boss->SetIsLocked(true);
+		if (boss->GetIsInvisible() == false) {
+			if (pow((epos1.x - cur.x), 2) + pow((epos1.y - cur.y), 2) < 100) {
+				if (boss->GetIsLocked() == false && infos.size() < 10) {
+					LockInfo info;
+					info.vec = boss->GetWorldPos();
+					info.obj = boss;
+					infos.push_back(info);
+					boss->SetIsLocked(true);
+				}
 			}
 		}
 

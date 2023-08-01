@@ -24,6 +24,7 @@
 #pragma warning(disable:26813)
 #include<DirectXTex.h>
 #pragma warning(pop)
+#include "PostEffect.h"
 
 #pragma comment(lib,"d3dcompiler.lib")
 #pragma comment(lib,"dxguid.lib")
@@ -57,6 +58,7 @@ protected:
 	Input* input = nullptr;
 	SpriteCommon spriteCommon;
 	GameScene* gameScene = nullptr;
+	PostEffect postEffect;
 	ParticleManager* particleManager = nullptr;
 
 private:

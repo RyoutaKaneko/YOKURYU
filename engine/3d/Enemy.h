@@ -27,6 +27,7 @@ public:
 
 	void OnCollision(const CollisionInfo& info) override;
 	void SetStagePoint(float pos_) { stagePoint = pos_; }
+	float GetStagePoint(){return stagePoint;}
 	Object3d* GetPointer() { return this; }
 
 	//’eƒŠƒXƒg‚ğæ“¾

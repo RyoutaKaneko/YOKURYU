@@ -313,6 +313,7 @@ void Model::LoadFromOBJInternal(const string& modelname)
 	}
 	vector<Vector3> positions; // 頂点座標
 	vector<Vector3> normals;   // 法線ベクトル
+
 	vector<Vector2> texcoords; // テクスチャUV
 	// １行ずつ読み込む
 	string line;

@@ -206,9 +206,6 @@ void GameScene::Update() {
 		if (gameTime == 0) {
 		
 
-			//当たり判定チェック
-			collisionManager->CheckAllCollisions();
-
 			//boss
 			if (railCamera->GetOnRail() == false) {
 				if (isCheckPoint == false) {
@@ -305,12 +302,12 @@ void GameScene::Update() {
 			if (boss->GetTimer() == 0) {
 				Vector2 hp_ = bossHP.GetScale();
 				if ((hp_.x / 24) < boss->GetHP()) {
-					bossHP.SetScale(Vector2(hp_.x + 24, 64.0f));
+					bossHP.SetScale(Vector2(hp_.x + 12, 64.0f));
 					bossHP.SpriteTransferVertexBuffer(bossHP, 6);
 					bossHP.SpriteUpdate(bossHP, spriteCommon_);
 				}
 				else if ((hp_.x / 24) > boss->GetHP()) {
-					bossHP.SetScale(Vector2(hp_.x - 24, 64.0f));
+					bossHP.SetScale(Vector2(hp_.x - 1, 64.0f));
 					bossHP.SpriteTransferVertexBuffer(bossHP, 6);
 					bossHP.SpriteUpdate(bossHP, spriteCommon_);
 				}
@@ -331,6 +328,8 @@ void GameScene::Update() {
 		pm_->Update();
 		obj->Update();
 		boss->Update();
+		//当たり判定チェック
+		collisionManager->CheckAllCollisions();
 		break;
 
 	case GameScene::CLEAR:

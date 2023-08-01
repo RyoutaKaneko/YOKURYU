@@ -17,12 +17,14 @@ bool Player::PlayerInitialize() {
 	Initialize();
 
 	// OBJからモデルデータを読み込む
-	playerModel = Model::LoadFromOBJ("triangle_mat");
+	/*playerModel = Model::LoadFromOBJ("triangle_mat");*/
+	playerModel = Model::LoadFromOBJ("box");
 	// 3Dオブジェクト生成
 	Create();
 	// オブジェクトにモデルをひも付ける
 	SetModel(playerModel);
 	SetPosition(Vector3(0, 0, 0));
+	SetRotation(Vector3(0, 270, 0));
 
 	hp = 5;
 	coolTime = 0;

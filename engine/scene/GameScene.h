@@ -111,4 +111,5 @@ private:
 	float cursorRotate;
 	//leveleditor
 	std::map<std::string, Model> models;
+	std::list<std::unique_ptr<Object3d>> objects;
 };

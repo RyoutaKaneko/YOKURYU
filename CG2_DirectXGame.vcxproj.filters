@@ -198,6 +198,12 @@
     <ClCompile Include="engine\base\FPSFixed.cpp">
       <Filter>ソースファイル\Engine\Base</Filter>
     </ClCompile>
+    <ClCompile Include="engine\effect\PostEffect.cpp">
+      <Filter>ソースファイル\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\base\JsonLoader.cpp">
+      <Filter>ソースファイル\Engine\Base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -213,6 +219,9 @@
       <Filter>シェーダーファイル</Filter>
     </None>
     <None Include="Resources\shaders\FBX.hlsli">
+      <Filter>シェーダーファイル</Filter>
+    </None>
+    <None Include="Resources\shaders\PostEffect.hlsli">
       <Filter>シェーダーファイル</Filter>
     </None>
   </ItemGroup>
@@ -248,6 +257,12 @@
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
     <FxCompile Include="Resources\shaders\FBXVS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\PostEffectPS.hlsl">
+      <Filter>シェーダーファイル</Filter>
+    </FxCompile>
+    <FxCompile Include="Resources\shaders\PostEffectVS.hlsl">
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
   </ItemGroup>
@@ -361,6 +376,15 @@
       <Filter>ヘッダー ファイル\Engine\GameObj</Filter>
     </ClInclude>
     <ClInclude Include="engine\base\FPSFixed.h">
+      <Filter>ヘッダー ファイル\Engine\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\effect\PostEffect.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\base\JsonLoader.h">
+      <Filter>ヘッダー ファイル\Engine\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\base\json.hpp">
       <Filter>ヘッダー ファイル\Engine\Base</Filter>
     </ClInclude>
   </ItemGroup>

@@ -18,6 +18,7 @@
 #include "Enemy.h"
 #include "CollisionManager.h"
 #include "Boss.h"
+#include "JsonLoader.h"
 
 
 class GameScene {
@@ -28,6 +29,7 @@ public:
 	~GameScene();
 
 	void Initialize(SpriteCommon& spriteCommon);
+	void LoadEnemyFromLevelEditor(const std::string& fileName);
 
 	void Update();
 
@@ -107,4 +109,6 @@ private:
 	Scene sceneNum;
 	int gameTime;
 	float cursorRotate;
+	//leveleditor
+	std::map<std::string, Model> models;
 };

@@ -168,6 +168,7 @@
     <ClCompile Include="engine\base\DirectXCommon.cpp" />
     <ClCompile Include="engine\base\FPSFixed.cpp" />
     <ClCompile Include="engine\base\Input.cpp" />
+    <ClCompile Include="engine\base\JsonLoader.cpp" />
     <ClCompile Include="engine\collision\Collision.cpp" />
     <ClCompile Include="engine\collision\CollisionManager.cpp" />
     <ClCompile Include="engine\collision\CollisionPrimitive.cpp" />
@@ -299,6 +300,8 @@
     <ClInclude Include="engine\base\DirectXCommon.h" />
     <ClInclude Include="engine\base\FPSFixed.h" />
     <ClInclude Include="engine\base\Input.h" />
+    <ClInclude Include="engine\base\json.hpp" />
+    <ClInclude Include="engine\base\JsonLoader.h" />
     <ClInclude Include="engine\collision\BaseCollider.h" />
     <ClInclude Include="engine\collision\Collision.h" />
     <ClInclude Include="engine\collision\CollisionInfo.h" />

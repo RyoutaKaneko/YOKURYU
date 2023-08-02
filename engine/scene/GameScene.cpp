@@ -8,6 +8,8 @@
 #include <cassert>
 #include <fstream>
 #include <sstream>
+#include <map>
+
 
 
 
@@ -789,4 +791,17 @@ Vector2 GameScene::GetWorldToScreenScale(Object3d* obj, RailCamera* rail)
 
 
 	return Vector2(x / len, y /len);
+}
+
+void GameScene::LoadEnemyFromLevelEditor(const std::string& fileName) {
+	//JsonLoader* file = nullptr;
+	//LevelData* levelData = file->LoadFile(fileName);
+
+	////オブジェクト配置
+	//for (auto& objectData : levelData->objects) {
+	//	//ファイル名から登録済みモデルを検索
+	//	Model* model = nullptr;
+	//	decltype(models)::iterator it = models.find(objectData->filename);
+	//	if (it != models.end()) { model = it->second; }
+	//}
 }

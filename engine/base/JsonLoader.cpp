@@ -3,6 +3,10 @@
 #include <json.hpp>
 #include <fstream>
 #include <cassert>
+
+const std::string JsonLoader::kDefaultBaseDirectory = "Resources/levels/";
+const std::string JsonLoader::kExtension = ".json";
+
 //ファイル読み込み
 LevelData* JsonLoader::LoadFile(const std::string& fileName) {
 	// 連結してフルパスを得る

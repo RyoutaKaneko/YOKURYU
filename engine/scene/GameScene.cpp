@@ -177,7 +177,7 @@ void GameScene::Update() {
 		Reset();
 		player->SetPosition(Vector3(0, -1.0f, -5.5f));
 		player->SetAlpha(0.0f);
-		Vector3 cursor = GetWorldToScreenPos(player->GetWorldPos(), railCamera);
+		Vector3 cursor = GetWorldToScreenPos(Vector3(0,0,0), railCamera);
 		input->SetMousePos({ cursor.x,cursor.y });
 	}
 
@@ -191,7 +191,7 @@ void GameScene::Update() {
 			railCamera->GetView()->SetEye(Vector3(-1, 0.5f, 490.0f));
 			railCamera->GetView()->SetTarget(Vector3(0.0f, 0.5f, 495));
 			player->SetPosition({ 0,0.5f,495 });
-			Vector3 cursor = GetWorldToScreenPos(player->GetWorldPos(), railCamera);
+			Vector3 cursor = GetWorldToScreenPos(Vector3(-230,85,0), railCamera);
 			input->SetMousePos({ cursor.x,cursor.y });
 		}
 		break;
@@ -212,11 +212,11 @@ void GameScene::Update() {
 					if (boss->GetTimer() > 0) {
 						if (isPlayable == true) {
 							isPlayable = false;
-							railCamera->GetView()->SetEye(Vector3(0, 5, -150));
+							railCamera->GetView()->SetEye(Vector3(-40, 5, -150));
 						}
 						railCamera->GetView()->SetTarget(boss->GetPosition());
 						if (boss->GetTimer() == 150 ) {
-							railCamera->GetView()->SetEye(Vector3(-20, 5, -300));
+							railCamera->GetView()->SetEye(Vector3(-80, 5, -300));
 						}
 						else if (boss->GetTimer() < 150) {
 							railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() + Vector3(0.5f,0.0f,0.05f));
@@ -224,9 +224,9 @@ void GameScene::Update() {
 					}
 					else {
 						if (isPlayable == false) {
-							railCamera->GetView()->SetEye(Vector3(75, 9, -40));
-							railCamera->GetView()->SetTarget(Vector3(75, 2, -200));
-							railCamera->GetCamera()->SetPosition(Vector3(75, 9, -45));
+							railCamera->GetView()->SetEye(Vector3(0, 9, -40));
+							railCamera->GetView()->SetTarget(Vector3(0, 2, -200));
+							railCamera->GetCamera()->SetPosition(Vector3(0, 9, -45));
 							railCamera->GetCamera()->SetRotation(Vector3(0, 180, 0));
 							player->SetPosition(Vector3(0, -1.0f, -5.5f));
 							player->SetAlpha(0.0f);
@@ -248,12 +248,14 @@ void GameScene::Update() {
 				}
 			}
 
-			//clear
+			//over
 			if (player->GetHP() == 0) {
+				LockedClear();
 				sceneNum = OVER;
 			}
-			//over
+			//clear
 			if (boss->GetIsDead() == true) {
+				LockedClear();
 				sceneNum = CLEAR;
 			}
 			//XV

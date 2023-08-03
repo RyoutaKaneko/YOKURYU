@@ -15,7 +15,7 @@ void Boss::BossInitialize()
 	Create();
 	// オブジェクトにモデルをひも付ける
 	SetModel(bossModel);
-	SetPosition({ 0,15,-200 });
+	SetPosition({ -60,15,-200 });
 	SetScale({ 10,10,10 });
 	isDead_ = false;
 	isInvisible = true;
@@ -44,16 +44,16 @@ void Boss::Update()
 	if(isInvisible == false) {
 		float moveX = 0;
 		if (timeCount == 0) {
-			moveX = -0.05f;
+			moveX = -0.025f;
 		}
 		else if (timeCount == 1) {
-			moveX = 0.05f;
+			moveX = 0.025f;
 		}
 		else if (timeCount == 2) {
-			moveX = 0.05f;
+			moveX = 0.025f;
 		}
 		else if(timeCount == 3){
-			moveX = -0.05f;
+			moveX = -0.025f;
 		}
 
 		if (timer < 75) {

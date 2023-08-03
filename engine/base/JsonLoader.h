@@ -1,8 +1,14 @@
 #pragma once
 #include "Vector4.h"
+#pragma warning(push)
+#pragma	warning(disable:4282)
+#pragma	warning(disable:4283)
+#pragma	warning(disable:4285)
 #include <json.hpp>
+#pragma warning(pop)
 #include <string>
 #include <vector>
+#include "Matrix4.h"
 
 // レベルデータ
 struct LevelData {

@@ -1,6 +1,9 @@
 #include "JsonLoader.h"
 
+#pragma warning(push)
+#pragma	warning(disable:4281)
 #include <json.hpp>
+#pragma warning(pop)
 #include <fstream>
 #include <cassert>
 

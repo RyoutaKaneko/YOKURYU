@@ -29,7 +29,7 @@ public:
 	~GameScene();
 
 	void Initialize(SpriteCommon& spriteCommon);
-	void LoadEnemyFromLevelEditor(const std::string& fileName);
+	void LoadObjFromLevelEditor(const std::string& fileName);
 
 	void Update();
 
@@ -69,9 +69,7 @@ private:
 	Player* player = nullptr;
 	Enemy* enemy = nullptr;
 	Model* skyModel = nullptr;
-	Object3d* sky = nullptr;
-	Model* floorModel = nullptr;
-	Object3d* floor = nullptr;
+	Model* seaModel = nullptr;
 	Boss* boss = nullptr;
 	//ÉJÉÅÉâ
 	ViewProjection* viewProjection = nullptr;
@@ -110,6 +108,6 @@ private:
 	int gameTime;
 	float cursorRotate;
 	//leveleditor
-	std::map<std::string, Model> models;
-	std::list<std::unique_ptr<Object3d>> objects;
+	std::map<std::string, Model*> models;
+	std::vector<Object3d*> objects;
 };

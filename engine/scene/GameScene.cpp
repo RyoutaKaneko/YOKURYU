@@ -31,23 +31,19 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	input = Input::GetInstance();
 	//当たり判定
 	collisionManager = CollisionManager::GetInstance();
-	
+
 	//player
 	player = new Player;
 	player->PlayerInitialize();
 	player->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 0.7f));
-	//sky
-	skyModel = Model::LoadFromOBJ("skydome");
-	sky = Object3d::Create();
-	sky->SetModel(skyModel);
-	sky->SetScale(Vector3(5,5,5));
-	sky->SetRotation(Vector3(0, 180, 0));
-	//floor
-	floorModel = Model::LoadFromOBJ("floor");
-	floor = Object3d::Create();
-	floor->SetModel(floorModel);
-	floor->SetPosition({ 0,-10,0 });
-	floor->SetScale(Vector3(500, 500, 500));
+
+	//モデル読み込み
+	skyModel = Model::LoadFromOBJ("sky");
+	seaModel = Model::LoadFromOBJ("sea");
+	models.insert(std::make_pair("sky", skyModel));
+	models.insert(std::make_pair("sea", seaModel));
+	//レベルエディタ読み込み
+	LoadObjFromLevelEditor("scene");
 
 	railCamera = new RailCamera;
 	railCamera->Initialize(player);
@@ -144,13 +140,13 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	pm->SetXMViewProjection(xmViewProjection);
 	pm_->SetXMViewProjection(xmViewProjection);
 
-	//モデル名を指定して読み込み
-	obj = new FbxObject3d;
-	obj->Initialize();
-	model = FbxLoader::GetInstance()->LoadModelFlomFile("cube");
-	obj->SetModel(model);
-	obj->SetPosition(Vector3(1, 0, -10));
-	obj->SetScale(Vector3((float)0.01, (float)0.01, (float)0.01));
+	////モデル名を指定して読み込み
+	//obj = new FbxObject3d;
+	//obj->Initialize();
+	//model = FbxLoader::GetInstance()->LoadModelFlomFile("cube");
+	//obj->SetModel(model);
+	//obj->SetPosition(Vector3(1, 0, -10));
+	//obj->SetScale(Vector3((float)0.01, (float)0.01, (float)0.01));
 
 	//boss
 	boss = new Boss;
@@ -324,11 +320,11 @@ void GameScene::Update() {
 		for (const std::unique_ptr<Enemy>& enemy : enemys_) {
 			enemy->Update(player->GetWorldPos(), railCamera->GetPasPoint());
 		}
-		sky->Update();
-		floor->Update();
+		for (auto& object : objects) {
+			object->Update();
+		}
 		pm->Update();
 		pm_->Update();
-		obj->Update();
 		boss->Update();
 		//当たり判定チェック
 		collisionManager->CheckAllCollisions();
@@ -357,8 +353,9 @@ void GameScene::Draw() {
 	Object3d::PreDraw(dxCommon->GetCommandList());
 
 	if (sceneNum == GAME) {
-		sky->Draw(railCamera->GetView());
-		floor->Draw(railCamera->GetView());
+		for (auto& object : objects) {
+			object->Draw(railCamera->GetView());
+		}
 		//敵キャラの描画
 		for (const std::unique_ptr<Enemy>& enemy : enemys_) {
 			enemy->EnemyDraw(railCamera->GetView());
@@ -793,34 +790,33 @@ Vector2 GameScene::GetWorldToScreenScale(Object3d* obj, RailCamera* rail)
 	return Vector2(x / len, y /len);
 }
 
-void GameScene::LoadEnemyFromLevelEditor(const std::string& fileName) {
-	//JsonLoader* file = nullptr;
-	//LevelData* levelData = file->LoadFile(fileName);
+void GameScene::LoadObjFromLevelEditor(const std::string& fileName) {
+	JsonLoader* file = nullptr;
+	LevelData* levelData = file->LoadFile(fileName);
 
-	////オブジェクト配置
-	//for (auto& objectData : levelData->objects) {
-	//	//ファイル名から登録済みモデルを検索
-	//	Model* model = nullptr;
-	//	decltype(models)::iterator it = models.find(objectData->filename);
-	//	if (it != models.end()) { model = it->second; }
-	//	//モデルを指定して3DObjectを生成
-	//	std::unique_ptr<Object3d> newObject = std::make_unique<Object3d>();
-	//	newObject->Create();
-	//	newObject->Initialize();
-	//	newObject->SetModel(model);
-	//	//座標
-	//	Vector3 pos;
-	//	pos = Vector3(objectData.translation.x, objectData.translation.y, objectData.translation.z);
-	//	newObject->SetPosition(pos);
-	//	//回転角
-	//	Vector3 rot;
-	//	rot = Vector3(objectData.rotation.x, objectData.rotation.y, objectData.rotation.z);
-	//	newObject->SetRotation(rot);
-	//	//スケール
-	//	Vector3 scale;
-	//	scale = Vector3(objectData.scaling.x, objectData.scaling.y, objectData.scaling.z);
-	//	newObject->SetScale(scale);
-	//	//配列に登録
-	//	objects.push_back(newObject);
-	//}
+	//オブジェクト配置
+	for (auto& objectData : levelData->objects) {
+		//ファイル名から登録済みモデルを検索
+		Model* model = nullptr;
+		decltype(models)::iterator it = models.find(objectData.fileName);
+		if (it != models.end()) { model = it->second; }
+		//モデルを指定して3DObjectを生成
+		Object3d* newObject = Object3d::Create();
+		newObject->Initialize();
+		newObject->SetModel(model);
+		//座標
+		Vector3 pos;
+		pos = Vector3(objectData.translation.x, objectData.translation.y, objectData.translation.z);
+		newObject->SetPosition(pos);
+		//回転角
+		Vector3 rot;
+		rot = Vector3(objectData.rotation.x, objectData.rotation.y, objectData.rotation.z);
+		newObject->SetRotation(rot);
+		//スケール
+		Vector3 scale;
+		scale = Vector3(objectData.scaling.x, objectData.scaling.y, objectData.scaling.z);
+		newObject->SetScale(scale);
+		//配列に登録
+		objects.push_back(newObject);
+	}
 }

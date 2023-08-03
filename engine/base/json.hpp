@@ -1,3 +1,11 @@
+#pragma warning(push)
+#pragma	warning(disable:4282)
+#pragma	warning(disable:4283)
+#pragma	warning(disable:4285)
+#pragma	warning(disable:4287)
+#pragma	warning(disable:4288)
+#pragma	warning(disable:4289)
+
 //     __ _____ _____ _____
 //  __|  |   __|     |   | |  JSON for Modern C++
 // |  |  |__   |  |  | | | |  version 3.11.2
@@ -4272,6 +4280,7 @@ inline void concat_into(OutStringType& out, const Arg& arg, Args&& ... rest)
     out.append(arg.data(), arg.size());
     concat_into(out, std::forward<Args>(rest)...);
 }
+
 
 template<typename OutStringType = std::string, typename... Args>
 inline OutStringType concat(Args && ... args)

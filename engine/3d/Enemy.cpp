@@ -121,7 +121,7 @@ void Enemy::Attack() {
 
 
 			//クールタイムを設定
-			coolTime = 100;
+			coolTime = 200;
 		}
 		else if (coolTime > 0) {
 			coolTime--;

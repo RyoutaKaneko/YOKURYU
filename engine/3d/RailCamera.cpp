@@ -15,9 +15,9 @@ void RailCamera::Initialize(Player* player_) {
 	input = Input::GetInstance();
 	viewProjection->Initialize();
 	camera = Object3d::Create();
-	viewProjection->eye = { 0, 0, -10 };
-	viewProjection->target = { 0,0,0 };
-	camera->SetPosition(viewProjection->eye);
+	viewProjection->eye = { 0, 1, 505 };
+	viewProjection->target = { 0.3f,0.5f,499 };
+	camera->SetPosition({0,0,500});
 	camera->SetRotation(Vector3(0, 0, 0));
 	SetPlayer(player_);
 	oldCamera = { 0,0,0 };
@@ -62,7 +62,7 @@ void RailCamera::Update(Player* player_, std::vector<Vector3>& point) {
 		//XV
 		camera->Update();
 		viewProjection->target = ((target_ + frontVec));
-		viewProjection->target.x += targetAd * 2;
+		/*viewProjection->target.x += targetAd * 2;*/
 		viewProjection->eye = (camera->GetPosition() - frontVec * player_->GetLen());
 		if (viewProjection->eye.y > (eyeTmp.y + 1)) {
 			viewProjection->eye.y += 0.05f;

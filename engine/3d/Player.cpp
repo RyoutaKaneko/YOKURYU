@@ -23,7 +23,7 @@ bool Player::PlayerInitialize() {
 	Create();
 	// オブジェクトにモデルをひも付ける
 	SetModel(playerModel);
-	SetPosition(Vector3(0, 0, 0));
+	SetPosition(Vector3(0, 0, 500));
 	SetRotation(Vector3(0, 270, 0));
 
 	hp = 5;

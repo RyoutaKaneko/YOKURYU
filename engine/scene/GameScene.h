@@ -70,6 +70,8 @@ private:
 	Enemy* enemy = nullptr;
 	Model* skyModel = nullptr;
 	Model* seaModel = nullptr;
+	Model* block01Model = nullptr;
+	Model* block02Model = nullptr;
 	Boss* boss = nullptr;
 	//ÉJÉÅÉâ
 	ViewProjection* viewProjection = nullptr;

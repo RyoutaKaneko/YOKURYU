@@ -4,20 +4,13 @@
 #include "SphereCollider.h"
 #include "CollisionManager.h"
 
-
 #include <cassert>
 #include <fstream>
 #include <sstream>
 #include <map>
 
 
-
-
-
-GameScene::GameScene()
-{
-
-}
+GameScene::GameScene(){}
 
 GameScene::~GameScene() {
 	delete player;
@@ -40,8 +33,12 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	//モデル読み込み
 	skyModel = Model::LoadFromOBJ("sky");
 	seaModel = Model::LoadFromOBJ("sea");
+	block01Model = Model::LoadFromOBJ("block01");
+	block02Model = Model::LoadFromOBJ("block02");
 	models.insert(std::make_pair("sky", skyModel));
 	models.insert(std::make_pair("sea", seaModel));
+	models.insert(std::make_pair("block01", block01Model));
+	models.insert(std::make_pair("block02", block02Model));
 	//レベルエディタ読み込み
 	LoadObjFromLevelEditor("scene");
 
@@ -191,8 +188,9 @@ void GameScene::Update() {
 		if (input->TriggerKey(DIK_SPACE)) {
 			sceneNum = GAME;
 			gameTime = 150;
-			railCamera->GetView()->SetEye(Vector3(2, 1.0f, 0.0f));
-			railCamera->GetView()->SetTarget(Vector3(0, 0.5f, 0));
+			railCamera->GetView()->SetEye(Vector3(-1, 0.5f, 490.0f));
+			railCamera->GetView()->SetTarget(Vector3(0.0f, 0.5f, 495));
+			player->SetPosition({ 0,0.5f,495 });
 			Vector3 cursor = GetWorldToScreenPos(player->GetWorldPos(), railCamera);
 			input->SetMousePos({ cursor.x,cursor.y });
 		}
@@ -226,9 +224,9 @@ void GameScene::Update() {
 					}
 					else {
 						if (isPlayable == false) {
-							railCamera->GetView()->SetEye(Vector3(60, 9, -40));
-							railCamera->GetView()->SetTarget(Vector3(60, 2, -200));
-							railCamera->GetCamera()->SetPosition(Vector3(60, 9, -45));
+							railCamera->GetView()->SetEye(Vector3(75, 9, -40));
+							railCamera->GetView()->SetTarget(Vector3(75, 2, -200));
+							railCamera->GetCamera()->SetPosition(Vector3(75, 9, -45));
 							railCamera->GetCamera()->SetRotation(Vector3(0, 180, 0));
 							player->SetPosition(Vector3(0, -1.0f, -5.5f));
 							player->SetAlpha(0.0f);
@@ -281,9 +279,18 @@ void GameScene::Update() {
 				player->Update(shotVec, infos);
 				LockedClear();
 			}
+			//デスフラグの立った敵を削除
+			enemys_.remove_if([](std::unique_ptr < Enemy>& enemy_) {
+				return enemy_->GetIsDead();
+				});
+			//敵キャラの更新
+			for (const std::unique_ptr<Enemy>& enemy : enemys_) {
+				enemy->Update(player->GetWorldPos(), railCamera->GetPasPoint());
+			}
 		}
+		//ゲームスタート時演出
 		else {
-			railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() + Vector3(0, 0.0f, -0.05f));
+			railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() + Vector3(0, 0.0f, 0.05f));
 			gameTime--;
 			if (gameTime == 0) {
 				player->SetPosition(Vector3(0, -1.0f, -5.5f));
@@ -312,14 +319,6 @@ void GameScene::Update() {
 			}
 		}
 	
-		//デスフラグの立った敵を削除
-		enemys_.remove_if([](std::unique_ptr < Enemy>& enemy_) {
-			return enemy_->GetIsDead();
-			});
-		//敵キャラの更新
-		for (const std::unique_ptr<Enemy>& enemy : enemys_) {
-			enemy->Update(player->GetWorldPos(), railCamera->GetPasPoint());
-		}
 		for (auto& object : objects) {
 			object->Update();
 		}

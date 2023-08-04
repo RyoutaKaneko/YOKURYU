@@ -15,7 +15,7 @@ void Boss::BossInitialize()
 	Create();
 	// オブジェクトにモデルをひも付ける
 	SetModel(bossModel);
-	SetPosition({ -60,15,-200 });
+	SetPosition({ -75,65,-200 });
 	SetScale({ 10,10,10 });
 	isDead_ = false;
 	isInvisible = true;
@@ -57,10 +57,10 @@ void Boss::Update()
 		}
 
 		if (timer < 75) {
-			SetPosition(GetPosition() + Vector3(moveX, 0.01f, 0));
+			SetPosition(GetPosition() + Vector3(0.0f, 0.01f, 0.0f));
 		}
 		else if (timer < 150) {
-			SetPosition(GetPosition() + Vector3(moveX, -0.01f, 0));
+			SetPosition(GetPosition() + Vector3(0.0f, -0.01f, 0.0f));
 		}
 		else {
 			timer = 0;

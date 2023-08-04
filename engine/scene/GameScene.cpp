@@ -212,11 +212,11 @@ void GameScene::Update() {
 					if (boss->GetTimer() > 0) {
 						if (isPlayable == true) {
 							isPlayable = false;
-							railCamera->GetView()->SetEye(Vector3(-40, 5, -150));
+							railCamera->GetView()->SetEye(Vector3(-40, 55, -150));
 						}
 						railCamera->GetView()->SetTarget(boss->GetPosition());
 						if (boss->GetTimer() == 150 ) {
-							railCamera->GetView()->SetEye(Vector3(-80, 5, -300));
+							railCamera->GetView()->SetEye(Vector3(-80, 55, -300));
 						}
 						else if (boss->GetTimer() < 150) {
 							railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() + Vector3(0.5f,0.0f,0.05f));
@@ -224,9 +224,9 @@ void GameScene::Update() {
 					}
 					else {
 						if (isPlayable == false) {
-							railCamera->GetView()->SetEye(Vector3(0, 9, -40));
-							railCamera->GetView()->SetTarget(Vector3(0, 2, -200));
-							railCamera->GetCamera()->SetPosition(Vector3(0, 9, -45));
+							railCamera->GetView()->SetEye(Vector3(0, 59, -95));
+							railCamera->GetView()->SetTarget(Vector3(0, 52, -200));
+							railCamera->GetCamera()->SetPosition(Vector3(0, 59, -100));
 							railCamera->GetCamera()->SetRotation(Vector3(0, 180, 0));
 							player->SetPosition(Vector3(0, -1.0f, -5.5f));
 							player->SetAlpha(0.0f);
@@ -526,6 +526,7 @@ void GameScene::Reset() {
 	isPlayable = false;
 	cursorRotate = 0.001f;
 	LockedClear();
+	infos.clear();
 }
 
 void GameScene::LoadEnemy(int stageNum) {
@@ -633,7 +634,7 @@ void GameScene::SerchEnemy()
 			Vector3 epos2 = GetWorldToScreenPos(enemy->GetWorldPos(), railCamera);
 			Vector3 len = enemy->GetWorldPos() - player->GetWorldPos();
 			float len_ = len.length();
-			if (pow((epos2.x - cur.x), 2) + pow((epos2.y - cur.y), 2) < (100 - len_)) {
+			if (pow((epos2.x - cur.x), 2) + pow((epos2.y - cur.y), 2) < (30)) {
 				if (enemy->GetIsLocked() == false && infos.size() < 10) {
 					LockInfo info;
 					info.vec = enemy->GetWorldPos();

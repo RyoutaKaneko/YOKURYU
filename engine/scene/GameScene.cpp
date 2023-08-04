@@ -35,10 +35,12 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	seaModel = Model::LoadFromOBJ("sea");
 	block01Model = Model::LoadFromOBJ("block01");
 	block02Model = Model::LoadFromOBJ("block02");
+	stoneModel = Model::LoadFromOBJ("stone");
 	models.insert(std::make_pair("sky", skyModel));
 	models.insert(std::make_pair("sea", seaModel));
 	models.insert(std::make_pair("block01", block01Model));
 	models.insert(std::make_pair("block02", block02Model));
+	models.insert(std::make_pair("stone", stoneModel));
 	//レベルエディタ読み込み
 	LoadObjFromLevelEditor("scene");
 
@@ -193,6 +195,9 @@ void GameScene::Update() {
 			player->SetPosition({ 0,0.5f,495 });
 			Vector3 cursor = GetWorldToScreenPos(Vector3(-230,85,0), railCamera);
 			input->SetMousePos({ cursor.x,cursor.y });
+			for (auto& object : objects) {
+				object->Update();
+			}
 		}
 		break;
 
@@ -319,10 +324,6 @@ void GameScene::Update() {
 					bossHP.SpriteUpdate(bossHP, spriteCommon_);
 				}
 			}
-		}
-	
-		for (auto& object : objects) {
-			object->Update();
 		}
 		pm->Update();
 		pm_->Update();

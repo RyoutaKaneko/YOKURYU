@@ -6,7 +6,7 @@ void PlayerBullet::BulletInitialize(const Vector3& velocity) {
 	Initialize();
 
 	// OBJからモデルデータを読み込む
-	bulletModel = Model::LoadFromOBJ("ironSphere");
+	bulletModel = Model::LoadFromOBJ("triangle_mat");
 	// 3Dオブジェクト生成
 	Create();
 	// オブジェクトにモデルをひも付ける

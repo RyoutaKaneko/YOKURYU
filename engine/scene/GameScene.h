@@ -72,6 +72,7 @@ private:
 	Model* seaModel = nullptr;
 	Model* block01Model = nullptr;
 	Model* block02Model = nullptr;
+	Model* stoneModel = nullptr;
 	Boss* boss = nullptr;
 	//ÉJÉÅÉâ
 	ViewProjection* viewProjection = nullptr;

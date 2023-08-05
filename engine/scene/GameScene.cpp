@@ -162,6 +162,7 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	isPlayable = false;
 	 //
 	sceneNum = TITLE;
+	gameState = MAIN;
 	infos.clear();
 	//
 	gameTime = 0;

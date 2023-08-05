@@ -98,9 +98,9 @@ private:
 	int stageNum = 0;
 	bool isCheckPoint = false;
 	bool isPlayable = false;
-
+	//ロックオン情報
 	std::vector<LockInfo> infos;
-
+	//シーン情報
 	enum Scene {
 		TITLE,
 		GAME,
@@ -110,6 +110,12 @@ private:
 	Scene sceneNum;
 	int gameTime;
 	float cursorRotate;
+	//ゲームステータス
+	enum GameState {
+		MAIN,
+		BOSS
+	};
+	GameState gameState;
 	//leveleditor
 	std::map<std::string, Model*> models;
 	std::vector<Object3d*> objects;

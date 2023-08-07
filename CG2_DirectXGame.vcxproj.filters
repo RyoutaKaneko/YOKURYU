@@ -204,6 +204,9 @@
     <ClCompile Include="engine\effect\PostEffect.cpp">
       <Filter>ソースファイル\Engine\Effect</Filter>
     </ClCompile>
+    <ClCompile Include="engine\3d\BossBullet.cpp">
+      <Filter>ソースファイル\Engine\GameObj</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -372,9 +375,6 @@
     <ClInclude Include="engine\3d\EnemyBullet.h">
       <Filter>ヘッダー ファイル\Engine\GameObj</Filter>
     </ClInclude>
-    <ClInclude Include="engine\3d\Boss.h">
-      <Filter>ヘッダー ファイル\Engine\GameObj</Filter>
-    </ClInclude>
     <ClInclude Include="engine\base\FPSFixed.h">
       <Filter>ヘッダー ファイル\Engine\Base</Filter>
     </ClInclude>
@@ -386,6 +386,12 @@
     </ClInclude>
     <ClInclude Include="engine\effect\PostEffect.h">
       <Filter>ヘッダー ファイル\Engine\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\BossBullet.h">
+      <Filter>ヘッダー ファイル\Engine\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\Boss.h">
+      <Filter>ヘッダー ファイル\Engine\GameObj</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

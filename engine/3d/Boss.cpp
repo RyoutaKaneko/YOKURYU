@@ -31,6 +31,7 @@ void Boss::BossInitialize()
 
 void Boss::Update()
 {
+	//登場時
 	if (appearTimer > 0) {
 		if (appearTimer > 150) {
 			SetPosition(GetPosition() + Vector3(0.5f, -0.1f, 0));
@@ -40,8 +41,58 @@ void Boss::Update()
 		}
 		appearTimer--;
 	}
+	//基本挙動
+	Move();
+	 //ダメージ判定
+	if (hitTimer > 0) {
+		hitTimer--;
+		if (hitTimer == 0) {
+			isHit = false;
+		}
+	}
+	//HPが0なら死亡
+	if (hp == 0) {
+		isDead_ = true;
+	}
+	//更新
+	worldTransform_.UpdateMatrix();
+	//当たり判定更新
+	if (collider)
+	{
+		collider->Update();
+	}
+}
+
+void Boss::Pop()
+{
+	if (isInvisible == true) {
+		isInvisible = false;
+	}
+	appearTimer = 300;
+
+}
+
+void Boss::Attack()
+{
+	//弾を生成し初期化
+//複数
+	std::unique_ptr<BossBullet> newBullet = std::make_unique<BossBullet>();
+
+	//単発													   
+	newBullet->BulletInitialize(GetPosition());
+	newBullet->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 0.5f));
+
+	//弾の登録										 
+   //複数
+	newBullet->SetPosition(GetPosition());
+	newBullet->SetScale({ 0.3f,0.3f,0.3f });
+	bullets_.push_back(std::move(newBullet));
+}
+
+void Boss::Move()
+{
 	//ボス登場後
-	if(isInvisible == false) {
+	if (isInvisible == false) {
 		float moveX = 0;
 		if (timeCount == 0) {
 			moveX = -0.025f;
@@ -52,7 +103,7 @@ void Boss::Update()
 		else if (timeCount == 2) {
 			moveX = 0.025f;
 		}
-		else if(timeCount == 3){
+		else if (timeCount == 3) {
 			moveX = -0.025f;
 		}
 
@@ -71,30 +122,6 @@ void Boss::Update()
 		}
 		timer++;
 	}
-	if (hitTimer > 0) {
-		hitTimer--;
-		if (hitTimer == 0) {
-			isHit = false;
-		}
-	}
-	if (hp == 0) {
-		isDead_ = true;
-	}
-	worldTransform_.UpdateMatrix();
-	//当たり判定更新
-	if (collider)
-	{
-		collider->Update();
-	}
-}
-
-void Boss::Pop()
-{
-	if (isInvisible == true) {
-		isInvisible = false;
-	}
-	appearTimer = 300;
-
 }
 
 void Boss::OnCollision(const CollisionInfo& info)

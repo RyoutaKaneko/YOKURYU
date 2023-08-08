@@ -24,6 +24,8 @@ public:
 	void SetEye(Vector3 view);
 	void SetTarget(Vector3 target_);
 	void ShakeCamera();
+	//デバック用//
+	void SetOnRail(bool onrail) { OnRail = onrail; }
 
 	//ベクトルを取得
 	void GetVec(Vector3 a, Vector3 b);

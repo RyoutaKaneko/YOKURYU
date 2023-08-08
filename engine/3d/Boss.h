@@ -4,6 +4,7 @@
 #include "WinApp.h"
 #include "Vector3.h"
 #include "Model.h"
+#include "BossBullet.h"
 
 //GameScene‚Ì‘O•ûéŒ¾
 class GameScene;
@@ -18,6 +19,8 @@ public:
 
 	void Update()override;
 	void Pop();
+	void Attack();
+	void Move();
 
 	bool GetIsDead() const { return isDead_; }
 
@@ -44,4 +47,6 @@ private:
 
 	// ƒ‚ƒfƒ‹
 	Model* bossModel = nullptr;
+	//’e
+	std::list<std::unique_ptr<BossBullet>> bullets_;
 };

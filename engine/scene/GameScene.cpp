@@ -231,6 +231,11 @@ void GameScene::Update() {
 						gameState = BOSS;
 					}
 				}
+				/////デバック用/////
+				if (input->TriggerKey(DIK_B)) {
+					railCamera->SetOnRail(false);
+				}
+
 				//更新
 				if (railCamera->GetIsEnd() == false) {
 					railCamera->Update(player, points);

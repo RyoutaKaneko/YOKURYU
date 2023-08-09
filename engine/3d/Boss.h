@@ -21,6 +21,7 @@ public:
 	void Pop();
 	void Attack();
 	void Move();
+	void ChangeState();
 
 	bool GetIsDead() const { return isDead_; }
 
@@ -44,6 +45,13 @@ private:
 	int hitTimer;
 	int timeCount;
 	int timer;
+	
+	//ボス行動情報
+	enum State {
+		WAIT,
+		SHOT
+	};
+	State state;
 
 	// モデル
 	Model* bossModel = nullptr;

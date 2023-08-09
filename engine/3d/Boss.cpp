@@ -1,5 +1,7 @@
 #include "Boss.h"
 #include "SphereCollider.h"
+#include "time.h"
+#include "stdlib.h"
 
 Boss::~Boss()
 {
@@ -27,6 +29,9 @@ void Boss::BossInitialize()
 	hitTimer = 0;
 	timer = 0;
 	timeCount = 0;
+	state = WAIT;
+	//—”
+	srand(time(NULL));
 }
 
 void Boss::Update()
@@ -121,6 +126,21 @@ void Boss::Move()
 			}
 		}
 		timer++;
+	}
+}
+
+void Boss::ChangeState()
+{
+	if (state == WAIT) {
+		//—”‚É‚æ‚ès“®‚ğŒˆ’è
+		int random = rand() % 2 + 1;
+		//Œ‹‰Ê‚ğŒ©‚Äó‘Ô‚ğ‘JˆÚ
+		if (random == 1) {
+			state = SHOT;
+		}
+		else {
+			state = SHOT;
+		}
 	}
 }
 

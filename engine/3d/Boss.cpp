@@ -47,6 +47,7 @@ void Boss::Update()
 		appearTimer--;
 	}
 	//基本挙動
+	ChangeState();
 	Move();
 	 //ダメージ判定
 	if (hitTimer > 0) {

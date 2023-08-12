@@ -17,11 +17,13 @@ public:
 	//èâä˙âª
 	void BossInitialize();
 
-	void Update()override;
+	void Update(Vector3 velo);
 	void Pop();
 	void Attack();
 	void Move();
 	void ChangeState();
+	
+	void BossDraw(ViewProjection* viewProjection_);
 
 	bool GetIsDead() const { return isDead_; }
 

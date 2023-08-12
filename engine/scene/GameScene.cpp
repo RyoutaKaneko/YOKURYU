@@ -295,7 +295,7 @@ void GameScene::Update() {
 				fade.SetAlpha(fade, fadeAlpha);
 			}
 			//更新
-			boss->Update();
+			boss->Update(player->GetWorldPos());
 			break;
 		}
 		//////////////操作可能なら更新///////////////////
@@ -368,6 +368,7 @@ void GameScene::Draw() {
 	Object3d::PreDraw(dxCommon->GetCommandList());
 
 	if (sceneNum == GAME) {
+		//背景オブジェクト
 		for (auto& object : objects) {
 			object->Draw(railCamera->GetView());
 		}
@@ -375,9 +376,11 @@ void GameScene::Draw() {
 		for (const std::unique_ptr<Enemy>& enemy : enemys_) {
 			enemy->EnemyDraw(railCamera->GetView());
 		}
+		//ボス
 		if (gameState == BOSS) {
-			boss->Draw(railCamera->GetView(), boss->GetAlpha());
+			boss->BossDraw(railCamera->GetView());
 		}
+		//プレイヤー
 		player->PlayerDraw(railCamera->GetView());
 	}
 

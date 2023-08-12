@@ -34,7 +34,7 @@ void Boss::BossInitialize()
 	srand(time(NULL));
 }
 
-void Boss::Update()
+void Boss::Update(Vector3 velo)
 {
 	//登場時
 	if (appearTimer > 0) {
@@ -49,6 +49,16 @@ void Boss::Update()
 	//基本挙動
 	ChangeState();
 	Move();
+
+	//弾があるなら更新
+	for (std::unique_ptr<BossBullet>& bullet : bullets_) {
+		bullet->Update(velo);
+	}
+	//デスフラグの立った敵を削除
+	bullets_.remove_if([](std::unique_ptr <BossBullet>& bullets_) {
+		return bullets_->IsDead();
+		});
+	
 	 //ダメージ判定
 	if (hitTimer > 0) {
 		hitTimer--;
@@ -75,7 +85,6 @@ void Boss::Pop()
 		isInvisible = false;
 	}
 	appearTimer = 300;
-
 }
 
 void Boss::Attack()
@@ -91,7 +100,7 @@ void Boss::Attack()
 	//弾の登録										 
    //複数
 	newBullet->SetPosition(GetPosition());
-	newBullet->SetScale({ 0.3f,0.3f,0.3f });
+	newBullet->SetScale({ 0.4f,0.4f,0.4f });
 	bullets_.push_back(std::move(newBullet));
 }
 
@@ -132,6 +141,7 @@ void Boss::Move()
 
 void Boss::ChangeState()
 {
+	//待機状態
 	if (state == WAIT) {
 		//乱数により行動を決定
 		int random = rand() % 2 + 1;
@@ -142,6 +152,19 @@ void Boss::ChangeState()
 		else {
 			state = SHOT;
 		}
+	}
+	//射撃状態
+	else if (state == SHOT) {
+
+	}
+}
+
+void Boss::BossDraw(ViewProjection* viewProjection_)
+{
+	Draw(viewProjection_, bossAlpha);
+	//弾描画
+	for (std::unique_ptr<BossBullet>& bullet : bullets_) {
+		bullet->Draw(viewProjection_);
 	}
 }
 

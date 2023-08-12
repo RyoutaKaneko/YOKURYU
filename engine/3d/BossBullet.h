@@ -41,8 +41,9 @@ private:
 	static const int32_t kLifeTime = 60 * 3;
 	//デスタイマー
 	int32_t deathTimer_ = kLifeTime;
-	int bulletTime;
 	//デスフラグ
+	int hp;
+	int hitTime;
 	bool isDead_ = false;
 
 };

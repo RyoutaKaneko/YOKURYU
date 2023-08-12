@@ -48,6 +48,7 @@ void PlayerBullet::OnCollision(const CollisionInfo& info)
 	const char* str1 = "class Enemy";
 	const char* str2 = "class EnemyBullet";
 	const char* str3 = "class Boss";
+	const char* str4 = "class BossBullet";
 
 	//‘ŠŽè‚ªenemy
 	if (strcmp(toCollisionName, str1) == 0) {
@@ -68,4 +69,12 @@ void PlayerBullet::OnCollision(const CollisionInfo& info)
 			isDead_ = true;
 		}
 	}
+
+	//‘ŠŽè‚ªƒ{ƒX‚Ì’e
+	if (strcmp(toCollisionName, str4) == 0) {
+		if (isDead_ == false) {
+			isDead_ = true;
+		}
+	}
+
 }

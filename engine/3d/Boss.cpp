@@ -31,7 +31,7 @@ void Boss::BossInitialize()
 	timeCount = 0;
 	state = WAIT;
 	//乱数
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 }
 
 void Boss::Update(Vector3 velo)
@@ -47,8 +47,8 @@ void Boss::Update(Vector3 velo)
 		appearTimer--;
 	}
 	//基本挙動
-	ChangeState();
 	Move();
+	ChangeState();
 
 	//弾があるなら更新
 	for (std::unique_ptr<BossBullet>& bullet : bullets_) {
@@ -77,6 +77,10 @@ void Boss::Update(Vector3 velo)
 	{
 		collider->Update();
 	}
+	//カウントリセット
+	if (timeCount == 4) {
+		timeCount = 0;
+	}
 }
 
 void Boss::Pop()
@@ -100,7 +104,7 @@ void Boss::Attack()
 	//弾の登録										 
    //複数
 	newBullet->SetPosition(GetPosition());
-	newBullet->SetScale({ 0.4f,0.4f,0.4f });
+	newBullet->SetScale({ 0.8f,0.8f,0.8f });
 	bullets_.push_back(std::move(newBullet));
 }
 
@@ -108,20 +112,6 @@ void Boss::Move()
 {
 	//ボス登場後
 	if (isInvisible == false) {
-		float moveX = 0;
-		if (timeCount == 0) {
-			moveX = -0.025f;
-		}
-		else if (timeCount == 1) {
-			moveX = 0.025f;
-		}
-		else if (timeCount == 2) {
-			moveX = 0.025f;
-		}
-		else if (timeCount == 3) {
-			moveX = -0.025f;
-		}
-
 		if (timer < 75) {
 			SetPosition(GetPosition() + Vector3(0.0f, 0.01f, 0.0f));
 		}
@@ -131,9 +121,6 @@ void Boss::Move()
 		else {
 			timer = 0;
 			timeCount++;
-			if (timeCount == 4) {
-				timeCount = 0;
-			}
 		}
 		timer++;
 	}
@@ -143,19 +130,17 @@ void Boss::ChangeState()
 {
 	//待機状態
 	if (state == WAIT) {
-		//乱数により行動を決定
-		int random = rand() % 2 + 1;
-		//結果を見て状態を遷移
-		if (random == 1) {
-			state = SHOT;
-		}
-		else {
-			state = SHOT;
-		}
+		if (timeCount == 4) {
+			//乱数により行動を決定
+			int random = rand() % 1 + 1;
+			//抽選された行動
+			state = (State)random;
+		}						 
 	}
 	//射撃状態
 	else if (state == SHOT) {
-
+		Attack();
+		state = WAIT;
 	}
 }
 
@@ -181,4 +166,11 @@ void Boss::OnCollision(const CollisionInfo& info)
 			hp--;
 		}
 	}
+}
+
+void Boss::SkipMovie()
+{
+	appearTimer = 0;
+	SetPosition({ 0.0f,49.99f,-200.0f });
+	bossAlpha = 1.0f;
 }

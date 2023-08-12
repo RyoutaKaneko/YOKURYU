@@ -26,12 +26,16 @@ public:
 	void BossDraw(ViewProjection* viewProjection_);
 
 	bool GetIsDead() const { return isDead_; }
-
+	//当たり判定
 	void OnCollision(const CollisionInfo& info) override;
+	//Getter
 	bool GetIsInvisible() { return isInvisible; }
 	float GetAlpha() { return bossAlpha; }
 	int GetTimer() { return appearTimer; }
 	float GetHP() { return hp; }
+	//演出スキップ
+	void SkipMovie();
+
 	
 
 private:

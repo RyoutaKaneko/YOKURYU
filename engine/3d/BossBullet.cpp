@@ -16,6 +16,7 @@ void BossBullet::BulletInitialize(const Vector3& position)
 	//体力指定
 	hp = 2;
 	hitTime = 0;
+	isHit = false;
 }
 
 void BossBullet::Update(const Vector3& playerPos_)
@@ -36,6 +37,16 @@ void BossBullet::Update(const Vector3& playerPos_)
 	//ヒット時クールタイム
 	if (hitTime > 0) {
 		hitTime--;
+		if (isHit == false) {
+			isHit = true;
+			bulletModel->LoadTexture("Resources/red.png");
+		}
+	}
+	else {
+		if (isHit == true) {
+			isHit = false;
+			bulletModel->LoadTexture("Resources/blue.png");
+		}
 	}
 	//時間経過でデス
 	if (--deathTimer_ <= 0) {
@@ -63,7 +74,7 @@ void BossBullet::OnCollision(const CollisionInfo& info)
 			}
 			else {
 				isDead_ = true;
-				hitTime = 1;
+				hitTime = 10;
 			}
 		}
 	}

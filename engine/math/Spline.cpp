@@ -71,8 +71,10 @@ Vector3 Spline::pointCal(std::vector<Vector3>& points) {
 	return pos;
 }
 
-void Spline::Draw() {
-	
+void Spline::Reset()
+{			 
+	t = 0;
+	integer = 0;
 }
 
 Vector3 Spline::SplinePosition(const std::vector<Vector3>& points, size_t startIndex, float t) {

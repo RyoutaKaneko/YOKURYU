@@ -94,6 +94,7 @@ private:
 	std::vector<Vector3> points{};
 	std::vector<Vector3> pointsL;
 	std::vector<Vector3> pointsR;
+	std::vector<Vector3> bossPoint{};
 	//ステージ
 	int stageNum = 0;
 	bool isCheckPoint = false;
@@ -116,6 +117,7 @@ private:
 		BOSS
 	};
 	GameState gameState;
+	int bossPass;
 	//leveleditor
 	std::map<std::string, Model*> models;
 	std::vector<Object3d*> objects;

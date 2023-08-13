@@ -44,6 +44,7 @@ private:
 	//デスフラグ
 	int hp;
 	int hitTime;
+	bool isHit;
 	bool isDead_ = false;
 
 };

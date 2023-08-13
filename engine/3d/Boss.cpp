@@ -99,12 +99,12 @@ void Boss::Attack()
 
 	//’P”­													   
 	newBullet->BulletInitialize(GetPosition());
-	newBullet->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 0.5f));
+	newBullet->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 5.0f));
 
 	//’e‚Ì“o˜^										 
    //•¡”
 	newBullet->SetPosition(GetPosition());
-	newBullet->SetScale({ 0.8f,0.8f,0.8f });
+	newBullet->SetScale({ 1.2f,1.2f,1.2f });
 	bullets_.push_back(std::move(newBullet));
 }
 

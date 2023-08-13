@@ -18,23 +18,25 @@ public:
 	void Update(Player* player_, std::vector<Vector3>& point);
 	void ViewUpdate();
 
-	void TitleR(Player* player_);
+	void ShakeCamera();
 
+	void TitleR(Player* player_);
+	void RailReset();
+
+	//Setter
 	void SetPlayer(Player* player_);
 	void SetEye(Vector3 view);
 	void SetTarget(Vector3 target_);
-	void ShakeCamera();
-	//デバック用//
 	void SetOnRail(bool onrail) { OnRail = onrail; }
 
 	//ベクトルを取得
 	void GetVec(Vector3 a, Vector3 b);
 
+	//Getter
 	ViewProjection* GetView() { return viewProjection; }
 	bool GetIsEnd() { return isEnd; }
 	bool GetOnRail() { return OnRail; }
 	Vector3 GetFrontVec() { return frontVec; }
-
 	Object3d* GetCamera() { return camera; }
 	Vector3 GetCameraPos() { return camera->worldTransform_.position_; }
 	float GetPasPoint() { return splineCam.GetT(); }

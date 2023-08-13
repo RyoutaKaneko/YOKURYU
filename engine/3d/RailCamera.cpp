@@ -82,6 +82,11 @@ void RailCamera::TitleR(Player* player_)
 	viewProjection->eye.z -= 1.5;
 }
 
+void RailCamera::RailReset()
+{
+	spline_.Reset();
+}
+
 ////////////////////--------クラス内便利関数--------///////////////////////
 
 //方向ベクトルを取得

@@ -26,13 +26,6 @@ public:
 	float GetT() { return t + integer; }
 
 private:
-	//時間計算に必要なデータ
-	long long startCount = 0;
-	long long nowCount = 0;
-	double elapsedCount = 0;
-
-	float maxTime = 5.0f;				//全体時間[s]
-
 	//P1からスタートする
 	size_t startIndex = 1;
 	bool isEnd = false;

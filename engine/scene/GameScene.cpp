@@ -245,8 +245,10 @@ void GameScene::Update() {
 				}
 
 				//更新
-				if (railCamera->GetIsEnd() == false) {
-					railCamera->Update(player, points);
+				railCamera->Update(player, points);
+				//ダメージをくらったときに画面シェイク
+				if (player->GetIsHit() == true) {
+					railCamera->ShakeCamera(-0.2f,0.2f);
 				}
 			}
 			break;
@@ -326,7 +328,11 @@ void GameScene::Update() {
 					}
 				}
 				else if (bossPass == 3) {
-					
+					if (railCamera->GetPasPoint() + 1.0f >= 8.96f) {
+						railCamera->SetOnRail(false);
+						railCamera->RailReset();
+						bossPass = 0;
+					}
 				}
 			}
 			//fadein
@@ -334,8 +340,17 @@ void GameScene::Update() {
 				fadeAlpha -= 0.005f;
 				fade.SetAlpha(fade, fadeAlpha);
 			}
+			//gameclear
+			if (boss->GetIsDead() == true) {
+				LockedClear();
+				sceneNum = CLEAR;
+			}
 			//更新
 			boss->Update(player->GetWorldPos());
+			//ダメージをくらったときに画面シェイク
+			if (player->GetIsHit() == true) {
+				railCamera->ShakeCamera(-2.0f,2.0f);
+			}
 			break;
 		}
 		//////////////操作可能なら更新///////////////////
@@ -351,9 +366,6 @@ void GameScene::Update() {
 			}
 			LockedClear();
 		}
-		if (player->GetIsHit() == true) {
-			railCamera->ShakeCamera();
-		}
 		//デスフラグの立った敵を削除
 		enemys_.remove_if([](std::unique_ptr < Enemy>& enemy_) {
 			return enemy_->GetIsDead();
@@ -367,13 +379,8 @@ void GameScene::Update() {
 			LockedClear();
 			sceneNum = OVER;
 		}
-		//gameclear
-		if (boss->GetIsDead() == true) {
-			LockedClear();
-			sceneNum = CLEAR;
-		}
-		pm->Update();
-		pm_->Update();
+	/*	pm->Update();
+		pm_->Update();*/
 		//当たり判定チェック
 		collisionManager->CheckAllCollisions();
 		break;

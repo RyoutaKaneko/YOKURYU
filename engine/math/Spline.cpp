@@ -3,7 +3,6 @@
 #include <sysinfoapi.h>
 
 void Spline::Initialize() {
-	startCount = GetTickCount64();
 	isEnd = false;
 	t = 0.0f;
 }
@@ -75,6 +74,7 @@ void Spline::Reset()
 {			 
 	t = 0;
 	integer = 0;
+	startIndex = 1;
 }
 
 Vector3 Spline::SplinePosition(const std::vector<Vector3>& points, size_t startIndex, float t) {

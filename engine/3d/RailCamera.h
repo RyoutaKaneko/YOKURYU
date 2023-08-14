@@ -18,7 +18,7 @@ public:
 	void Update(Player* player_, std::vector<Vector3>& point);
 	void ViewUpdate();
 
-	void ShakeCamera();
+	void ShakeCamera(float x, float y);
 
 	void TitleR(Player* player_);
 	void RailReset();

@@ -301,7 +301,7 @@ void GameScene::Update() {
 				//ƒJƒƒ‰XV
 				if (railCamera->GetOnRail() == false) {
 					gameTime++;
-					if (gameTime == 150) {
+					if (gameTime == 300) {
 						railCamera->SetOnRail(true);
 						gameTime = 0;
 					}

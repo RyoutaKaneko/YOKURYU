@@ -78,14 +78,12 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	}
 
 	//HP用画像
-	for (int i = 0; i < 5; i++) {
-		hp[i].LoadTexture(spriteCommon_, 2, L"Resources/hitPoint.png", dxCommon->GetDevice());
-		hp[i].SpriteCreate(dxCommon->GetDevice(), 50, 50, 2, Vector2(0.0f, 0.0f), false, false);
-		hp[i].SetPosition(Vector3(0 + i * 68.0f, 650, 0));
-		hp[i].SetScale(Vector2(64 * 1, 64 * 1));
-		hp[i].SpriteTransferVertexBuffer(hp[i], 2);
-		hp[i].SpriteUpdate(hp[i], spriteCommon_);
-	}
+	hp.SpriteCreate(dxCommon->GetDevice(), 50, 50, 2, Vector2(0.0f, 0.0f), false, false);
+	hp.SetPosition(Vector3(28, 650, 0));
+	hp.SetScale(Vector2(4 * 1, 48 * 1));
+	hp.LoadTexture(spriteCommon_, 2, L"Resources/life.png", dxCommon->GetDevice());
+	hp.SpriteTransferVertexBuffer(hp, 2);
+	hp.SpriteUpdate(hp, spriteCommon_);
 
 	//gameclearの画像
 	clearGH.LoadTexture(spriteCommon_, 3, L"Resources/clear.png", dxCommon->GetDevice());
@@ -121,8 +119,8 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	//boosHP
 	bossHP.LoadTexture(spriteCommon_, 6, L"Resources/hp.png", dxCommon->GetDevice());
 	bossHP.SpriteCreate(dxCommon->GetDevice(), 1280, 720, 6, Vector2(0.0f, 0.5f), false, false);
-	bossHP.SetPosition(Vector3(25,50, 0));
-	bossHP.SetScale(Vector2(12 * 1, 48 * 1));
+	bossHP.SetPosition(Vector3(25, 50, 0));
+	bossHP.SetScale(Vector2(2 * 1, 48 * 1));
 	bossHP.SpriteTransferVertexBuffer(bossHP, 6);
 	bossHP.SpriteUpdate(bossHP, spriteCommon_);
 
@@ -187,6 +185,7 @@ void GameScene::Update() {
 	}
 
 	Vector3 shotVec = { 0,0,0 };
+	/*Vector2 playerHp_ = {0,0};*/
 	switch (sceneNum)
 	{
 	case GameScene::TITLE:
@@ -206,6 +205,31 @@ void GameScene::Update() {
 		break;
 
 	case GameScene::GAME:
+		if (isPlayable == true) {
+			//playerhp
+			float playerHp_ = player->GetHP() -  (hp.GetScale().x / 4);
+			if ((playerHp_) > 4) {
+				hp.SetScale(hp.GetScale() + Vector2(16.0f, 0.0f));
+			}
+			else if ((playerHp_) > 2) {
+				hp.SetScale(hp.GetScale() + Vector2(8.0f, 0.0f));
+			}
+			else if ((playerHp_) > 1) {
+				hp.SetScale(hp.GetScale() + Vector2(4.0f, 0.0f));
+			}
+			else if ((playerHp_) < 4) {
+				hp.SetScale(hp.GetScale() - Vector2(16.0f, 0.0f));
+			}
+			else if ((playerHp_) < 2) {
+				hp.SetScale(hp.GetScale() - Vector2(8.0f, 0.0f));
+			}
+			else if ((playerHp_) < 1) {
+				hp.SetScale(hp.GetScale() - Vector2(4.0f, 0.0f));
+			}
+			hp.SpriteTransferVertexBuffer(hp, 2);
+			hp.SpriteUpdate(hp, spriteCommon_);
+		}
+
 		//メインゲーム中
 		switch (gameState)
 		{
@@ -248,7 +272,7 @@ void GameScene::Update() {
 				railCamera->Update(player, points);
 				//ダメージをくらったときに画面シェイク
 				if (player->GetIsHit() == true) {
-					railCamera->ShakeCamera(-0.2f,0.2f);
+					railCamera->ShakeCamera(-0.2f, 0.2f);
 				}
 			}
 			break;
@@ -274,18 +298,6 @@ void GameScene::Update() {
 				}
 			}
 			else {
-				//BossHP
-				Vector2 hp_ = bossHP.GetScale();
-				if ((hp_.x / 12) < boss->GetHP()) {
-					bossHP.SetScale(Vector2(hp_.x + 6, 48.0f));
-					bossHP.SpriteTransferVertexBuffer(bossHP, 6);
-					bossHP.SpriteUpdate(bossHP, spriteCommon_);
-				}
-				else if ((hp_.x / 12) > boss->GetHP()) {
-					bossHP.SetScale(Vector2(hp_.x - 1, 48.0f));
-					bossHP.SpriteTransferVertexBuffer(bossHP, 6);
-					bossHP.SpriteUpdate(bossHP, spriteCommon_);
-				}
 				//操作可能状態に
 				if (isPlayable == false) {
 					railCamera->GetView()->SetEye(Vector3(0, 59, -100));
@@ -296,7 +308,20 @@ void GameScene::Update() {
 					player->SetAlpha(0.0f);
 					fadeAlpha = 1.0f;
 					fade.SetAlpha(fade, fadeAlpha);
+					railCamera->SetOnRail(true);
 					isPlayable = true;
+				}
+				//BossHP
+				Vector2 bossHp_ = bossHP.GetScale();
+				if ((bossHp_.x / 2) < boss->GetHP()) {
+					bossHP.SetScale(Vector2(bossHp_.x + 2, 48.0f));
+					bossHP.SpriteTransferVertexBuffer(bossHP, 6);
+					bossHP.SpriteUpdate(bossHP, spriteCommon_);
+				}
+				else if ((bossHp_.x / 2) > boss->GetHP()) {
+					bossHP.SetScale(Vector2(bossHp_.x - 1, 48.0f));
+					bossHP.SpriteTransferVertexBuffer(bossHP, 6);
+					bossHP.SpriteUpdate(bossHP, spriteCommon_);
 				}
 				//カメラ更新
 				if (railCamera->GetOnRail() == false) {
@@ -315,7 +340,7 @@ void GameScene::Update() {
 						bossPass = 1;
 					}
 				}
-				else if (bossPass == 1){
+				else if (bossPass == 1) {
 					if (railCamera->GetPasPoint() + 1.0f > 5.0f) {
 						railCamera->SetOnRail(false);
 						bossPass = 2;
@@ -349,7 +374,7 @@ void GameScene::Update() {
 			boss->Update(player->GetWorldPos());
 			//ダメージをくらったときに画面シェイク
 			if (player->GetIsHit() == true) {
-				railCamera->ShakeCamera(-2.0f,2.0f);
+				railCamera->ShakeCamera(-2.0f, 2.0f);
 			}
 			break;
 		}
@@ -379,9 +404,9 @@ void GameScene::Update() {
 			LockedClear();
 			sceneNum = OVER;
 		}
-	/*	pm->Update();
-		pm_->Update();*/
-		//当たり判定チェック
+		/*	pm->Update();
+			pm_->Update();*/
+			//当たり判定チェック
 		collisionManager->CheckAllCollisions();
 		break;
 
@@ -476,8 +501,8 @@ void GameScene::Draw() {
 				bossHP.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
 			}
 		}
-		for (int i = 0; i < player->GetHP(); i++) {
-			hp[i].SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
+		if (isPlayable == true) {
+			hp.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
 		}
 		if (isPlayable == true) {
 			for (int i = 0; i < 4; i++) {
@@ -608,10 +633,12 @@ void GameScene::Reset() {
 	player->PlayerInitialize();
 	player->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 0.7f));
 	player->SetPosition({ 0,0.5f,495 });
+	hp.SetScale(Vector2(0, 48 * 1));
 	//boss
 	boss = new Boss;
 	boss->BossInitialize();
 	boss->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 10.0f));
+	bossHP.SetScale(Vector2(12 * 1, 48 * 1));
 	//camera
 	railCamera = new RailCamera;
 	railCamera->Initialize(player);
@@ -752,7 +779,7 @@ void GameScene::SerchEnemy()
 			cursorRotate -= 0.0001f;
 		}
 	}
-	 //ロックオン画像の更新
+	//ロックオン画像の更新
 	for (int i = 0; i < infos.size(); i++) {
 		lock[i].SetScale(GetWorldToScreenScale(infos[i].obj, railCamera));
 		lock[i].SetPosition(GetWorldToScreenPos(infos[i].obj->GetWorldPos(), railCamera) - (Vector3(lock[i].GetScale().x, lock[i].GetScale().y, 0) / 2));

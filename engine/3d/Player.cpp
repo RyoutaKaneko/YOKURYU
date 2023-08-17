@@ -26,7 +26,7 @@ bool Player::PlayerInitialize() {
 	SetPosition(Vector3(0, 0, 500));
 	SetRotation(Vector3(0, 270, 0));
 
-	hp = 5;
+	hp = 100;
 	coolTime = 0;
 	len = 6.0f;
 	pTimer = 0;
@@ -214,14 +214,14 @@ void Player::OnCollision(const CollisionInfo& info)
 	//‘ŠŽè‚ªenemy‚Ì’e
 	if (strcmp(toCollisionName, str2) == 0) {
 		if (isHit == false) {
-			hp--;
+			hp-=10;
 			isHit = true;
 		}
 	}
 	//‘ŠŽè‚ªboss‚Ì’e
 	if (strcmp(toCollisionName, str3) == 0) {
 		if (isHit == false) {
-			hp--;
+			hp-=25;
 			isHit = true;
 		}
 	}

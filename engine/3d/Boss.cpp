@@ -24,7 +24,7 @@ void Boss::BossInitialize()
 	//タイマー
 	appearTimer = 0;
 	bossAlpha = 0.0f;
-	hp = 30;
+	hp = 300;
 	isHit = false;
 	hitTimer = 0;
 	timer = 0;
@@ -163,7 +163,7 @@ void Boss::OnCollision(const CollisionInfo& info)
 		if (isHit == false && isInvisible == false) {
 			isHit = true;
 			hitTimer = 30;
-			hp--;
+			hp-= 5;
 		}
 	}
 }

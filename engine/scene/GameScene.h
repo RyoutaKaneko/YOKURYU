@@ -57,7 +57,7 @@ private:
 	SpriteCommon spriteCommon_;
 	Sprite titleGH;
 	Sprite crosshair[4];
-	Sprite hp[5];
+	Sprite hp;
 	Sprite clearGH;
 	Sprite overGH;
 	Sprite lock[10];

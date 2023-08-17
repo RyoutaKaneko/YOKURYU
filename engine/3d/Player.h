@@ -35,7 +35,7 @@ public:
 
 	/////getter/////
 	//hp
-	int GetHP() { return hp; }
+	float GetHP() { return hp; }
 	bool GetIsHit() { return isHit; }
 	bool GetIsShooted() { return isShooted; }
 	//fever
@@ -55,7 +55,7 @@ private:
 	//弾 
 	std::list<std::unique_ptr<PlayerBullet>> bullets_;
 	//HP
-	int hp = 5;
+	float hp;
 	int coolTime = 0;
 	float len = 6;
 	int pTimer = 0;

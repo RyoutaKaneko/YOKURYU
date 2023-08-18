@@ -208,24 +208,29 @@ void GameScene::Update() {
 		if (isPlayable == true) {
 			//playerhp
 			float playerHp_ = player->GetHP() -  (hp.GetScale().x / 4);
-			if ((playerHp_) > 4) {
-				hp.SetScale(hp.GetScale() + Vector2(16.0f, 0.0f));
+			if (playerHp_ > 0) {
+				if ((playerHp_) > 4) {
+					hp.SetScale(hp.GetScale() + Vector2(16.0f, 0.0f));
+				}
+				else if ((playerHp_) > 2) {
+					hp.SetScale(hp.GetScale() + Vector2(8.0f, 0.0f));
+				}
+				else if ((playerHp_) > 1) {
+					hp.SetScale(hp.GetScale() + Vector2(4.0f, 0.0f));
+				}
 			}
-			else if ((playerHp_) > 2) {
-				hp.SetScale(hp.GetScale() + Vector2(8.0f, 0.0f));
+			else if (playerHp_ < 0) {
+				if ((playerHp_) < 4) {
+					hp.SetScale(hp.GetScale() - Vector2(8.0f, 0.0f));
+				}
+				else if ((playerHp_) < 2) {
+					hp.SetScale(hp.GetScale() - Vector2(4.0f, 0.0f));
+				}
+				else if ((playerHp_) < 1) {
+					hp.SetScale(hp.GetScale() - Vector2(2.0f, 0.0f));
+				}
 			}
-			else if ((playerHp_) > 1) {
-				hp.SetScale(hp.GetScale() + Vector2(4.0f, 0.0f));
-			}
-			else if ((playerHp_) < 4) {
-				hp.SetScale(hp.GetScale() - Vector2(16.0f, 0.0f));
-			}
-			else if ((playerHp_) < 2) {
-				hp.SetScale(hp.GetScale() - Vector2(8.0f, 0.0f));
-			}
-			else if ((playerHp_) < 1) {
-				hp.SetScale(hp.GetScale() - Vector2(4.0f, 0.0f));
-			}
+	
 			hp.SpriteTransferVertexBuffer(hp, 2);
 			hp.SpriteUpdate(hp, spriteCommon_);
 		}
@@ -312,17 +317,31 @@ void GameScene::Update() {
 					isPlayable = true;
 				}
 				//BossHP
-				Vector2 bossHp_ = bossHP.GetScale();
-				if ((bossHp_.x / 2) < boss->GetHP()) {
-					bossHP.SetScale(Vector2(bossHp_.x + 2, 48.0f));
-					bossHP.SpriteTransferVertexBuffer(bossHP, 6);
-					bossHP.SpriteUpdate(bossHP, spriteCommon_);
+				float bossHp_ = boss->GetHP() - (bossHP.GetScale().x / 4);
+				if (bossHp_ > 0) {
+					if ((bossHp_) > 4) {
+						bossHP.SetScale(bossHP.GetScale() + Vector2(16.0f, 0.0f));
+					}
+					else if ((bossHp_) > 2) {
+						bossHP.SetScale(bossHP.GetScale() + Vector2(8.0f, 0.0f));
+					}
+					else if ((bossHp_) > 1) {
+						bossHP.SetScale(bossHP.GetScale() + Vector2(4.0f, 0.0f));
+					}
 				}
-				else if ((bossHp_.x / 2) > boss->GetHP()) {
-					bossHP.SetScale(Vector2(bossHp_.x - 1, 48.0f));
-					bossHP.SpriteTransferVertexBuffer(bossHP, 6);
-					bossHP.SpriteUpdate(bossHP, spriteCommon_);
+				else if (bossHp_ < 0) {
+					if ((bossHp_) < 4) {
+						bossHP.SetScale(bossHP.GetScale() - Vector2(8.0f, 0.0f));
+					}
+					else if ((bossHp_) < 2) {
+						bossHP.SetScale(bossHP.GetScale() - Vector2(4.0f, 0.0f));
+					}
+					else if ((bossHp_) < 1) {
+						bossHP.SetScale(bossHP.GetScale() - Vector2(2.0f, 0.0f));
+					}
 				}
+				bossHP.SpriteTransferVertexBuffer(bossHP, 6);
+				bossHP.SpriteUpdate(bossHP, spriteCommon_);
 				//ƒJƒƒ‰XV
 				if (railCamera->GetOnRail() == false) {
 					gameTime++;

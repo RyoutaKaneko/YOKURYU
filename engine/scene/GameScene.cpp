@@ -114,7 +114,7 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	fade.SpriteTransferVertexBuffer(fade, 5);
 	fade.SpriteUpdate(fade, spriteCommon_);
 	//alpha
-	fadeAlpha = 0.0f;
+	fadeAlpha = 1.0f;
 	fade.SetAlpha(fade, fadeAlpha);
 	//boosHP
 	bossHP.LoadTexture(spriteCommon_, 6, L"Resources/hp.png", dxCommon->GetDevice());
@@ -190,6 +190,8 @@ void GameScene::Update() {
 	{
 	case GameScene::TITLE:
 		if (input->TriggerKey(DIK_SPACE)) {
+			fadeAlpha = 0.0f;
+			fade.SetAlpha(fade, fadeAlpha);
 			sceneNum = GAME;
 			gameState = MAIN;
 			gameTime = 150;
@@ -305,7 +307,7 @@ void GameScene::Update() {
 			else {
 				//‘€ì‰Â”\ó‘Ô‚É
 				if (isPlayable == false) {
-					railCamera->GetView()->SetEye(Vector3(0, 59, -100));
+					railCamera->GetView()->SetEye(Vector3(0, 60, -95));
 					railCamera->GetView()->SetTarget(Vector3(0, 52, -200));
 					railCamera->GetCamera()->SetPosition(Vector3(0, 59, -100));
 					railCamera->GetCamera()->SetRotation(Vector3(0, 180, 0));
@@ -313,7 +315,6 @@ void GameScene::Update() {
 					player->SetAlpha(0.0f);
 					fadeAlpha = 1.0f;
 					fade.SetAlpha(fade, fadeAlpha);
-					railCamera->SetOnRail(true);
 					isPlayable = true;
 				}
 				//BossHP
@@ -405,7 +406,7 @@ void GameScene::Update() {
 		if (isPlayable == true) {
 			SerchEnemy();
 			player->Update(shotVec, infos);
-			if (gameState == BOSS) {
+			if (gameState == BOSS && railCamera->GetOnRail() == true) {
 				player->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 			}
 			LockedClear();
@@ -509,6 +510,7 @@ void GameScene::Draw() {
 	switch (sceneNum)
 	{
 	case GameScene::TITLE:
+		fade.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
 		titleGH.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
 		break;
 
@@ -672,6 +674,8 @@ void GameScene::Reset() {
 	gameState = MAIN;
 	gameTime = 150;
 	bossPass = 0;
+	fadeAlpha = 1.0f;
+	fade.SetAlpha(fade, fadeAlpha);
 }
 
 void GameScene::LoadEnemy(int stageNum) {

@@ -268,6 +268,9 @@ void GameScene::Update() {
 						isCheckPoint = true;
 						boss->Pop();
 						gameState = BOSS;
+						delete railCamera;
+						railCamera = new RailCamera;
+						railCamera->Initialize(player);
 					}
 				}
 				/////デバック用/////
@@ -312,7 +315,6 @@ void GameScene::Update() {
 					railCamera->GetCamera()->SetPosition(Vector3(0, 59, -100));
 					railCamera->GetCamera()->SetRotation(Vector3(0, 180, 0));
 					player->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
-					player->SetAlpha(0.0f);
 					fadeAlpha = 1.0f;
 					fade.SetAlpha(fade, fadeAlpha);
 					isPlayable = true;

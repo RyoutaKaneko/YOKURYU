@@ -185,7 +185,6 @@ void GameScene::Update() {
 	}
 
 	Vector3 shotVec = { 0,0,0 };
-	/*Vector2 playerHp_ = {0,0};*/
 	switch (sceneNum)
 	{
 	case GameScene::TITLE:
@@ -426,8 +425,6 @@ void GameScene::Update() {
 			LockedClear();
 			sceneNum = OVER;
 		}
-		/*	pm->Update();
-			pm_->Update();*/
 			//当たり判定チェック
 		collisionManager->CheckAllCollisions();
 		break;
@@ -480,8 +477,6 @@ void GameScene::Draw() {
 
 	// 3Dオブジェクト描画前処理
 	FbxObject3d::PreDraw(dxCommon->GetCommandList());
-
-	/*obj->Draw(railCamera->GetView());*/
 
 	// 3Dオブジェクト描画後処理
 	FbxObject3d::PostDraw();

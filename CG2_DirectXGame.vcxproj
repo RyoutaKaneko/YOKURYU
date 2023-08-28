@@ -163,6 +163,7 @@
     <ClCompile Include="engine\3d\BossBullet.cpp" />
     <ClCompile Include="engine\3d\Enemy.cpp" />
     <ClCompile Include="engine\3d\EnemyBullet.cpp" />
+    <ClCompile Include="engine\3d\Energy.cpp" />
     <ClCompile Include="engine\3d\Player.cpp" />
     <ClCompile Include="engine\3d\PlayerBullet.cpp" />
     <ClCompile Include="engine\3d\RailCamera.cpp" />
@@ -296,6 +297,7 @@
     <ClInclude Include="engine\3d\BossBullet.h" />
     <ClInclude Include="engine\3d\Enemy.h" />
     <ClInclude Include="engine\3d\EnemyBullet.h" />
+    <ClInclude Include="engine\3d\Energy.h" />
     <ClInclude Include="engine\3d\Player.h" />
     <ClInclude Include="engine\3d\PlayerBullet.h" />
     <ClInclude Include="engine\3d\RailCamera.h" />

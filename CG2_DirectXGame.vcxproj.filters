@@ -207,6 +207,9 @@
     <ClCompile Include="engine\3d\BossBullet.cpp">
       <Filter>ソースファイル\Engine\GameObj</Filter>
     </ClCompile>
+    <ClCompile Include="engine\3d\Energy.cpp">
+      <Filter>ソースファイル\Engine\GameObj</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -391,6 +394,9 @@
       <Filter>ヘッダー ファイル\Engine\GameObj</Filter>
     </ClInclude>
     <ClInclude Include="engine\3d\Boss.h">
+      <Filter>ヘッダー ファイル\Engine\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\Energy.h">
       <Filter>ヘッダー ファイル\Engine\GameObj</Filter>
     </ClInclude>
   </ItemGroup>

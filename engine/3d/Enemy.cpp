@@ -2,6 +2,7 @@
 #include "string.h"
 #include "BaseCollider.h"
 #include "SphereCollider.h"
+#include "GameScene.h"
 
 //デストラクタ
 Enemy::~Enemy() {
@@ -20,73 +21,87 @@ void Enemy::EnemyInitialize()
 	// オブジェクトにモデルをひも付ける
 	SetModel(enemyModel);
 	isDead_ = false;
+	isInvisible = true;
 	timer = 0;
 	isAttack = false;
 	timeCount = 0;
+	alpha = 0;
 }
 
 void Enemy::Update(Vector3 velo,float t) {
-	float moveX;
-	if (timeCount == 0) {
-		moveX = -0.05f;
-	}
-	else if (timeCount == 1) {
-		moveX = 0.05f;
-	}
-	else if (timeCount == 2) {
-		moveX = 0.05f;
+	//透明状態なら
+	if (isInvisible == true) {
+		float len = stagePoint - t + 1.0f;
+ 		if (len < 4.0f) {
+			isInvisible = false;
+		}
 	}
 	else {
-		moveX = -0.05f;
-	}
-
-	if (timer < 75) {
-		SetPosition(GetPosition() + Vector3(moveX, 0.005f, 0 ));
-	}
-	else if (timer < 150) {
-		SetPosition(GetPosition() + Vector3(moveX, -0.005f, 0));
-	}
-	else {
-		timer = 0;
-		if (timeCount == 4) {
-			timeCount = 0;
+		if (alpha < 1) {
+			alpha += 0.05f;
+		}
+		float moveX;
+		if (timeCount == 0) {
+			moveX = -0.05f;
+		}
+		else if (timeCount == 1) {
+			moveX = 0.05f;
+		}
+		else if (timeCount == 2) {
+			moveX = 0.05f;
 		}
 		else {
-			timeCount++;
+			moveX = -0.05f;
 		}
-	}
-	//playerが敵を追い越したら攻撃しない
-	if (stagePoint < t + 1.0f) {
-		if (isAttack == true) {
-			isAttack = false;
-		}
-	}
-	//攻撃
-	if (isAttack == false) {
-		Vector3 playerVec = velo - GetPosition();
-		float len = playerVec.length();
-		if (len < 70.0f) {
-			isAttack = true;
-		}
-	}
-	else {
-		Attack();
-	}
 
-	for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
-		bullet->Update(velo);
+		if (timer < 75) {
+			SetPosition(GetPosition() + Vector3(moveX, 0.005f, 0));
+		}
+		else if (timer < 150) {
+			SetPosition(GetPosition() + Vector3(moveX, -0.005f, 0));
+		}
+		else {
+			timer = 0;
+			if (timeCount == 4) {
+				timeCount = 0;
+			}
+			else {
+				timeCount++;
+			}
+		}
+		//playerが敵を追い越したら攻撃しない
+		if (stagePoint < t + 1.0f) {
+			if (isAttack == true) {
+				isAttack = false;
+			}
+		}
+		//攻撃
+		if (isAttack == false) {
+			Vector3 playerVec = velo - GetPosition();
+			float len = playerVec.length();
+			if (len < 70.0f) {
+				isAttack = true;
+			}
+		}
+		else {
+			Attack();
+		}
+
+		for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
+			bullet->Update(velo);
+		}
+		//デスフラグの立った敵を削除
+		bullets_.remove_if([](std::unique_ptr <EnemyBullet>& bullets_) {
+			return bullets_->IsDead();
+			});
+		//当たり判定更新
+		if (collider)
+		{
+			collider->Update();
+		}
+		worldTransform_.UpdateMatrix();
+		timer++;
 	}
-	//デスフラグの立った敵を削除
-	bullets_.remove_if([](std::unique_ptr <EnemyBullet>& bullets_) {
-		return bullets_->IsDead();
-		});
-	//当たり判定更新
-	if (collider)
-	{
-		collider->Update();
-	}
-	worldTransform_.UpdateMatrix();
-	timer++;
 }
 
 void Enemy::OnCollision(const CollisionInfo& info)
@@ -96,8 +111,13 @@ void Enemy::OnCollision(const CollisionInfo& info)
 
 	//相手がplayerの弾
 	if (strcmp(toCollisionName, str1) == 0) {
-		if (isDead_ == false) {
-			isDead_ = true;
+		if (isInvisible == false) {
+			if (isDead_ == false) {
+				isDead_ = true;
+				for (int i = 0; i < 3; i++) {
+					GameScene::PopEnergy(GetPosition());
+				}
+			}
 		}
 	}
 }
@@ -130,7 +150,7 @@ void Enemy::Attack() {
 }
 
 void Enemy::EnemyDraw(ViewProjection* viewProjection_) {
-	Draw(viewProjection_);
+	Draw(viewProjection_, alpha);
 	//弾描画
 	for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
 		bullet->Draw(viewProjection_);

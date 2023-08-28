@@ -63,4 +63,5 @@ private:
 	bool isShooted;
 	int hitTime;
 	float alpha;
+	int energy;
 };

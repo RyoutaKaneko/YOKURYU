@@ -18,7 +18,8 @@
 #include "Enemy.h"
 #include "CollisionManager.h"
 #include "Boss.h"
-#include "JsonLoader.h"
+#include "JsonLoader.h"	
+#include "energy.h"
 
 
 class GameScene {
@@ -41,6 +42,7 @@ public:
 	void SerchEnemy();
 	void LockedClear();
 	void GetCrosshair();
+	static void PopEnergy(Vector3 pos_);
 
 	Vector3 GetScreenToWorldPos(Sprite& sprite_, RailCamera* rail);
 	Vector3 GetWorldToScreenPos(Vector3 pos_, RailCamera* rail);
@@ -85,6 +87,9 @@ private:
 	ParticleManager* pm_ = nullptr;
 	//enemy
 	std::list<std::unique_ptr<Enemy>> enemys_;
+	//energy
+	static std::list<std::unique_ptr<Energy>> energys_;
+	static int popEnergyCount;
 	//“–‚½‚è”»’è
 	CollisionManager* collisionManager = nullptr;
 	//FBX

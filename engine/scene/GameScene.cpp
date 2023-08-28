@@ -9,7 +9,8 @@
 #include <sstream>
 #include <map>
 
-
+std::list<std::unique_ptr<Energy>> GameScene::energys_;
+int GameScene::popEnergyCount = 0;
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
@@ -420,6 +421,14 @@ void GameScene::Update() {
 		for (const std::unique_ptr<Enemy>& enemy : enemys_) {
 			enemy->Update(player->GetWorldPos(), railCamera->GetPasPoint());
 		}
+		//必殺技エネルギー
+		for (const std::unique_ptr<Energy>& energy : energys_) {
+			energy->Update(player->GetWorldPos(), railCamera->GetCamera()->GetRotation());
+		}
+		//デスフラグの立った敵を削除
+		energys_.remove_if([](std::unique_ptr <Energy>& energys_) {
+			return energys_->GetIsDead();
+			});
 		//gameover
 		if (player->GetHP() == 0) {
 			LockedClear();
@@ -459,6 +468,9 @@ void GameScene::Draw() {
 		//敵キャラの描画
 		for (const std::unique_ptr<Enemy>& enemy : enemys_) {
 			enemy->EnemyDraw(railCamera->GetView());
+		}
+		for (const std::unique_ptr<Energy>& energy : energys_) {
+			energy->Draw(railCamera->GetView(),0.9f);
 		}
 		//ボス
 		if (gameState == BOSS) {
@@ -673,6 +685,7 @@ void GameScene::Reset() {
 	bossPass = 0;
 	fadeAlpha = 1.0f;
 	fade.SetAlpha(fade, fadeAlpha);
+	popEnergyCount = 0;
 }
 
 void GameScene::LoadEnemy(int stageNum) {
@@ -871,6 +884,24 @@ void GameScene::GetCrosshair()
 			crosshair[i].SpriteUpdate(crosshair[i], spriteCommon_);
 		}
 	}
+}
+
+void GameScene::PopEnergy(Vector3 pos_)
+{
+	//乱数生成装置
+	std::random_device seed_gen;
+	std::mt19937_64 engine(seed_gen());
+	std::uniform_real_distribution<float>dist(-1.5f, 1.5f);
+	std::uniform_real_distribution<float>dist2(-2.5f, 2.5f);
+	std::uniform_real_distribution<float>dist3(-1.5f, 1.5f);
+	//弾を生成し初期化
+	std::unique_ptr<Energy> newEnergy = std::make_unique<Energy>();
+
+	//単発													   
+	newEnergy->EnergyInitialize();
+	newEnergy->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 2.0f));
+	newEnergy->SetPosition(pos_ + Vector3(dist(engine), dist2(engine), dist3(engine)));
+	energys_.push_back(std::move(newEnergy));
 }
 
 Vector3 GameScene::GetScreenToWorldPos(Sprite& sprite_, RailCamera* rail)

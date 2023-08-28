@@ -40,8 +40,6 @@ void RailCamera::Update(Player* player_, std::vector<Vector3>& point) {
 			oldCamera = camera->GetPosition();
 		}
 
-		float targetAd = target_.x - oldCamera.x;
-
 		//方向ベクトルの取得
 		GetVec(camera->GetPosition(), target_);
 
@@ -62,7 +60,6 @@ void RailCamera::Update(Player* player_, std::vector<Vector3>& point) {
 		//更新
 		camera->Update();
 		viewProjection->target = ((target_ + frontVec));
-		/*viewProjection->target.x += targetAd * 2;*/
 		viewProjection->eye = (camera->GetPosition() - frontVec * player_->GetLen());
 		if (viewProjection->eye.y > (eyeTmp.y + 1)) {
 			viewProjection->eye.y += 0.05f;

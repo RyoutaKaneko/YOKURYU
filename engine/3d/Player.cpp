@@ -17,7 +17,6 @@ bool Player::PlayerInitialize() {
 	Initialize();
 
 	// OBJからモデルデータを読み込む
-	/*playerModel = Model::LoadFromOBJ("triangle_mat");*/
 	playerModel = Model::LoadFromOBJ("box");
 	// 3Dオブジェクト生成
 	Create();
@@ -34,6 +33,7 @@ bool Player::PlayerInitialize() {
 	isShooted = false;
 	hitTime = 0;
 	alpha = 1.0f;
+	energy = 0;
 
 	return true;
 }

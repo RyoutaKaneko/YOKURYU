@@ -94,7 +94,6 @@ void Boss::Pop()
 void Boss::Attack()
 {
 	//’e‚ğ¶¬‚µ‰Šú‰»
-//•¡”
 	std::unique_ptr<BossBullet> newBullet = std::make_unique<BossBullet>();
 
 	//’P”­													   

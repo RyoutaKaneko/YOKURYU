@@ -29,6 +29,7 @@ public:
 	void SetStagePoint(float pos_) { stagePoint = pos_; }
 	float GetStagePoint(){return stagePoint;}
 	Object3d* GetPointer() { return this; }
+	bool GetIsInvisible() { return isInvisible; }
 
 	//弾リストを取得
 	const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets_; }
@@ -37,12 +38,15 @@ private:
 
 	//デスフラグ
 	bool isDead_ = false;
+	//
+	bool isInvisible = true;
 
 	//敵
 	std::list<std::unique_ptr<EnemyBullet>> bullets_;
 
 	// モデル
 	Model* enemyModel = nullptr;
+	float alpha;
 
 	//半径
 	int timer;

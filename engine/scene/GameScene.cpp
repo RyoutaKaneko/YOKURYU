@@ -124,6 +124,13 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	bossHP.SetScale(Vector2(2 * 1, 48 * 1));
 	bossHP.SpriteTransferVertexBuffer(bossHP, 6);
 	bossHP.SpriteUpdate(bossHP, spriteCommon_);
+	//gage
+	gage.LoadTexture(spriteCommon_, 7, L"Resources/green.png", dxCommon->GetDevice());
+	gage.SpriteCreate(dxCommon->GetDevice(), 1280, 720, 7, Vector2(0.0f, 0.5f), false, false);
+	gage.SetPosition(Vector3(28, 641, 0));
+	gage.SetScale(Vector2(2 * 1, 18 * 1));
+	gage.SpriteTransferVertexBuffer(gage, 7);
+	gage.SpriteUpdate(gage, spriteCommon_);
 
 
 	//パーティクル初期化
@@ -165,6 +172,8 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	gameTime = 150;
 	cursorRotate = 0.001f;
 	bossPass = 0;
+	cameraTmpPos = { 0,0,0 };
+	cameraTmpRot = { 0,0,0 };
 }
 
 ///-----更新処理-----///
@@ -209,7 +218,7 @@ void GameScene::Update() {
 	case GameScene::GAME:
 		if (isPlayable == true) {
 			//playerhp
-			float playerHp_ = player->GetHP() -  (hp.GetScale().x / 4);
+			float playerHp_ = player->GetHP() - (hp.GetScale().x / 4);
 			if (playerHp_ > 0) {
 				if ((playerHp_) > 4) {
 					hp.SetScale(hp.GetScale() + Vector2(16.0f, 0.0f));
@@ -232,9 +241,38 @@ void GameScene::Update() {
 					hp.SetScale(hp.GetScale() - Vector2(2.0f, 0.0f));
 				}
 			}
-	
+
 			hp.SpriteTransferVertexBuffer(hp, 2);
 			hp.SpriteUpdate(hp, spriteCommon_);
+			//gage
+			float gage_ = player->GetEnergy() - (gage.GetScale().x / 4);
+			if (gage_ > 0) {
+				if (player->GetEnergy() < 100) {
+					if ((gage_) > 4) {
+						gage.SetScale(gage.GetScale() + Vector2(16.0f, 0.0f));
+					}
+					else if ((gage_) > 2) {
+						gage.SetScale(gage.GetScale() + Vector2(8.0f, 0.0f));
+					}
+					else if ((gage_) > 1) {
+						gage.SetScale(gage.GetScale() + Vector2(4.0f, 0.0f));
+					}
+				}
+			}
+			else if (gage_ < 0) {
+				if ((gage_) < 4) {
+					gage.SetScale(gage.GetScale() - Vector2(8.0f, 0.0f));
+				}
+				else if ((gage_) < 2) {
+					gage.SetScale(gage.GetScale() - Vector2(4.0f, 0.0f));
+				}
+				else if ((gage_) < 1) {
+					gage.SetScale(gage.GetScale() - Vector2(2.0f, 0.0f));
+				}
+			}
+
+			gage.SpriteTransferVertexBuffer(gage, 7);
+			gage.SpriteUpdate(gage, spriteCommon_);
 		}
 
 		//メインゲーム中
@@ -399,6 +437,19 @@ void GameScene::Update() {
 				railCamera->ShakeCamera(-2.0f, 2.0f);
 			}
 			break;
+		case GameScene::ULT:
+			if (isPlayable == true) {
+				isPlayable = false;
+			}
+			player->Ultimate();
+			railCamera->SetTarget(player->GetWorldPos());
+			if (player->GetIsUltimate() == false) {
+				player->BackRail();
+				railCamera->SetEye(cameraTmpPos);
+				railCamera->SetTarget(cameraTmpRot);
+				gameState = gameState_bak;
+			}
+			break;
 		}
 		//////////////操作可能なら更新///////////////////
 		//player
@@ -412,6 +463,14 @@ void GameScene::Update() {
 				player->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 			}
 			LockedClear();
+		}
+		if (player->GetIsUltimate() == true && gameState != ULT) {
+			cameraTmpPos = railCamera->GetView()->GetEye();
+			cameraTmpRot = railCamera->GetView()->GetTarget();
+			railCamera->SetEye(player->GetWorldPos() + Vector3(-2, 0, -3));
+			railCamera->SetTarget(player->GetWorldPos());
+			gameState_bak = gameState;
+			gameState = ULT;
 		}
 		//デスフラグの立った敵を削除
 		enemys_.remove_if([](std::unique_ptr < Enemy>& enemy_) {
@@ -434,7 +493,7 @@ void GameScene::Update() {
 			LockedClear();
 			sceneNum = OVER;
 		}
-			//当たり判定チェック
+		//当たり判定チェック
 		collisionManager->CheckAllCollisions();
 		break;
 
@@ -470,7 +529,7 @@ void GameScene::Draw() {
 			enemy->EnemyDraw(railCamera->GetView());
 		}
 		for (const std::unique_ptr<Energy>& energy : energys_) {
-			energy->Draw(railCamera->GetView(),0.9f);
+			energy->Draw(railCamera->GetView());
 		}
 		//ボス
 		if (gameState == BOSS) {
@@ -533,6 +592,7 @@ void GameScene::Draw() {
 		}
 		if (isPlayable == true) {
 			hp.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
+			gage.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
 		}
 		if (isPlayable == true) {
 			for (int i = 0; i < 4; i++) {

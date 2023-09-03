@@ -34,6 +34,10 @@ bool Player::PlayerInitialize() {
 	hitTime = 0;
 	alpha = 1.0f;
 	energy = 0;
+	isUltimate = false;
+	ultTime = 0;
+	pos_ = { 0,0,0 };
+	rot_ = { 0,0,0 };
 
 	return true;
 }
@@ -49,6 +53,16 @@ void Player::Update(Vector3 velo, std::vector<LockInfo>& info)
 	Move();
 	LockAttack(info);
 	Attack(velo);
+	//ULT
+	if (energy >= 100) {
+		if (input->TriggerKey(DIK_Q)) {
+			if (isUltimate == false) {
+				pos_ = GetPosition();
+				rot_ = GetRotation();
+				isUltimate = true;
+			}
+		}
+	}
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		if (bullet->GetIsHoming() == true) {
 			bullet->HomingVec(GetWorldPos());
@@ -191,6 +205,20 @@ void Player::LockAttack(std::vector<LockInfo>& info)
 	}
 }
 
+void Player::Ultimate()
+{
+	if (ultTime > 50 && ultTime < 175) {
+		SetPosition(GetPosition() + Vector3(0.0f, 0.05f, 0.0f));
+	}
+	else if (ultTime == 175) {
+		ultTime = 0;
+		isUltimate = false;
+		energy = 0;
+	}
+	worldTransform_.UpdateMatrix();
+	ultTime++;
+}
+
 void Player::PlayerDraw(ViewProjection* viewProjection_) {
 	if (hitTime % 5 == 0) {
 		Draw(viewProjection_,alpha);
@@ -201,12 +229,19 @@ void Player::PlayerDraw(ViewProjection* viewProjection_) {
 	}
 }
 
+void Player::BackRail()
+{
+	SetPosition(pos_);
+	SetRotation(rot_);
+}
+
 void Player::OnCollision(const CollisionInfo& info)
 {
 	//Õ“Ë‘ŠŽè‚Ì–¼‘O
 	const char* str1 = "class Enemy";
 	const char* str2 = "class EnemyBullet";
 	const char* str3 = "class BossBullet";
+	const char* str4 = "class Energy";
 
 	//‘ŠŽè‚ªenemy
 	if (strcmp(toCollisionName, str1) == 0) {
@@ -223,6 +258,13 @@ void Player::OnCollision(const CollisionInfo& info)
 		if (isHit == false) {
 			hp-=25;
 			isHit = true;
+		}
+	}
+
+	//‘ŠŽè‚ªenergy
+	if (strcmp(toCollisionName, str4) == 0) {
+		if (energy < 100) {
+			energy += 5;
 		}
 	}
 }

@@ -27,7 +27,9 @@ public:
 	///</summary>
 	void Attack(Vector3 velo);
 	void LockAttack(std::vector<LockInfo>& info);
+	void Ultimate();
 	void PlayerDraw(ViewProjection* viewProjection_);
+	void BackRail();
 
 	//衝突時コールバック関数
 	void OnCollision(const CollisionInfo& info) override;
@@ -36,11 +38,14 @@ public:
 	/////getter/////
 	//hp
 	float GetHP() { return hp; }
+	float GetEnergy() { return energy; }
 	bool GetIsHit() { return isHit; }
 	bool GetIsShooted() { return isShooted; }
-	//fever
 	float GetLen() { return len; }
+	bool GetIsUltimate() { return isUltimate; }
+	//setter
 	void SetAlpha(float a) { alpha = a; }
+	void SetIsUltimate(bool ult) { isUltimate = ult; }
 
 	//弾リストを取得
 	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
@@ -63,5 +68,9 @@ private:
 	bool isShooted;
 	int hitTime;
 	float alpha;
-	int energy;
+	float energy;
+	bool isUltimate;
+	int ultTime;
+	Vector3 pos_;
+	Vector3 rot_;
 };

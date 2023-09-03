@@ -66,6 +66,7 @@ private:
 	Sprite fade;
 	float fadeAlpha;
 	Sprite bossHP;
+	Sprite gage;
 	//オブジェクトのポインタ
 	//3Dオブジェクト生成
 	Player* player = nullptr;
@@ -80,6 +81,8 @@ private:
 	ViewProjection* viewProjection = nullptr;
 	XMViewProjection* xmViewProjection = nullptr;
 	RailCamera* railCamera = nullptr;
+	Vector3 cameraTmpPos;
+	Vector3 cameraTmpRot;
 	//パーティクル
 	Particle* particle = nullptr;
 	ParticleManager* pm = nullptr;
@@ -119,9 +122,11 @@ private:
 	//ゲームステータス
 	enum GameState {
 		MAIN,
-		BOSS
+		BOSS,
+		ULT
 	};
 	GameState gameState;
+	GameState gameState_bak;
 	int bossPass;
 	//leveleditor
 	std::map<std::string, Model*> models;

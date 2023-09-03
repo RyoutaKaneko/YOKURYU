@@ -273,9 +273,6 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="engine\scene\GameScene.h">
-      <Filter>ヘッダー ファイル\Engine\GameScene</Filter>
-    </ClInclude>
     <ClInclude Include="engine\2d\Sprite.h">
       <Filter>ヘッダー ファイル\Engine\2d</Filter>
     </ClInclude>
@@ -398,6 +395,9 @@
     </ClInclude>
     <ClInclude Include="engine\3d\Energy.h">
       <Filter>ヘッダー ファイル\Engine\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\GameScene.h">
+      <Filter>ヘッダー ファイル\Engine\GameScene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

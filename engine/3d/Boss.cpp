@@ -2,6 +2,7 @@
 #include "SphereCollider.h"
 #include "time.h"
 #include "stdlib.h"
+#include "GameScene.h"
 
 Boss::~Boss()
 {
@@ -19,6 +20,18 @@ void Boss::BossInitialize()
 	SetModel(bossModel);
 	SetPosition({ -75,65,-200 });
 	SetScale({ 10,10,10 });
+	//パーツの初期化
+	for (int i = 0; i < PARTS_NUM; i++) {
+		parts[i] = Create();
+		parts[i]->worldTransform_.SetParent3d(&worldTransform_);
+		parts[i]->SetCollider(new SphereCollider());
+	}
+	parts[0]->SetPosition({ -2.0f,0.0f,-0.5f });
+	parts[1]->SetPosition({ 2.0f,0.0f,-0.5f });
+	parts[2]->SetPosition({ 0.0f,0.0f,1.0f });
+	parts[3]->SetPosition({ -3.0f,0.0f,-1.0f });
+	parts[4]->SetPosition({ 3.0f,0.0f,-1.0f });
+
 	isDead_ = false;
 	isInvisible = true;
 	//タイマー
@@ -76,6 +89,10 @@ void Boss::Update(Vector3 velo)
 	if (collider)
 	{
 		collider->Update();
+	}
+	//ボスパーツアップデート
+	for (int i = 0; i < PARTS_NUM; i++) {
+		parts[i]->Update();
 	}
 	//カウントリセット
 	if (timeCount == 4) {
@@ -163,6 +180,13 @@ void Boss::OnCollision(const CollisionInfo& info)
 			isHit = true;
 			hitTimer = 30;
 			hp-= 5;
+			for (int i = 0; i < PARTS_NUM; i++) {
+				if (parts[i]->GetIsLocked() == true) {
+					parts[i]->SetIsLocked(false);
+					GameScene::PopEnergy(parts[i]->GetWorldPos());
+					hp -= 5;
+				}
+			}
 		}
 	}
 }

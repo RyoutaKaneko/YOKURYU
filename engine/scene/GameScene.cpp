@@ -131,7 +131,22 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	gage.SetScale(Vector2(2 * 1, 18 * 1));
 	gage.SpriteTransferVertexBuffer(gage, 7);
 	gage.SpriteUpdate(gage, spriteCommon_);
-
+	//
+	gageBack.LoadTexture(spriteCommon_, 8, L"Resources/green.png", dxCommon->GetDevice());
+	gageBack.SpriteCreate(dxCommon->GetDevice(), 1280, 720, 8, Vector2(0.0f, 0.5f), false, false);
+	gageBack.SetPosition(Vector3(28, 641, 0));
+	gageBack.SetScale(Vector2(2 * 178, 18 * 1));
+	gageBack.SetAlpha(gageBack, 0.5f);
+	gageBack.SpriteTransferVertexBuffer(gageBack, 8);
+	gageBack.SpriteUpdate(gageBack, spriteCommon_);
+	//
+	hpBack.SpriteCreate(dxCommon->GetDevice(), 50, 50, 9, Vector2(0.0f, 0.0f), false, false);
+	hpBack.SetPosition(Vector3(28, 650, 0));
+	hpBack.SetScale(Vector2(396, 48 * 1));
+	hpBack.LoadTexture(spriteCommon_, 9, L"Resources/life.png", dxCommon->GetDevice());
+	hpBack.SetAlpha(hpBack, 0.5f);
+	hpBack.SpriteTransferVertexBuffer(hpBack, 9);
+	hpBack.SpriteUpdate(hpBack, spriteCommon_);
 
 	//パーティクル初期化
 	particle = Particle::LoadParticleTexture("blue.png");
@@ -393,6 +408,7 @@ void GameScene::Update() {
 				}
 				railCamera->Update(player, bossPoint);
 				railCamera->GetView()->SetTarget(boss->GetPosition());
+				railCamera->GetCamera()->SetRotation(railCamera->GetView()->GetTarget());
 				//カメラ制御
 				if (bossPass == 0) {
 					if (railCamera->GetPasPoint() + 1.0f > 3.0f) {
@@ -591,6 +607,8 @@ void GameScene::Draw() {
 			}
 		}
 		if (isPlayable == true) {
+			hpBack.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
+			gageBack.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
 			hp.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
 			gage.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
 		}
@@ -834,17 +852,20 @@ void GameScene::LoadEnemy(int stageNum) {
 
 void GameScene::SerchEnemy()
 {
+	Vector3 cur = input->GetMousePos();
+
 	if (input->PushKey(DIK_LSHIFT)) {
-		Vector3 epos1 = GetWorldToScreenPos(boss->GetWorldPos(), railCamera);
-		Vector3 cur = input->GetMousePos();
-		if (boss->GetIsInvisible() == false) {
-			if (pow((epos1.x - cur.x), 2) + pow((epos1.y - cur.y), 2) < 100) {
-				if (boss->GetIsLocked() == false && infos.size() < 10) {
-					LockInfo info;
-					info.vec = boss->GetWorldPos();
-					info.obj = boss;
-					infos.push_back(info);
-					boss->SetIsLocked(true);
+		for (int i = 0; i < boss->GetPartsNum(); i++) {
+			Vector3 epos1 = GetWorldToScreenPos(boss->GetParts(i)->GetWorldPos(), railCamera);
+			if (boss->GetIsInvisible() == false) {
+				if (pow((epos1.x - cur.x), 2) + pow((epos1.y - cur.y), 2) < pow(50, 2)) {
+					if (boss->GetParts(i)->GetIsLocked() == false && infos.size() < 10) {
+						LockInfo info;
+						info.vec = boss->GetParts(i)->GetWorldPos();
+						info.obj = boss->GetParts(i);
+						infos.push_back(info);
+						boss->GetParts(i)->SetIsLocked(true);
+					}
 				}
 			}
 		}
@@ -853,7 +874,7 @@ void GameScene::SerchEnemy()
 			Vector3 epos2 = GetWorldToScreenPos(enemy->GetWorldPos(), railCamera);
 			Vector3 len = enemy->GetWorldPos() - player->GetWorldPos();
 			float len_ = len.length();
-			if (pow((epos2.x - cur.x), 2) + pow((epos2.y - cur.y), 2) < (30)) {
+			if (pow((epos2.x - cur.x), 2) + pow((epos2.y - cur.y), 2) < pow(30,2)) {
 				if (enemy->GetIsLocked() == false && infos.size() < 10) {
 					LockInfo info;
 					info.vec = enemy->GetWorldPos();

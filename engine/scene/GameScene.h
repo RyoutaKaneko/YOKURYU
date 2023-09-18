@@ -67,6 +67,8 @@ private:
 	float fadeAlpha;
 	Sprite bossHP;
 	Sprite gage;
+	Sprite gageBack;
+	Sprite hpBack;
 	//オブジェクトのポインタ
 	//3Dオブジェクト生成
 	Player* player = nullptr;

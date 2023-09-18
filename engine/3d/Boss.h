@@ -33,6 +33,8 @@ public:
 	float GetAlpha() { return bossAlpha; }
 	int GetTimer() { return appearTimer; }
 	float GetHP() { return hp; }
+	int GetPartsNum() { return PARTS_NUM; }
+	Object3d* GetParts(int i) { return parts[i]; }
 	//演出スキップ
 	void SkipMovie();
 
@@ -63,4 +65,6 @@ private:
 	Model* bossModel = nullptr;
 	//弾
 	std::list<std::unique_ptr<BossBullet>> bullets_;
+	static const int PARTS_NUM = 5;
+	Object3d* parts[PARTS_NUM];
 };

@@ -56,8 +56,8 @@ void Framework::Initialize()
 #pragma endregion 基盤システムの初期化
 
 	//ゲームシーン
-	gameScene = new GameScene();
-	gameScene->Initialize(spriteCommon);
+	/*gameScene = new GameScene();*/
+	gameScene->Initialize();
 }
 
 void Framework::Update()

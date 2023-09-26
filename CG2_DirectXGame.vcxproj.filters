@@ -210,6 +210,30 @@
     <ClCompile Include="engine\3d\Energy.cpp">
       <Filter>ソースファイル\Engine\GameObj</Filter>
     </ClCompile>
+    <ClCompile Include="engine\scene\Game.cpp">
+      <Filter>ソースファイル\Engine\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\scene\GameBaseScene.cpp">
+      <Filter>ソースファイル\Engine\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\scene\GameClearScene.cpp">
+      <Filter>ソースファイル\Engine\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\scene\GameSceneManager.cpp">
+      <Filter>ソースファイル\Engine\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\scene\GameTitleScene.cpp">
+      <Filter>ソースファイル\Engine\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\scene\SceneFactory.cpp">
+      <Filter>ソースファイル\Engine\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\scene\SIFrameWork.cpp">
+      <Filter>ソースファイル\Engine\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\scene\GameOverScene.cpp">
+      <Filter>ソースファイル\Engine\GameScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -397,6 +421,33 @@
       <Filter>ヘッダー ファイル\Engine\GameObj</Filter>
     </ClInclude>
     <ClInclude Include="engine\scene\GameScene.h">
+      <Filter>ヘッダー ファイル\Engine\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\AbstractSceneFactory.h">
+      <Filter>ヘッダー ファイル\Engine\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\Game.h">
+      <Filter>ヘッダー ファイル\Engine\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\GameBaseScene.h">
+      <Filter>ヘッダー ファイル\Engine\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\GameClearScene.h">
+      <Filter>ヘッダー ファイル\Engine\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\GameSceneManager.h">
+      <Filter>ヘッダー ファイル\Engine\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\GameTitleScene.h">
+      <Filter>ヘッダー ファイル\Engine\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\SceneFactory.h">
+      <Filter>ヘッダー ファイル\Engine\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\SIFrameWork.h">
+      <Filter>ヘッダー ファイル\Engine\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\GameOverScene.h">
       <Filter>ヘッダー ファイル\Engine\GameScene</Filter>
     </ClInclude>
   </ItemGroup>

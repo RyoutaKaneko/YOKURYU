@@ -20,22 +20,24 @@
 #include "Boss.h"
 #include "JsonLoader.h"	
 #include "energy.h"
+#include "GameBaseScene.h"
 
 
-class GameScene {
+class GameScene : public GameBaseScene {
 public:
 	//ÉÅÉìÉoä÷êî
 	GameScene();
 
 	~GameScene();
 
-	void Initialize(SpriteCommon& spriteCommon);
+	void Initialize() override;
 	void LoadObjFromLevelEditor(const std::string& fileName);
 
 	void Update();
 
 	void Draw();
 	void Reset();
+	void Finalize()override;
 
 	void LoadStage(int stageNum);
 	void LoadEnemy(int stageNum);
@@ -133,4 +135,5 @@ private:
 	//leveleditor
 	std::map<std::string, Model*> models;
 	std::vector<Object3d*> objects;
+	bool isStart;
 };

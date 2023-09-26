@@ -177,6 +177,14 @@
     <ClCompile Include="engine\collision\SphereCollider.cpp" />
     <ClCompile Include="engine\effect\PostEffect.cpp" />
     <ClCompile Include="engine\math\Spline.cpp" />
+    <ClCompile Include="engine\scene\Game.cpp" />
+    <ClCompile Include="engine\scene\GameBaseScene.cpp" />
+    <ClCompile Include="engine\scene\GameClearScene.cpp" />
+    <ClCompile Include="engine\scene\GameOverScene.cpp" />
+    <ClCompile Include="engine\scene\GameSceneManager.cpp" />
+    <ClCompile Include="engine\scene\GameTitleScene.cpp" />
+    <ClCompile Include="engine\scene\SceneFactory.cpp" />
+    <ClCompile Include="engine\scene\SIFrameWork.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="engine\math\Matrix4.cpp" />
     <ClCompile Include="engine\3d\Model.cpp" />
@@ -327,12 +335,21 @@
     <ClInclude Include="engine\math\Vector4.h" />
     <ClInclude Include="engine\3d\ViewProjection.h" />
     <ClInclude Include="engine\base\WinApp.h" />
+    <ClInclude Include="engine\scene\AbstractSceneFactory.h" />
+    <ClInclude Include="engine\scene\Game.h" />
+    <ClInclude Include="engine\scene\GameBaseScene.h" />
+    <ClInclude Include="engine\scene\GameClearScene.h" />
+    <ClInclude Include="engine\scene\GameOverScene.h" />
     <ClInclude Include="engine\scene\GameScene.h" />
     <ClInclude Include="engine\3d\WorldTransform.h" />
     <ClInclude Include="engine\3d\XMViewProjection.h" />
     <ClInclude Include="engine\3d\FbxLoader.h" />
     <ClInclude Include="engine\3d\FbxModel.h" />
     <ClInclude Include="engine\3d\FbxObject3d.h" />
+    <ClInclude Include="engine\scene\GameSceneManager.h" />
+    <ClInclude Include="engine\scene\GameTitleScene.h" />
+    <ClInclude Include="engine\scene\SceneFactory.h" />
+    <ClInclude Include="engine\scene\SIFrameWork.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

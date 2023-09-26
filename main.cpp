@@ -1,8 +1,9 @@
-#include "Framework.h"
+#include "Game.h"
+
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
-	Framework* game = new Framework();
+	SIFrameWork* game = new Game();
 
 	game->Run();
 

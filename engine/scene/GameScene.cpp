@@ -3,6 +3,7 @@
 #include "FbxObject3d.h"
 #include "SphereCollider.h"
 #include "CollisionManager.h"
+#include "GameSceneManager.h"
 
 #include <cassert>
 #include <fstream>
@@ -18,7 +19,7 @@ GameScene::~GameScene() {
 }
 
 ///-----変数の初期化-----///
-void GameScene::Initialize(SpriteCommon& spriteCommon) {
+void GameScene::Initialize() {
 	//基盤
 	dxCommon = DirectXCommon::GetInstance();
 	winApp = WinApp::GetInstance();
@@ -50,11 +51,11 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 
 	xmViewProjection = new XMViewProjection;
 
-	//FbxObjectの静的初期化
-	//カメラをセット
-	FbxObject3d::SetCamera(viewProjection);
-	//グラフィックスパイプラインを初期化
-	FbxObject3d::CreateGraphicsPipeline();
+	////FbxObjectの静的初期化
+	////カメラをセット
+	//FbxObject3d::SetCamera(viewProjection);
+	////グラフィックスパイプラインを初期化
+	//FbxObject3d::CreateGraphicsPipeline();
 
 	// スプライトの初期化
 	// スプライト
@@ -181,7 +182,7 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	//変数
 	isCheckPoint = false;
 	isPlayable = false;
-	sceneNum = TITLE;
+	sceneNum = GAME;
 	gameState = MAIN;
 	infos.clear();
 	gameTime = 150;
@@ -189,6 +190,7 @@ void GameScene::Initialize(SpriteCommon& spriteCommon) {
 	bossPass = 0;
 	cameraTmpPos = { 0,0,0 };
 	cameraTmpRot = { 0,0,0 };
+	isStart = false;
 }
 
 ///-----更新処理-----///
@@ -207,6 +209,20 @@ void GameScene::Update() {
 		player->SetPosition({ 0,0.5f,495 });
 		Vector3 cursor = GetWorldToScreenPos(Vector3(0, 0, 0), railCamera);
 		input->SetMousePos({ cursor.x,cursor.y });
+	}
+	if (isStart == false) {
+		fadeAlpha = 0.0f;
+		fade.SetAlpha(fade, fadeAlpha);
+		gameTime = 150;
+		railCamera->GetView()->SetEye(Vector3(-1, 0.5f, 490.0f));
+		railCamera->GetView()->SetTarget(Vector3(0.0f, 0.5f, 495));
+		player->SetPosition({ 0,0.5f,495 });
+		Vector3 cursor = GetWorldToScreenPos(Vector3(-230, 85, 0), railCamera);
+		input->SetMousePos({ cursor.x,cursor.y });
+		for (auto& object : objects) {
+			object->Update();
+		}
+		isStart = true;
 	}
 
 	Vector3 shotVec = { 0,0,0 };
@@ -444,7 +460,7 @@ void GameScene::Update() {
 			//gameclear
 			if (boss->GetIsDead() == true) {
 				LockedClear();
-				sceneNum = CLEAR;
+				GameSceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 			}
 			//更新
 			boss->Update(player->GetWorldPos());
@@ -507,30 +523,18 @@ void GameScene::Update() {
 		//gameover
 		if (player->GetHP() == 0) {
 			LockedClear();
-			sceneNum = OVER;
+			GameSceneManager::GetInstance()->ChangeScene("OVER");
 		}
 		//当たり判定チェック
 		collisionManager->CheckAllCollisions();
-		break;
-
-	case GameScene::CLEAR:
-		if (input->TriggerKey(DIK_SPACE)) {
-			Reset();
-			sceneNum = TITLE;
-		}
-		break;
-
-	case GameScene::OVER:
-		if (input->TriggerKey(DIK_SPACE)) {
-			Reset();
-			sceneNum = TITLE;
-		}
 		break;
 	}
 }
 
 void GameScene::Draw() {
 #pragma region 3Dオブジェクト描画
+
+	dxCommon->PreDraw();
 
 	// 3Dオブジェクト描画前処理
 	Object3d::PreDraw(dxCommon->GetCommandList());
@@ -562,11 +566,11 @@ void GameScene::Draw() {
 
 #pragma region FBX3Dオブジェクト描画
 
-	// 3Dオブジェクト描画前処理
-	FbxObject3d::PreDraw(dxCommon->GetCommandList());
+	//// 3Dオブジェクト描画前処理
+	//FbxObject3d::PreDraw(dxCommon->GetCommandList());
 
-	// 3Dオブジェクト描画後処理
-	FbxObject3d::PostDraw();
+	//// 3Dオブジェクト描画後処理
+	//FbxObject3d::PostDraw();
 
 #pragma endregion
 
@@ -633,6 +637,8 @@ void GameScene::Draw() {
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
+
+	dxCommon->PostDraw();
 }
 
 void GameScene::LoadStage(int stageNum) {
@@ -764,6 +770,10 @@ void GameScene::Reset() {
 	fadeAlpha = 1.0f;
 	fade.SetAlpha(fade, fadeAlpha);
 	popEnergyCount = 0;
+}
+
+void GameScene::Finalize()
+{
 }
 
 void GameScene::LoadEnemy(int stageNum) {

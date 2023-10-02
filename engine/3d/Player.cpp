@@ -2,6 +2,7 @@
 #include "string.h"
 #include "RailCamera.h"
 #include "SphereCollider.h"
+#include"Input.h"
 
 //デストラクタ
 Player::~Player() {
@@ -14,6 +15,7 @@ bool Player::PlayerInitialize() {
 		return false;
 	}
 
+	input = Input::GetInstance();
 	Initialize();
 
 	// OBJからモデルデータを読み込む
@@ -44,7 +46,6 @@ bool Player::PlayerInitialize() {
 
 void Player::Update(Vector3 velo, std::vector<LockInfo>& info)
 {
-	input = Input::GetInstance();
 	if (isShooted == true) {
 		isShooted = false;
 	}
@@ -155,7 +156,7 @@ void Player::Move()
 
 void Player::Attack(Vector3 velo) {
 	
-	if (input->PushMouseLeft()) {
+	if (Input::GetInstance()->PushMouseLeft()) {
 		if (coolTime == 0) {
 			//弾を生成し初期化
 		//複数
@@ -184,7 +185,7 @@ void Player::Attack(Vector3 velo) {
 
 void Player::LockAttack(std::vector<LockInfo>& info)
 {
-	if (input->GetInstance()->TriggerMouseRight()) {
+	if (Input::GetInstance()->TriggerMouseRight() == true) {
 		for (int i = 0; i < info.size(); i++) {
 			//弾を生成し初期化
 			std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();

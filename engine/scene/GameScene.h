@@ -113,14 +113,6 @@ private:
 	bool isPlayable = false;
 	//ロックオン情報
 	std::vector<LockInfo> infos;
-	//シーン情報
-	enum Scene {
-		TITLE,
-		GAME,
-		CLEAR,
-		OVER
-	};
-	Scene sceneNum;
 	int gameTime;
 	float cursorRotate;
 	//ゲームステータス

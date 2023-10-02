@@ -25,6 +25,12 @@ void GameTitleScene::Initialize()
 	title.SpriteTransferVertexBuffer(title, 0);
 	title.SpriteUpdate(title, spriteCommon_);
 	title.LoadTexture(spriteCommon_, 0, L"Resources/title.png", dxCommon_->GetDevice());
+	//black
+	black.SpriteCreate(dxCommon_->GetDevice(), 50, 50, 1, Vector2(0.0f, 0.0f), false, false);
+	black.SetScale(Vector2(1280 * 1, 720 * 1));
+	black.SpriteTransferVertexBuffer(black, 1);
+	black.SpriteUpdate(black, spriteCommon_);
+	black.LoadTexture(spriteCommon_, 1, L"Resources/black.png", dxCommon_->GetDevice());
 
 	//カメラ初期化
 	viewProjection = new ViewProjection();
@@ -37,6 +43,7 @@ void GameTitleScene::Update()
 {
 	viewProjection->UpdateMatrix();
 	title.SpriteUpdate(title, spriteCommon_);
+	black.SpriteUpdate(black, spriteCommon_);
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		GameSceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 	}
@@ -53,6 +60,7 @@ void GameTitleScene::Draw()
  
 	Sprite::PreDraw(dxCommon_->GetCommandList(),spriteCommon_);
 
+	black.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 	title.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 
 	Sprite::PostDraw();

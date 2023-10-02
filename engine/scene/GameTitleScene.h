@@ -55,6 +55,7 @@ private: // メンバ変数
 	Sprite* sprite = new Sprite;
 	SpriteCommon spriteCommon_;
 	Sprite title;
+	Sprite black;
 
 	int effectTime;
 	bool isShow1[120];

@@ -44,6 +44,7 @@ public:
 	float GetLen() { return len; }
 	bool GetIsUltimate() { return isUltimate; }
 	//setter
+	void SetIsHit(bool isHit_) { isHit = isHit_; }
 	void SetAlpha(float a) { alpha = a; }
 	void SetIsUltimate(bool ult) { isUltimate = ult; }
 

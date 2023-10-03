@@ -921,28 +921,6 @@
         },
         {
             "type": "MESH",
-            "name": "円柱.014",
-            "transform": {
-                "translation": [
-                    0.0,
-                    0.0,
-                    0.8694351315498352
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.5,
-                    1.5,
-                    0.30000001192092896
-                ]
-            },
-            "file_name": "block02"
-        },
-        {
-            "type": "MESH",
             "name": "円柱.017",
             "transform": {
                 "translation": [

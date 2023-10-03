@@ -43,6 +43,7 @@ public:
 	bool GetIsShooted() { return isShooted; }
 	float GetLen() { return len; }
 	bool GetIsUltimate() { return isUltimate; }
+	Vector3 GetMove() { return move; }
 	//setter
 	void SetIsHit(bool isHit_) { isHit = isHit_; }
 	void SetAlpha(float a) { alpha = a; }
@@ -74,4 +75,5 @@ private:
 	int ultTime;
 	Vector3 pos_;
 	Vector3 rot_;
+	Vector3 move;
 };

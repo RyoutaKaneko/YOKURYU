@@ -80,7 +80,7 @@ void Boss::Update(Vector3 velo)
 		}
 	}
 	//HP‚ª0‚È‚çŽ€–S
-	if (hp == 0) {
+	if (hp <= 0) {
 		isDead_ = true;
 	}
 	//XV

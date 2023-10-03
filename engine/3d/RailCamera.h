@@ -55,6 +55,10 @@ private:
 	Vector3 frontVec = { 0,0,0 };
 	Vector3 oldCamera = { 0,0,0 };
 
+	//カメラディレイ
+	Vector3 playerMoveVel;
+	Vector3 cameraDelay;
+
 	//tmp
 	Vector3 eyeTmp{};
 	Vector3 targetTmp{};

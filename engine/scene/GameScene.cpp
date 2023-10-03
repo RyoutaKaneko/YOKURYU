@@ -225,6 +225,7 @@ void GameScene::Update() {
 	Vector3 shotVec = { 0,0,0 };
 
 
+  //操作可能状態ならHPを更新
 	if (isPlayable == true) {
 		//playerhp
 		float playerHp_ = player->GetHP() - (hp.GetScale().x / 4);
@@ -320,11 +321,23 @@ void GameScene::Update() {
 					railCamera->Initialize(player);
 				}
 			}
-			/////デバック用/////
+			/////デバック用(ボスまでスキップ)/////
 			if (input->TriggerKey(DIK_B)) {
 				railCamera->SetOnRail(false);
 			}
 
+			//player更新(カメラの前)
+			if (input->PushMouseLeft()) {
+				shotVec = GetScreenToWorldPos(crosshair[0], railCamera);
+			}
+			if (isPlayable == true) {
+				SerchEnemy();
+				player->Update(shotVec, infos);
+				if (gameState == BOSS && railCamera->GetOnRail() == true) {
+					player->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+				}
+				LockedClear();
+			}
 			//更新
 			railCamera->Update(player, points);
 			//ダメージをくらったときに画面シェイク
@@ -393,6 +406,19 @@ void GameScene::Update() {
 			}
 			bossHP.SpriteTransferVertexBuffer(bossHP, 6);
 			bossHP.SpriteUpdate(bossHP, spriteCommon_);
+			//player更新(カメラの前)
+			if (input->PushMouseLeft()) {
+				shotVec = GetScreenToWorldPos(crosshair[0], railCamera);
+			}
+			if (isPlayable == true) {
+				SerchEnemy();
+				player->Update(shotVec, infos);
+				if (gameState == BOSS && railCamera->GetOnRail() == true) {
+					player->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+				}
+				LockedClear();
+			}
+
 			//カメラ更新
 			if (railCamera->GetOnRail() == false) {
 				gameTime++;
@@ -463,18 +489,6 @@ void GameScene::Update() {
 		break;
 	}
 	//////////////操作可能なら更新///////////////////
-	//player
-	if (input->PushMouseLeft()) {
-		shotVec = GetScreenToWorldPos(crosshair[0], railCamera);
-	}
-	if (isPlayable == true) {
-		SerchEnemy();
-		player->Update(shotVec, infos);
-		if (gameState == BOSS && railCamera->GetOnRail() == true) {
-			player->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
-		}
-		LockedClear();
-	}
 	if (player->GetIsUltimate() == true && gameState != ULT) {
 		cameraTmpPos = railCamera->GetView()->GetEye();
 		cameraTmpRot = railCamera->GetView()->GetTarget();
@@ -1043,33 +1057,33 @@ Vector2 GameScene::GetWorldToScreenScale(Object3d* obj, RailCamera* rail)
 	return Vector2(x / len, y / len);
 }
 
-void GameScene::LoadObjFromLevelEditor(const std::string& fileName) {
-	JsonLoader* file = nullptr;
-	LevelData* levelData = file->LoadFile(fileName);
-
-	//オブジェクト配置
-	for (auto& objectData : levelData->objects) {
-		//ファイル名から登録済みモデルを検索
-		Model* model = nullptr;
-		decltype(models)::iterator it = models.find(objectData.fileName);
-		if (it != models.end()) { model = it->second; }
-		//モデルを指定して3DObjectを生成
-		Object3d* newObject = Object3d::Create();
-		newObject->Initialize();
-		newObject->SetModel(model);
-		//座標
-		Vector3 pos;
-		pos = Vector3(objectData.translation.x, objectData.translation.y, objectData.translation.z);
-		newObject->SetPosition(pos);
-		//回転角
-		Vector3 rot;
-		rot = Vector3(objectData.rotation.x, objectData.rotation.y, objectData.rotation.z);
-		newObject->SetRotation(rot);
-		//スケール
-		Vector3 scale;
-		scale = Vector3(objectData.scaling.x, objectData.scaling.y, objectData.scaling.z);
-		newObject->SetScale(scale);
-		//配列に登録
-		objects.push_back(newObject);
-	}
-}
+//void GameScene::LoadObjFromLevelEditor(const std::string& fileName) {
+//	JsonLoader* file = nullptr;
+//	LevelData* levelData = file->LoadFile(fileName);
+//
+//	//オブジェクト配置
+//	for (auto& objectData : levelData->objects) {
+//		//ファイル名から登録済みモデルを検索
+//		Model* model = nullptr;
+//		decltype(models)::iterator it = models.find(objectData.fileName);
+//		if (it != models.end()) { model = it->second; }
+//		//モデルを指定して3DObjectを生成
+//		Object3d* newObject = Object3d::Create();
+//		newObject->Initialize();
+//		newObject->SetModel(model);
+//		//座標
+//		Vector3 pos;
+//		pos = Vector3(objectData.translation.x, objectData.translation.y, objectData.translation.z);
+//		newObject->SetPosition(pos);
+//		//回転角
+//		Vector3 rot;
+//		rot = Vector3(objectData.rotation.x, objectData.rotation.y, objectData.rotation.z);
+//		newObject->SetRotation(rot);
+//		//スケール
+//		Vector3 scale;
+//		scale = Vector3(objectData.scaling.x, objectData.scaling.y, objectData.scaling.z);
+//		newObject->SetScale(scale);
+//		//配列に登録
+//		objects.push_back(newObject);
+//	}
+//}

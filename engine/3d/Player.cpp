@@ -96,7 +96,7 @@ void Player::Update(Vector3 velo, std::vector<LockInfo>& info)
 
 void Player::Move()
 {
-	Vector3 move = { 0,0,0 };
+	move = { 0,0,0 };
 
 	//playerˆÚ“®
 	if (input->PushKey(DIK_W)) {
@@ -130,26 +130,32 @@ void Player::Move()
 		move = { 0, -0.04f, 0 };
 	}
 
+	Vector3 floating(0, 0, 0);
 	//player‚Ó‚í‚Ó‚í
 	if (pTimer < 75) {
-		move += Vector3(0, 0.005f, 0);
+		floating += Vector3(0, 0.005f, 0);
 	}
 	else if (pTimer < 150) {
-		move += Vector3(0, -0.005f, 0);
+		floating += Vector3(0, -0.005f, 0);
 	}
 	else {
 		pTimer = 0;
 	}
 
-	Vector3 tmp = GetPosition() + move;
+	Vector3 tmp = GetPosition() + move + floating;
 	//
 	if (abs(tmp.x) <= 3.0f) {
 		if (tmp.y >= -1.5f && tmp.y <= 2.0f) {
 			if (GetPosition().z < -1.6f) {
-				move.z += 0.05f;
+				SetPosition(GetPosition() + move + floating + Vector3(0.0f,0.0f,0.05f));
 			}
-			SetPosition(GetPosition() + move);
+			else {
+				SetPosition(GetPosition() + move + floating);
+			}
 		}
+	}
+	else {
+		move = { 0,0,0 };
 	}
 	pTimer++;
 }

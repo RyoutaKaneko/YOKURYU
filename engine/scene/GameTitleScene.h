@@ -7,6 +7,7 @@
 #include "GameSceneManager.h"
 #include "GameScene.h"
 #include "viewProjection.h"
+#include "Player.h"
 
 
 #include <DirectXMath.h>
@@ -55,15 +56,19 @@ private: // メンバ変数
 	Sprite* sprite = new Sprite;
 	SpriteCommon spriteCommon_;
 	Sprite title;
-	Sprite black;
+	Sprite titleBack[3];
+	Sprite cursor;
+	Sprite click[2];
 
-	int effectTime;
-	bool isShow1[120];
-	bool isShow2[120];
-	bool effectSwitch;
+	Model* skyModel = nullptr;
+	Model* seaModel = nullptr;
+	Model* block01Model = nullptr;
+	Model* block02Model = nullptr;
+	Model* stoneModel = nullptr;
+	Player* player = nullptr;
+
+	int gameTimer;
+	int isBackNum;
+	bool onCursor;
 	bool isNext;
-	bool curHit;
-	bool isUp;
-	float logoTime;
-	float logoY;
 };

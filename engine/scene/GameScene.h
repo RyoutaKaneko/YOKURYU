@@ -31,7 +31,7 @@ public:
 	~GameScene();
 
 	void Initialize() override;
-	void LoadObjFromLevelEditor(const std::string& fileName);
+	/*void LoadObjFromLevelEditor(const std::string& fileName);*/
 
 	void Update();
 
@@ -124,8 +124,5 @@ private:
 	GameState gameState;
 	GameState gameState_bak;
 	int bossPass;
-	//leveleditor
-	std::map<std::string, Model*> models;
-	std::vector<Object3d*> objects;
 	bool isStart;
 };

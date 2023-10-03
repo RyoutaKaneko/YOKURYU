@@ -22,30 +22,132 @@ void GameTitleScene::Initialize()
 	//titleの画像
 	title.SpriteCreate(dxCommon_->GetDevice(), 50, 50, 0, Vector2(0.0f, 0.0f), false, false);
 	title.SetScale(Vector2(1280 * 1, 720 * 1));
+	title.SetPosition({ -354,-32,0 });
 	title.SpriteTransferVertexBuffer(title, 0);
 	title.SpriteUpdate(title, spriteCommon_);
 	title.LoadTexture(spriteCommon_, 0, L"Resources/title.png", dxCommon_->GetDevice());
-	//black
-	black.SpriteCreate(dxCommon_->GetDevice(), 50, 50, 1, Vector2(0.0f, 0.0f), false, false);
-	black.SetScale(Vector2(1280 * 1, 720 * 1));
-	black.SpriteTransferVertexBuffer(black, 1);
-	black.SpriteUpdate(black, spriteCommon_);
-	black.LoadTexture(spriteCommon_, 1, L"Resources/black.png", dxCommon_->GetDevice());
+	//title背景
+	for (int i = 0; i < 3; i++) {
+		titleBack[i].SpriteCreate(dxCommon_->GetDevice(), 50, 50, i + 1, Vector2(0.0f, 0.0f), false, false);
+		titleBack[i].SetScale(Vector2(1280 * 1.1, 720 * 1.7));
+		titleBack[i].SetPosition({ -418,-192,0 });
+		titleBack[i].SpriteTransferVertexBuffer(titleBack[i], i + 1);
+		titleBack[i].SpriteUpdate(titleBack[i], spriteCommon_);
+	}
+	titleBack[0].LoadTexture(spriteCommon_, 1, L"Resources/titleBack.png", dxCommon_->GetDevice());
+	titleBack[1].LoadTexture(spriteCommon_, 2, L"Resources/titleBack2.png", dxCommon_->GetDevice());
+	titleBack[2].LoadTexture(spriteCommon_, 3, L"Resources/titleBack3.png", dxCommon_->GetDevice());
+	//カーソル
+	cursor.SpriteCreate(dxCommon_->GetDevice(), 50, 50, 4, Vector2(0.0f, 0.0f), false, false);
+	cursor.SetScale(Vector2(48 * 1, 48 * 1));
+	cursor.SetPosition({ 0,0,0 });
+	cursor.SpriteTransferVertexBuffer(cursor, 4);
+	cursor.SpriteUpdate(cursor, spriteCommon_);
+	cursor.LoadTexture(spriteCommon_, 4, L"Resources/cursor.png", dxCommon_->GetDevice());
+	//クリック
+	for (int i = 0; i < 2; i++) {
+		click[i].SpriteCreate(dxCommon_->GetDevice(), 50, 50, 5+i, Vector2(0.5f, 0.5f), false, false);
+		click[i].SetScale(Vector2(480.0f * 1.2f, 72.0f * 1.2f));
+		click[i].SetPosition({ 640,640,0 });
+		click[i].SpriteTransferVertexBuffer(click[i], 5+i);
+		click[i].SpriteUpdate(click[i], spriteCommon_);
+	}
+	click[0].LoadTexture(spriteCommon_, 5, L"Resources/click1.png", dxCommon_->GetDevice());
+	click[1].LoadTexture(spriteCommon_, 6, L"Resources/click2.png", dxCommon_->GetDevice());
+
+	//player
+	player = new Player;
+	player->PlayerInitialize();
+	player->SetPosition({ 0.0f,33.3f,288.0f });
+	player->SetRotation({ 0,90,0 });
 
 	//カメラ初期化
 	viewProjection = new ViewProjection();
 	viewProjection->Initialize();
+	viewProjection->SetEye({ 3.5f,34.5f,298.0f });
+	viewProjection->SetTarget({0,40,-400});
 
-	
+	//モデル読み込み
+	skyModel = Model::LoadFromOBJ("sky");
+	seaModel = Model::LoadFromOBJ("sea");
+	block01Model = Model::LoadFromOBJ("block01");
+	block02Model = Model::LoadFromOBJ("block02");
+	stoneModel = Model::LoadFromOBJ("stone");
+	models.insert(std::make_pair("sky", skyModel));
+	models.insert(std::make_pair("sea", seaModel));
+	models.insert(std::make_pair("block01", block01Model));
+	models.insert(std::make_pair("block02", block02Model));
+	models.insert(std::make_pair("stone", stoneModel));
+	//レベルエディタ読み込み
+	LoadObjFromLevelEditor("title");
+	gameTimer = 0;
+	isBackNum = 0;
+	onCursor = false;
+	isNext = false;
 }
 
 void GameTitleScene::Update()
 {
-	viewProjection->UpdateMatrix();
+	Vector3 cur = Input::GetInstance()->GetMousePos();
+	cursor.SetPosition(cur);
+	cursor.SpriteUpdate(cursor, spriteCommon_);
+	//クリック判定
+	if (cur.x > click[0].GetPosition().x - 240 && cur.x < click[0].GetPosition().x + 240) {
+		if (cur.y > click[0].GetPosition().y - 36 && cur.y < click[0].GetPosition().y + 36) {
+			if (onCursor == false) {
+				onCursor = true;
+			 }
+			//次シーンへ
+			if (Input::GetInstance()->TriggerMouseLeft()) {
+				GameSceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+			}
+		}
+		else {
+			if (onCursor == true) {
+				onCursor = false;
+			}
+		}
+	}
+	else {
+		if (onCursor == true) {
+			onCursor = false;
+		}
+	}
+	//タイトル演出
+	if (gameTimer % 8== 0) {
+		if (isBackNum < 2) {
+			isBackNum++;
+		}
+		else if(isBackNum == 2) {
+			isBackNum = 0;
+		}
+	}
 	title.SpriteUpdate(title, spriteCommon_);
-	black.SpriteUpdate(black, spriteCommon_);
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		GameSceneManager::GetInstance()->ChangeScene("GAMEPLAY");
+	for (int i = 0; i < 3; i++) {
+		titleBack[i].SpriteUpdate(titleBack[i], spriteCommon_);
+	}
+	//クリック
+	for (int i = 0; i < 2; i++) {
+		click[i].SpriteUpdate(click[i], spriteCommon_);
+	}
+	
+	//更新
+	for (auto& object : objects) {
+		object->Update();
+	}
+	if (gameTimer < 50) {
+		player->SetPosition(player->GetPosition() + Vector3(0, 0.005f, 0));
+	}
+	else if (gameTimer < 100) {
+		player->SetPosition(player->GetPosition() + Vector3(0, -0.005f, 0));
+	}
+	player->worldTransform_.UpdateMatrix();
+
+	viewProjection->UpdateMatrix();
+
+	gameTimer++;
+	if (gameTimer > 100) {
+		gameTimer = 0;
 	}
 }
 
@@ -55,13 +157,25 @@ void GameTitleScene::Draw()
 
 	Object3d::PreDraw(dxCommon_->GetCommandList());
 
+	player->Draw(viewProjection);
+	//背景オブジェクト
+	for (auto& object : objects) {
+		object->Draw(viewProjection);
+	}
 
 	Object3d::PostDraw();
- 
-	Sprite::PreDraw(dxCommon_->GetCommandList(),spriteCommon_);
 
-	black.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+	Sprite::PreDraw(dxCommon_->GetCommandList(), spriteCommon_);
+
+	titleBack[isBackNum].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 	title.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+	if (onCursor == false) {
+		click[0].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+	 }
+	else {
+		click[1].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+	}
+	cursor.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 
 	Sprite::PostDraw();
 

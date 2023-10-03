@@ -23,6 +23,8 @@ void RailCamera::Initialize(Player* player_) {
 	oldCamera = { 0,0,0 };
 	isEnd = false;
 	OnRail = true;
+	playerMoveVel = { 0,0,0 };
+	cameraDelay = { 0,0,0 };
 }
 
 void RailCamera::ViewUpdate() {
@@ -60,7 +62,8 @@ void RailCamera::Update(Player* player_, std::vector<Vector3>& point) {
 		//更新
 		camera->Update();
 		viewProjection->target = ((target_ + frontVec));
-		viewProjection->eye = (camera->GetPosition() - frontVec * player_->GetLen());
+		//playerの移動をもとにディレイをかけて更新
+		viewProjection->eye = ((camera->GetPosition() + cameraDelay) - frontVec * player_->GetLen());
 		if (viewProjection->eye.y > (eyeTmp.y + 1)) {
 			viewProjection->eye.y += 0.05f;
 		}
@@ -72,6 +75,41 @@ void RailCamera::Update(Player* player_, std::vector<Vector3>& point) {
 		viewProjection->UpdateMatrix();
 		camera->Update();
 	}
+	//cameraDelay
+	playerMoveVel += (player_->GetMove() *= Vector3(1,-1,1));
+	//
+	if (playerMoveVel.x > 2.0f) {
+		playerMoveVel.x = 2.0f;
+	}
+	else if (playerMoveVel.x < -2.0f) {
+		playerMoveVel.x = -2.0f;
+	}
+	if (playerMoveVel.y > 1.2f) {
+		playerMoveVel.y = 1.2f;
+	}
+	else if (playerMoveVel.y < -1.2f) {
+		playerMoveVel.y = -1.2f;
+	}
+	//
+	if (abs((playerMoveVel.x - cameraDelay.x)) > abs(0.05f)) {
+		if (playerMoveVel.x > cameraDelay.x) {
+			cameraDelay.x += 0.02f;
+		}
+		else if (playerMoveVel.x < cameraDelay.x) {
+			cameraDelay.x += -0.02f;
+		}
+		else{}
+	}
+	if (abs((playerMoveVel.y - cameraDelay.y)) > abs(0.05f)) {
+		if (playerMoveVel.y > cameraDelay.y) {
+			cameraDelay.y += 0.02f;
+		}
+		else if (playerMoveVel.y < cameraDelay.y) {
+			cameraDelay.y += -0.02f;
+		}
+		else {}
+	}
+
 }
 
 void RailCamera::TitleR(Player* player_)

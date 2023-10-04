@@ -57,8 +57,11 @@ private: // メンバ変数
 	SpriteCommon spriteCommon_;
 	Sprite title;
 	Sprite titleBack[3];
-	Sprite cursor;
+	Sprite cursor[9];
 	Sprite click[2];
+	Sprite circle;
+	Sprite fade;
+	Sprite loading;
 
 	Model* skyModel = nullptr;
 	Model* seaModel = nullptr;
@@ -71,4 +74,5 @@ private: // メンバ変数
 	int isBackNum;
 	bool onCursor;
 	bool isNext;
+	float circleSize;
 };

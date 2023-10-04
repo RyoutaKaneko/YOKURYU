@@ -21,7 +21,7 @@ GameScene::~GameScene() {
 ///-----変数の初期化-----///
 void GameScene::Initialize() {
 	//基盤
-	dxCommon = DirectXCommon::GetInstance();
+	dxCommon_ = DirectXCommon::GetInstance();
 	winApp = WinApp::GetInstance();
 	input = Input::GetInstance();
 	//当たり判定
@@ -60,19 +60,19 @@ void GameScene::Initialize() {
 	// スプライトの初期化
 	// スプライト
 	sprite = new Sprite();
-	spriteCommon_ = sprite->SpriteCommonCreate(dxCommon->GetDevice());
+	spriteCommon_ = sprite->SpriteCommonCreate(dxCommon_->GetDevice());
 
 	//titleの画像
-	titleGH.LoadTexture(spriteCommon_, 0, L"Resources/title.png", dxCommon->GetDevice());
-	titleGH.SpriteCreate(dxCommon->GetDevice(), 50, 50, 0, Vector2(0.0f, 0.0f), false, false);
+	titleGH.LoadTexture(spriteCommon_, 0, L"Resources/title.png", dxCommon_->GetDevice());
+	titleGH.SpriteCreate(dxCommon_->GetDevice(), 50, 50, 0, Vector2(0.0f, 0.0f), false, false);
 	titleGH.SetScale(Vector2(1280 * 1, 720 * 1));
 	titleGH.SpriteTransferVertexBuffer(titleGH, 0);
 	titleGH.SpriteUpdate(titleGH, spriteCommon_);
 
 	//クロスヘアの画像
 	for (int i = 0; i < 4; i++) {
-		crosshair[i].LoadTexture(spriteCommon_, 1, L"Resources/crosshair.png", dxCommon->GetDevice());
-		crosshair[i].SpriteCreate(dxCommon->GetDevice(), 1280, 720, 1, Vector2(0.5f, 0.5f), false, false);
+		crosshair[i].LoadTexture(spriteCommon_, 1, L"Resources/crosshair.png", dxCommon_->GetDevice());
+		crosshair[i].SpriteCreate(dxCommon_->GetDevice(), 1280, 720, 1, Vector2(0.5f, 0.5f), false, false);
 		crosshair[i].SetPosition(Vector3(1100, 0, 0));
 		crosshair[i].SetScale(Vector2(24.0f * (i + 1.0f), 24.0f * (i + 1.0f)));
 		crosshair[i].SpriteTransferVertexBuffer(crosshair[i], 1);
@@ -80,38 +80,38 @@ void GameScene::Initialize() {
 	}
 
 	//HP用画像
-	hp.SpriteCreate(dxCommon->GetDevice(), 50, 50, 2, Vector2(0.0f, 0.0f), false, false);
+	hp.SpriteCreate(dxCommon_->GetDevice(), 50, 50, 2, Vector2(0.0f, 0.0f), false, false);
 	hp.SetPosition(Vector3(28, 650, 0));
 	hp.SetScale(Vector2(4 * 1, 48 * 1));
-	hp.LoadTexture(spriteCommon_, 2, L"Resources/life.png", dxCommon->GetDevice());
+	hp.LoadTexture(spriteCommon_, 2, L"Resources/life.png", dxCommon_->GetDevice());
 	hp.SpriteTransferVertexBuffer(hp, 2);
 	hp.SpriteUpdate(hp, spriteCommon_);
 
 	//gameclearの画像
-	clearGH.LoadTexture(spriteCommon_, 3, L"Resources/clear.png", dxCommon->GetDevice());
-	clearGH.SpriteCreate(dxCommon->GetDevice(), 1280, 720, 3, Vector2(0.0f, 0.0f), false, false);
+	clearGH.LoadTexture(spriteCommon_, 3, L"Resources/clear.png", dxCommon_->GetDevice());
+	clearGH.SpriteCreate(dxCommon_->GetDevice(), 1280, 720, 3, Vector2(0.0f, 0.0f), false, false);
 	clearGH.SetScale(Vector2(1280 * 1, 720 * 1));
 	clearGH.SpriteTransferVertexBuffer(clearGH, 3);
 	clearGH.SpriteUpdate(clearGH, spriteCommon_);
 
 	//gameoverの画像
-	overGH.LoadTexture(spriteCommon_, 4, L"Resources/over.png", dxCommon->GetDevice());
-	overGH.SpriteCreate(dxCommon->GetDevice(), 1280, 720, 4, Vector2(0.0f, 0.0f), false, false);
+	overGH.LoadTexture(spriteCommon_, 4, L"Resources/over.png", dxCommon_->GetDevice());
+	overGH.SpriteCreate(dxCommon_->GetDevice(), 1280, 720, 4, Vector2(0.0f, 0.0f), false, false);
 	overGH.SetScale(Vector2(1280 * 1, 720 * 1));
 	overGH.SpriteTransferVertexBuffer(overGH, 4);
 	overGH.SpriteUpdate(overGH, spriteCommon_);
 
 	for (int i = 0; i < 10; i++) {
-		lock[i].LoadTexture(spriteCommon_, 1, L"Resources/crosshair.png", dxCommon->GetDevice());
-		lock[i].SpriteCreate(dxCommon->GetDevice(), 50, 50, 1, Vector2(0.0f, 0.0f), false, false);
+		lock[i].LoadTexture(spriteCommon_, 1, L"Resources/crosshair.png", dxCommon_->GetDevice());
+		lock[i].SpriteCreate(dxCommon_->GetDevice(), 50, 50, 1, Vector2(0.0f, 0.0f), false, false);
 		lock[i].SetScale(Vector2(128 * 1, 128 * 1));
 		lock[i].SpriteTransferVertexBuffer(lock[i], 1);
 		lock[i].SpriteUpdate(lock[i], spriteCommon_);
 	}
 
 	//fade
-	fade.LoadTexture(spriteCommon_, 5, L"Resources/black.png", dxCommon->GetDevice());
-	fade.SpriteCreate(dxCommon->GetDevice(), 1280, 720, 5, Vector2(0.0f, 0.0f), false, false);
+	fade.LoadTexture(spriteCommon_, 5, L"Resources/black.png", dxCommon_->GetDevice());
+	fade.SpriteCreate(dxCommon_->GetDevice(), 1280, 720, 5, Vector2(0.0f, 0.0f), false, false);
 	fade.SetScale(Vector2(1280 * 1, 720 * 1));
 	fade.SpriteTransferVertexBuffer(fade, 5);
 	fade.SpriteUpdate(fade, spriteCommon_);
@@ -119,35 +119,43 @@ void GameScene::Initialize() {
 	fadeAlpha = 1.0f;
 	fade.SetAlpha(fade, fadeAlpha);
 	//boosHP
-	bossHP.LoadTexture(spriteCommon_, 6, L"Resources/hp.png", dxCommon->GetDevice());
-	bossHP.SpriteCreate(dxCommon->GetDevice(), 1280, 720, 6, Vector2(0.0f, 0.5f), false, false);
+	bossHP.LoadTexture(spriteCommon_, 6, L"Resources/hp.png", dxCommon_->GetDevice());
+	bossHP.SpriteCreate(dxCommon_->GetDevice(), 1280, 720, 6, Vector2(0.0f, 0.5f), false, false);
 	bossHP.SetPosition(Vector3(25, 50, 0));
 	bossHP.SetScale(Vector2(2 * 1, 48 * 1));
 	bossHP.SpriteTransferVertexBuffer(bossHP, 6);
 	bossHP.SpriteUpdate(bossHP, spriteCommon_);
 	//gage
-	gage.LoadTexture(spriteCommon_, 7, L"Resources/green.png", dxCommon->GetDevice());
-	gage.SpriteCreate(dxCommon->GetDevice(), 1280, 720, 7, Vector2(0.0f, 0.5f), false, false);
+	gage.LoadTexture(spriteCommon_, 7, L"Resources/green.png", dxCommon_->GetDevice());
+	gage.SpriteCreate(dxCommon_->GetDevice(), 1280, 720, 7, Vector2(0.0f, 0.5f), false, false);
 	gage.SetPosition(Vector3(28, 641, 0));
 	gage.SetScale(Vector2(2 * 1, 18 * 1));
 	gage.SpriteTransferVertexBuffer(gage, 7);
 	gage.SpriteUpdate(gage, spriteCommon_);
 	//
-	gageBack.LoadTexture(spriteCommon_, 8, L"Resources/green.png", dxCommon->GetDevice());
-	gageBack.SpriteCreate(dxCommon->GetDevice(), 1280, 720, 8, Vector2(0.0f, 0.5f), false, false);
+	gageBack.LoadTexture(spriteCommon_, 8, L"Resources/green.png", dxCommon_->GetDevice());
+	gageBack.SpriteCreate(dxCommon_->GetDevice(), 1280, 720, 8, Vector2(0.0f, 0.5f), false, false);
 	gageBack.SetPosition(Vector3(28, 641, 0));
 	gageBack.SetScale(Vector2(2 * 178, 18 * 1));
 	gageBack.SetAlpha(gageBack, 0.5f);
 	gageBack.SpriteTransferVertexBuffer(gageBack, 8);
 	gageBack.SpriteUpdate(gageBack, spriteCommon_);
 	//
-	hpBack.SpriteCreate(dxCommon->GetDevice(), 50, 50, 9, Vector2(0.0f, 0.0f), false, false);
+	hpBack.SpriteCreate(dxCommon_->GetDevice(), 50, 50, 9, Vector2(0.0f, 0.0f), false, false);
 	hpBack.SetPosition(Vector3(28, 650, 0));
 	hpBack.SetScale(Vector2(396, 48 * 1));
-	hpBack.LoadTexture(spriteCommon_, 9, L"Resources/life.png", dxCommon->GetDevice());
+	hpBack.LoadTexture(spriteCommon_, 9, L"Resources/life.png", dxCommon_->GetDevice());
 	hpBack.SetAlpha(hpBack, 0.5f);
 	hpBack.SpriteTransferVertexBuffer(hpBack, 9);
 	hpBack.SpriteUpdate(hpBack, spriteCommon_);
+	//フェードアウト
+	fadeout.SpriteCreate(dxCommon_->GetDevice(), 50, 50, 10, Vector2(1.0f, 0.0f), false, false);
+	fadeout.SetScale(Vector2(1280 * 1, 1120 * 1));
+	fadeout.SetPosition({ 0,100,0 });
+	fadeout.SetRotation(45);
+	fadeout.SpriteTransferVertexBuffer(fadeout, 10);
+	fadeout.SpriteUpdate(fadeout, spriteCommon_);
+	fadeout.LoadTexture(spriteCommon_, 10, L"Resources/fade.png", dxCommon_->GetDevice());
 
 	//パーティクル初期化
 	particle = Particle::LoadParticleTexture("blue.png");
@@ -221,6 +229,11 @@ void GameScene::Update() {
 		}
 		isStart = true;
 	}
+	//メインゲーム開始時フェードアウト
+	//if (fadeout.GetPosition().y < 400) {
+	//	fadeout.SetPosition(fadeout.GetPosition() + Vector3(0, 40, 0));
+	//	fadeout.SpriteUpdate(fadeout, spriteCommon_);
+	//}
 
 	Vector3 shotVec = { 0,0,0 };
 
@@ -525,10 +538,10 @@ void GameScene::Update() {
 void GameScene::Draw() {
 #pragma region 3Dオブジェクト描画
 
-	dxCommon->PreDraw();
+	dxCommon_->PreDraw();
 
 	// 3Dオブジェクト描画前処理
-	Object3d::PreDraw(dxCommon->GetCommandList());
+	Object3d::PreDraw(dxCommon_->GetCommandList());
 
 	//背景オブジェクト
 	for (auto& object : objects) {
@@ -556,7 +569,7 @@ void GameScene::Draw() {
 #pragma region FBX3Dオブジェクト描画
 
 	//// 3Dオブジェクト描画前処理
-	//FbxObject3d::PreDraw(dxCommon->GetCommandList());
+	//FbxObject3d::PreDraw(dxCommon_->GetCommandList());
 
 	//// 3Dオブジェクト描画後処理
 	//FbxObject3d::PostDraw();
@@ -566,7 +579,7 @@ void GameScene::Draw() {
 #pragma region パーティクル描画
 
 	// パーティクル描画前処理
-	ParticleManager::PreDraw(dxCommon->GetCommandList());
+	ParticleManager::PreDraw(dxCommon_->GetCommandList());
 
 	///==== パーティクル描画 ====///
 	//パーティクル
@@ -581,36 +594,37 @@ void GameScene::Draw() {
 #pragma region スプライト描画
 
 	// スプライト描画前処理
-	Sprite::PreDraw(dxCommon->GetCommandList(), spriteCommon_);
+	Sprite::PreDraw(dxCommon_->GetCommandList(), spriteCommon_);
 
 	///=== スプライト描画 ===///
 
 	if (gameState == BOSS) {
-		fade.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
+		fade.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		if (boss->GetTimer() == 0) {
 			//ボスのHP
-			bossHP.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
+			bossHP.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		}
 	}
 	if (isPlayable == true) {
-		hpBack.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
-		gageBack.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
-		hp.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
-		gage.SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
+		hpBack.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+		gageBack.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+		hp.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+		gage.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 	}
 	if (isPlayable == true) {
 		for (int i = 0; i < 4; i++) {
-			crosshair[i].SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
+			crosshair[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		}
 	}
 	for (int i = 0; i < infos.size(); i++) {
-		lock[i].SpriteDraw(dxCommon->GetCommandList(), spriteCommon_, dxCommon->GetDevice());
+		lock[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 	}
+	fadeout.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
 
-	dxCommon->PostDraw();
+	dxCommon_->PostDraw();
 }
 
 void GameScene::LoadStage(int stageNum) {

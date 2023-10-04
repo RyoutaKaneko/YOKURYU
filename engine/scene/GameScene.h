@@ -52,7 +52,7 @@ public:
 
 private:
 	//base
-	DirectXCommon* dxCommon = nullptr;
+	DirectXCommon* dxCommon_ = nullptr;
 	WinApp* winApp = nullptr;
 	//入力のポインタ
 	Input* input = nullptr;
@@ -71,6 +71,7 @@ private:
 	Sprite gage;
 	Sprite gageBack;
 	Sprite hpBack;
+	Sprite fadeout;
 	//オブジェクトのポインタ
 	//3Dオブジェクト生成
 	Player* player = nullptr;

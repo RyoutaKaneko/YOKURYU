@@ -762,7 +762,7 @@ void GameScene::Finalize()
 {
 }
 
-void GameScene::LoadEnemy(int stageNum) {
+void GameScene::LoadEnemy(int stageNum_) {
 
 	Spline spline;
 	spline.Initialize();
@@ -783,10 +783,9 @@ void GameScene::LoadEnemy(int stageNum) {
 	file.open("Resources/csv/EnemyPop.csv");
 	assert(file.is_open());
 
-	HRESULT result = S_FALSE;
 
 	std::string num;
-	num = stageNum + 48;
+	num = stageNum_ + 48;
 
 	// １行ずつ読み込む
 	string line;
@@ -802,7 +801,7 @@ void GameScene::LoadEnemy(int stageNum) {
 		string word;
 		getline(line_stream, word, ' ');
 
-		if (stageNum < 10) {
+		if (stageNum_ < 10) {
 			// 先頭文字列がｖなら頂点座標
 			if (key == "ea" + num) {
 				//敵の生成

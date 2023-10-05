@@ -40,9 +40,6 @@
     <Filter Include="ソースファイル\Engine\Effect">
       <UniqueIdentifier>{436c057a-8f47-423b-8489-b9aceefb13ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソースファイル\Application\platform">
-      <UniqueIdentifier>{46d387be-bb6f-44f2-acdc-483e1b27f2b5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソースファイル\Application\scene">
       <UniqueIdentifier>{0554bbb1-90f0-423b-b877-043bcaaa4592}</UniqueIdentifier>
     </Filter>
@@ -69,9 +66,6 @@
     </Filter>
     <Filter Include="ヘッダー ファイル\Engine\2d">
       <UniqueIdentifier>{5138cc02-99cf-4f0f-bdef-c2321640aa1c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\Application\platform">
-      <UniqueIdentifier>{5d923fb2-2d4d-47e6-ac8a-df6b18b95a2f}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソースファイル\Engine\Camera">
       <UniqueIdentifier>{d39ca11e-0299-46e3-9634-f3dae2283183}</UniqueIdentifier>

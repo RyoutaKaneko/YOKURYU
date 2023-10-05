@@ -114,7 +114,7 @@ void Boss::Attack()
 	std::unique_ptr<BossBullet> newBullet = std::make_unique<BossBullet>();
 
 	//’P”­													   
-	newBullet->BulletInitialize(GetPosition());
+	newBullet->BulletInitialize();
 	newBullet->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 5.0f));
 
 	//’e‚Ì“o˜^										 

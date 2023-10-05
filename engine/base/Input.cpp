@@ -13,10 +13,10 @@ Input* Input::GetInstance()
 	return &instance;
 }
 
-void Input::Initialize(WinApp* winApp)
+void Input::Initialize(WinApp* winApp_)
 {
 	// 借りてきたWinAppのインスタンスを記録
-	this->winApp = winApp;
+	this->winApp = winApp_;
 
 	HRESULT result;
 

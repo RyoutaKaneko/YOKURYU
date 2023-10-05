@@ -1,7 +1,7 @@
 #include "BossBullet.h"
 #include "BaseCollider.h"
 
-void BossBullet::BulletInitialize(const Vector3& position)
+void BossBullet::BulletInitialize()
 {
 	Initialize();
 

@@ -87,7 +87,7 @@ public: // ê√ìIÉÅÉìÉoä÷êî
 	void Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParamIndexMaterial,float alpha_ = 1);
 
 	// setter
-	static void SetDevice(ID3D12Device* device) { Model::device = device; }
+	static void SetDevice(ID3D12Device* device_) { Model::device = device_; }
 
 	void SetAlpha(float alpha_);
 

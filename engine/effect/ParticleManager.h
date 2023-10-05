@@ -81,5 +81,5 @@ public://setter
 	//パーティクルモデル
 	void SetParticleModel(Particle* particlemodel) { this->particle = particlemodel; }
 	//カメラ
-	void SetXMViewProjection(XMViewProjection* xmViewProjection) { this->xmViewProjection = xmViewProjection; }
+	void SetXMViewProjection(XMViewProjection* xmViewProjection_) { this->xmViewProjection = xmViewProjection_; }
 };

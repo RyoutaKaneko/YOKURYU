@@ -70,7 +70,7 @@ public: // メンバ関数
 	const Matrix4& GetMatWorld() { return matWorld; }
 
 	// モデルの設定
-	void SetModel(Model* model) { this->model = model; }
+	void SetModel(Model* model_) { this->model = model_; }
 
 	//コライダーのセット
 	void SetCollider(BaseCollider* collider);

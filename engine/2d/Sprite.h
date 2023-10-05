@@ -105,13 +105,13 @@ public:
 
 public: // セッター
 	// 座標設定
-	void SetPosition(Vector3 position) { this->position = position; }
+	void SetPosition(Vector3 position_) { this->position = position_; }
 	// サイズ設定
-	void SetScale(Vector2 scale) { this->scale = scale; }
+	void SetScale(Vector2 scale_) { this->scale = scale_; }
 	// 回転
-	void SetRotation(float rotation) { this->rotation = rotation; }
+	void SetRotation(float rotation_) { this->rotation = rotation_; }
 	// 番号
-	void SetTexNumber(UINT texNumber) { this->texNumber = texNumber; }
+	void SetTexNumber(UINT texNumber_) { this->texNumber = texNumber_; }
 	// 色
 	void SetColor(const Vector4& color) { this->color_ = color; }
 	void SetAlpha(Sprite sprite, float alpha_);

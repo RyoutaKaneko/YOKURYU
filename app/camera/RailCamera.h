@@ -20,7 +20,7 @@ public:
 
 	void ShakeCamera(float x, float y);
 
-	void TitleR(Player* player_);
+	void TitleR();
 	void RailReset();
 
 	//Setter

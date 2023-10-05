@@ -20,11 +20,11 @@ public:
 
 	inline const Vector3& GetOffset() { return offset; }
 
-	inline void SetOffset(const Vector3& offset) { this->offset = offset; }
+	inline void SetOffset(const Vector3& offset_) { this->offset = offset_; }
 
 	inline float GetRadius() { return radius; }
 
-	inline void SetRadius(float radius) { this->radius = radius; }
+	inline void SetRadius(float radius_) { this->radius = radius_; }
 
 private:
 	// オブジェクト中心からのオフセット

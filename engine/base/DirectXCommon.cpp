@@ -16,13 +16,13 @@ DirectXCommon* DirectXCommon::GetInstance()
 	return &instance;
 }
 
-void DirectXCommon::Initialize(WinApp* winApp) 
+void DirectXCommon::Initialize(WinApp* winApp_) 
 {
 	// NULLŒŸo
-	assert(winApp);
+	assert(winApp_);
 
 	// ƒƒ“ƒo•Ï”‚É‹L˜^
-	this->winApp = winApp;
+	this->winApp = winApp_;
 
 	// FPSŒÅ’è‰Šú‰»
 	fpsFixed = new FPSFixed();

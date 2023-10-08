@@ -22,7 +22,7 @@ private: // エイリアス
 
 public: // 静的メンバ関数
 	/// 静的初期化
-	static void StaticInitialize(ID3D12Device* device, int window_width, int window_height);
+	static void StaticInitialize(ID3D12Device* device);
 
 	/// 描画前処理
 	static void PreDraw(ID3D12GraphicsCommandList* cmdList);
@@ -76,8 +76,8 @@ public: // メンバ関数
 	void SetCollider(BaseCollider* collider);
 
 	//衝突時コールバック関数
-	virtual void OnCollision(const CollisionInfo& info) {}
-	virtual void OffCollision(const CollisionInfo& info) {}
+	virtual void OnCollision([[maybe_unused]] const CollisionInfo& info) {}
+	virtual void OffCollision([[maybe_unused]] const CollisionInfo& info) {}
 
 	// オブジェクトの座標
 	Vector3 GetWorldPos();

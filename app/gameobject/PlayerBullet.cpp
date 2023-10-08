@@ -34,7 +34,7 @@ void PlayerBullet::Update() {
 
 }
 
-void PlayerBullet::HomingVec(Vector3 pos)
+void PlayerBullet::HomingVec()
 {
 	if (isHoming == true) {
 		velocity_ = lockObj->GetWorldPos() - GetPosition();
@@ -42,7 +42,7 @@ void PlayerBullet::HomingVec(Vector3 pos)
 	}
 }
 
-void PlayerBullet::OnCollision(const CollisionInfo& info)
+void PlayerBullet::OnCollision([[maybe_unused]] const CollisionInfo& info)
 {
 	//Õ“Ë‘Šè‚Ì–¼‘O
 	const char* str1 = "class Enemy";

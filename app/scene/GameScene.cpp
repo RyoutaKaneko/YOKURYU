@@ -64,7 +64,7 @@ void GameScene::Initialize() {
 
 	//titleの画像
 	titleGH.LoadTexture(spriteCommon_, 0, L"Resources/title.png", dxCommon_->GetDevice());
-	titleGH.SpriteCreate(dxCommon_->GetDevice(), 50, 50, 0, Vector2(0.0f, 0.0f), false, false);
+	titleGH.SpriteCreate(dxCommon_->GetDevice(), 0, Vector2(0.0f, 0.0f), false, false);
 	titleGH.SetScale(Vector2(1280 * 1, 720 * 1));
 	titleGH.SpriteTransferVertexBuffer(titleGH, 0);
 	titleGH.SpriteUpdate(titleGH, spriteCommon_);
@@ -72,7 +72,7 @@ void GameScene::Initialize() {
 	//クロスヘアの画像
 	for (int i = 0; i < 4; i++) {
 		crosshair[i].LoadTexture(spriteCommon_, 1, L"Resources/crosshair.png", dxCommon_->GetDevice());
-		crosshair[i].SpriteCreate(dxCommon_->GetDevice(), 1280, 720, 1, Vector2(0.5f, 0.5f), false, false);
+		crosshair[i].SpriteCreate(dxCommon_->GetDevice(), 1, Vector2(0.5f, 0.5f), false, false);
 		crosshair[i].SetPosition(Vector3(1100, 0, 0));
 		crosshair[i].SetScale(Vector2(24.0f * (i + 1.0f), 24.0f * (i + 1.0f)));
 		crosshair[i].SpriteTransferVertexBuffer(crosshair[i], 1);
@@ -80,7 +80,7 @@ void GameScene::Initialize() {
 	}
 
 	//HP用画像
-	hp.SpriteCreate(dxCommon_->GetDevice(), 50, 50, 2, Vector2(0.0f, 0.0f), false, false);
+	hp.SpriteCreate(dxCommon_->GetDevice(), 2, Vector2(0.0f, 0.0f), false, false);
 	hp.SetPosition(Vector3(28, 650, 0));
 	hp.SetScale(Vector2(4 * 1, 48 * 1));
 	hp.LoadTexture(spriteCommon_, 2, L"Resources/life.png", dxCommon_->GetDevice());
@@ -89,21 +89,21 @@ void GameScene::Initialize() {
 
 	//gameclearの画像
 	clearGH.LoadTexture(spriteCommon_, 3, L"Resources/clear.png", dxCommon_->GetDevice());
-	clearGH.SpriteCreate(dxCommon_->GetDevice(), 1280, 720, 3, Vector2(0.0f, 0.0f), false, false);
+	clearGH.SpriteCreate(dxCommon_->GetDevice(), 3, Vector2(0.0f, 0.0f), false, false);
 	clearGH.SetScale(Vector2(1280 * 1, 720 * 1));
 	clearGH.SpriteTransferVertexBuffer(clearGH, 3);
 	clearGH.SpriteUpdate(clearGH, spriteCommon_);
 
 	//gameoverの画像
 	overGH.LoadTexture(spriteCommon_, 4, L"Resources/over.png", dxCommon_->GetDevice());
-	overGH.SpriteCreate(dxCommon_->GetDevice(), 1280, 720, 4, Vector2(0.0f, 0.0f), false, false);
+	overGH.SpriteCreate(dxCommon_->GetDevice(), 4, Vector2(0.0f, 0.0f), false, false);
 	overGH.SetScale(Vector2(1280 * 1, 720 * 1));
 	overGH.SpriteTransferVertexBuffer(overGH, 4);
 	overGH.SpriteUpdate(overGH, spriteCommon_);
 
 	for (int i = 0; i < 10; i++) {
 		lock[i].LoadTexture(spriteCommon_, 1, L"Resources/crosshair.png", dxCommon_->GetDevice());
-		lock[i].SpriteCreate(dxCommon_->GetDevice(), 50, 50, 1, Vector2(0.0f, 0.0f), false, false);
+		lock[i].SpriteCreate(dxCommon_->GetDevice(), 1, Vector2(0.0f, 0.0f), false, false);
 		lock[i].SetScale(Vector2(128 * 1, 128 * 1));
 		lock[i].SpriteTransferVertexBuffer(lock[i], 1);
 		lock[i].SpriteUpdate(lock[i], spriteCommon_);
@@ -111,7 +111,7 @@ void GameScene::Initialize() {
 
 	//fade
 	fade.LoadTexture(spriteCommon_, 5, L"Resources/black.png", dxCommon_->GetDevice());
-	fade.SpriteCreate(dxCommon_->GetDevice(), 1280, 720, 5, Vector2(0.0f, 0.0f), false, false);
+	fade.SpriteCreate(dxCommon_->GetDevice(), 5, Vector2(0.0f, 0.0f), false, false);
 	fade.SetScale(Vector2(1280 * 1, 720 * 1));
 	fade.SpriteTransferVertexBuffer(fade, 5);
 	fade.SpriteUpdate(fade, spriteCommon_);
@@ -120,28 +120,28 @@ void GameScene::Initialize() {
 	fade.SetAlpha(fade, fadeAlpha);
 	//boosHP
 	bossHP.LoadTexture(spriteCommon_, 6, L"Resources/hp.png", dxCommon_->GetDevice());
-	bossHP.SpriteCreate(dxCommon_->GetDevice(), 1280, 720, 6, Vector2(0.0f, 0.5f), false, false);
+	bossHP.SpriteCreate(dxCommon_->GetDevice(), 6, Vector2(0.0f, 0.5f), false, false);
 	bossHP.SetPosition(Vector3(25, 50, 0));
 	bossHP.SetScale(Vector2(2 * 1, 48 * 1));
 	bossHP.SpriteTransferVertexBuffer(bossHP, 6);
 	bossHP.SpriteUpdate(bossHP, spriteCommon_);
 	//gage
 	gage.LoadTexture(spriteCommon_, 7, L"Resources/green.png", dxCommon_->GetDevice());
-	gage.SpriteCreate(dxCommon_->GetDevice(), 1280, 720, 7, Vector2(0.0f, 0.5f), false, false);
+	gage.SpriteCreate(dxCommon_->GetDevice(), 7, Vector2(0.0f, 0.5f), false, false);
 	gage.SetPosition(Vector3(28, 641, 0));
 	gage.SetScale(Vector2(2 * 1, 18 * 1));
 	gage.SpriteTransferVertexBuffer(gage, 7);
 	gage.SpriteUpdate(gage, spriteCommon_);
 	//
 	gageBack.LoadTexture(spriteCommon_, 8, L"Resources/green.png", dxCommon_->GetDevice());
-	gageBack.SpriteCreate(dxCommon_->GetDevice(), 1280, 720, 8, Vector2(0.0f, 0.5f), false, false);
+	gageBack.SpriteCreate(dxCommon_->GetDevice(), 8, Vector2(0.0f, 0.5f), false, false);
 	gageBack.SetPosition(Vector3(28, 641, 0));
 	gageBack.SetScale(Vector2(2 * 178, 18 * 1));
 	gageBack.SetAlpha(gageBack, 0.5f);
 	gageBack.SpriteTransferVertexBuffer(gageBack, 8);
 	gageBack.SpriteUpdate(gageBack, spriteCommon_);
 	//
-	hpBack.SpriteCreate(dxCommon_->GetDevice(), 50, 50, 9, Vector2(0.0f, 0.0f), false, false);
+	hpBack.SpriteCreate(dxCommon_->GetDevice(), 9, Vector2(0.0f, 0.0f), false, false);
 	hpBack.SetPosition(Vector3(28, 650, 0));
 	hpBack.SetScale(Vector2(396, 48 * 1));
 	hpBack.LoadTexture(spriteCommon_, 9, L"Resources/life.png", dxCommon_->GetDevice());
@@ -149,7 +149,7 @@ void GameScene::Initialize() {
 	hpBack.SpriteTransferVertexBuffer(hpBack, 9);
 	hpBack.SpriteUpdate(hpBack, spriteCommon_);
 	//フェードアウト
-	fadeout.SpriteCreate(dxCommon_->GetDevice(), 1280, 720, 10, Vector2(0.0f, 0.0f), false, false);
+	fadeout.SpriteCreate(dxCommon_->GetDevice(), 10, Vector2(0.0f, 0.0f), false, false);
 	fadeout.SetScale(Vector2(128 * 1, 112 * 1));
 	fadeout.SetPosition({ 200,360,0 });
 	fadeout.SetRotation(180.0f);
@@ -185,8 +185,8 @@ void GameScene::Initialize() {
 
 	//スプライン制御点の読み込み
 	stageNum = 1;
-	LoadStage(stageNum);
-	LoadEnemy(stageNum);
+	LoadStage();
+	LoadEnemy();
 	//変数
 	isCheckPoint = false;
 	isPlayable = false;
@@ -515,16 +515,16 @@ void GameScene::Update() {
 		return enemy_->GetIsDead();
 		});
 	//敵キャラの更新
-	for (const std::unique_ptr<Enemy>& enemy : enemys_) {
-		enemy->Update(player->GetWorldPos(), railCamera->GetPasPoint());
+	for (const std::unique_ptr<Enemy>& enemy_ : enemys_) {
+		enemy_->Update(player->GetWorldPos(), railCamera->GetPasPoint());
 	}
 	//必殺技エネルギー
 	for (const std::unique_ptr<Energy>& energy : energys_) {
 		energy->Update(player->GetWorldPos(), railCamera->GetCamera()->GetRotation());
 	}
 	//デスフラグの立った敵を削除
-	energys_.remove_if([](std::unique_ptr <Energy>& energys_) {
-		return energys_->GetIsDead();
+	energys_.remove_if([](std::unique_ptr <Energy>& energys) {
+		return energys->GetIsDead();
 		});
 	//gameover
 	if (player->GetHP() == 0) {
@@ -548,8 +548,8 @@ void GameScene::Draw() {
 		object->Draw(railCamera->GetView());
 	}
 	//敵キャラの描画
-	for (const std::unique_ptr<Enemy>& enemy : enemys_) {
-		enemy->EnemyDraw(railCamera->GetView());
+	for (const std::unique_ptr<Enemy>& enemy_ : enemys_) {
+		enemy_->EnemyDraw(railCamera->GetView());
 	}
 	for (const std::unique_ptr<Energy>& energy : energys_) {
 		energy->Draw(railCamera->GetView());
@@ -627,7 +627,7 @@ void GameScene::Draw() {
 	dxCommon_->PostDraw();
 }
 
-void GameScene::LoadStage(int stageNum) {
+void GameScene::LoadStage() {
 	points.clear();
 	bossPoint.clear();
 
@@ -636,10 +636,8 @@ void GameScene::LoadStage(int stageNum) {
 	file.open("Resources/csv/stagePop.csv");
 	assert(file.is_open());
 
-	HRESULT result = S_FALSE;
-
 	std::string num;
-	num = stageNum + 48;
+	num = "0";
 
 	// １行ずつ読み込む
 	string line;
@@ -743,7 +741,7 @@ void GameScene::Reset() {
 	railCamera = new RailCamera;
 	railCamera->Initialize(player);
 	//enemy
-	LoadEnemy(stageNum);
+	LoadEnemy();
 	//変数
 	isCheckPoint = false;
 	isPlayable = false;
@@ -762,7 +760,7 @@ void GameScene::Finalize()
 {
 }
 
-void GameScene::LoadEnemy(int stageNum_) {
+void GameScene::LoadEnemy() {
 
 	Spline spline;
 	spline.Initialize();
@@ -785,7 +783,7 @@ void GameScene::LoadEnemy(int stageNum_) {
 
 
 	std::string num;
-	num = stageNum_ + 48;
+	num = "0";
 
 	// １行ずつ読み込む
 	string line;
@@ -801,7 +799,6 @@ void GameScene::LoadEnemy(int stageNum_) {
 		string word;
 		getline(line_stream, word, ' ');
 
-		if (stageNum_ < 10) {
 			// 先頭文字列がｖなら頂点座標
 			if (key == "ea" + num) {
 				//敵の生成
@@ -839,7 +836,6 @@ void GameScene::LoadEnemy(int stageNum_) {
 				//登録
 				enemys_.push_back(std::move(newEnemy));
 			}
-		}
 	}
 	// ファイルと閉じる
 	file.close();
@@ -865,17 +861,16 @@ void GameScene::SerchEnemy()
 			}
 		}
 
-		for (const std::unique_ptr<Enemy>& enemy : enemys_) {
-			Vector3 epos2 = GetWorldToScreenPos(enemy->GetWorldPos(), railCamera);
-			Vector3 len = enemy->GetWorldPos() - player->GetWorldPos();
-			float len_ = len.length();
+		for (const std::unique_ptr<Enemy>& enemy_ : enemys_) {
+			Vector3 epos2 = GetWorldToScreenPos(enemy_->GetWorldPos(), railCamera);
+			Vector3 len = enemy_->GetWorldPos() - player->GetWorldPos();
 			if (pow((epos2.x - cur.x), 2) + pow((epos2.y - cur.y), 2) < pow(30, 2)) {
-				if (enemy->GetIsLocked() == false && infos.size() < 10) {
+				if (enemy_->GetIsLocked() == false && infos.size() < 10) {
 					LockInfo info;
-					info.vec = enemy->GetWorldPos();
-					info.obj = enemy->GetPointer();
+					info.vec = enemy_->GetWorldPos();
+					info.obj = enemy_->GetPointer();
 					infos.push_back(info);
-					enemy->SetIsLocked(true);
+					enemy_->SetIsLocked(true);
 				}
 			}
 		}
@@ -904,9 +899,9 @@ void GameScene::LockedClear()
 			boss->SetIsLocked(false);
 		}
 
-		for (const std::unique_ptr<Enemy>& enemy : enemys_) {
-			if (enemy->GetIsLocked() == true) {
-				enemy->SetIsLocked(false);
+		for (const std::unique_ptr<Enemy>& enemy_ : enemys_) {
+			if (enemy_->GetIsLocked() == true) {
+				enemy_->SetIsLocked(false);
 			}
 		}
 		infos.clear();
@@ -1051,7 +1046,7 @@ Vector3 GameScene::GetWorldToScreenPos(Vector3 pos_, RailCamera* rail)
 	return posScreen;
 }
 
-Vector2 GameScene::GetWorldToScreenScale(Object3d* obj, RailCamera* rail)
+Vector2 GameScene::GetWorldToScreenScale(Object3d* obj_, RailCamera* rail)
 {
 	if (rail == nullptr) {
 		return Vector2(0, 0);
@@ -1062,9 +1057,9 @@ Vector2 GameScene::GetWorldToScreenScale(Object3d* obj, RailCamera* rail)
 	float len = v.length();
 
 	float x = 64;
-	x *= obj->GetScale().x;
+	x *= obj_->GetScale().x;
 	float y = 64;
-	y *= obj->GetScale().y;
+	y *= obj_->GetScale().y;
 
 
 	return Vector2(x / len, y / len);

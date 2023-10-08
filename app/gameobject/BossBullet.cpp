@@ -54,7 +54,7 @@ void BossBullet::Update(const Vector3& playerPos_)
 	}
 }
 
-void BossBullet::OnCollision(const CollisionInfo& info)
+void BossBullet::OnCollision([[maybe_unused]] const CollisionInfo& info)
 {
 	//Õ“Ë‘Šè‚Ì–¼‘O
 	const char* str1 = "class Player";

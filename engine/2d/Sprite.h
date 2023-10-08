@@ -81,8 +81,7 @@ public:
 		const wchar_t* filename, ID3D12Device* dev);
 
 	/// スプライト生成
-	void SpriteCreate(ID3D12Device* dev, int window_width, int window_height, 
-		UINT texNumber, Vector2 anchorpoint, bool isFlipX, bool FlipY);
+	void SpriteCreate(ID3D12Device* dev, UINT texNumber, Vector2 anchorpoint, bool isFlipX, bool FlipY);
 
 	/// スプライト単体頂点バッファの転送
 	void SpriteTransferVertexBuffer(const Sprite& sprite, uint32_t texIndex_ = UINT32_MAX);
@@ -149,7 +148,7 @@ public:
 	ComPtr<ID3D12Resource> vertBuff;
 	//頂点バッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vbView{};
-	D3D12_RESOURCE_DESC resDesc;
+	D3D12_RESOURCE_DESC resDesc = CD3DX12_RESOURCE_DESC();
 
 private:
 	// DirectXCommonのインスタンス

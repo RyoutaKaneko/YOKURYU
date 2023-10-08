@@ -208,24 +208,24 @@ void FbxObject3d::Draw(ViewProjection* viewProjection)
 	model->Draw(cmdList);
 }
 
-void FbxObject3d::StaticInitialize(ID3D12Device* device)
+void FbxObject3d::StaticInitialize(ID3D12Device* device_)
 {
 	// nullptrチェック
-	assert(device);
+	assert(device_);
 
-	FbxObject3d::device = device;
+	FbxObject3d::device = device_;
 
 	// ワールドトランスフォームにデバイスを貸す
 	WorldTransform::StaticInitialize(device);
 }
 
-void FbxObject3d::PreDraw(ID3D12GraphicsCommandList* cmdList)
+void FbxObject3d::PreDraw(ID3D12GraphicsCommandList* cmdList_)
 {
 	// PreDrawとPostDrawがペアで呼ばれていなければエラー
 	assert(FbxObject3d::cmdList == nullptr);
 
 	// コマンドリストをセット
-	FbxObject3d::cmdList = cmdList;
+	FbxObject3d::cmdList = cmdList_;
 
 
 	// パイプラインステートの設定

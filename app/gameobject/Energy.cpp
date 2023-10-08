@@ -33,7 +33,7 @@ void Energy::Update(Vector3 pos,Vector3 rot)
 	}
 }
 
-void Energy::OnCollision(const CollisionInfo& info)
+void Energy::OnCollision([[maybe_unused]] const CollisionInfo& info)
 {
 	//Õ“Ë‘Šè‚Ì–¼‘O
 	const char* str1 = "class Player";

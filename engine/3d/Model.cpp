@@ -19,7 +19,7 @@ using namespace std;
 // 静的メンバ変数の実体
 ID3D12Device* Model::device = nullptr;
 
-Model* Model::LoadFromOBJ(const string& modelname, const string& texname)
+Model* Model::LoadFromOBJ(const string& modelname)
 {
 	// 新たなModel型のインスタンスのメモリを確保
 	Model* model = new Model();
@@ -115,7 +115,8 @@ void Model::LoadTexture(const std::string& directoryPath, const std::string& fil
 
 	// ユニコード文字列に変換する
 	wchar_t wfilepath[128];
-	int iBufferSize = MultiByteToWideChar(CP_ACP, 0, filepath.c_str(), -1, wfilepath, _countof(wfilepath));
+	int iBufferSize;
+	iBufferSize = MultiByteToWideChar(CP_ACP, 0, filepath.c_str(), -1, wfilepath, _countof(wfilepath));
 #pragma warning(push)
 #pragma warning(disable:6054)
 #pragma warning(disable:6001)
@@ -199,7 +200,8 @@ void Model::LoadTexture(const std::string& filename)
 
 	// ユニコード文字列に変換する
 	wchar_t wfilepath[128];
-	int iBufferSize = MultiByteToWideChar(CP_ACP, 0, filepath.c_str(), -1, wfilepath, _countof(wfilepath));
+	int iBufferSize;
+	iBufferSize = MultiByteToWideChar(CP_ACP, 0, filepath.c_str(), -1, wfilepath, _countof(wfilepath));
 
 	result = LoadFromWICFile(
 		wfilepath, WIC_FLAGS_NONE,
@@ -299,7 +301,6 @@ void Model::Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParamIndexMaterial
 
 void Model::LoadFromOBJInternal(const string& modelname)
 {
-	HRESULT result = S_FALSE;
 
 	// ファイルストリーム
 	std::ifstream file;

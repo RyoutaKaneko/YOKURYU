@@ -53,8 +53,6 @@ Vector3 Spline::EnemyPosition(std::vector<Vector3>& points, float val)
 
 Vector3 Spline::pointCal(std::vector<Vector3>& points) {
 
-	const int INDEXMAX = (int)points.size() - 1;
-
 	Vector3 pos = SplinePosition(points, startIndex, t);
 
 	if (t >= 1) {

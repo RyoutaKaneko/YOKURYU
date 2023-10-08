@@ -16,12 +16,12 @@ FbxLoader* FbxLoader::GetInstance() {
 }
 
 //初期化
-void FbxLoader::Initialize(ID3D12Device* device) {
+void FbxLoader::Initialize(ID3D12Device* device_) {
 
 	//再初期化チェック
 	assert(fbxManager == nullptr);
 	//引数からメンバ変数に代入
-	this->device = device;
+	this->device = device_;
 	//FBXマネージャーの生成
 	fbxManager = FbxManager::Create();
 	//FBXマネージャーの入出力設定
@@ -387,8 +387,8 @@ void FbxLoader::ParseSkin(FbxModel* model, FbxMesh* fbxMesh) {
 		}
 
 		auto& vertices = model->vertices;
-		for (int i = 0; i < vertices.size(); i++) {
-			auto& weightList = weightLists[i];
+		for (int j = 0; j < vertices.size(); j++) {
+			auto& weightList = weightLists[j];
 			weightList.sort([](auto const& lhs, auto const& rhs) {
 			//左の要素の方が大きければtrue そうでなければfalseを返す
 			return lhs.weight > rhs.weight;
@@ -397,17 +397,17 @@ void FbxLoader::ParseSkin(FbxModel* model, FbxMesh* fbxMesh) {
 			int weightArrayIndex = 0;
 			//降順ソート済みのウェイトリストから
 			for (auto& weightSet : weightList) {
-				vertices[i].boneIndex[weightArrayIndex] = weightSet.index;
-				vertices[i].boneWeight[weightArrayIndex] = weightSet.weight;
+				vertices[j].boneIndex[weightArrayIndex] = weightSet.index;
+				vertices[j].boneWeight[weightArrayIndex] = weightSet.weight;
 				//4つに達したら終了
 				if (++weightArrayIndex >= FbxModel::MAX_BONE_INDICES) {
 					float weight = 0.0f;
 					//2番目以降のウェイトを合計
-					for (int j = 1; j < FbxModel::MAX_BONE_INDICES; j++) {
-						weight += vertices[i].boneWeight[j];
+					for (int n = 1; n < FbxModel::MAX_BONE_INDICES; n++) {
+						weight += vertices[j].boneWeight[n];
 					}
 					//合計で1.0f(100%)になるように調整
-					vertices[i].boneWeight[0] = 1.0f - weight;
+					vertices[j].boneWeight[0] = 1.0f - weight;
 					break;
 				}
 			}

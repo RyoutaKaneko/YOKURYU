@@ -169,7 +169,7 @@ void Boss::BossDraw(ViewProjection* viewProjection_)
 	}
 }
 
-void Boss::OnCollision(const CollisionInfo& info)
+void Boss::OnCollision([[maybe_unused]] const CollisionInfo& info)
 {
 	//Õ“Ë‘Šè‚Ì–¼‘O
 	const char* str1 = "class PlayerBullet";

@@ -1,7 +1,7 @@
 #include "EnemyBullet.h"
 #include "BaseCollider.h"
 
-void EnemyBullet::BulletInitialize(const Vector3& position) {
+void EnemyBullet::BulletInitialize() {
 
 	Initialize();
 
@@ -38,7 +38,7 @@ void EnemyBullet::Update(const Vector3& playerPos_) {
 	}
 }
 
-void EnemyBullet::OnCollision(const CollisionInfo& info)
+void EnemyBullet::OnCollision([[maybe_unused]] const CollisionInfo& info)
 {
 	//è’ìÀëäéËÇÃñºëO
 	const char* str1 = "class Player";

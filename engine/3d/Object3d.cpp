@@ -34,12 +34,12 @@ Object3d::~Object3d()
 	}
 }
 
-void Object3d::StaticInitialize(ID3D12Device * device, int window_width, int window_height)
+void Object3d::StaticInitialize(ID3D12Device * device_)
 {
 	// nullptrチェック
-	assert(device);
+	assert(device_);
 
-	Object3d::device = device;
+	Object3d::device = device_;
 
 	// モデルにデバイスをセット
 	Model::SetDevice(device);
@@ -51,13 +51,13 @@ void Object3d::StaticInitialize(ID3D12Device * device, int window_width, int win
 	InitializeGraphicsPipeline();
 }
 
-void Object3d::PreDraw(ID3D12GraphicsCommandList * cmdList)
+void Object3d::PreDraw(ID3D12GraphicsCommandList * cmdList_)
 {
 	// PreDrawとPostDrawがペアで呼ばれていなければエラー
 	assert(Object3d::cmdList == nullptr);
 
 	// コマンドリストをセット
-	Object3d::cmdList = cmdList;
+	Object3d::cmdList = cmdList_;
 
 	// パイプラインステートの設定
 	cmdList->SetPipelineState(pipelinestate.Get());
@@ -307,10 +307,10 @@ void Object3d::Draw(ViewProjection* viewProjection,float alpha_)
 	model->Draw(cmdList, 2,alpha_);
 }
 
-void Object3d::SetCollider(BaseCollider* collider)
+void Object3d::SetCollider(BaseCollider* collider_)
 {
-	collider->SetObject(this);
-	this->collider = collider;
+	collider_->SetObject(this);
+	this->collider = collider_;
 	//コリジョンマネージャに登録
 	CollisionManager::GetInstance()->AddCollider(collider);
 	//コライダーを更新しておく

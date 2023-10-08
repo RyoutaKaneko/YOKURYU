@@ -66,7 +66,7 @@ void Player::Update(Vector3 velo, std::vector<LockInfo>& info)
 	}
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		if (bullet->GetIsHoming() == true) {
-			bullet->HomingVec(GetWorldPos());
+			bullet->HomingVec();
 		}
 		bullet->Update();
 	}
@@ -242,7 +242,7 @@ void Player::BackRail()
 	SetRotation(rot_);
 }
 
-void Player::OnCollision(const CollisionInfo& info)
+void Player::OnCollision([[maybe_unused]] const CollisionInfo& info)
 {
 	//Õ“Ë‘Šè‚Ì–¼‘O
 	const char* str1 = "class Enemy";

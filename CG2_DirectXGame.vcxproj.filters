@@ -411,9 +411,6 @@
     <ClInclude Include="engine\camera\XMViewProjection.h">
       <Filter>ヘッダー ファイル\Engine\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="engine\scene\GameSceneManager.h">
-      <Filter>ヘッダー ファイル\Engine\GameScene</Filter>
-    </ClInclude>
     <ClInclude Include="app\camera\RailCamera.h">
       <Filter>ヘッダー ファイル\Application\camera</Filter>
     </ClInclude>
@@ -437,6 +434,9 @@
     </ClInclude>
     <ClInclude Include="app\gameobject\PlayerBullet.h">
       <Filter>ヘッダー ファイル\Application\gameobject</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\GameSceneManager.h">
+      <Filter>ヘッダー ファイル\Engine\GameScene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -637,7 +637,7 @@ void GameScene::LoadStage() {
 	assert(file.is_open());
 
 	std::string num;
-	num = "0";
+	num = "1";
 
 	// １行ずつ読み込む
 	string line;
@@ -652,7 +652,7 @@ void GameScene::LoadStage() {
 
 
 		// 先頭文字列がstならステージ
-		if (key == "st" + num) {
+		if (key == "st") {
 			// X,Y,Z座標読み込み
 			Vector3 position{};
 			line_stream >> position.x;
@@ -661,30 +661,8 @@ void GameScene::LoadStage() {
 			// 座標データに追加
 			points.emplace_back(position);
 		}
-		if (stageNum == 10) {
-			if (key == "st10") {
-				// X,Y,Z座標読み込み
-				Vector3 position{};
-				line_stream >> position.x;
-				line_stream >> position.y;
-				line_stream >> position.z;
-				// 座標データに追加
-				points.emplace_back(position);
-			}
-		}
-		else if (stageNum > 10) {
-			if (key == "st1" + stageNum - 10) {
-				// X,Y,Z座標読み込み
-				Vector3 position{};
-				line_stream >> position.x;
-				line_stream >> position.y;
-				line_stream >> position.z;
-				// 座標データに追加
-				points.emplace_back(position);
-			}
-		}
 		//先頭文字がboならボス
-		if (key == "bo" + num) {
+		if (key == "bo") {
 			// X,Y,Z座標読み込み
 			Vector3 position{};
 			line_stream >> position.x;
@@ -692,28 +670,6 @@ void GameScene::LoadStage() {
 			line_stream >> position.z;
 			// 座標データに追加
 			bossPoint.emplace_back(position);
-		}
-		if (stageNum == 10) {
-			if (key == "st10") {
-				// X,Y,Z座標読み込み
-				Vector3 position{};
-				line_stream >> position.x;
-				line_stream >> position.y;
-				line_stream >> position.z;
-				// 座標データに追加
-				bossPoint.emplace_back(position);
-			}
-		}
-		else if (stageNum > 10) {
-			if (key == "st1" + stageNum - 10) {
-				// X,Y,Z座標読み込み
-				Vector3 position{};
-				line_stream >> position.x;
-				line_stream >> position.y;
-				line_stream >> position.z;
-				// 座標データに追加
-				bossPoint.emplace_back(position);
-			}
 		}
 	}
 	// ファイルと閉じる
@@ -800,7 +756,7 @@ void GameScene::LoadEnemy() {
 		getline(line_stream, word, ' ');
 
 			// 先頭文字列がｖなら頂点座標
-			if (key == "ea" + num) {
+			if (key == "ea") {
 				//敵の生成
 				std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
 				//敵の初期化
@@ -1052,7 +1008,7 @@ Vector2 GameScene::GetWorldToScreenScale(Object3d* obj_, RailCamera* rail)
 		return Vector2(0, 0);
 	}
 
-	Vector3 v = obj->GetPosition() - rail->GetView()->GetEye();
+	Vector3 v = obj_->GetPosition() - rail->GetView()->GetEye();
 	v.normalize();
 	float len = v.length();
 

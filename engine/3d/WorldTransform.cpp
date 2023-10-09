@@ -44,7 +44,8 @@ void WorldTransform::CreateConstBuffer()
 void WorldTransform::Map()
 {
 	//定数バッファのマッピング
-	HRESULT result = constBuffB0->Map(0, nullptr, (void**)&constMap);//マッピング
+	HRESULT result;//マッピング
+	result = constBuffB0->Map(0, nullptr, (void**)&constMap);//マッピング
 	assert(SUCCEEDED(result));
 }
 

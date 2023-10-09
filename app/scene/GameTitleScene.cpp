@@ -77,6 +77,12 @@ void GameTitleScene::Initialize()
 	loading.SetPosition({ 1000,600,0 });
 	loading.SpriteTransferVertexBuffer(loading, 9);
 	loading.LoadTexture(spriteCommon_, 9, L"Resources/loading.png", dxCommon_->GetDevice());
+	//clickEffect
+	clickEffect.SpriteCreate(dxCommon_->GetDevice(), 10, Vector2(0.5f, 0.5f), false, false);
+	clickEffect.SetScale(Vector2(312.0f * 1.2f, 52.0f * 1.2f));
+	clickEffect.SetPosition({ 640,640,0 });
+	clickEffect.SpriteTransferVertexBuffer(clickEffect, 10);
+	clickEffect.LoadTexture(spriteCommon_, 10, L"Resources/clickEffect.png", dxCommon_->GetDevice());
 
 
 	//player
@@ -109,6 +115,7 @@ void GameTitleScene::Initialize()
 	onCursor = false;
 	isNext = false;
 	circleSize = 1.0f;
+	clickEffectAlpha = 1.0f;
 }
 
 void GameTitleScene::Update()
@@ -196,6 +203,15 @@ void GameTitleScene::Update()
 		}
 	}
 	else {
+		if (clickEffectAlpha > 0) {
+			clickEffectAlpha -= 0.025f;
+			clickEffect.SetScale(clickEffect.GetScale() + Vector2(1.0f,1.0f));
+			clickEffect.SpriteTransferVertexBuffer(clickEffect, 10);
+			clickEffect.SetAlpha(clickEffect, clickEffectAlpha);
+			click[1].SetAlpha(click[1], clickEffectAlpha);
+			click[1].SpriteUpdate(click[1], spriteCommon_);
+		  }
+		clickEffect.SpriteUpdate(clickEffect, spriteCommon_);
 		//シーン遷移
 		if (gameTimer < 10) {
 			player->SetPosition(player->GetPosition() + Vector3(0, 0.0075f, 0));
@@ -256,6 +272,8 @@ void GameTitleScene::Draw()
 		}
    }
 	else {
+		click[1].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+		clickEffect.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		fade.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		loading.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 	}

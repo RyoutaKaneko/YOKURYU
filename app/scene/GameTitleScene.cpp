@@ -167,7 +167,7 @@ void GameTitleScene::Update()
 		else {
 			outlineSize = 1.0f;
 		}
-		clickOutline.SetScale(Vector2(312.0f * 1.2f, 52.0f * 1.2f) * outlineSize);
+		clickOutline.SetScale(Vector2(312.0f * 1.2f, 52.0f * 1.34f) * outlineSize);
 		clickOutline.SpriteTransferVertexBuffer(clickOutline, 11);
 		clickOutline.SpriteUpdate(clickOutline, spriteCommon_);
 		//クリック判定

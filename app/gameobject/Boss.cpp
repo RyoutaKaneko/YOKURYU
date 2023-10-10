@@ -114,7 +114,7 @@ void Boss::Attack()
 	std::unique_ptr<BossBullet> newBullet = std::make_unique<BossBullet>();
 
 	//íPî≠													   
-	newBullet->BulletInitialize(GetPosition());
+	newBullet->BulletInitialize();
 	newBullet->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 5.0f));
 
 	//íeÇÃìoò^										 
@@ -169,7 +169,7 @@ void Boss::BossDraw(ViewProjection* viewProjection_)
 	}
 }
 
-void Boss::OnCollision(const CollisionInfo& info)
+void Boss::OnCollision([[maybe_unused]] const CollisionInfo& info)
 {
 	//è’ìÀëäéËÇÃñºëO
 	const char* str1 = "class PlayerBullet";

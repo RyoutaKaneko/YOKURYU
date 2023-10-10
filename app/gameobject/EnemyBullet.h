@@ -13,7 +13,7 @@ public:
 	///< summary>
 	///‰Šú‰»
 	///</summary>
-	void BulletInitialize(const Vector3& position);
+	void BulletInitialize();
 
 	///< summary>
 	///‰Šú‰»

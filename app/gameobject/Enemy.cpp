@@ -104,7 +104,7 @@ void Enemy::Update(Vector3 velo,float t) {
 	}
 }
 
-void Enemy::OnCollision(const CollisionInfo& info)
+void Enemy::OnCollision([[maybe_unused]] const CollisionInfo& info)
 {
 	//Õ“Ë‘Šè‚Ì–¼‘O
 	const char* str1 = "class PlayerBullet";
@@ -130,7 +130,7 @@ void Enemy::Attack() {
 			std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
 
 			//’P”­													   
-			newBullet->BulletInitialize(GetPosition());
+			newBullet->BulletInitialize();
 			newBullet->SetCollider(new SphereCollider(Vector3{0,0,0},0.5f));
 
 			//’e‚Ì“o˜^										 

@@ -40,9 +40,6 @@
     <Filter Include="ソースファイル\Engine\Effect">
       <UniqueIdentifier>{436c057a-8f47-423b-8489-b9aceefb13ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソースファイル\Application\platform">
-      <UniqueIdentifier>{46d387be-bb6f-44f2-acdc-483e1b27f2b5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソースファイル\Application\scene">
       <UniqueIdentifier>{0554bbb1-90f0-423b-b877-043bcaaa4592}</UniqueIdentifier>
     </Filter>
@@ -70,18 +67,6 @@
     <Filter Include="ヘッダー ファイル\Engine\2d">
       <UniqueIdentifier>{5138cc02-99cf-4f0f-bdef-c2321640aa1c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Application\platform">
-      <UniqueIdentifier>{5d923fb2-2d4d-47e6-ac8a-df6b18b95a2f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\Application\scene">
-      <UniqueIdentifier>{bcb6b033-1690-4db6-a7a7-f0e436506639}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソースファイル\Engine\GameObj">
-      <UniqueIdentifier>{db1e4cf1-5bc3-450f-8d25-9e3810865cb0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\Engine\GameObj">
-      <UniqueIdentifier>{f3046790-de45-420a-9f52-00891842d0ca}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソースファイル\Engine\Camera">
       <UniqueIdentifier>{d39ca11e-0299-46e3-9634-f3dae2283183}</UniqueIdentifier>
     </Filter>
@@ -91,16 +76,28 @@
     <Filter Include="ソースファイル\Engine\Collision">
       <UniqueIdentifier>{6d468e4a-84a8-4f43-aa92-3bd8a1d2e728}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Collision">
+    <Filter Include="ヘッダー ファイル\Engine\Collision">
       <UniqueIdentifier>{9db64233-bb0d-4897-ba7c-418dd1007c1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Application\scene">
+      <UniqueIdentifier>{16cb9844-964a-4341-a31d-35c417ef618d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Application\gameobject">
+      <UniqueIdentifier>{c551a089-2b3b-4d03-847b-e8bd672051c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Application\camera">
+      <UniqueIdentifier>{7d18152a-fd2c-4a4a-971e-1d4ca6510ac9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Application\camera">
+      <UniqueIdentifier>{153cf6e6-a23a-4bdb-9d35-f1029039e5c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Application\gameobject">
+      <UniqueIdentifier>{dbdedb92-ec33-4cc9-8bfe-9d8d2f04fb07}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>ソースファイル\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\scene\GameScene.cpp">
-      <Filter>ソースファイル\Engine\GameScene</Filter>
     </ClCompile>
     <ClCompile Include="engine\base\DirectXCommon.cpp">
       <Filter>ソースファイル\Engine\Base</Filter>
@@ -147,32 +144,8 @@
     <ClCompile Include="engine\3d\FbxObject3d.cpp">
       <Filter>ソースファイル\Engine\3d</Filter>
     </ClCompile>
-    <ClCompile Include="app\scene\BaseScene.cpp">
-      <Filter>ソースファイル\Application\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="app\platform\Framework.cpp">
-      <Filter>ソースファイル\Application\platform</Filter>
-    </ClCompile>
     <ClCompile Include="engine\math\Spline.cpp">
       <Filter>ソースファイル\Engine\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\Player.cpp">
-      <Filter>ソースファイル\Engine\GameObj</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\XMViewProjection.cpp">
-      <Filter>ソースファイル\Engine\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\ViewProjection.cpp">
-      <Filter>ソースファイル\Engine\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\RailCamera.cpp">
-      <Filter>ソースファイル\Engine\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\PlayerBullet.cpp">
-      <Filter>ソースファイル\Engine\GameObj</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\Enemy.cpp">
-      <Filter>ソースファイル\Engine\GameObj</Filter>
     </ClCompile>
     <ClCompile Include="engine\collision\Collision.cpp">
       <Filter>ソースファイル\Engine\Collision</Filter>
@@ -189,12 +162,6 @@
     <ClCompile Include="engine\base\WinApp.cpp">
       <Filter>ソースファイル\Engine\Base</Filter>
     </ClCompile>
-    <ClCompile Include="engine\3d\EnemyBullet.cpp">
-      <Filter>ソースファイル\Engine\GameObj</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\Boss.cpp">
-      <Filter>ソースファイル\Engine\GameObj</Filter>
-    </ClCompile>
     <ClCompile Include="engine\base\FPSFixed.cpp">
       <Filter>ソースファイル\Engine\Base</Filter>
     </ClCompile>
@@ -204,25 +171,13 @@
     <ClCompile Include="engine\effect\PostEffect.cpp">
       <Filter>ソースファイル\Engine\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="engine\3d\BossBullet.cpp">
-      <Filter>ソースファイル\Engine\GameObj</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\Energy.cpp">
-      <Filter>ソースファイル\Engine\GameObj</Filter>
-    </ClCompile>
     <ClCompile Include="engine\scene\Game.cpp">
       <Filter>ソースファイル\Engine\GameScene</Filter>
     </ClCompile>
     <ClCompile Include="engine\scene\GameBaseScene.cpp">
       <Filter>ソースファイル\Engine\GameScene</Filter>
     </ClCompile>
-    <ClCompile Include="engine\scene\GameClearScene.cpp">
-      <Filter>ソースファイル\Engine\GameScene</Filter>
-    </ClCompile>
     <ClCompile Include="engine\scene\GameSceneManager.cpp">
-      <Filter>ソースファイル\Engine\GameScene</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\scene\GameTitleScene.cpp">
       <Filter>ソースファイル\Engine\GameScene</Filter>
     </ClCompile>
     <ClCompile Include="engine\scene\SceneFactory.cpp">
@@ -231,8 +186,47 @@
     <ClCompile Include="engine\scene\SIFrameWork.cpp">
       <Filter>ソースファイル\Engine\GameScene</Filter>
     </ClCompile>
-    <ClCompile Include="engine\scene\GameOverScene.cpp">
-      <Filter>ソースファイル\Engine\GameScene</Filter>
+    <ClCompile Include="app\scene\GameClearScene.cpp">
+      <Filter>ソースファイル\Application\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="app\scene\GameOverScene.cpp">
+      <Filter>ソースファイル\Application\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="app\scene\GameScene.cpp">
+      <Filter>ソースファイル\Application\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="app\scene\GameTitleScene.cpp">
+      <Filter>ソースファイル\Application\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="app\gameobject\Boss.cpp">
+      <Filter>ソースファイル\Application\gameobject</Filter>
+    </ClCompile>
+    <ClCompile Include="app\gameobject\BossBullet.cpp">
+      <Filter>ソースファイル\Application\gameobject</Filter>
+    </ClCompile>
+    <ClCompile Include="app\gameobject\Enemy.cpp">
+      <Filter>ソースファイル\Application\gameobject</Filter>
+    </ClCompile>
+    <ClCompile Include="app\gameobject\EnemyBullet.cpp">
+      <Filter>ソースファイル\Application\gameobject</Filter>
+    </ClCompile>
+    <ClCompile Include="app\gameobject\Energy.cpp">
+      <Filter>ソースファイル\Application\gameobject</Filter>
+    </ClCompile>
+    <ClCompile Include="app\gameobject\Player.cpp">
+      <Filter>ソースファイル\Application\gameobject</Filter>
+    </ClCompile>
+    <ClCompile Include="app\gameobject\PlayerBullet.cpp">
+      <Filter>ソースファイル\Application\gameobject</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\camera\ViewProjection.cpp">
+      <Filter>ソースファイル\Engine\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\camera\XMViewProjection.cpp">
+      <Filter>ソースファイル\Engine\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="app\camera\RailCamera.cpp">
+      <Filter>ソースファイル\Application\camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -345,59 +339,32 @@
     <ClInclude Include="engine\3d\FbxObject3d.h">
       <Filter>ヘッダー ファイル\Engine\3d</Filter>
     </ClInclude>
-    <ClInclude Include="app\platform\Framework.h">
-      <Filter>ヘッダー ファイル\Application\platform</Filter>
-    </ClInclude>
-    <ClInclude Include="app\scene\BaseScene.h">
-      <Filter>ヘッダー ファイル\Application\scene</Filter>
-    </ClInclude>
     <ClInclude Include="engine\math\Spline.h">
       <Filter>ヘッダー ファイル\Engine\Math</Filter>
     </ClInclude>
-    <ClInclude Include="engine\3d\Player.h">
-      <Filter>ヘッダー ファイル\Engine\GameObj</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\XMViewProjection.h">
-      <Filter>ヘッダー ファイル\Engine\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\ViewProjection.h">
-      <Filter>ヘッダー ファイル\Engine\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\RailCamera.h">
-      <Filter>ヘッダー ファイル\Engine\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\PlayerBullet.h">
-      <Filter>ヘッダー ファイル\Engine\GameObj</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\Enemy.h">
-      <Filter>ヘッダー ファイル\Engine\GameObj</Filter>
-    </ClInclude>
     <ClInclude Include="engine\collision\BaseCollider.h">
-      <Filter>ヘッダー ファイル\Collision</Filter>
+      <Filter>ヘッダー ファイル\Engine\Collision</Filter>
     </ClInclude>
     <ClInclude Include="engine\collision\Collision.h">
-      <Filter>ヘッダー ファイル\Collision</Filter>
+      <Filter>ヘッダー ファイル\Engine\Collision</Filter>
     </ClInclude>
     <ClInclude Include="engine\collision\CollisionInfo.h">
-      <Filter>ヘッダー ファイル\Collision</Filter>
+      <Filter>ヘッダー ファイル\Engine\Collision</Filter>
     </ClInclude>
     <ClInclude Include="engine\collision\CollisionManager.h">
-      <Filter>ヘッダー ファイル\Collision</Filter>
+      <Filter>ヘッダー ファイル\Engine\Collision</Filter>
     </ClInclude>
     <ClInclude Include="engine\collision\CollisionPrimitive.h">
-      <Filter>ヘッダー ファイル\Collision</Filter>
+      <Filter>ヘッダー ファイル\Engine\Collision</Filter>
     </ClInclude>
     <ClInclude Include="engine\collision\CollisionTypes.h">
-      <Filter>ヘッダー ファイル\Collision</Filter>
+      <Filter>ヘッダー ファイル\Engine\Collision</Filter>
     </ClInclude>
     <ClInclude Include="engine\collision\RaycastHit.h">
-      <Filter>ヘッダー ファイル\Collision</Filter>
+      <Filter>ヘッダー ファイル\Engine\Collision</Filter>
     </ClInclude>
     <ClInclude Include="engine\collision\SphereCollider.h">
-      <Filter>ヘッダー ファイル\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\EnemyBullet.h">
-      <Filter>ヘッダー ファイル\Engine\GameObj</Filter>
+      <Filter>ヘッダー ファイル\Engine\Collision</Filter>
     </ClInclude>
     <ClInclude Include="engine\base\FPSFixed.h">
       <Filter>ヘッダー ファイル\Engine\Base</Filter>
@@ -411,18 +378,6 @@
     <ClInclude Include="engine\effect\PostEffect.h">
       <Filter>ヘッダー ファイル\Engine\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="engine\3d\BossBullet.h">
-      <Filter>ヘッダー ファイル\Engine\GameObj</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\Boss.h">
-      <Filter>ヘッダー ファイル\Engine\GameObj</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\Energy.h">
-      <Filter>ヘッダー ファイル\Engine\GameObj</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\scene\GameScene.h">
-      <Filter>ヘッダー ファイル\Engine\GameScene</Filter>
-    </ClInclude>
     <ClInclude Include="engine\scene\AbstractSceneFactory.h">
       <Filter>ヘッダー ファイル\Engine\GameScene</Filter>
     </ClInclude>
@@ -432,22 +387,55 @@
     <ClInclude Include="engine\scene\GameBaseScene.h">
       <Filter>ヘッダー ファイル\Engine\GameScene</Filter>
     </ClInclude>
-    <ClInclude Include="engine\scene\GameClearScene.h">
-      <Filter>ヘッダー ファイル\Engine\GameScene</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\scene\GameSceneManager.h">
-      <Filter>ヘッダー ファイル\Engine\GameScene</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\scene\GameTitleScene.h">
-      <Filter>ヘッダー ファイル\Engine\GameScene</Filter>
-    </ClInclude>
     <ClInclude Include="engine\scene\SceneFactory.h">
       <Filter>ヘッダー ファイル\Engine\GameScene</Filter>
     </ClInclude>
     <ClInclude Include="engine\scene\SIFrameWork.h">
       <Filter>ヘッダー ファイル\Engine\GameScene</Filter>
     </ClInclude>
-    <ClInclude Include="engine\scene\GameOverScene.h">
+    <ClInclude Include="app\scene\GameClearScene.h">
+      <Filter>ヘッダー ファイル\Application\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="app\scene\GameOverScene.h">
+      <Filter>ヘッダー ファイル\Application\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="app\scene\GameScene.h">
+      <Filter>ヘッダー ファイル\Application\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="app\scene\GameTitleScene.h">
+      <Filter>ヘッダー ファイル\Application\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\camera\ViewProjection.h">
+      <Filter>ヘッダー ファイル\Engine\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\camera\XMViewProjection.h">
+      <Filter>ヘッダー ファイル\Engine\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="app\camera\RailCamera.h">
+      <Filter>ヘッダー ファイル\Application\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="app\gameobject\Boss.h">
+      <Filter>ヘッダー ファイル\Application\gameobject</Filter>
+    </ClInclude>
+    <ClInclude Include="app\gameobject\BossBullet.h">
+      <Filter>ヘッダー ファイル\Application\gameobject</Filter>
+    </ClInclude>
+    <ClInclude Include="app\gameobject\Enemy.h">
+      <Filter>ヘッダー ファイル\Application\gameobject</Filter>
+    </ClInclude>
+    <ClInclude Include="app\gameobject\EnemyBullet.h">
+      <Filter>ヘッダー ファイル\Application\gameobject</Filter>
+    </ClInclude>
+    <ClInclude Include="app\gameobject\Energy.h">
+      <Filter>ヘッダー ファイル\Application\gameobject</Filter>
+    </ClInclude>
+    <ClInclude Include="app\gameobject\Player.h">
+      <Filter>ヘッダー ファイル\Application\gameobject</Filter>
+    </ClInclude>
+    <ClInclude Include="app\gameobject\PlayerBullet.h">
+      <Filter>ヘッダー ファイル\Application\gameobject</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene\GameSceneManager.h">
       <Filter>ヘッダー ファイル\Engine\GameScene</Filter>
     </ClInclude>
   </ItemGroup>

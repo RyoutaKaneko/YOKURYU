@@ -41,7 +41,7 @@ public://ƒƒ“ƒoŠÖ”
 
 	void Update();
 
-	void SetModel(FbxModel* model) { this->model = model; }
+	void SetModel(FbxModel* model_) { this->model = model_; }
 
 	void Draw(ViewProjection* viewProjection);
 

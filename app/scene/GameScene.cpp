@@ -1,4 +1,4 @@
-#include "GameScene.h"
+ï»¿#include "GameScene.h"
 #include "FbxLoader.h"
 #include "FbxObject3d.h"
 #include "SphereCollider.h"
@@ -18,13 +18,13 @@ GameScene::~GameScene() {
 	delete player;
 }
 
-///-----•Ï”‚Ì‰Šú‰»-----///
+///-----å¤‰æ•°ã®åˆæœŸåŒ–-----///
 void GameScene::Initialize() {
-	//Šî”Õ
+	//åŸºç›¤
 	dxCommon_ = DirectXCommon::GetInstance();
 	winApp = WinApp::GetInstance();
 	input = Input::GetInstance();
-	//“–‚½‚è”»’è
+	//å½“ãŸã‚Šåˆ¤å®š
 	collisionManager = CollisionManager::GetInstance();
 
 	//player
@@ -32,7 +32,7 @@ void GameScene::Initialize() {
 	player->PlayerInitialize();
 	player->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 0.7f));
 
-	//ƒ‚ƒfƒ‹“Ç‚İ‚İ
+	//ãƒ¢ãƒ‡ãƒ«èª­ã¿è¾¼ã¿
 	skyModel = Model::LoadFromOBJ("sky");
 	seaModel = Model::LoadFromOBJ("sea");
 	block01Model = Model::LoadFromOBJ("block01");
@@ -43,7 +43,7 @@ void GameScene::Initialize() {
 	models.insert(std::make_pair("block01", block01Model));
 	models.insert(std::make_pair("block02", block02Model));
 	models.insert(std::make_pair("stone", stoneModel));
-	//ƒŒƒxƒ‹ƒGƒfƒBƒ^“Ç‚İ‚İ
+	//ãƒ¬ãƒ™ãƒ«ã‚¨ãƒ‡ã‚£ã‚¿èª­ã¿è¾¼ã¿
 	LoadObjFromLevelEditor("scene");
 
 	railCamera = new RailCamera;
@@ -51,59 +51,59 @@ void GameScene::Initialize() {
 
 	xmViewProjection = new XMViewProjection;
 
-	////FbxObject‚ÌÃ“I‰Šú‰»
-	////ƒJƒƒ‰‚ğƒZƒbƒg
+	////FbxObjectã®é™çš„åˆæœŸåŒ–
+	////ã‚«ãƒ¡ãƒ©ã‚’ã‚»ãƒƒãƒˆ
 	//FbxObject3d::SetCamera(viewProjection);
-	////ƒOƒ‰ƒtƒBƒbƒNƒXƒpƒCƒvƒ‰ƒCƒ“‚ğ‰Šú‰»
+	////ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚¹ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã‚’åˆæœŸåŒ–
 	//FbxObject3d::CreateGraphicsPipeline();
 
-	// ƒXƒvƒ‰ƒCƒg‚Ì‰Šú‰»
-	// ƒXƒvƒ‰ƒCƒg
+	// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®åˆæœŸåŒ–
+	// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ
 	sprite = new Sprite();
 	spriteCommon_ = sprite->SpriteCommonCreate(dxCommon_->GetDevice());
 
-	//title‚Ì‰æ‘œ
+	//titleã®ç”»åƒ
 	titleGH.LoadTexture(spriteCommon_, 0, L"Resources/title.png", dxCommon_->GetDevice());
-	titleGH.SpriteCreate(dxCommon_->GetDevice(), 50, 50, 0, Vector2(0.0f, 0.0f), false, false);
+	titleGH.SpriteCreate(dxCommon_->GetDevice(), 0, Vector2(0.0f, 0.0f), false, false);
 	titleGH.SetScale(Vector2(1280 * 1, 720 * 1));
 	titleGH.SpriteTransferVertexBuffer(titleGH, 0);
 	titleGH.SpriteUpdate(titleGH, spriteCommon_);
 
-	//ƒNƒƒXƒwƒA‚Ì‰æ‘œ
+	//ã‚¯ãƒ­ã‚¹ãƒ˜ã‚¢ã®ç”»åƒ
 	for (int i = 0; i < 4; i++) {
 		crosshair[i].LoadTexture(spriteCommon_, 1, L"Resources/crosshair.png", dxCommon_->GetDevice());
-		crosshair[i].SpriteCreate(dxCommon_->GetDevice(), 1280, 720, 1, Vector2(0.5f, 0.5f), false, false);
+		crosshair[i].SpriteCreate(dxCommon_->GetDevice(), 1, Vector2(0.5f, 0.5f), false, false);
 		crosshair[i].SetPosition(Vector3(1100, 0, 0));
 		crosshair[i].SetScale(Vector2(24.0f * (i + 1.0f), 24.0f * (i + 1.0f)));
 		crosshair[i].SpriteTransferVertexBuffer(crosshair[i], 1);
 		crosshair[i].SpriteUpdate(crosshair[i], spriteCommon_);
 	}
 
-	//HP—p‰æ‘œ
-	hp.SpriteCreate(dxCommon_->GetDevice(), 50, 50, 2, Vector2(0.0f, 0.0f), false, false);
+	//HPç”¨ç”»åƒ
+	hp.SpriteCreate(dxCommon_->GetDevice(), 2, Vector2(0.0f, 0.0f), false, false);
 	hp.SetPosition(Vector3(28, 650, 0));
 	hp.SetScale(Vector2(4 * 1, 48 * 1));
 	hp.LoadTexture(spriteCommon_, 2, L"Resources/life.png", dxCommon_->GetDevice());
 	hp.SpriteTransferVertexBuffer(hp, 2);
 	hp.SpriteUpdate(hp, spriteCommon_);
 
-	//gameclear‚Ì‰æ‘œ
+	//gameclearã®ç”»åƒ
 	clearGH.LoadTexture(spriteCommon_, 3, L"Resources/clear.png", dxCommon_->GetDevice());
-	clearGH.SpriteCreate(dxCommon_->GetDevice(), 1280, 720, 3, Vector2(0.0f, 0.0f), false, false);
+	clearGH.SpriteCreate(dxCommon_->GetDevice(), 3, Vector2(0.0f, 0.0f), false, false);
 	clearGH.SetScale(Vector2(1280 * 1, 720 * 1));
 	clearGH.SpriteTransferVertexBuffer(clearGH, 3);
 	clearGH.SpriteUpdate(clearGH, spriteCommon_);
 
-	//gameover‚Ì‰æ‘œ
+	//gameoverã®ç”»åƒ
 	overGH.LoadTexture(spriteCommon_, 4, L"Resources/over.png", dxCommon_->GetDevice());
-	overGH.SpriteCreate(dxCommon_->GetDevice(), 1280, 720, 4, Vector2(0.0f, 0.0f), false, false);
+	overGH.SpriteCreate(dxCommon_->GetDevice(), 4, Vector2(0.0f, 0.0f), false, false);
 	overGH.SetScale(Vector2(1280 * 1, 720 * 1));
 	overGH.SpriteTransferVertexBuffer(overGH, 4);
 	overGH.SpriteUpdate(overGH, spriteCommon_);
 
 	for (int i = 0; i < 10; i++) {
 		lock[i].LoadTexture(spriteCommon_, 1, L"Resources/crosshair.png", dxCommon_->GetDevice());
-		lock[i].SpriteCreate(dxCommon_->GetDevice(), 50, 50, 1, Vector2(0.0f, 0.0f), false, false);
+		lock[i].SpriteCreate(dxCommon_->GetDevice(), 1, Vector2(0.0f, 0.0f), false, false);
 		lock[i].SetScale(Vector2(128 * 1, 128 * 1));
 		lock[i].SpriteTransferVertexBuffer(lock[i], 1);
 		lock[i].SpriteUpdate(lock[i], spriteCommon_);
@@ -111,7 +111,7 @@ void GameScene::Initialize() {
 
 	//fade
 	fade.LoadTexture(spriteCommon_, 5, L"Resources/black.png", dxCommon_->GetDevice());
-	fade.SpriteCreate(dxCommon_->GetDevice(), 1280, 720, 5, Vector2(0.0f, 0.0f), false, false);
+	fade.SpriteCreate(dxCommon_->GetDevice(), 5, Vector2(0.0f, 0.0f), false, false);
 	fade.SetScale(Vector2(1280 * 1, 720 * 1));
 	fade.SpriteTransferVertexBuffer(fade, 5);
 	fade.SpriteUpdate(fade, spriteCommon_);
@@ -120,56 +120,56 @@ void GameScene::Initialize() {
 	fade.SetAlpha(fade, fadeAlpha);
 	//boosHP
 	bossHP.LoadTexture(spriteCommon_, 6, L"Resources/hp.png", dxCommon_->GetDevice());
-	bossHP.SpriteCreate(dxCommon_->GetDevice(), 1280, 720, 6, Vector2(0.0f, 0.5f), false, false);
+	bossHP.SpriteCreate(dxCommon_->GetDevice(), 6, Vector2(0.0f, 0.5f), false, false);
 	bossHP.SetPosition(Vector3(25, 50, 0));
 	bossHP.SetScale(Vector2(2 * 1, 48 * 1));
 	bossHP.SpriteTransferVertexBuffer(bossHP, 6);
 	bossHP.SpriteUpdate(bossHP, spriteCommon_);
 	//gage
 	gage.LoadTexture(spriteCommon_, 7, L"Resources/green.png", dxCommon_->GetDevice());
-	gage.SpriteCreate(dxCommon_->GetDevice(), 1280, 720, 7, Vector2(0.0f, 0.5f), false, false);
+	gage.SpriteCreate(dxCommon_->GetDevice(), 7, Vector2(0.0f, 0.5f), false, false);
 	gage.SetPosition(Vector3(28, 641, 0));
 	gage.SetScale(Vector2(2 * 1, 18 * 1));
 	gage.SpriteTransferVertexBuffer(gage, 7);
 	gage.SpriteUpdate(gage, spriteCommon_);
 	//
 	gageBack.LoadTexture(spriteCommon_, 8, L"Resources/green.png", dxCommon_->GetDevice());
-	gageBack.SpriteCreate(dxCommon_->GetDevice(), 1280, 720, 8, Vector2(0.0f, 0.5f), false, false);
+	gageBack.SpriteCreate(dxCommon_->GetDevice(), 8, Vector2(0.0f, 0.5f), false, false);
 	gageBack.SetPosition(Vector3(28, 641, 0));
 	gageBack.SetScale(Vector2(2 * 178, 18 * 1));
 	gageBack.SetAlpha(gageBack, 0.5f);
 	gageBack.SpriteTransferVertexBuffer(gageBack, 8);
 	gageBack.SpriteUpdate(gageBack, spriteCommon_);
 	//
-	hpBack.SpriteCreate(dxCommon_->GetDevice(), 50, 50, 9, Vector2(0.0f, 0.0f), false, false);
+	hpBack.SpriteCreate(dxCommon_->GetDevice(), 9, Vector2(0.0f, 0.0f), false, false);
 	hpBack.SetPosition(Vector3(28, 650, 0));
 	hpBack.SetScale(Vector2(396, 48 * 1));
 	hpBack.LoadTexture(spriteCommon_, 9, L"Resources/life.png", dxCommon_->GetDevice());
 	hpBack.SetAlpha(hpBack, 0.5f);
 	hpBack.SpriteTransferVertexBuffer(hpBack, 9);
 	hpBack.SpriteUpdate(hpBack, spriteCommon_);
-	//ƒtƒF[ƒhƒAƒEƒg
-	fadeout.SpriteCreate(dxCommon_->GetDevice(), 50, 50, 10, Vector2(1.0f, 0.0f), false, false);
-	fadeout.SetScale(Vector2(1280 * 1, 1120 * 1));
-	fadeout.SetPosition({ 0,100,0 });
-	fadeout.SetRotation(45);
+	//ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆ
+	fadeout.SpriteCreate(dxCommon_->GetDevice(), 10, Vector2(0.0f, 0.0f), false, false);
+	fadeout.SetScale(Vector2(128 * 1, 112 * 1));
+	fadeout.SetPosition({ 200,360,0 });
+	fadeout.SetRotation(180.0f);
 	fadeout.SpriteTransferVertexBuffer(fadeout, 10);
 	fadeout.SpriteUpdate(fadeout, spriteCommon_);
 	fadeout.LoadTexture(spriteCommon_, 10, L"Resources/fade.png", dxCommon_->GetDevice());
 
-	//ƒp[ƒeƒBƒNƒ‹‰Šú‰»
+	//ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«åˆæœŸåŒ–
 	particle = Particle::LoadParticleTexture("blue.png");
 	pm_ = ParticleManager::Create();
 	particle_ = Particle::LoadParticleTexture("crosshair.png");
 	pm = ParticleManager::Create();
-	//ƒIƒuƒWƒFƒNƒg‚Éƒ‚ƒfƒ‹‚ğ•R•t‚¯‚é
+	//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ãƒ¢ãƒ‡ãƒ«ã‚’ç´ä»˜ã‘ã‚‹
 	pm->SetParticleModel(particle);
 	pm_->SetParticleModel(particle_);
-	//ƒJƒƒ‰‚ğƒZƒbƒg
+	//ã‚«ãƒ¡ãƒ©ã‚’ã‚»ãƒƒãƒˆ
 	pm->SetXMViewProjection(xmViewProjection);
 	pm_->SetXMViewProjection(xmViewProjection);
 
-	////ƒ‚ƒfƒ‹–¼‚ğw’è‚µ‚Ä“Ç‚İ‚İ
+	////ãƒ¢ãƒ‡ãƒ«åã‚’æŒ‡å®šã—ã¦èª­ã¿è¾¼ã¿
 	//obj = new FbxObject3d;
 	//obj->Initialize();
 	//model = FbxLoader::GetInstance()->LoadModelFlomFile("cube");
@@ -183,11 +183,11 @@ void GameScene::Initialize() {
 	boss->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 10.0f));
 
 
-	//ƒXƒvƒ‰ƒCƒ“§Œä“_‚Ì“Ç‚İ‚İ
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒ³åˆ¶å¾¡ç‚¹ã®èª­ã¿è¾¼ã¿
 	stageNum = 1;
-	LoadStage(stageNum);
-	LoadEnemy(stageNum);
-	//•Ï”
+	LoadStage();
+	LoadEnemy();
+	//å¤‰æ•°
 	isCheckPoint = false;
 	isPlayable = false;
 	gameState = MAIN;
@@ -200,11 +200,11 @@ void GameScene::Initialize() {
 	isStart = false;
 }
 
-///-----XVˆ—-----///
+///-----æ›´æ–°å‡¦ç†-----///
 void GameScene::Update() {
-	//ƒNƒƒXƒwƒA‚ğXV
+	//ã‚¯ãƒ­ã‚¹ãƒ˜ã‚¢ã‚’æ›´æ–°
 	GetCrosshair();
-	//ƒŠƒZƒbƒg
+	//ãƒªã‚»ãƒƒãƒˆ
 	if (Input::GetInstance()->TriggerKey(DIK_R)) {
 		Reset();
 		gameState = MAIN;
@@ -229,7 +229,7 @@ void GameScene::Update() {
 		}
 		isStart = true;
 	}
-	//ƒƒCƒ“ƒQ[ƒ€ŠJnƒtƒF[ƒhƒAƒEƒg
+	//ãƒ¡ã‚¤ãƒ³ã‚²ãƒ¼ãƒ é–‹å§‹æ™‚ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆ
 	//if (fadeout.GetPosition().y < 400) {
 	//	fadeout.SetPosition(fadeout.GetPosition() + Vector3(0, 40, 0));
 	//	fadeout.SpriteUpdate(fadeout, spriteCommon_);
@@ -238,7 +238,7 @@ void GameScene::Update() {
 	Vector3 shotVec = { 0,0,0 };
 
 
-  //‘€ì‰Â”\ó‘Ô‚È‚çHP‚ğXV
+  //æ“ä½œå¯èƒ½çŠ¶æ…‹ãªã‚‰HPã‚’æ›´æ–°
 	if (isPlayable == true) {
 		//playerhp
 		float playerHp_ = player->GetHP() - (hp.GetScale().x / 4);
@@ -298,14 +298,14 @@ void GameScene::Update() {
 		gage.SpriteUpdate(gage, spriteCommon_);
 	}
 
-	//ƒƒCƒ“ƒQ[ƒ€’†
+	//ãƒ¡ã‚¤ãƒ³ã‚²ãƒ¼ãƒ ä¸­
 	switch (gameState)
 	{
-		//ƒƒCƒ“ƒQ[ƒ€
+		//ãƒ¡ã‚¤ãƒ³ã‚²ãƒ¼ãƒ 
 	case GameScene::MAIN:
-		//ƒQ[ƒ€ƒXƒ^[ƒg‰‰o
+		//ã‚²ãƒ¼ãƒ ã‚¹ã‚¿ãƒ¼ãƒˆæ™‚æ¼”å‡º
 		if (gameTime > 0) {
-			//SPACE‚Å‰‰oƒXƒLƒbƒv
+			//SPACEã§æ¼”å‡ºã‚¹ã‚­ãƒƒãƒ—
 			if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 				gameTime = 1;
 			}
@@ -317,13 +317,13 @@ void GameScene::Update() {
 			}
 			player->worldTransform_.UpdateMatrix();
 		}
-		//ƒQ[ƒ€’†
+		//ã‚²ãƒ¼ãƒ ä¸­
 		if (gameTime == 0) {
-			//‘€ì•s‰Âó‘Ô‚ğ‰ğœ
+			//æ“ä½œä¸å¯çŠ¶æ…‹ã‚’è§£é™¤
 			if (isPlayable == false) {
 				isPlayable = true;
 			}
-			//bossí‚Ö
+			//bossæˆ¦ã¸
 			if (railCamera->GetOnRail() == false) {
 				if (isCheckPoint == false) {
 					isCheckPoint = true;
@@ -334,12 +334,12 @@ void GameScene::Update() {
 					railCamera->Initialize(player);
 				}
 			}
-			/////ƒfƒoƒbƒN—p(ƒ{ƒX‚Ü‚ÅƒXƒLƒbƒv)/////
+			/////ãƒ‡ãƒãƒƒã‚¯ç”¨(ãƒœã‚¹ã¾ã§ã‚¹ã‚­ãƒƒãƒ—)/////
 			if (input->TriggerKey(DIK_B)) {
 				railCamera->SetOnRail(false);
 			}
 
-			//playerXV(ƒJƒƒ‰‚Ì‘O)
+			//playeræ›´æ–°(ã‚«ãƒ¡ãƒ©ã®å‰)
 			if (input->PushMouseLeft()) {
 				shotVec = GetScreenToWorldPos(crosshair[0], railCamera);
 			}
@@ -351,28 +351,28 @@ void GameScene::Update() {
 				}
 				LockedClear();
 			}
-			//XV
+			//æ›´æ–°
 			railCamera->Update(player, points);
-			//ƒ_ƒ[ƒW‚ğ‚­‚ç‚Á‚½‚Æ‚«‚É‰æ–ÊƒVƒFƒCƒN
+			//ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ãã‚‰ã£ãŸã¨ãã«ç”»é¢ã‚·ã‚§ã‚¤ã‚¯
 			if (player->GetIsHit() == true) {
 				railCamera->ShakeCamera(-0.2f, 0.2f);
 			}
 		}
 		break;
-		//ƒ{ƒXí
+		//ãƒœã‚¹æˆ¦
 	case GameScene::BOSS:
 		if (boss->GetTimer() > 0) {
 			player->SetIsHit(false);
-			//player‚ğ‘€ì•s‰Â‚É
+			//playerã‚’æ“ä½œä¸å¯ã«
 			if (isPlayable == true) {
 				isPlayable = false;
 				railCamera->GetView()->SetEye(Vector3(-40, 55, -150));
 			}
-			//SPACE‚Å‰‰oƒXƒLƒbƒv
+			//SPACEã§æ¼”å‡ºã‚¹ã‚­ãƒƒãƒ—
 			if (input->TriggerKey(DIK_SPACE)) {
 				boss->SkipMovie();
 			}
-			//‰‰o
+			//æ¼”å‡º
 			railCamera->GetView()->SetTarget(boss->GetPosition());
 			if (boss->GetTimer() == 150) {
 				railCamera->GetView()->SetEye(Vector3(-80, 55, -300));
@@ -382,7 +382,7 @@ void GameScene::Update() {
 			}
 		}
 		else {
-			//‘€ì‰Â”\ó‘Ô‚É
+			//æ“ä½œå¯èƒ½çŠ¶æ…‹ã«
 			if (isPlayable == false) {
 				railCamera->GetView()->SetEye(Vector3(0, 60, -95));
 				railCamera->GetView()->SetTarget(Vector3(0, 52, -200));
@@ -419,7 +419,7 @@ void GameScene::Update() {
 			}
 			bossHP.SpriteTransferVertexBuffer(bossHP, 6);
 			bossHP.SpriteUpdate(bossHP, spriteCommon_);
-			//playerXV(ƒJƒƒ‰‚Ì‘O)
+			//playeræ›´æ–°(ã‚«ãƒ¡ãƒ©ã®å‰)
 			if (input->PushMouseLeft()) {
 				shotVec = GetScreenToWorldPos(crosshair[0], railCamera);
 			}
@@ -432,7 +432,7 @@ void GameScene::Update() {
 				LockedClear();
 			}
 
-			//ƒJƒƒ‰XV
+			//ã‚«ãƒ¡ãƒ©æ›´æ–°
 			if (railCamera->GetOnRail() == false) {
 				gameTime++;
 				if (gameTime == 300) {
@@ -443,7 +443,7 @@ void GameScene::Update() {
 			railCamera->Update(player, bossPoint);
 			railCamera->GetView()->SetTarget(boss->GetPosition());
 			railCamera->GetCamera()->SetRotation(railCamera->GetView()->GetTarget());
-			//ƒJƒƒ‰§Œä
+			//ã‚«ãƒ¡ãƒ©åˆ¶å¾¡
 			if (bossPass == 0) {
 				if (railCamera->GetPasPoint() + 1.0f > 3.0f) {
 					railCamera->SetOnRail(false);
@@ -480,9 +480,9 @@ void GameScene::Update() {
 			LockedClear();
 			GameSceneManager::GetInstance()->ChangeScene("CLEAR");
 		}
-		//XV
+		//æ›´æ–°
 		boss->Update(player->GetWorldPos());
-		//ƒ_ƒ[ƒW‚ğ‚­‚ç‚Á‚½‚Æ‚«‚É‰æ–ÊƒVƒFƒCƒN
+		//ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ãã‚‰ã£ãŸã¨ãã«ç”»é¢ã‚·ã‚§ã‚¤ã‚¯
 		if (player->GetIsHit() == true) {
 			railCamera->ShakeCamera(-2.0f, 2.0f);
 		}
@@ -501,7 +501,7 @@ void GameScene::Update() {
 		}
 		break;
 	}
-	//////////////‘€ì‰Â”\‚È‚çXV///////////////////
+	//////////////æ“ä½œå¯èƒ½ãªã‚‰æ›´æ–°///////////////////
 	if (player->GetIsUltimate() == true && gameState != ULT) {
 		cameraTmpPos = railCamera->GetView()->GetEye();
 		cameraTmpRot = railCamera->GetView()->GetTarget();
@@ -510,98 +510,98 @@ void GameScene::Update() {
 		gameState_bak = gameState;
 		gameState = ULT;
 	}
-	//ƒfƒXƒtƒ‰ƒO‚Ì—§‚Á‚½“G‚ğíœ
+	//ãƒ‡ã‚¹ãƒ•ãƒ©ã‚°ã®ç«‹ã£ãŸæ•µã‚’å‰Šé™¤
 	enemys_.remove_if([](std::unique_ptr < Enemy>& enemy_) {
 		return enemy_->GetIsDead();
 		});
-	//“GƒLƒƒƒ‰‚ÌXV
-	for (const std::unique_ptr<Enemy>& enemy : enemys_) {
-		enemy->Update(player->GetWorldPos(), railCamera->GetPasPoint());
+	//æ•µã‚­ãƒ£ãƒ©ã®æ›´æ–°
+	for (const std::unique_ptr<Enemy>& enemy_ : enemys_) {
+		enemy_->Update(player->GetWorldPos(), railCamera->GetPasPoint());
 	}
-	//•KE‹ZƒGƒlƒ‹ƒM[
+	//å¿…æ®ºæŠ€ã‚¨ãƒãƒ«ã‚®ãƒ¼
 	for (const std::unique_ptr<Energy>& energy : energys_) {
 		energy->Update(player->GetWorldPos(), railCamera->GetCamera()->GetRotation());
 	}
-	//ƒfƒXƒtƒ‰ƒO‚Ì—§‚Á‚½“G‚ğíœ
-	energys_.remove_if([](std::unique_ptr <Energy>& energys_) {
-		return energys_->GetIsDead();
+	//ãƒ‡ã‚¹ãƒ•ãƒ©ã‚°ã®ç«‹ã£ãŸæ•µã‚’å‰Šé™¤
+	energys_.remove_if([](std::unique_ptr <Energy>& energys) {
+		return energys->GetIsDead();
 		});
 	//gameover
 	if (player->GetHP() == 0) {
 		LockedClear();
 		GameSceneManager::GetInstance()->ChangeScene("OVER");
 	}
-	//“–‚½‚è”»’èƒ`ƒFƒbƒN
+	//å½“ãŸã‚Šåˆ¤å®šãƒã‚§ãƒƒã‚¯
 	collisionManager->CheckAllCollisions();
 }
 
 void GameScene::Draw() {
-#pragma region 3DƒIƒuƒWƒFƒNƒg•`‰æ
+#pragma region 3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»
 
 	dxCommon_->PreDraw();
 
-	// 3DƒIƒuƒWƒFƒNƒg•`‰æ‘Oˆ—
+	// 3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»å‰å‡¦ç†
 	Object3d::PreDraw(dxCommon_->GetCommandList());
 
-	//”wŒiƒIƒuƒWƒFƒNƒg
+	//èƒŒæ™¯ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 	for (auto& object : objects) {
 		object->Draw(railCamera->GetView());
 	}
-	//“GƒLƒƒƒ‰‚Ì•`‰æ
-	for (const std::unique_ptr<Enemy>& enemy : enemys_) {
-		enemy->EnemyDraw(railCamera->GetView());
+	//æ•µã‚­ãƒ£ãƒ©ã®æç”»
+	for (const std::unique_ptr<Enemy>& enemy_ : enemys_) {
+		enemy_->EnemyDraw(railCamera->GetView());
 	}
 	for (const std::unique_ptr<Energy>& energy : energys_) {
 		energy->Draw(railCamera->GetView());
 	}
-	//ƒ{ƒX
+	//ãƒœã‚¹
 	if (gameState == BOSS) {
 		boss->BossDraw(railCamera->GetView());
 	}
-	//ƒvƒŒƒCƒ„[
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼
 	player->PlayerDraw(railCamera->GetView());
 
-	// 3DƒIƒuƒWƒFƒNƒg•`‰æŒãˆ—
+	// 3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»å¾Œå‡¦ç†
 	Object3d::PostDraw();
 
 #pragma endregion
 
-#pragma region FBX3DƒIƒuƒWƒFƒNƒg•`‰æ
+#pragma region FBX3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»
 
-	//// 3DƒIƒuƒWƒFƒNƒg•`‰æ‘Oˆ—
+	//// 3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»å‰å‡¦ç†
 	//FbxObject3d::PreDraw(dxCommon_->GetCommandList());
 
-	//// 3DƒIƒuƒWƒFƒNƒg•`‰æŒãˆ—
+	//// 3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»å¾Œå‡¦ç†
 	//FbxObject3d::PostDraw();
 
 #pragma endregion
 
-#pragma region ƒp[ƒeƒBƒNƒ‹•`‰æ
+#pragma region ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«æç”»
 
-	// ƒp[ƒeƒBƒNƒ‹•`‰æ‘Oˆ—
+	// ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«æç”»å‰å‡¦ç†
 	ParticleManager::PreDraw(dxCommon_->GetCommandList());
 
-	///==== ƒp[ƒeƒBƒNƒ‹•`‰æ ====///
-	//ƒp[ƒeƒBƒNƒ‹
+	///==== ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«æç”» ====///
+	//ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«
 	/*pm->Draw();
 	pm_->Draw();*/
 
-	// ƒp[ƒeƒBƒNƒ‹•`‰æŒãˆ—
+	// ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«æç”»å¾Œå‡¦ç†
 	ParticleManager::PostDraw();
 
 #pragma endregion
 
-#pragma region ƒXƒvƒ‰ƒCƒg•`‰æ
+#pragma region ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»
 
-	// ƒXƒvƒ‰ƒCƒg•`‰æ‘Oˆ—
+	// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»å‰å‡¦ç†
 	Sprite::PreDraw(dxCommon_->GetCommandList(), spriteCommon_);
 
-	///=== ƒXƒvƒ‰ƒCƒg•`‰æ ===///
+	///=== ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”» ===///
 
 	if (gameState == BOSS) {
 		fade.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		if (boss->GetTimer() == 0) {
-			//ƒ{ƒX‚ÌHP
+			//ãƒœã‚¹ã®HP
 			bossHP.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		}
 	}
@@ -619,106 +619,60 @@ void GameScene::Draw() {
 	for (int i = 0; i < infos.size(); i++) {
 		lock[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 	}
-	fadeout.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+	/*fadeout.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());*/
 
-	// ƒXƒvƒ‰ƒCƒg•`‰æŒãˆ—
+	// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»å¾Œå‡¦ç†
 	Sprite::PostDraw();
 
 	dxCommon_->PostDraw();
 }
 
-void GameScene::LoadStage(int stageNum) {
+void GameScene::LoadStage() {
 	points.clear();
 	bossPoint.clear();
 
-	//ƒtƒ@ƒCƒ‹‚ğŠJ‚­
+	//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã
 	std::ifstream file;
 	file.open("Resources/csv/stagePop.csv");
 	assert(file.is_open());
 
-	HRESULT result = S_FALSE;
-
 	std::string num;
-	num = stageNum + 48;
+	num = "1";
 
-	// ‚Ps‚¸‚Â“Ç‚İ‚Ş
+	// ï¼‘è¡Œãšã¤èª­ã¿è¾¼ã‚€
 	string line;
 	while (getline(file, line)) {
 
-		// ‚Ps•ª‚Ì•¶š—ñ‚ğƒXƒgƒŠ[ƒ€‚É•ÏŠ·‚µ‚Ä‰ğÍ‚µ‚â‚·‚­‚·‚é
+		// ï¼‘è¡Œåˆ†ã®æ–‡å­—åˆ—ã‚’ã‚¹ãƒˆãƒªãƒ¼ãƒ ã«å¤‰æ›ã—ã¦è§£æã—ã‚„ã™ãã™ã‚‹
 		std::istringstream line_stream(line);
 
-		// ”¼ŠpƒXƒp[ƒX‹æØ‚è‚Ås‚Ìæ“ª•¶š—ñ‚ğæ“¾
+		// åŠè§’ã‚¹ãƒ‘ãƒ¼ã‚¹åŒºåˆ‡ã‚Šã§è¡Œã®å…ˆé ­æ–‡å­—åˆ—ã‚’å–å¾—
 		string key;
 		getline(line_stream, key, ' ');
 
 
-		// æ“ª•¶š—ñ‚ªst‚È‚çƒXƒe[ƒW
-		if (key == "st" + num) {
-			// X,Y,ZÀ•W“Ç‚İ‚İ
+		// å…ˆé ­æ–‡å­—åˆ—ãŒstãªã‚‰ã‚¹ãƒ†ãƒ¼ã‚¸
+		if (key == "st") {
+			// X,Y,Zåº§æ¨™èª­ã¿è¾¼ã¿
 			Vector3 position{};
 			line_stream >> position.x;
 			line_stream >> position.y;
 			line_stream >> position.z;
-			// À•Wƒf[ƒ^‚É’Ç‰Á
+			// åº§æ¨™ãƒ‡ãƒ¼ã‚¿ã«è¿½åŠ 
 			points.emplace_back(position);
 		}
-		if (stageNum == 10) {
-			if (key == "st10") {
-				// X,Y,ZÀ•W“Ç‚İ‚İ
-				Vector3 position{};
-				line_stream >> position.x;
-				line_stream >> position.y;
-				line_stream >> position.z;
-				// À•Wƒf[ƒ^‚É’Ç‰Á
-				points.emplace_back(position);
-			}
-		}
-		else if (stageNum > 10) {
-			if (key == "st1" + stageNum - 10) {
-				// X,Y,ZÀ•W“Ç‚İ‚İ
-				Vector3 position{};
-				line_stream >> position.x;
-				line_stream >> position.y;
-				line_stream >> position.z;
-				// À•Wƒf[ƒ^‚É’Ç‰Á
-				points.emplace_back(position);
-			}
-		}
-		//æ“ª•¶š‚ªbo‚È‚çƒ{ƒX
-		if (key == "bo" + num) {
-			// X,Y,ZÀ•W“Ç‚İ‚İ
+		//å…ˆé ­æ–‡å­—ãŒboãªã‚‰ãƒœã‚¹
+		if (key == "bo") {
+			// X,Y,Zåº§æ¨™èª­ã¿è¾¼ã¿
 			Vector3 position{};
 			line_stream >> position.x;
 			line_stream >> position.y;
 			line_stream >> position.z;
-			// À•Wƒf[ƒ^‚É’Ç‰Á
+			// åº§æ¨™ãƒ‡ãƒ¼ã‚¿ã«è¿½åŠ 
 			bossPoint.emplace_back(position);
 		}
-		if (stageNum == 10) {
-			if (key == "st10") {
-				// X,Y,ZÀ•W“Ç‚İ‚İ
-				Vector3 position{};
-				line_stream >> position.x;
-				line_stream >> position.y;
-				line_stream >> position.z;
-				// À•Wƒf[ƒ^‚É’Ç‰Á
-				bossPoint.emplace_back(position);
-			}
-		}
-		else if (stageNum > 10) {
-			if (key == "st1" + stageNum - 10) {
-				// X,Y,ZÀ•W“Ç‚İ‚İ
-				Vector3 position{};
-				line_stream >> position.x;
-				line_stream >> position.y;
-				line_stream >> position.z;
-				// À•Wƒf[ƒ^‚É’Ç‰Á
-				bossPoint.emplace_back(position);
-			}
-		}
 	}
-	// ƒtƒ@ƒCƒ‹‚Æ•Â‚¶‚é
+	// ãƒ•ã‚¡ã‚¤ãƒ«ã¨é–‰ã˜ã‚‹
 	file.close();
 }
 
@@ -743,8 +697,8 @@ void GameScene::Reset() {
 	railCamera = new RailCamera;
 	railCamera->Initialize(player);
 	//enemy
-	LoadEnemy(stageNum);
-	//•Ï”
+	LoadEnemy();
+	//å¤‰æ•°
 	isCheckPoint = false;
 	isPlayable = false;
 	cursorRotate = 0.001f;
@@ -762,7 +716,7 @@ void GameScene::Finalize()
 {
 }
 
-void GameScene::LoadEnemy(int stageNum) {
+void GameScene::LoadEnemy() {
 
 	Spline spline;
 	spline.Initialize();
@@ -778,40 +732,38 @@ void GameScene::LoadEnemy(int stageNum) {
 
 	enemys_.clear();
 
-	//ƒtƒ@ƒCƒ‹‚ğŠJ‚­
+	//ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã
 	std::ifstream file;
 	file.open("Resources/csv/EnemyPop.csv");
 	assert(file.is_open());
 
-	HRESULT result = S_FALSE;
 
 	std::string num;
-	num = stageNum + 48;
+	num = "0";
 
-	// ‚Ps‚¸‚Â“Ç‚İ‚Ş
+	// ï¼‘è¡Œãšã¤èª­ã¿è¾¼ã‚€
 	string line;
 	while (getline(file, line)) {
 
-		// ‚Ps•ª‚Ì•¶š—ñ‚ğƒXƒgƒŠ[ƒ€‚É•ÏŠ·‚µ‚Ä‰ğÍ‚µ‚â‚·‚­‚·‚é
+		// ï¼‘è¡Œåˆ†ã®æ–‡å­—åˆ—ã‚’ã‚¹ãƒˆãƒªãƒ¼ãƒ ã«å¤‰æ›ã—ã¦è§£æã—ã‚„ã™ãã™ã‚‹
 		std::istringstream line_stream(line);
 
-		// ”¼ŠpƒXƒp[ƒX‹æØ‚è‚Ås‚Ìæ“ª•¶š—ñ‚ğæ“¾
+		// åŠè§’ã‚¹ãƒ‘ãƒ¼ã‚¹åŒºåˆ‡ã‚Šã§è¡Œã®å…ˆé ­æ–‡å­—åˆ—ã‚’å–å¾—
 		string key;
 		getline(line_stream, key, ' ');
 
 		string word;
 		getline(line_stream, word, ' ');
 
-		if (stageNum < 10) {
-			// æ“ª•¶š—ñ‚ª‚–‚È‚ç’¸“_À•W
-			if (key == "ea" + num) {
-				//“G‚Ì¶¬
+			// å…ˆé ­æ–‡å­—åˆ—ãŒï½–ãªã‚‰é ‚ç‚¹åº§æ¨™
+			if (key == "ea") {
+				//æ•µã®ç”Ÿæˆ
 				std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
-				//“G‚Ì‰Šú‰»
+				//æ•µã®åˆæœŸåŒ–
 				newEnemy->EnemyInitialize();
-				////ƒRƒ‰ƒCƒ_[‚Ì’Ç‰Á
+				////ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®è¿½åŠ 
 				newEnemy->SetCollider(new SphereCollider());
-				// X,Y,ZÀ•W“Ç‚İ‚İ
+				// X,Y,Zåº§æ¨™èª­ã¿è¾¼ã¿
 				Vector3 position{};
 				float t;
 
@@ -834,15 +786,14 @@ void GameScene::LoadEnemy(int stageNum) {
 					position = spline.EnemyPosition(pointsR, t);
 				}
 
-				// À•Wƒf[ƒ^‚É’Ç‰Á
+				// åº§æ¨™ãƒ‡ãƒ¼ã‚¿ã«è¿½åŠ 
 				newEnemy->SetPosition(position);
 				newEnemy->SetScale({ 0.6f,0.6f,0.6f });
-				//“o˜^
+				//ç™»éŒ²
 				enemys_.push_back(std::move(newEnemy));
 			}
-		}
 	}
-	// ƒtƒ@ƒCƒ‹‚Æ•Â‚¶‚é
+	// ãƒ•ã‚¡ã‚¤ãƒ«ã¨é–‰ã˜ã‚‹
 	file.close();
 }
 
@@ -866,17 +817,16 @@ void GameScene::SerchEnemy()
 			}
 		}
 
-		for (const std::unique_ptr<Enemy>& enemy : enemys_) {
-			Vector3 epos2 = GetWorldToScreenPos(enemy->GetWorldPos(), railCamera);
-			Vector3 len = enemy->GetWorldPos() - player->GetWorldPos();
-			float len_ = len.length();
+		for (const std::unique_ptr<Enemy>& enemy_ : enemys_) {
+			Vector3 epos2 = GetWorldToScreenPos(enemy_->GetWorldPos(), railCamera);
+			Vector3 len = enemy_->GetWorldPos() - player->GetWorldPos();
 			if (pow((epos2.x - cur.x), 2) + pow((epos2.y - cur.y), 2) < pow(30, 2)) {
-				if (enemy->GetIsLocked() == false && infos.size() < 10) {
+				if (enemy_->GetIsLocked() == false && infos.size() < 10) {
 					LockInfo info;
-					info.vec = enemy->GetWorldPos();
-					info.obj = enemy->GetPointer();
+					info.vec = enemy_->GetWorldPos();
+					info.obj = enemy_->GetPointer();
 					infos.push_back(info);
-					enemy->SetIsLocked(true);
+					enemy_->SetIsLocked(true);
 				}
 			}
 		}
@@ -889,7 +839,7 @@ void GameScene::SerchEnemy()
 			cursorRotate -= 0.0001f;
 		}
 	}
-	//ƒƒbƒNƒIƒ“‰æ‘œ‚ÌXV
+	//ãƒ­ãƒƒã‚¯ã‚ªãƒ³ç”»åƒã®æ›´æ–°
 	for (int i = 0; i < infos.size(); i++) {
 		lock[i].SetScale(GetWorldToScreenScale(infos[i].obj, railCamera));
 		lock[i].SetPosition(GetWorldToScreenPos(infos[i].obj->GetWorldPos(), railCamera) - (Vector3(lock[i].GetScale().x, lock[i].GetScale().y, 0) / 2));
@@ -905,9 +855,9 @@ void GameScene::LockedClear()
 			boss->SetIsLocked(false);
 		}
 
-		for (const std::unique_ptr<Enemy>& enemy : enemys_) {
-			if (enemy->GetIsLocked() == true) {
-				enemy->SetIsLocked(false);
+		for (const std::unique_ptr<Enemy>& enemy_ : enemys_) {
+			if (enemy_->GetIsLocked() == true) {
+				enemy_->SetIsLocked(false);
 			}
 		}
 		infos.clear();
@@ -917,7 +867,7 @@ void GameScene::LockedClear()
 void GameScene::GetCrosshair()
 {
 	Vector3 mPos = input->GetMousePos();
-	//ƒ}ƒEƒXƒJ[ƒ\ƒ‹‚ÌêŠ‚ÉƒNƒƒXƒwƒA‚ğ•\¦
+	//ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«ã®å ´æ‰€ã«ã‚¯ãƒ­ã‚¹ãƒ˜ã‚¢ã‚’è¡¨ç¤º
 	if (gameState == MAIN) {
 		for (int i = 0; i < 4; i++) {
 			if (i == 0) {
@@ -965,16 +915,16 @@ void GameScene::GetCrosshair()
 
 void GameScene::PopEnergy(Vector3 pos_)
 {
-	//—”¶¬‘•’u
+	//ä¹±æ•°ç”Ÿæˆè£…ç½®
 	std::random_device seed_gen;
 	std::mt19937_64 engine(seed_gen());
 	std::uniform_real_distribution<float>dist(-1.5f, 1.5f);
 	std::uniform_real_distribution<float>dist2(-2.5f, 2.5f);
 	std::uniform_real_distribution<float>dist3(-1.5f, 1.5f);
-	//’e‚ğ¶¬‚µ‰Šú‰»
+	//å¼¾ã‚’ç”Ÿæˆã—åˆæœŸåŒ–
 	std::unique_ptr<Energy> newEnergy = std::make_unique<Energy>();
 
-	//’P”­													   
+	//å˜ç™º													   
 	newEnergy->EnergyInitialize();
 	newEnergy->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 2.0f));
 	newEnergy->SetPosition(pos_ + Vector3(dist(engine), dist2(engine), dist3(engine)));
@@ -987,37 +937,37 @@ Vector3 GameScene::GetScreenToWorldPos(Sprite& sprite_, RailCamera* rail)
 		return Vector3(0, 0, 1);
 	}
 
-	//ƒrƒ…[ƒ|[ƒgs—ñ¶¬
+	//ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆè¡Œåˆ—ç”Ÿæˆ
 	Matrix4 viewPort = viewPort.ViewPortMat(WinApp::window_width, WinApp::window_height, Vector2(0.0f, 0.0f));
 
-	//ƒrƒ…[ƒvƒƒWƒFƒNƒVƒ‡ƒ“ƒrƒ…[ƒ|[ƒg‡¬s—ñ
+	//ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆåˆæˆè¡Œåˆ—
 	Matrix4 invViewPort = viewPort;
 	invViewPort.MakeInverse();
-	//ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ//
+	//ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—//
 	float fovAngleY = 45.0f * (3.141592f / 180.0f);;
 	float aspectRatio = (float)WinApp::window_width / WinApp::window_height;
-	//ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ¶¬
+	//ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—ç”Ÿæˆ
 	Matrix4 projection = projection.ProjectionMat(fovAngleY, aspectRatio, 0.1f, 200.0f);
 	Matrix4 invProjection = projection;
 	invProjection.MakeInverse();
-	//ƒrƒ…[s—ñ//
+	//ãƒ“ãƒ¥ãƒ¼è¡Œåˆ—//
 	Matrix4 view = railCamera->GetView()->GetMatView();
 	Matrix4 invView = view;
 	invView.MakeInverse();
-	////‡¬s—ñ‚Ì‹ts—ñ‚ğŒvZ‚·‚é
+	////åˆæˆè¡Œåˆ—ã®é€†è¡Œåˆ—ã‚’è¨ˆç®—ã™ã‚‹
 	Matrix4 matInverseVPV = invViewPort * invProjection * invView;
-	//ƒXƒNƒŠ[ƒ“À•WŒn‚©‚çƒ[ƒ‹ƒhÀ•WŒn
+	//ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ç³»ã‹ã‚‰ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ç³»
 	Matrix4 mat1, mat2;
-	//wœZ
+	//wé™¤ç®—
 	Vector3 posNear = Vector3(sprite_.GetPosition().x, sprite_.GetPosition().y, 0);
 	Vector3 posFar = Vector3(sprite_.GetPosition().x, sprite_.GetPosition().y, 1);
 	posNear = mat1.transform(posNear, matInverseVPV);
 	posFar = mat2.transform(posFar, matInverseVPV);
 
-	//ƒ}ƒEƒXƒŒƒC‚Ì•ûŒü
+	//ãƒã‚¦ã‚¹ãƒ¬ã‚¤ã®æ–¹å‘
 	Vector3 mouseDirection = posFar - posNear;
 	mouseDirection = mouseDirection.normalize();
-	//ƒJƒƒ‰‚©‚çÆ€ƒIƒuƒWƒFƒNƒg‚Ì‹——£
+	//ã‚«ãƒ¡ãƒ©ã‹ã‚‰ç…§æº–ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®è·é›¢
 	const float kDistanceTestObject = 0.05f;
 
 	Vector3 pos = player->GetWorldPos();
@@ -1032,14 +982,14 @@ Vector3 GameScene::GetWorldToScreenPos(Vector3 pos_, RailCamera* rail)
 		return Vector3(0, 0, 0);
 	}
 
-	//ƒrƒ…[s—ñ//
+	//ãƒ“ãƒ¥ãƒ¼è¡Œåˆ—//
 	Matrix4 view = railCamera->GetView()->GetMatView();
-	//ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ//
+	//ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—//
 	float fovAngleY = 45.0f * (3.141592f / 180.0f);;
 	float aspectRatio = (float)WinApp::window_width / WinApp::window_height;
-	//ƒvƒƒWƒFƒNƒVƒ‡ƒ“s—ñ¶¬
+	//ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ã‚·ãƒ§ãƒ³è¡Œåˆ—ç”Ÿæˆ
 	Matrix4 projection = projection.ProjectionMat(fovAngleY, aspectRatio, 0.1f, 200.0f);
-	//ƒrƒ…[ƒ|[ƒgs—ñ¶¬
+	//ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆè¡Œåˆ—ç”Ÿæˆ
 	Matrix4 viewPort = viewPort.ViewPortMat(WinApp::window_width, WinApp::window_height, Vector2(0.0f, 0.0f));
 
 	Matrix4 matVPV = view * projection * viewPort;
@@ -1052,20 +1002,20 @@ Vector3 GameScene::GetWorldToScreenPos(Vector3 pos_, RailCamera* rail)
 	return posScreen;
 }
 
-Vector2 GameScene::GetWorldToScreenScale(Object3d* obj, RailCamera* rail)
+Vector2 GameScene::GetWorldToScreenScale(Object3d* obj_, RailCamera* rail)
 {
 	if (rail == nullptr) {
 		return Vector2(0, 0);
 	}
 
-	Vector3 v = obj->GetPosition() - rail->GetView()->GetEye();
+	Vector3 v = obj_->GetPosition() - rail->GetView()->GetEye();
 	v.normalize();
 	float len = v.length();
 
 	float x = 64;
-	x *= obj->GetScale().x;
+	x *= obj_->GetScale().x;
 	float y = 64;
-	y *= obj->GetScale().y;
+	y *= obj_->GetScale().y;
 
 
 	return Vector2(x / len, y / len);
@@ -1075,29 +1025,29 @@ Vector2 GameScene::GetWorldToScreenScale(Object3d* obj, RailCamera* rail)
 //	JsonLoader* file = nullptr;
 //	LevelData* levelData = file->LoadFile(fileName);
 //
-//	//ƒIƒuƒWƒFƒNƒg”z’u
+//	//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé…ç½®
 //	for (auto& objectData : levelData->objects) {
-//		//ƒtƒ@ƒCƒ‹–¼‚©‚ç“o˜^Ï‚İƒ‚ƒfƒ‹‚ğŒŸõ
+//		//ãƒ•ã‚¡ã‚¤ãƒ«åã‹ã‚‰ç™»éŒ²æ¸ˆã¿ãƒ¢ãƒ‡ãƒ«ã‚’æ¤œç´¢
 //		Model* model = nullptr;
 //		decltype(models)::iterator it = models.find(objectData.fileName);
 //		if (it != models.end()) { model = it->second; }
-//		//ƒ‚ƒfƒ‹‚ğw’è‚µ‚Ä3DObject‚ğ¶¬
+//		//ãƒ¢ãƒ‡ãƒ«ã‚’æŒ‡å®šã—ã¦3DObjectã‚’ç”Ÿæˆ
 //		Object3d* newObject = Object3d::Create();
 //		newObject->Initialize();
 //		newObject->SetModel(model);
-//		//À•W
+//		//åº§æ¨™
 //		Vector3 pos;
 //		pos = Vector3(objectData.translation.x, objectData.translation.y, objectData.translation.z);
 //		newObject->SetPosition(pos);
-//		//‰ñ“]Šp
+//		//å›è»¢è§’
 //		Vector3 rot;
 //		rot = Vector3(objectData.rotation.x, objectData.rotation.y, objectData.rotation.z);
 //		newObject->SetRotation(rot);
-//		//ƒXƒP[ƒ‹
+//		//ã‚¹ã‚±ãƒ¼ãƒ«
 //		Vector3 scale;
 //		scale = Vector3(objectData.scaling.x, objectData.scaling.y, objectData.scaling.z);
 //		newObject->SetScale(scale);
-//		//”z—ñ‚É“o˜^
+//		//é…åˆ—ã«ç™»éŒ²
 //		objects.push_back(newObject);
 //	}
 //}

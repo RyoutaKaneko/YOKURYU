@@ -72,7 +72,7 @@ private: // 定数
 public: // 静的メンバ関数
 	
 	// OBJファイルから3Dモデルを読み込む
-	static Model* LoadFromOBJ(const std::string& modelname, const std::string& texname = "Resources");
+	static Model* LoadFromOBJ(const std::string& modelname);
 
 	// マテリアル読み込み
 	void LoadMaterial(const std::string& directoryPath, const std::string& filename);
@@ -87,7 +87,7 @@ public: // 静的メンバ関数
 	void Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParamIndexMaterial,float alpha_ = 1);
 
 	// setter
-	static void SetDevice(ID3D12Device* device) { Model::device = device; }
+	static void SetDevice(ID3D12Device* device_) { Model::device = device_; }
 
 	void SetAlpha(float alpha_);
 

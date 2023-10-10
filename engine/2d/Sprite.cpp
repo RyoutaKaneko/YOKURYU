@@ -1,7 +1,7 @@
 #include "Sprite.h"
 
 Sprite::Sprite() {
-
+	resDesc;
 }
 
 Sprite::~Sprite() {
@@ -85,6 +85,9 @@ PipelineSet Sprite::SpriteCreateGraphicsPipeline(ID3D12Device* device)
 	descriptorRange.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0);
 
 	CD3DX12_ROOT_PARAMETER rootParams[2];
+	for (int i = 0; i < 2; i++) {
+		rootParams[i] = CD3DX12_ROOT_PARAMETER();
+	}
 	rootParams[0].InitAsConstantBufferView(0);
 	rootParams[1].InitAsDescriptorTable(1, &descriptorRange, D3D12_SHADER_VISIBILITY_ALL);
 
@@ -197,8 +200,7 @@ PipelineSet Sprite::SpriteCreateGraphicsPipeline(ID3D12Device* device)
 	return pipelineSet;
 }
 
-void Sprite::SpriteCreate(ID3D12Device* dev, int window_width, int window_height, 
-	UINT texNumber, Vector2 anchorpoint, bool isFlipX, bool isFlipY) {
+void Sprite::SpriteCreate(ID3D12Device* dev, UINT texNumber_, Vector2 anchorpoint_, bool isFlipX, bool isFlipY) {
 
 	HRESULT result = S_FALSE;
 
@@ -210,7 +212,8 @@ void Sprite::SpriteCreate(ID3D12Device* dev, int window_width, int window_height
 		{{100.0f,	0.0f,	0.0f},{1.0f,0.0f}},
 	};
 
-	UINT sizeVB = static_cast<UINT>(sizeof(VertexPosUv) * _countof(vertices));
+	UINT sizeVB;
+	sizeVB = static_cast<UINT>(sizeof(VertexPosUv) * _countof(vertices));
 
 	// ヒーププロパティ
 	CD3DX12_HEAP_PROPERTIES heapPropsVertexBuffer = 
@@ -220,7 +223,7 @@ void Sprite::SpriteCreate(ID3D12Device* dev, int window_width, int window_height
 		CD3DX12_RESOURCE_DESC::Buffer(sizeof(vertices));
 
 	// テクスチャ番号をコピー
-	this->texNumber = texNumber;
+	this->texNumber = texNumber_;
 
 	//頂点バッファ生成
 	result = dev->CreateCommittedResource(
@@ -235,16 +238,16 @@ void Sprite::SpriteCreate(ID3D12Device* dev, int window_width, int window_height
 	// 指定番号の画像が読み込み済みなら
 	if (spriteCommon_.texBuff[this->texNumber]) {
 		// テクスチャ情報取得
-		D3D12_RESOURCE_DESC resDesc = spriteCommon_.texBuff[this->texNumber]->GetDesc();
+		D3D12_RESOURCE_DESC resDesc_ = spriteCommon_.texBuff[this->texNumber]->GetDesc();
 		// スプライトの大きさを画像の解像度に合わせる
-		scale = { (float)resDesc.Width,(float)resDesc.Height };
+		scale = { (float)resDesc_.Width,(float)resDesc_.Height };
 		// テクスチャ情報取得
 	}
 
 	texSize_ = { (float)resDesc.Width, (float)resDesc.Height };
 
 	// アンカーポイントをコピー
-	this->anchorpoint = anchorpoint;
+	this->anchorpoint = anchorpoint_;
 
 	// 反転フラグをコピー
 	this->isFlipX_ = isFlipX;
@@ -395,7 +398,8 @@ void Sprite::SpriteUpdate(Sprite& sprite, const SpriteCommon& spriteCommon)
 	sprite.matWorld *= matTrans;
 
 	// 定数バッファの転送
-	HRESULT result = sprite.constBuffB0->Map(0, nullptr, (void**)&constMap);
+	HRESULT result;
+	result = sprite.constBuffB0->Map(0, nullptr, (void**)&constMap);
 	constMap->mat = sprite.matWorld * spriteCommon.matProjection;
 	sprite.constBuffB0->Unmap(0, nullptr);
 }
@@ -456,7 +460,7 @@ void Sprite::LoadTexture(SpriteCommon& spriteCommon, UINT texnumber, const wchar
 
 	// シェーダリソースビュー作成
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{}; // 設定構造体
-	D3D12_RESOURCE_DESC resDesc = spriteCommon.texBuff[texnumber]->GetDesc();
+	resDesc = spriteCommon.texBuff[texnumber]->GetDesc();
 
 	srvDesc.Format = resDesc.Format;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
@@ -495,13 +499,13 @@ void Sprite::SpriteTransferVertexBuffer(const Sprite& sprite, uint32_t texIndex)
 	float top = (0.0f - anchorpoint.y) * scale.y;
 	float bottom = (1.0f - anchorpoint.y) * scale.y;
 
-	if (isFlipX_ = false) 
+	if (isFlipX_ == true) 
 	{// 左右入れ替え
 		left = -left;
 		right = -right;
 	}
 
-	if (isFlipY_ = false)
+	if (isFlipY_ == true)
 	{// 左右入れ替え
 		top = -top;
 		bottom = -bottom;
@@ -545,7 +549,8 @@ void Sprite::Finalize()
 void Sprite::SetAlpha(Sprite sprite,float alpha_) {
 
 	// 定数バッファの転送
-	HRESULT result = sprite.constBuffB0->Map(0, nullptr, (void**)&constMap);
+	HRESULT result;
+	result = sprite.constBuffB0->Map(0, nullptr, (void**)&constMap);
 	constMap->color.w = alpha_;
 	sprite.constBuffB0->Unmap(0, nullptr);
 	assert(SUCCEEDED(result));

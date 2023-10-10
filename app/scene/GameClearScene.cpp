@@ -25,7 +25,7 @@ void GameClearScene::Initialize()
 
 	//gameclear�̉摜
 	clearGH.LoadTexture(spriteCommon_, 0, L"Resources/clear.png", dxCommon->GetDevice());
-	clearGH.SpriteCreate(dxCommon->GetDevice(), 1280, 720, 0, Vector2(0.0f, 0.0f), false, false);
+	clearGH.SpriteCreate(dxCommon->GetDevice(), 0, Vector2(0.0f, 0.0f), false, false);
 	clearGH.SetScale(Vector2(1280 * 1, 720 * 1));
 	clearGH.SpriteTransferVertexBuffer(clearGH, 0);
 	clearGH.SpriteUpdate(clearGH, spriteCommon_);

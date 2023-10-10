@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Vector3.h"
 #include <Vector>
@@ -6,33 +6,33 @@
 class Spline 
 {
 public:
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 	void Initialize();
 
-	//XV
+	//æ›´æ–°
 	Vector3 Update(std::vector<Vector3>& points,float val);
 
 	Vector3 EnemyPosition(std::vector<Vector3>& points, float val);
 
-	//XV
+	//æ›´æ–°
 	Vector3 pointCal(std::vector<Vector3>& points);
 
 	void Reset();
 
-	//§Œä“_‚ÌW‡(vectorƒRƒ“ƒeƒi)A•âŠÔ‚·‚é‹æŠÔ‚Ì“YšAŠÔŒo‰ß—¦
+	//åˆ¶å¾¡ç‚¹ã®é›†åˆ(vectorã‚³ãƒ³ãƒ†ãƒŠ)ã€è£œé–“ã™ã‚‹åŒºé–“ã®æ·»å­—ã€æ™‚é–“çµŒéç‡
 	Vector3 SplinePosition(const std::vector<Vector3>& point, size_t startIndex, float t);
 
 	bool GetIsEnd() { return isEnd; }
 	float GetT() { return t + integer; }
 
 private:
-	//P1‚©‚çƒXƒ^[ƒg‚·‚é
+	//P1ã‹ã‚‰ã‚¹ã‚¿ãƒ¼ãƒˆã™ã‚‹
 	size_t startIndex = 1;
 	bool isEnd = false;
 	float t = 0;
 	float integer = 0;
 
 
-	//‹…‚ÌˆÊ’u
+	//çƒã®ä½ç½®
 	Vector3 position;
 };

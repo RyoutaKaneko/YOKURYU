@@ -1,4 +1,6 @@
 #include "FbxModel.h"
+#pragma	warning(disable:4244)
+
 
 FbxModel::~FbxModel() {
 	//FBXƒV[ƒ“‚Ì‰ğ•ú

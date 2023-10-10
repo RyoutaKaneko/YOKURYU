@@ -39,8 +39,8 @@ public:
 	void Reset();
 	void Finalize()override;
 
-	void LoadStage(int stageNum);
-	void LoadEnemy(int stageNum);
+	void LoadStage();
+	void LoadEnemy();
 	void SerchEnemy();
 	void LockedClear();
 	void GetCrosshair();

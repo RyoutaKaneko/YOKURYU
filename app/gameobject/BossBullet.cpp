@@ -1,7 +1,7 @@
 #include "BossBullet.h"
 #include "BaseCollider.h"
 
-void BossBullet::BulletInitialize(const Vector3& position)
+void BossBullet::BulletInitialize()
 {
 	Initialize();
 
@@ -54,7 +54,7 @@ void BossBullet::Update(const Vector3& playerPos_)
 	}
 }
 
-void BossBullet::OnCollision(const CollisionInfo& info)
+void BossBullet::OnCollision([[maybe_unused]] const CollisionInfo& info)
 {
 	//è’ìÀëäéËÇÃñºëO
 	const char* str1 = "class Player";

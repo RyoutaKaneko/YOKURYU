@@ -29,13 +29,13 @@ void ParticleManager::StaticInitialize(ID3D12Device* device)
 	InitializeGraphicsPipeline();
 }
 
-void ParticleManager::PreDraw(ID3D12GraphicsCommandList* cmdList)
+void ParticleManager::PreDraw(ID3D12GraphicsCommandList* cmdList_)
 {
 	// PreDrawとPostDrawがペアで呼ばれていなければエラー
 	assert(ParticleManager::cmdList == nullptr);
 
 	// コマンドリストをセット
-	ParticleManager::cmdList = cmdList;
+	ParticleManager::cmdList = cmdList_;
 
 	// パイプラインステートの設定
 	cmdList->SetPipelineState(pipelinestate.Get());
@@ -304,7 +304,7 @@ void ParticleManager::Draw()
 	particle->Draw(cmdList);
 }
 
-void ParticleManager::Fire(Particle* particle, const float& setpos, const float& setvel, const float& setacc, const int& setnum, const XMFLOAT2& setscale)
+void ParticleManager::Fire(Particle* particle_, const float& setpos, const float& setvel, const float& setacc, const int& setnum, const XMFLOAT2& setscale)
 {
 	for (int i = 0; i < setnum; i++)
 	{
@@ -326,6 +326,6 @@ void ParticleManager::Fire(Particle* particle, const float& setpos, const float&
 		acc.y = -(float)rand() / RAND_MAX * md_acc;
 
 		//追加
-		particle->Add(60, pos, vel, acc, setscale.x, setscale.y);
+		particle_->Add(60, pos, vel, acc, setscale.x, setscale.y);
 	}
 }

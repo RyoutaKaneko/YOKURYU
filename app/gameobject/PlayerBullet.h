@@ -19,7 +19,7 @@ class PlayerBullet : public Object3d
 	///初期化
 	///</summary>
 	void Update();
-	void HomingVec(Vector3 pos);
+	void HomingVec();
 
 
 	//衝突を検出したら呼び出されるコールバック関数

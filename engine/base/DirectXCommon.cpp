@@ -16,13 +16,13 @@ DirectXCommon* DirectXCommon::GetInstance()
 	return &instance;
 }
 
-void DirectXCommon::Initialize(WinApp* winApp) 
+void DirectXCommon::Initialize(WinApp* winApp_) 
 {
 	// NULL検出
-	assert(winApp);
+	assert(winApp_);
 
 	// メンバ変数に記録
-	this->winApp = winApp;
+	this->winApp = winApp_;
 
 	// FPS固定初期化
 	fpsFixed = new FPSFixed();
@@ -219,20 +219,20 @@ void DirectXCommon::InitializeRenderTargetView()
 	// 裏表の2つ分
 	for (int i = 0; i < 2; i++) {
 		// スワップチェーンの全てのバッファについて処理する
-		for (size_t i = 0; i < backBuffers.size(); i++) {
+		for (size_t j = 0; j < backBuffers.size(); j++) {
 			// スワップチェーンからバッファを取得
-			swapChain->GetBuffer((UINT)i, IID_PPV_ARGS(&backBuffers[i]));
+			swapChain->GetBuffer((UINT)j, IID_PPV_ARGS(&backBuffers[j]));
 			// デクリプタヒープからバッファを取得
 			D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = rtvHeap->GetCPUDescriptorHandleForHeapStart();
 			// 裏か表かでアドレスがずれる
-			rtvHandle.ptr += i * device->GetDescriptorHandleIncrementSize(rtvHeapDesc.Type);
+			rtvHandle.ptr += j * device->GetDescriptorHandleIncrementSize(rtvHeapDesc.Type);
 			// レンダーターゲットレビューの設定
 			D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
 			// シェーダーの計算結果をSRGBに変換して書き込む
 			rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 			rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 			// レンダーターゲットレビューの生成
-			device->CreateRenderTargetView(backBuffers[i].Get(), &rtvDesc, rtvHandle);
+			device->CreateRenderTargetView(backBuffers[j].Get(), &rtvDesc, rtvHandle);
 		}
 	}
 }

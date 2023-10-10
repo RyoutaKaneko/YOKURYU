@@ -14,7 +14,7 @@ void SIFrameWork::Initialize()
 	input = Input::GetInstance();
 	input->Initialize(winApp);
 	//3Dオブジェクト静的初期化
-	Object3d::StaticInitialize(dxCommon->GetDevice(), WinApp::window_width, WinApp::window_height);
+	Object3d::StaticInitialize(dxCommon->GetDevice());
 	// ビュープロジェクションの初期化
 	ViewProjection::StaticInitialize(dxCommon->GetDevice());
 	// シーンマネージャの生成

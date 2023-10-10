@@ -1,4 +1,4 @@
-#include "Spline.h"
+ï»¿#include "Spline.h"
 #include <windows.h>
 #include <sysinfoapi.h>
 
@@ -11,7 +11,7 @@ Vector3 Spline::Update(std::vector<Vector3>& points, float val) {
 
 	t = t + val;
 
-	//timeRate‚ª1.0fˆÈã‚É‚È‚Á‚½‚çAŽŸ‚Ì‹æŠÔ‚Éi‚Þ
+	//timeRateãŒ1.0fä»¥ä¸Šã«ãªã£ãŸã‚‰ã€æ¬¡ã®åŒºé–“ã«é€²ã‚€
 	if (t >= 1.0f) {
 		if (startIndex < points.size() - 3) {
 
@@ -43,19 +43,15 @@ Vector3 Spline::Update(std::vector<Vector3>& points, float val) {
 
 Vector3 Spline::EnemyPosition(std::vector<Vector3>& points, float val)
 {
-	float integer = (float)floor(val);
+	float integer_ = (float)floor(val);
 	float few = (float)fmod(val, 1);
 
-	Vector3 pos = SplinePosition(points, (size_t)integer, few);
+	Vector3 pos = SplinePosition(points, (size_t)integer_, few);
 
 	return pos;
 }
 
 Vector3 Spline::pointCal(std::vector<Vector3>& points) {
-
-	const int INDEXMAX = (int)points.size() - 1;
-
-	float nowPoint = (float)startIndex / (float)INDEXMAX;
 
 	Vector3 pos = SplinePosition(points, startIndex, t);
 
@@ -77,24 +73,24 @@ void Spline::Reset()
 	startIndex = 1;
 }
 
-Vector3 Spline::SplinePosition(const std::vector<Vector3>& points, size_t startIndex, float t) {
-	//•âŠÔ‚·‚×‚«“_
+Vector3 Spline::SplinePosition(const std::vector<Vector3>& points, size_t startIndex_, float t_) {
+	//è£œé–“ã™ã¹ãç‚¹
 	size_t n = points.size() - 2;
 
-	if (startIndex > n) return points[n];
-	if (startIndex < 1) return points[1];
+	if (startIndex_ > n) return points[n];
+	if (startIndex_ < 1) return points[1];
 
-	//p0~p3‚Ì§Œä“_‚ðŽæ“¾‚·‚é
-	Vector3 p0_ = points[startIndex - 1];
-	Vector3 p1_ = points[startIndex];
-	Vector3 p2_ = points[startIndex + 1];
-	Vector3 p3_ = points[startIndex + 2];
+	//p0~p3ã®åˆ¶å¾¡ç‚¹ã‚’å–å¾—ã™ã‚‹
+	Vector3 p0_ = points[startIndex_ - 1];
+	Vector3 p1_ = points[startIndex_];
+	Vector3 p2_ = points[startIndex_ + 1];
+	Vector3 p3_ = points[startIndex_ + 2];
 
-	//Catmull-Rom ‚ÌŽ®‚É‚æ‚é•âŠÔ
-	Vector3 position = 0.5 * (p1_ * 2 + (-p0_ + p2_) *
-							  t + (p0_ * 2 - p1_ * 5 + p2_ * 4 - p3_) *
-							  (t * t) + (-p0_ + p1_ * 3 - p2_ * 3 + p3_) *
-							  (t * t * t));
+	//Catmull-Rom ã®å¼ã«ã‚ˆã‚‹è£œé–“
+	Vector3 position_ = 0.5 * (p1_ * 2 + (-p0_ + p2_) *
+							  t_ + (p0_ * 2 - p1_ * 5 + p2_ * 4 - p3_) *
+							  (t_ * t_) + (-p0_ + p1_ * 3 - p2_ * 3 + p3_) *
+							  (t_ * t_ * t_));
 
-	return position;
+	return position_;
 }

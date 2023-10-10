@@ -29,7 +29,7 @@ void Game::Update()
 void Game::Draw()
 {
 	// コマンドリストの取得
-	ID3D12GraphicsCommandList* cmdList = dxCommon->GetCommandList();
+	/*ID3D12GraphicsCommandList* cmdList = dxCommon->GetCommandList();*/
 
 	//=== シーンマネージャの描画 ===//
 	sceneManager_->Draw();

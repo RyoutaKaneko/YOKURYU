@@ -137,7 +137,7 @@ void GameScene::Initialize() {
 	gageBack.SpriteCreate(dxCommon_->GetDevice(), 8, Vector2(0.0f, 0.5f), false, false);
 	gageBack.SetPosition(Vector3(28, 641, 0));
 	gageBack.SetScale(Vector2(2 * 178, 18 * 1));
-	gageBack.SetAlpha(gageBack, 0.5f);
+	gageBack.SetAlpha(gageBack, 0.4f);
 	gageBack.SpriteTransferVertexBuffer(gageBack, 8);
 	gageBack.SpriteUpdate(gageBack, spriteCommon_);
 	//
@@ -149,10 +149,9 @@ void GameScene::Initialize() {
 	hpBack.SpriteTransferVertexBuffer(hpBack, 9);
 	hpBack.SpriteUpdate(hpBack, spriteCommon_);
 	//フェードアウト
-	fadeout.SpriteCreate(dxCommon_->GetDevice(), 10, Vector2(0.0f, 0.0f), false, false);
-	fadeout.SetScale(Vector2(128 * 1, 112 * 1));
-	fadeout.SetPosition({ 200,360,0 });
-	fadeout.SetRotation(180.0f);
+	fadeout.SpriteCreate(dxCommon_->GetDevice(), 10, Vector2(0.0f, 0.0f), false, true);
+	fadeout.SetScale(Vector2(1280 * 1, 1120 * 1));
+	fadeout.SetPosition({ 0,720,0 });
 	fadeout.SpriteTransferVertexBuffer(fadeout, 10);
 	fadeout.SpriteUpdate(fadeout, spriteCommon_);
 	fadeout.LoadTexture(spriteCommon_, 10, L"Resources/fade.png", dxCommon_->GetDevice());
@@ -230,10 +229,10 @@ void GameScene::Update() {
 		isStart = true;
 	}
 	//メインゲーム開始時フェードアウト
-	//if (fadeout.GetPosition().y < 400) {
-	//	fadeout.SetPosition(fadeout.GetPosition() + Vector3(0, 40, 0));
-	//	fadeout.SpriteUpdate(fadeout, spriteCommon_);
-	//}
+	if (fadeout.GetPosition().y < 18200) {
+		fadeout.SetPosition(fadeout.GetPosition() + Vector3(0, 40, 0));
+		fadeout.SpriteUpdate(fadeout, spriteCommon_);
+	}
 
 	Vector3 shotVec = { 0,0,0 };
 
@@ -350,6 +349,14 @@ void GameScene::Update() {
 					player->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 				}
 				LockedClear();
+			}
+			//デスフラグの立った敵を削除
+			enemys_.remove_if([](std::unique_ptr < Enemy>& enemy_) {
+				return enemy_->GetIsDead();
+				});
+			//敵キャラの更新
+			for (const std::unique_ptr<Enemy>& enemy_ : enemys_) {
+				enemy_->Update(player->GetWorldPos(), railCamera->GetPasPoint());
 			}
 			//更新
 			railCamera->Update(player, points);
@@ -510,19 +517,11 @@ void GameScene::Update() {
 		gameState_bak = gameState;
 		gameState = ULT;
 	}
-	//デスフラグの立った敵を削除
-	enemys_.remove_if([](std::unique_ptr < Enemy>& enemy_) {
-		return enemy_->GetIsDead();
-		});
-	//敵キャラの更新
-	for (const std::unique_ptr<Enemy>& enemy_ : enemys_) {
-		enemy_->Update(player->GetWorldPos(), railCamera->GetPasPoint());
-	}
 	//必殺技エネルギー
 	for (const std::unique_ptr<Energy>& energy : energys_) {
 		energy->Update(player->GetWorldPos(), railCamera->GetCamera()->GetRotation());
 	}
-	//デスフラグの立った敵を削除
+	//デスフラグの立ったエネルギーを削除
 	energys_.remove_if([](std::unique_ptr <Energy>& energys) {
 		return energys->GetIsDead();
 		});
@@ -619,7 +618,7 @@ void GameScene::Draw() {
 	for (int i = 0; i < infos.size(); i++) {
 		lock[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 	}
-	/*fadeout.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());*/
+	fadeout.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 
 	// スプライト描画後処理
 	Sprite::PostDraw();

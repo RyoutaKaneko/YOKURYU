@@ -63,6 +63,7 @@ private: // メンバ変数
 	Sprite fade;
 	Sprite loading;
 	Sprite clickEffect;
+	Sprite clickOutline;
 
 	Model* skyModel = nullptr;
 	Model* seaModel = nullptr;
@@ -77,4 +78,5 @@ private: // メンバ変数
 	bool isNext;
 	float circleSize;
 	float clickEffectAlpha;
+	float outlineSize;
 };

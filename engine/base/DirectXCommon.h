@@ -72,7 +72,7 @@ private:
 	// FPS
 	FPSFixed* fpsFixed = nullptr;
 
-	HRESULT result;
+	HRESULT result = NULL;
 	// DirectX12デバイス
 	ComPtr<ID3D12Device> device;
 	// DXGIファクトリ
@@ -94,6 +94,6 @@ private:
 	// フェンスの生成
 	ComPtr<ID3D12Fence> fence;
 
-	UINT rtvHD;
+	UINT rtvHD = 0;
 	UINT64 fenceVal = 0;
 };

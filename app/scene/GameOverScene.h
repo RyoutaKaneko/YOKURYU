@@ -49,18 +49,6 @@ private: // ƒƒ“ƒo•Ï”
 	//score
 	Sprite* sprite = new Sprite;
 	SpriteCommon spriteCommon_;
-	Sprite clearGH;
-	int scores[6];
-	float numPosX;
-	int showTime;
-	//title
-	Sprite* title01 = nullptr;
-	Sprite* title02 = nullptr;
-	//retry
-	Sprite* retry01 = nullptr;
-	Sprite* retry02 = nullptr;
-	bool isNext;
-	bool curHit01;
-	bool curHit02;
+	Sprite overGH;
 };
 

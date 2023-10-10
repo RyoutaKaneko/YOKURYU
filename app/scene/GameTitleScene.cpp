@@ -83,6 +83,13 @@ void GameTitleScene::Initialize()
 	clickEffect.SetPosition({ 640,640,0 });
 	clickEffect.SpriteTransferVertexBuffer(clickEffect, 10);
 	clickEffect.LoadTexture(spriteCommon_, 10, L"Resources/clickEffect.png", dxCommon_->GetDevice());
+	//clickOutline
+	clickOutline.SpriteCreate(dxCommon_->GetDevice(), 11, Vector2(0.5f, 0.5f), false, false);
+	clickOutline.SetScale(Vector2(312.0f * 1.2f, 52.0f * 1.2f));
+	clickOutline.SetPosition({ 640,640,0 });
+	clickOutline.SetAlpha(clickOutline, 0.8f);
+	clickOutline.SpriteTransferVertexBuffer(clickOutline, 11);
+	clickOutline.LoadTexture(spriteCommon_, 11, L"Resources/clickOutline.png", dxCommon_->GetDevice());
 
 
 	//player
@@ -116,6 +123,7 @@ void GameTitleScene::Initialize()
 	isNext = false;
 	circleSize = 1.0f;
 	clickEffectAlpha = 1.0f;
+	outlineSize = 1.0f;
 }
 
 void GameTitleScene::Update()
@@ -147,6 +155,15 @@ void GameTitleScene::Update()
 		for (int i = 0; i < 9; i++) {
 			cursor[i].SpriteUpdate(cursor[i], spriteCommon_);
 		}
+		if (outlineSize < 1.04f) {
+			outlineSize += 0.00075f;
+		}
+		else {
+			outlineSize = 1.0f;
+		}
+		clickOutline.SetScale(Vector2(312.0f * 1.2f, 52.0f * 1.2f) * outlineSize);
+		clickOutline.SpriteTransferVertexBuffer(clickOutline, 11);
+		clickOutline.SpriteUpdate(clickOutline, spriteCommon_);
 		//クリック判定
 		if (cur.x > click[0].GetPosition().x - 156 && cur.x < click[0].GetPosition().x + 156) {
 			if (cur.y > click[0].GetPosition().y - 26 && cur.y < click[0].GetPosition().y + 26) {
@@ -266,6 +283,7 @@ void GameTitleScene::Draw()
 		else {
 			click[1].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		}
+		clickOutline.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		circle.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		for (int i = 0; i < 9; i++) {
 			cursor[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());

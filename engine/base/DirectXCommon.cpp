@@ -375,13 +375,14 @@ void DirectXCommon::PostDraw()
 	assert(SUCCEEDED(result));
 
 	// コマンドの実行完了を持つ
-	commandQueue->Signal(fence.Get(), ++fenceVal);
+	result = commandQueue->Signal(fence.Get(), ++fenceVal);
 	if (fence->GetCompletedValue() != fenceVal) {
 		HANDLE event = CreateEvent(nullptr, false, false, nullptr);
 		fence->SetEventOnCompletion(fenceVal, event);
 		WaitForSingleObject(event, INFINITE);
 		CloseHandle(event);
 	}
+	assert(SUCCEEDED(result));
 
 	// FPS固定
 	fpsFixed->UpdateFixFPS();

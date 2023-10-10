@@ -49,6 +49,7 @@
     <LibraryPath>$(ProjectDir)engine\external\fbx_sdk\lib\Debug;$(ProjectDir)engine\external\DirectXTex\lib\Debug;$(LibraryPath)</LibraryPath>
     <IntDir>$(SolutionDir)..\Generated\Obj\$(ProjectName)\$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)..\Generated\Output\$(Configuration)\</OutDir>
+    <TargetName>YOKURYU</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -56,6 +57,7 @@
     <LibraryPath>$(ProjectDir)engine\external\fbx_sdk\lib\Release;$(ProjectDir)engine\external\DirectXTex\lib\Release;$(LibraryPath)</LibraryPath>
     <IntDir>$(SolutionDir)..\Generated\Obj\$(ProjectName)\$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)..\Generated\Output\$(Configuration)\</OutDir>
+    <TargetName>YOKURYU</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

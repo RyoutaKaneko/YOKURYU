@@ -143,6 +143,7 @@ void GameTitleScene::Update()
 		circle.SetPosition(cur);
 		if (Input::GetInstance()->TriggerMouseLeft() == true) {
 			circleSize = 1.0f;
+			circleAlpha = 1.0f;
 		}
 		else if (circleSize < 6.0f) {
 			circleSize += 0.1f;

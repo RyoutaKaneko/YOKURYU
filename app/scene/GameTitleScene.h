@@ -79,4 +79,5 @@ private: // メンバ変数
 	float circleSize;
 	float clickEffectAlpha;
 	float outlineSize;
+	float circleAlpha;
 };

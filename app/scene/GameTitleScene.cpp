@@ -124,6 +124,7 @@ void GameTitleScene::Initialize()
 	circleSize = 1.0f;
 	clickEffectAlpha = 1.0f;
 	outlineSize = 1.0f;
+	circleAlpha = 1.0f;
 }
 
 void GameTitleScene::Update()
@@ -145,11 +146,15 @@ void GameTitleScene::Update()
 		}
 		else if (circleSize < 6.0f) {
 			circleSize += 0.1f;
+			circleAlpha -= 0.025f;
 		}
 		else {
 			circleSize = 1.0f;
+			circleAlpha = 1.0f;
 		}
-		circle.SetScale(Vector2(64 * circleSize, 64 * circleSize));
+		circle.SetScale(Vector2(16 * circleSize, 16 * circleSize));
+		circle.SetRotation(circle.GetRotation() + 0.005f);
+		circle.SetAlpha(circle, circleAlpha);
 		circle.SpriteTransferVertexBuffer(circle, 7);
 		circle.SpriteUpdate(circle, spriteCommon_);
 		for (int i = 0; i < 9; i++) {

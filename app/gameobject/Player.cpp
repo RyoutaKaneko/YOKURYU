@@ -1,3 +1,9 @@
+/**
+ * @file Player.h
+ * @brief プレイヤーの移動、攻撃、描画をまとめたクラス
+ * @author カネコ_リョウタ
+ */
+
 #include "Player.h"
 #include "string.h"
 #include "RailCamera.h"

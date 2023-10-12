@@ -1,3 +1,8 @@
+/**
+ * @brief レイキャストに使う構造体を定義するh
+ * @author カネコ_リョウタ
+ */
+
 #pragma once
 #include "BaseCollider.h"
 #include <DirectXMath.h>

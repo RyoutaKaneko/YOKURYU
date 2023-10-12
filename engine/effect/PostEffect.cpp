@@ -1,3 +1,9 @@
+/**
+ * @file PostEffect.h
+ * @brief ポストエフェクトを行うクラス(基盤)
+ * @author カネコ_リョウタ
+ */
+
 #include "PostEffect.h"
 #include "WinApp.h"
 

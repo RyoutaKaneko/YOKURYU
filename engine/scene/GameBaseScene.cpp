@@ -1,5 +1,10 @@
-#include "GameBaseScene.h"
+/**
+ * @file GameBaseScene.h
+ * @brief ゲームシーンの基盤クラス
+ * @author カネコ_リョウタ
+ */
 
+#include "GameBaseScene.h"
 
 void GameBaseScene::LoadObjFromLevelEditor(const std::string& fileName) {
 	JsonLoader* file = nullptr;

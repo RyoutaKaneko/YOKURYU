@@ -1,6 +1,9 @@
-﻿// ========================
-// Matrix4 型 Matrix4.cpp
-// ========================
+﻿/**
+ * @file Matrix4.h
+ * @brief 4x4行列クラス
+ * @author カネコ_リョウタ
+ */
+
 #include "Matrix4.h"
 #include "Vector3.h"
 #include <cmath> // sin cos

@@ -1,3 +1,9 @@
+/**
+ * @file RaikCamera.h
+ * @brief ゲーム内のレールカメラ制御に使う関数群をまとめてある
+ * @author カネコ_リョウタ
+ */
+
 #include "RailCamera.h"
 
 RailCamera::RailCamera() {

@@ -1,10 +1,14 @@
+/**
+ * @file SphereCollider.cpp
+ * @brief 球の当たり判定のクラス
+ * @author カネコ_リョウタ
+ */
+
 #pragma once
 #include "BaseCollider.h"
 #include "CollisionPrimitive.h"
-
 #include "Vector3.h"
 #include "Matrix4.h"
-
 
 class SphereCollider :public BaseCollider, public Sphere
 {

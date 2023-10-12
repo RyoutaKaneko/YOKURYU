@@ -1,3 +1,9 @@
+/**
+ * @file XMViewProjection.h
+ * @brief ParticleManager.cppに使っているカメラクラス
+ * @author カネコ_リョウタ
+ */
+
 #include "XMViewProjection.h"
 #include "WinApp.h"
 

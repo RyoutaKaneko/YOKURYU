@@ -1,3 +1,9 @@
+/**
+ * @file Boss.h
+ * @brief ボス全般(ステータス、行動、描画)をまとめたもの
+ * @author カネコ_リョウタ
+ */
+
 #include "Boss.h"
 #include "SphereCollider.h"
 #include "time.h"

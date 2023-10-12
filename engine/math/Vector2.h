@@ -1,3 +1,9 @@
+/**
+ * @file Vector2.cpp
+ * @brief 2軸ベクトルクラス
+ * @author カネコ_リョウタ
+ */
+
 #pragma once
 class Vector2
 {

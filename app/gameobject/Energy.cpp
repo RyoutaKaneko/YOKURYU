@@ -1,3 +1,9 @@
+/**
+ * @file Energy.h
+ * @brief 必殺技に必要なエネルギー用クラス
+ * @author カネコ_リョウタ
+ */
+
 #include "Energy.h"
 #include "string.h"
 #include "BaseCollider.h"

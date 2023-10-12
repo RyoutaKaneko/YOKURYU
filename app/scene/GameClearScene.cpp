@@ -1,3 +1,9 @@
+/**
+ * @file GameClearScene.h
+ * @brief クリア時のシーンクラス
+ * @author カネコ_リョウタ
+ */
+
 #include "GameClearScene.h"
 
 using namespace DirectX;

@@ -1,3 +1,9 @@
+/**
+ * @file RaikCamera.cpp
+ * @brief ゲーム内のレールカメラ制御に使う関数群をまとめてある
+ * @author カネコ_リョウタ
+ */
+
 #pragma once
 #include "ViewProjection.h"
 #include "Object3d.h"

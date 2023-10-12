@@ -1,4 +1,10 @@
-﻿#include "Spline.h"
+﻿/**
+ * @file Spline.h
+ * @brief 曲線補間クラス
+ * @author カネコ_リョウタ
+ */
+
+#include "Spline.h"
 #include <windows.h>
 #include <sysinfoapi.h>
 

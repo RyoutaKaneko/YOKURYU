@@ -1,5 +1,10 @@
-#pragma once
+/**
+ * @file Model.cpp
+ * @brief objモデルの基盤クラス
+ * @author カネコ_リョウタ
+ */
 
+#pragma once
 #include <Windows.h>
 #include <wrl.h>
 #include <d3d12.h>
@@ -11,6 +16,7 @@
 #include "Matrix4.h"
 #pragma warning(push)
 #pragma warning(disable:26495)
+
 class Model 
 {
 private: // エイリアス

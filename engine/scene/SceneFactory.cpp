@@ -1,3 +1,9 @@
+/**
+ * @file SceneFactory.h
+ * @brief シーン切り替え時の次シーンを生成するクラス
+ * @author カネコ_リョウタ
+ */
+
 #include "SceneFactory.h"
 
 GameBaseScene* SceneFactory::CreateScene(const std::string& sceneName)

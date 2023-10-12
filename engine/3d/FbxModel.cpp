@@ -1,3 +1,9 @@
+/**
+ * @file FbxModel.h
+ * @brief fbxモデル描画基盤クラス
+ * @author カネコ_リョウタ
+ */
+
 #include "FbxModel.h"
 #pragma	warning(disable:4244)
 

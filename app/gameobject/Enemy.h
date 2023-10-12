@@ -1,3 +1,9 @@
+/**
+ * @file Enemy.cpp
+ * @brief enemyの全般(ステータス、行動、描画)をまとめたクラス
+ * @author カネコ_リョウタ
+ */
+
 #pragma once
 #include "Object3d.h"
 #include "WinApp.h"

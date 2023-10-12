@@ -1,3 +1,9 @@
+/**
+ * @file GameOverScene.h
+ * @brief ゲームオーバー時のシーンクラス
+ * @author カネコ_リョウタ
+ */
+
 #include "GameOverScene.h"
 
 GameOverScene::GameOverScene()

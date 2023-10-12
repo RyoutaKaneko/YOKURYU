@@ -1,6 +1,9 @@
-// ===================
-// Vector3 型
-// ===================
+/**
+ * @file Vector3.h
+ * @brief 3軸ベクトルクラス
+ * @author カネコ_リョウタ
+ */
+
 #include "Vector3.h"
 
 Vector3::Vector3()

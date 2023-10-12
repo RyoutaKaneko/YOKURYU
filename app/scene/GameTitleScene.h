@@ -1,5 +1,10 @@
-﻿#pragma once
+﻿/**
+ * @file GameTitleScene.cpp
+ * @brief タイトル画面のシーンクラス
+ * @author カネコ_リョウタ
+ */
 
+#pragma once
 #include "DirectXCommon.h"
 #include "Input.h"
 #include "Sprite.h"
@@ -8,8 +13,6 @@
 #include "GameScene.h"
 #include "viewProjection.h"
 #include "Player.h"
-
-
 #include <DirectXMath.h>
 
 class GameTitleScene : public GameBaseScene

@@ -1,3 +1,9 @@
+/**
+ * @file DirectXCommon.h
+ * @brief DirectX基盤
+ * @author カネコ_リョウタ
+ */
+
 #include "DirectXCommon.h"
 #include <vector>
 #include <cassert>

@@ -1,5 +1,10 @@
-#pragma once
+/**
+ * @file Game.cpp
+ * @brief シーン生成クラス
+ * @author カネコ_リョウタ
+ */
 
+#pragma once
 #include "SIFrameWork.h"
 
 // ゲーム全体

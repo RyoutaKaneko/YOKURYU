@@ -1,3 +1,9 @@
+/**
+ * @file Energy.cpp
+ * @brief 必殺技に必要なエネルギー用クラス
+ * @author カネコ_リョウタ
+ */
+
 #pragma once
 #include "Object3d.h"
 #include "WinApp.h"

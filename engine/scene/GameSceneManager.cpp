@@ -1,3 +1,9 @@
+/**
+ * @file SceneManeger.h
+ * @brief シーン切り替えを行うクラス
+ * @author カネコ_リョウタ
+ */
+
 #include "GameSceneManager.h"
 
 GameSceneManager::~GameSceneManager()

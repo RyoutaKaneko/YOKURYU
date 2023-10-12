@@ -1,3 +1,9 @@
+/**
+ * @file ViewProjection.cpp
+ * @brief 通常のカメラ管理クラス
+ * @author カネコ_リョウタ
+ */
+
 #pragma once
 #include"Vector3.h"
 #include "Vector4.h"

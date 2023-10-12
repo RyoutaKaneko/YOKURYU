@@ -1,5 +1,10 @@
-﻿#pragma once
+﻿/**
+ * @file Sprite.cpp
+ * @brief 画像描画関係クラス
+ * @author カネコ_リョウタ
+ */
 
+#pragma once
 #include <Windows.h>
 #include <D3dx12.h>
 #include <DirectXMath.h>
@@ -15,9 +20,7 @@
 #include"Vector3.h"
 #include"Vector4.h"
 #include"Matrix4.h"
-
 #include "DirectXCommon.h"
-
 #pragma comment(lib, "d3dcompiler.lib")
 
 using namespace DirectX;

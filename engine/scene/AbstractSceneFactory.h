@@ -1,5 +1,10 @@
-#pragma once
+/**
+ * @file SceneFactory.h
+ * @brief SceneFactory基盤クラス
+ * @author カネコ_リョウタ
+ */
 
+#pragma once
 #include "GameBaseScene.h"
 #include <string>
 

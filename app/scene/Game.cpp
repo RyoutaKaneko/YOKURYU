@@ -1,5 +1,10 @@
-#include "Game.h"
+/**
+ * @file Game.h
+ * @brief シーン生成クラス
+ * @author カネコ_リョウタ
+ */
 
+#include "Game.h"
 #include "SceneFactory.h"
 
 void Game::Initialize()

@@ -1,5 +1,10 @@
-﻿#pragma once
+﻿/**
+ * @file Object3d.cpp
+ * @brief 3dオブジェクトを動かすためのクラス
+ * @author カネコ_リョウタ
+ */
 
+#pragma once
 #include <Windows.h>
 #include <wrl.h>
 #include <d3d12.h>

@@ -1,10 +1,15 @@
-﻿#include "GameScene.h"
+﻿/**
+ * @file GameScene.h
+ * @brief ゲームのメイン部分一番重要
+ * @author カネコ_リョウタ
+ */
+
+#include "GameScene.h"
 #include "FbxLoader.h"
 #include "FbxObject3d.h"
 #include "SphereCollider.h"
 #include "CollisionManager.h"
 #include "GameSceneManager.h"
-
 #include <cassert>
 #include <fstream>
 #include <sstream>

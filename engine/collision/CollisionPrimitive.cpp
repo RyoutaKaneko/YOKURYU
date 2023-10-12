@@ -1,3 +1,9 @@
+/**
+ * @file CollisionPrimitive.h
+ * @brief 当たり判定のプリミティブをまとめたクラス
+ * @author カネコ_リョウタ
+ */
+
 #include "CollisionPrimitive.h"
 
 void Triangle::ComputeNormal()

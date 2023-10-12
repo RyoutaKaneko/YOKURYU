@@ -1,9 +1,13 @@
+/**
+ * @brief 当たり判定のステータスをまとめたクラス
+ * @author カネコ_リョウタ
+ */
+
 #pragma once
 #include"Vector3.h"
 
 class Object3d;
 class BaseCollider;
-
 
 struct CollisionInfo
 {

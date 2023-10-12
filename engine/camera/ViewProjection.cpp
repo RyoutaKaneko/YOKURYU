@@ -1,3 +1,9 @@
+/**
+ * @file ViewProjection.h
+ * @brief 通常のカメラ管理クラス
+ * @author カネコ_リョウタ
+ */
+
 #include "ViewProjection.h"
 #include <d3dx12.h>
 #include <cassert>

@@ -1,3 +1,9 @@
+/**
+ * @file BossBullet.h
+ * @brief ボス攻撃に使う弾リスト用クラス
+ * @author カネコ_リョウタ
+ */
+
 #include "BossBullet.h"
 #include "BaseCollider.h"
 

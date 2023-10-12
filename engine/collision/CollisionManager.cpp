@@ -1,3 +1,9 @@
+/**
+ * @file CollisionManager.h
+ * @brief 当たり判定管理クラス
+ * @author カネコ_リョウタ
+ */
+
 #include "CollisionManager.h"
 #include "BaseCollider.h"
 #include "Collision.h"

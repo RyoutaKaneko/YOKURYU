@@ -1,5 +1,10 @@
-#pragma once
+/**
+ * @file FbxObject3d.cpp
+ * @brief fbxモデルを3dオブジェクトとして扱うためのクラス
+ * @author カネコ_リョウタ
+ */
 
+#pragma once
 #include "FbxModel.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
@@ -7,7 +12,6 @@
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Matrix4.h"
-
 #include <Windows.h>
 #include <wrl.h>
 #include <d3d12.h>

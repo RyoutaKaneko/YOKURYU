@@ -1,5 +1,10 @@
-#pragma once
+/**
+ * @file FpsFixed.cpp
+ * @brief ゲームのfps上限を管理するクラス
+ * @author カネコ_リョウタ
+ */
 
+#pragma once
 #include <chrono>
 #include <thread>
 

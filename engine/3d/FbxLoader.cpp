@@ -1,3 +1,9 @@
+/**
+ * @file FbxLoader.h
+ * @brief fbxモデルの読み込みクラス
+ * @author カネコ_リョウタ
+ */
+
 #include "FbxLoader.h"
 #include <cassert>
 #include "Vector3.h"

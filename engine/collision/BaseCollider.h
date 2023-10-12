@@ -1,5 +1,9 @@
-#pragma once
+/**
+ * @brief 当たり判定基盤
+ * @author カネコ_リョウタ
+ */
 
+#pragma once
 #include "CollisionTypes.h"
 #include "Object3d.h"
 #include "CollisionInfo.h"

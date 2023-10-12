@@ -1,3 +1,9 @@
+/**
+ * @file FpsFixed.h
+ * @brief ゲームのfps上限を管理するクラス
+ * @author カネコ_リョウタ
+ */
+
 #include "FPSFixed.h"
 
 void FPSFixed::InitializeFixFPS() {

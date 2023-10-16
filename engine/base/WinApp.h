@@ -1,3 +1,9 @@
+/**
+ * @file WinApp.cpp
+ * @brief Window生成クラス
+ * @author カネコ_リョウタ
+ */
+
 #pragma once
 #include <Windows.h>
 

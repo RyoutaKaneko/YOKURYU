@@ -1,5 +1,10 @@
-#pragma once
+/**
+ * @file GameClearScene.cpp
+ * @brief クリア時のシーンクラス
+ * @author カネコ_リョウタ
+ */
 
+#pragma once
 #include "Input.h"
 #include "DirectXCommon.h"
 #include "GameBaseScene.h"

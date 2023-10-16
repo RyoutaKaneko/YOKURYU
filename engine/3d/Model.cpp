@@ -1,5 +1,10 @@
-﻿#include "Model.h"
+﻿/**
+ * @file Model.h
+ * @brief objモデルの基盤クラス
+ * @author カネコ_リョウタ
+ */
 
+#include "Model.h"
 #include <d3dcompiler.h>
 #pragma warning(push)
 #pragma warning(disable:26813)

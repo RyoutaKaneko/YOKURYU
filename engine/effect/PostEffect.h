@@ -1,3 +1,9 @@
+/**
+ * @file PostEffect.cpp
+ * @brief ポストエフェクトを行うクラス(基盤)
+ * @author カネコ_リョウタ
+ */
+
 #pragma once
 #include <Windows.h>
 #include <D3dx12.h>
@@ -10,9 +16,7 @@
 #include"Vector3.h"
 #include"Vector4.h"
 #include"Matrix4.h"
-
 #include "DirectXCommon.h"
-
 #pragma comment(lib, "d3dcompiler.lib")
 
 struct VertexPosUv {

@@ -1,7 +1,12 @@
+/**
+ * @file CollisionManager.cpp
+ * @brief 当たり判定管理クラス
+ * @author カネコ_リョウタ
+ */
+
 #pragma once
 #include "CollisionPrimitive.h"
 #include "RaycastHit.h"
-
 #include <forward_list>
 #include <d3d12.h>
 

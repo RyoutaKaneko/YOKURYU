@@ -1,5 +1,10 @@
-#include "Vector4.h"
+/**
+ * @file Vector4.h
+ * @brief 4軸ベクトルクラス
+ * @author カネコ_リョウタ
+ */
 
+#include "Vector4.h"
 #include<cmath>  //sprt
 
 Vector4::Vector4() :x(0), y(0), z(0), w(0)

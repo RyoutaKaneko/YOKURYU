@@ -1,3 +1,9 @@
+/**
+ * @file Sprite.h
+ * @brief 画像描画関係クラス
+ * @author カネコ_リョウタ
+ */
+
 #include "Sprite.h"
 
 Sprite::Sprite() {

@@ -1,3 +1,9 @@
+/**
+ * @file GameScene.cpp
+ * @brief ゲームのメイン部分一番重要
+ * @author カネコ_リョウタ
+ */
+
 #pragma once
 #include "Sprite.h"
 #include "Object3d.h"

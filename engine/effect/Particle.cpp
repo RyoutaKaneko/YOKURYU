@@ -1,3 +1,9 @@
+/**
+ * @file Particle.h
+ * @brief パーティクル管理クラス
+ * @author カネコ_リョウタ
+ */
+
 #include "Particle.h"
 #pragma warning(push)
 #pragma warning(disable:26813)

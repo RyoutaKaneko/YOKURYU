@@ -1,3 +1,9 @@
+/**
+ * @file FbxObject3d.h
+ * @brief fbxモデルを3dオブジェクトとして扱うためのクラス
+ * @author カネコ_リョウタ
+ */
+
 #include "FbxObject3d.h"
 #include <d3dcompiler.h>
 #pragma comment(lib, "d3dcompiler.lib")

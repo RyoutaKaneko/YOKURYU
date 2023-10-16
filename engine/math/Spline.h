@@ -1,5 +1,10 @@
-﻿#pragma once
+﻿/**
+ * @file Spline.cpp
+ * @brief 曲線補間クラス
+ * @author カネコ_リョウタ
+ */
 
+#pragma once
 #include "Vector3.h"
 #include <Vector>
 

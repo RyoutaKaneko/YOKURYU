@@ -1,5 +1,10 @@
-#pragma once
+/**
+ * @file Collision.cpp
+ * @brief 当たり判定の関数をまとめたクラス
+ * @author カネコ_リョウタ
+ */
 
+#pragma once
 #include "CollisionPrimitive.h"
 
 class Collision

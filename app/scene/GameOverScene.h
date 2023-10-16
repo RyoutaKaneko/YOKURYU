@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Input.h"
 #include "DirectXCommon.h"
 #include "GameBaseScene.h"

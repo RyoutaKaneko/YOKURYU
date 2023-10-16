@@ -1,3 +1,9 @@
+/**
+ * @file Vector3.cpp
+ * @brief 3軸ベクトルクラス
+ * @author カネコ_リョウタ
+ */
+
 #pragma once
 #include <cmath>
 

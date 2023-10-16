@@ -1,3 +1,9 @@
+/**
+ * @file XMViewProjection.cpp
+ * @brief ParticleManager.cppに使っているカメラクラス
+ * @author カネコ_リョウタ
+ */
+
 #pragma once
 #include <DirectXMath.h>
 #include <wrl.h>

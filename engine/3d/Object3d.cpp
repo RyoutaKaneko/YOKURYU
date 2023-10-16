@@ -1,4 +1,10 @@
-﻿#include "Object3d.h"
+﻿/**
+ * @file Object3d.h
+ * @brief 3dオブジェクトを動かすためのクラス
+ * @author カネコ_リョウタ
+ */
+
+#include "Object3d.h"
 #include <d3dcompiler.h>
 #pragma warning(push)
 #pragma warning(disable:26813)
@@ -8,7 +14,6 @@
 #include <sstream>
 #include <vector>
 #include <CollisionManager.h>
-
 #pragma comment(lib, "d3dcompiler.lib")
 
 using namespace DirectX;

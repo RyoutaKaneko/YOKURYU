@@ -1,5 +1,10 @@
-#pragma once
+/**
+ * @file ParticleManager.cpp
+ * @brief パーティクル管理クラス
+ * @author カネコ_リョウタ
+ */
 
+#pragma once
 #include "Particle.h"
 #include "XMViewProjection.h"
 #include <Windows.h>

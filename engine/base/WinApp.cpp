@@ -1,3 +1,9 @@
+/**
+ * @file WinApp.h
+ * @brief Window生成クラス
+ * @author カネコ_リョウタ
+ */
+
 #include "WinApp.h"
 
 WinApp* WinApp::GetInstance() 

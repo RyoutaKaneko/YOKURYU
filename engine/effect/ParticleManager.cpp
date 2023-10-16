@@ -1,3 +1,9 @@
+/**
+ * @file ParticleManager.h
+ * @brief パーティクル管理クラス
+ * @author カネコ_リョウタ
+ */
+
 #include "ParticleManager.h"
 #include <d3dcompiler.h>
 #pragma warning(push)

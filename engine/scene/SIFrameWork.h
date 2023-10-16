@@ -1,3 +1,9 @@
+/**
+ * @file SlFrameWork.cpp
+ * @brief ゲーム基盤。メインループを行っている
+ * @author カネコ_リョウタ
+ */
+
 #pragma once
 #include"Input.h"
 #include"WinApp.h"

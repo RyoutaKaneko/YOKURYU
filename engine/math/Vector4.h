@@ -1,3 +1,9 @@
+/**
+ * @file Vector4.cpp
+ * @brief 4軸ベクトルクラス
+ * @author カネコ_リョウタ
+ */
+
 #pragma once
 
 class Vector4

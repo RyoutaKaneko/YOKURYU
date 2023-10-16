@@ -1,3 +1,9 @@
+/**
+ * @file Collision.h
+ * @brief 当たり判定の関数をまとめたクラス
+ * @author カネコ_リョウタ
+ */
+
 #include "Collision.h"
 using namespace DirectX;
 

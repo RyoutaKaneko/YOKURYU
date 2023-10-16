@@ -1,3 +1,9 @@
+/**
+ * @file WorldTransform.cpp
+ * @brief 3dオブジェクトの座標管理、アフィン変換を行うクラス
+ * @author カネコ_リョウタ
+ */
+
 #pragma once
 #include"Vector3.h"
 #include "Vector4.h"

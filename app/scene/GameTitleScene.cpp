@@ -1,4 +1,10 @@
-﻿#include "GameTitleScene.h"
+﻿/**
+ * @file GameTitleScene.h
+ * @brief タイトル画面のシーンクラス
+ * @author カネコ_リョウタ
+ */
+
+#include "GameTitleScene.h"
 
 using namespace DirectX;
 

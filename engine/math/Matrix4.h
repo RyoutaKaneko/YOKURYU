@@ -1,8 +1,10 @@
-// ===============================
-// Matrix4 型 Matrix4.h
-// ===============================
-#pragma once
+/**
+ * @file Matrix4.cpp
+ * @brief 4x4行列クラス
+ * @author カネコ_リョウタ
+ */
 
+#pragma once
 #include "Vector3.h"
 #include "Vector2.h"
 

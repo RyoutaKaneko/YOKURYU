@@ -1,4 +1,10 @@
-﻿#pragma once
+﻿/**
+ * @file Input.cpp
+ * @brief 入力デバイス管理クラス(キーボード、マウス)
+ * @author カネコ_リョウタ
+ */
+
+#pragma once
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 #include <windows.h>
@@ -11,12 +17,10 @@
 #include <xinput.h>
 #include "Vector3.h"
 #include "Vector2.h"
-
 #pragma comment(lib,"d3d11.lib")
 #pragma comment(lib,"d2d1.lib")
 #pragma comment(lib,"dwrite.lib")
 #pragma comment (lib, "xinput.lib")
-
 #define MaxCountrollers 4  
 #define MaxVibration 65535
 

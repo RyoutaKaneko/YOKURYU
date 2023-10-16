@@ -1,3 +1,9 @@
+/**
+ * @file BossBullet.cpp
+ * @brief ボス攻撃に使う弾リスト用クラス
+ * @author カネコ_リョウタ
+ */
+
 #pragma once
 #include "Vector3.h"
 #include <Model.h>

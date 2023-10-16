@@ -1,3 +1,9 @@
+/**
+ * @file PlayerBullet.h
+ * @brief プレイヤーの攻撃に使う弾リスト用クラス
+ * @author カネコ_リョウタ
+ */
+
 #include "PlayerBullet.h"
 #include "BaseCollider.h"
 

@@ -1,3 +1,9 @@
+/**
+ * @file Enemy.h
+ * @brief enemyの全般(ステータス、行動、描画)をまとめたクラス
+ * @author カネコ_リョウタ
+ */
+
 #include "Enemy.h"
 #include "string.h"
 #include "BaseCollider.h"

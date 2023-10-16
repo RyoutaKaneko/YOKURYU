@@ -1,3 +1,9 @@
+/**
+ * @file DirectXCommon.cpp
+ * @brief DirectX基盤
+ * @author カネコ_リョウタ
+ */
+
 #pragma once 
 #include <d3d12.h>
 #include <dxgi1_6.h>
@@ -5,12 +11,10 @@
 #include <d3dx12.h>
 #include <chrono>
 #include <thread>
-
 #pragma warning(push)
 #pragma warning(disable:26813)
 #include<DirectXTex.h>
 #pragma warning(pop)
-
 #include "WinApp.h"
 #include "FPSFixed.h"
 

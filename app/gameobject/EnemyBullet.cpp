@@ -1,3 +1,9 @@
+/**
+ * @file EnemyBullet.h
+ * @brief 通常敵攻撃に使う弾リスト用クラス
+ * @author カネコ_リョウタ
+ */
+
 #include "EnemyBullet.h"
 #include "BaseCollider.h"
 

@@ -1,10 +1,13 @@
+/**
+ * @file Input.h
+ * @brief 入力デバイス管理クラス(キーボード、マウス)
+ * @author カネコ_リョウタ
+ */
+
 #include "Input.h"
 #include <cassert>
-
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")
-
-//using namespace Microsoft::WRL;
 
 Input* Input::GetInstance()
 {

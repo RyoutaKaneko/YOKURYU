@@ -1,3 +1,9 @@
+/**
+ * @file Boss.cpp
+ * @brief ボス全般(ステータス、行動、描画)をまとめたもの
+ * @author カネコ_リョウタ
+ */
+
 #pragma once
 #pragma once
 #include "Object3d.h"

@@ -1,3 +1,9 @@
+/**
+ * @file SlFrameWork.h
+ * @brief ゲーム基盤。メインループを行っている
+ * @author カネコ_リョウタ
+ */
+
 #include "SIFrameWork.h"
 
 void SIFrameWork::Initialize()

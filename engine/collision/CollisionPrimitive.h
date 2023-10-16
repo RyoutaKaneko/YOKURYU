@@ -1,3 +1,9 @@
+/**
+ * @file CollisionPrimitive.cpp
+ * @brief 当たり判定のプリミティブをまとめたクラス
+ * @author カネコ_リョウタ
+ */
+
 #pragma once
 #pragma once
 #include<DirectXMath.h>

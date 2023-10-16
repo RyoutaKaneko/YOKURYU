@@ -1,3 +1,9 @@
+/**
+ * @file JsonLoader.h
+ * @brief レベルエディタJsonファイル読み込みクラス
+ * @author カネコ_リョウタ
+ */
+
 #include "JsonLoader.h"
 
 #pragma warning(push)

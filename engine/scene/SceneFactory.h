@@ -1,5 +1,10 @@
-#pragma once
+/**
+ * @file SceneFactory.cpp
+ * @brief シーン切り替え時の次シーンを生成するクラス
+ * @author カネコ_リョウタ
+ */
 
+#pragma once
 #include "AbstractSceneFactory.h"
 #include "GameTitleScene.h"
 #include "GameScene.h"

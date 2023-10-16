@@ -1,3 +1,9 @@
+/**
+ * @file JsonLoader.cpp
+ * @brief レベルエディタJsonファイル読み込みクラス
+ * @author カネコ_リョウタ
+ */
+
 #pragma once
 #include "Vector4.h"
 #pragma warning(push)

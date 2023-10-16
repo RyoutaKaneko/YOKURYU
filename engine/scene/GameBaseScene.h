@@ -1,10 +1,14 @@
-#pragma once
+/**
+ * @file GameBaseScene.cpp
+ * @brief ゲームシーンの基盤クラス
+ * @author カネコ_リョウタ
+ */
 
+#pragma once
 #include "Sprite.h"
 #include "JsonLoader.h"	
 #include "Model.h"
 #include "Object3d.h"
-
 #include <cassert>
 #include <fstream>
 #include <sstream>

@@ -113,6 +113,7 @@
     <ClCompile Include="app\gameobject\Energy.cpp" />
     <ClCompile Include="app\gameobject\Player.cpp" />
     <ClCompile Include="app\gameobject\PlayerBullet.cpp" />
+    <ClCompile Include="app\scene\Game.cpp" />
     <ClCompile Include="app\scene\GameClearScene.cpp" />
     <ClCompile Include="app\scene\GameOverScene.cpp" />
     <ClCompile Include="app\scene\GameScene.cpp" />
@@ -129,7 +130,6 @@
     <ClCompile Include="engine\collision\SphereCollider.cpp" />
     <ClCompile Include="engine\effect\PostEffect.cpp" />
     <ClCompile Include="engine\math\Spline.cpp" />
-    <ClCompile Include="engine\scene\Game.cpp" />
     <ClCompile Include="engine\scene\GameBaseScene.cpp" />
     <ClCompile Include="engine\scene\GameSceneManager.cpp" />
     <ClCompile Include="engine\scene\SceneFactory.cpp" />
@@ -252,6 +252,7 @@
     <ClInclude Include="app\gameobject\Energy.h" />
     <ClInclude Include="app\gameobject\Player.h" />
     <ClInclude Include="app\gameobject\PlayerBullet.h" />
+    <ClInclude Include="app\scene\Game.h" />
     <ClInclude Include="app\scene\GameClearScene.h" />
     <ClInclude Include="app\scene\GameOverScene.h" />
     <ClInclude Include="app\scene\GameScene.h" />
@@ -284,7 +285,6 @@
     <ClInclude Include="engine\math\Vector4.h" />
     <ClInclude Include="engine\base\WinApp.h" />
     <ClInclude Include="engine\scene\AbstractSceneFactory.h" />
-    <ClInclude Include="engine\scene\Game.h" />
     <ClInclude Include="engine\scene\GameBaseScene.h" />
     <ClInclude Include="engine\3d\WorldTransform.h" />
     <ClInclude Include="engine\3d\FbxLoader.h" />

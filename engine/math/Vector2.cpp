@@ -1,3 +1,9 @@
+/**
+ * @file Vector2.h
+ * @brief 2軸ベクトルクラス
+ * @author カネコ_リョウタ
+ */
+
 #include "Vector2.h"
 #include <cmath>      // sqrt
 

@@ -1,4 +1,10 @@
-﻿#pragma once
+﻿/**
+ * @file Player.cpp
+ * @brief プレイヤーの移動、攻撃、描画をまとめたクラス
+ * @author カネコ_リョウタ
+ */
+
+#pragma once
 #include "Object3d.h"
 #include "WinApp.h"
 #include "Vector3.h"

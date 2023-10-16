@@ -1,3 +1,9 @@
+/**
+ * @file WorldTransform.h
+ * @brief 3dオブジェクトの座標管理、アフィン変換を行うクラス
+ * @author カネコ_リョウタ
+ */
+
 #include "WorldTransform.h"
 #include<cassert>
 #include <d3dx12.h>

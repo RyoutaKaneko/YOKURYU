@@ -73,77 +73,202 @@ public:
 	Sprite();
 	~Sprite();
 
+	/// <summary>
 	/// スプライト共通データ生成
+	/// </summary>
+	/// <param name="dev">デバイス</param>
+	/// <returns></returns>
 	SpriteCommon SpriteCommonCreate(ID3D12Device* dev);
 
+	/// <summary>
 	/// 3Dオブジェクト用パイプライン生成
+	/// </summary>
+	/// <param name="device">デバイス</param>
+	/// <returns></returns>
 	PipelineSet SpriteCreateGraphicsPipeline(ID3D12Device* device);
 
+	/// <summary>
 	/// スプライト共通テクスチャ読み込み
+	/// </summary>
+	/// <param name="spriteCommon">スプライトコモン</param>
+	/// <param name="texnumber">テクスチャ番号</param>
+	/// <param name="filename">ファイル名</param>
+	/// <param name="dev">デバイス</param>
 	void LoadTexture(SpriteCommon& spriteCommon, UINT texnumber, 
 		const wchar_t* filename, ID3D12Device* dev);
 
+	/// <summary>
 	/// スプライト生成
+	/// </summary>
+	/// <param name="dev">デバイス</param>
+	/// <param name="texNumber">テクスチャ番号</param>
+	/// <param name="anchorpoint">アンカーポイント</param>
+	/// <param name="isFlipX">X反転</param>
+	/// <param name="FlipY">Y反転</param>
 	void SpriteCreate(ID3D12Device* dev, UINT texNumber, Vector2 anchorpoint, bool isFlipX, bool FlipY);
 
-	/// スプライト単体頂点バッファの転送
+	/// <summary>
+	///  スプライト単体頂点バッファの転送
+	/// </summary>
+	/// <param name="sprite">スプライト</param>
+	/// <param name="texIndex_">テクスチャ番号</param>
 	void SpriteTransferVertexBuffer(const Sprite& sprite, uint32_t texIndex_ = UINT32_MAX);
 
-	/// スプライト単体更新
+	/// <summary>
+	/// 更新
+	/// </summary>
+	/// <param name="sprite">スプライト</param>
+	/// <param name="spriteCommon">スプライトコモン</param>
 	void SpriteUpdate(Sprite& sprite, const SpriteCommon& spriteCommon);
 
+	/// <summary>
 	/// 描画前処理
+	/// </summary>
+	/// <param name="cmdList">コマンドリスト</param>
+	/// <param name="spriteCommon">スプライトコモン</param>
 	static void PreDraw(ID3D12GraphicsCommandList* cmdList, const SpriteCommon& spriteCommon);
 
+	/// <summary>
 	/// 描画後処理
+	/// </summary>
 	static void PostDraw();
 
-	/// スプライト単体描画
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="cmdList_">コマンドリスト</param>
+	/// <param name="spriteCommon">スプライトコモン</param>
+	/// <param name="dev">デバイス</param>
 	void SpriteDraw(ID3D12GraphicsCommandList* cmdList_, const SpriteCommon& spriteCommon, 
 		ID3D12Device* dev);
 
-	/// 終了処理
+	/// <summary>
+	/// 終了
+	/// </summary>
 	void Finalize();
 
 public: // セッター
-	// 座標設定
+	/// <summary>
+	/// 座標設定
+	/// </summary>
+	/// <param name="position_">座標</param>
 	void SetPosition(Vector3 position_) { this->position = position_; }
-	// サイズ設定
+	
+	/// <summary>
+	/// スケール設定
+	/// </summary>
+	/// <param name="scale_">スケール</param>
 	void SetScale(Vector2 scale_) { this->scale = scale_; }
-	// 回転
+	
+	/// <summary>
+	/// 回転設定
+	/// </summary>
+	/// <param name="_rotation">回転率</param>
 	void SetRotation(float _rotation) { this->rotation = _rotation; }
-	// 番号
+	
+	/// <summary>
+	/// テクスチャ番号を設定
+	/// </summary>
+	/// <param name="texNumber_">テクスチャ番号</param>
 	void SetTexNumber(UINT texNumber_) { this->texNumber = texNumber_; }
-	// 色
+	
+	/// <summary>
+	/// 色設定
+	/// </summary>
+	/// <param name="color">色</param>
 	void SetColor(const Vector4& color) { this->color_ = color; }
+
+	/// <summary>
+	/// 透過度を設定
+	/// </summary>
+	/// <param name="sprite">スプライト</param>
+	/// <param name="alpha_">透過度</param>
 	void SetAlpha(Sprite sprite, float alpha_);
-	// フリップ
-	void SetIsFlipX(bool isFlipX) { this->isFlipX_ = isFlipX; } // X
-	void SetIsFlipY(bool isFlipY) { this->isFlipY_ = isFlipY; } // Y
-	// テクスチャ左上座標
+	
+	/// <summary>
+	/// X反転フラグを設定
+	/// </summary>
+	/// <param name="isFlipX">X反転フラグ</param>
+	void SetIsFlipX(bool isFlipX) { this->isFlipX_ = isFlipX; }
+
+	/// <summary>
+	/// Y反転フラグを設定
+	/// </summary>
+	/// <param name="isFlipY">Y反転フラグ</param>
+	void SetIsFlipY(bool isFlipY) { this->isFlipY_ = isFlipY; }
+	
+	/// <summary>
+	/// テクスチャ左上座標を設定
+	/// </summary>
+	/// <param name="texLeftTop">テクスチャ左上座標</param>
 	void SetTexLeftTop(const Vector2& texLeftTop) { this->texLeftTop_ = texLeftTop; }
-	// テクスチャ切り出しサイズ
+
+
+	/// <summary>
+	/// テクスチャ切り出しサイズを設定
+	/// </summary>
+	/// <param name="texSize">テクスチャサイズ</param>
 	void SetTexSize(const Vector2& texSize) { this->texSize_ = texSize; }
 
 public: // ゲッター
-	// 座標
+	/// <summary>
+	/// 座標を取得
+	/// </summary>
+	/// <returns></returns>
 	Vector3 GetPosition() const { return position; }
-	// サイズ
+	
+	/// <summary>
+	/// スケールを取得
+	/// </summary>
+	/// <returns></returns>
 	Vector2 GetScale() const { return scale; }
-	//ワールド行列
+	
+	/// <summary>
+	/// ワールド行列を取得
+	/// </summary>
+	/// <returns></returns>
 	Matrix4 GetMat() { return constMap->mat; }
-	// 回転
+	
+	/// <summary>
+	/// 回転を取得
+	/// </summary>
+	/// <returns></returns>
 	float GetRotation() const { return rotation; }
-	// 番号
+	
+	/// <summary>
+	/// テクスチャ番号を取得
+	/// </summary>
+	/// <returns></returns>
 	UINT GetTexNumber() const { return texNumber; }
-	// 色
+	
+	/// <summary>
+	/// 色取得
+	/// </summary>
+	/// <returns></returns>
 	Vector4 GetColor() const { return color_; }
-	// フリップ
-	bool GetIsFlipX() const { return isFlipX_; } // X
-	bool GetIsFlipY() const { return isFlipY_; } // Y
-	// テクスチャ左上座標
+	
+	/// <summary>
+	/// X反転を取得
+	/// </summary>
+	/// <returns></returns>
+	bool GetIsFlipX() const { return isFlipX_; }
+
+	/// <summary>
+	/// Y反転を取得
+	/// </summary>
+	/// <returns></returns>
+	bool GetIsFlipY() const { return isFlipY_; }
+	
+	/// <summary>
+	/// テクスチャ左上を取得
+	/// </summary>
+	/// <returns></returns>
 	Vector2 GetTexLeftTop() const { return texLeftTop_; }
-	// テクスチャ切り出しサイズ
+	
+	/// <summary>
+	/// テクスチャ切り出しサイズを取得
+	/// </summary>
+	/// <returns></returns>
 	Vector2 GetTexSize() const { return texSize_; }
 
 public:

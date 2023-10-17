@@ -77,14 +77,31 @@ private: // 定数
 
 public: // 静的メンバ関数
 	
-	// OBJファイルから3Dモデルを読み込む
+	/// <summary>
+	/// OBJファイルから3Dモデルを読み込む
+	/// </summary>
+	/// <param name="modelname">モデル名</param>
+	/// <returns></returns>
 	static Model* LoadFromOBJ(const std::string& modelname);
 
-	// マテリアル読み込み
+	/// <summary>
+	/// マテリアル読み込み
+	/// </summary>
+	/// <param name="directoryPath">パス名</param>
+	/// <param name="filename">ファイル名</param>
 	void LoadMaterial(const std::string& directoryPath, const std::string& filename);
 
-	// テクスチャ読み込み
+	/// <summary>
+	/// テクスチャ読み込み
+	/// </summary>
+	/// <param name="directoryPath">パス名</param>
+	/// <param name="filename">ファイル名</param>
 	void LoadTexture(const std::string& directoryPath, const std::string& filename);
+
+	/// <summary>
+	///  ファイル名だけバージョン
+	/// </summary>
+	/// <param name="filename">ファイル名</param>
 	void LoadTexture(const std::string& filename = "Resources");
 
 	// 描画
@@ -92,9 +109,16 @@ public: // 静的メンバ関数
 	/// <param name="rootParamIndexMaterial">マテリアル用ルートパラメータ番号</param>
 	void Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParamIndexMaterial,float alpha_ = 1);
 
-	// setter
+	/// <summary>
+	/// デバイスをセット
+	/// </summary>
+	/// <param name="device_">デバイス</param>
 	static void SetDevice(ID3D12Device* device_) { Model::device = device_; }
 
+	/// <summary>
+	/// 透過度をセット
+	/// </summary>
+	/// <param name="alpha_">透過度</param>
 	void SetAlpha(float alpha_);
 
 

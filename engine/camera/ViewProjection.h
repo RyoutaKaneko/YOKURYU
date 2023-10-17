@@ -22,24 +22,62 @@ public:// サブクラス
 		Vector3 cameraPos;  // カメラ座標（ワールド座標）
 	};
 public:// メンバ関数
-	// 静的初期化
+	/// <summary>
+	///  静的初期化
+	/// </summary>
+	/// <param name="device">デバイス</param>
 	static void StaticInitialize(ID3D12Device* device);
 
+	/// <summary>
 	/// 初期化
+	/// </summary>
 	void Initialize();
 
+	/// <summary>
+	/// 視点をセット
+	/// </summary>
+	/// <param name="eye_">視点</param>
 	void SetEye(Vector3 eye_);
+
+	/// <summary>
+	/// 視点を取得
+	/// </summary>
+	/// <returns></returns>
 	Vector3 GetEye() { return eye; }
+
+	/// <summary>
+	///　注視点をセット
+	/// </summary>
+	/// <param name="terget_">注視点</param>
 	void SetTarget(Vector3 terget_);
+
+	/// <summary>
+	/// 注視点を取得
+	/// </summary>
+	/// <returns></returns>
 	Vector3 GetTarget() { return target; }
+
+	/// <summary>
+	/// ビュー行列を取得
+	/// </summary>
+	/// <returns></returns>
 	Matrix4 GetMatView() { return matView; }
+
+	/// <summary>
+	/// プロジェクション行列を取得
+	/// </summary>
+	/// <returns></returns>
 	Matrix4 GetMatProjection() { return matProjection; }
 
-
-	/// 行列を更新する
+	/// <summary>
+	/// 行列を更新
+	/// </summary>
 	void UpdateMatrix();
 
-	// バッファのゲッター
+	/// <summary>
+	/// バッファのゲッターを取得
+	/// </summary>
+	/// <returns></returns>
 	ID3D12Resource* GetBuff() { return constBuff.Get(); }
 
 
@@ -47,13 +85,21 @@ private:// プライベート関数
 	// 円周率
 	const float PI = 3.141592f;
 
+	/// <summary>
 	/// 定数バッファ生成
+	/// </summary>
 	void CreateConstBuffer();
 
+	/// <summary>
 	/// マッピングする
+	/// </summary>
 	void Map();
 
-	// 度数からラジアンに変換
+	/// <summary>
+	/// 度数からラジアンに変換
+	/// </summary>
+	/// <param name="angle">度数</param>
+	/// <returns></returns>
 	float ToRadian(float angle) { return angle * (PI / 180); }
 
 

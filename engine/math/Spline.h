@@ -11,23 +11,58 @@
 class Spline 
 {
 public:
-	//初期化
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
 
-	//更新
+	/// <summary>
+	/// 更新
+	/// </summary>
+	/// <param name="points">spline制御点</param>
+	/// <param name="val"> 加速度</param>
+	/// <returns></returns>
 	Vector3 Update(std::vector<Vector3>& points,float val);
 
+	/// <summary>
+	/// 敵位置の計算
+	/// </summary>
+	/// <param name="points">spline制御点</param>
+	/// <param name="val">加速度</param>
+	/// <returns></returns>
 	Vector3 EnemyPosition(std::vector<Vector3>& points, float val);
 
-	//更新
+	/// <summary>
+	/// 位置計算
+	/// </summary>
+	/// <param name="points">spline制御点</param>
+	/// <returns></returns>
 	Vector3 pointCal(std::vector<Vector3>& points);
 
+	/// <summary>
+	/// リセット
+	/// </summary>
 	void Reset();
 
-	//制御点の集合(vectorコンテナ)、補間する区間の添字、時間経過率
+	/// <summary>
+	/// 曲線補完
+	/// </summary>
+	/// <param name="point">spline制御点</param>
+	/// <param name="startIndex">補間する区間の添字</param>
+	/// <param name="t">時間経過率</param>
+	/// <returns></returns>
 	Vector3 SplinePosition(const std::vector<Vector3>& point, size_t startIndex, float t);
 
+	/// <summary>
+	/// 制御点の最後まで行ったかどうか
+	/// </summary>
+	/// <returns></returns>
 	bool GetIsEnd() { return isEnd; }
+
+	/// <summary>
+	/// 時間経過率取得
+	/// </summary>
+	/// <returns></returns>
 	float GetT() { return t + integer; }
 
 private:

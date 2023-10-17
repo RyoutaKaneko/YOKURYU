@@ -18,33 +18,112 @@ public:
 	//インスタンス
 	RailCamera();
 	~RailCamera();
-	//初期化
+
+	/// <summary>
+	///  初期化
+	/// </summary>
+	/// <param name="player_">プレイヤー</param>
 	void Initialize(Player* player_);
-	//更新
+	
+	/// <summary>
+	/// 更新
+	/// </summary>
+	/// <param name="player_">プレイヤー</param>
+	/// <param name="point">レールカメラ通過点</param>
 	void Update(Player* player_, std::vector<Vector3>& point);
+
+	/// <summary>
+	/// カメラのみ更新
+	/// </summary>
 	void ViewUpdate();
 
+	/// <summary>
+	/// 画面シェイク
+	/// </summary>
+	/// <param name="x">xの乱数</param>
+	/// <param name="y">yの乱数</param>
 	void ShakeCamera(float x, float y);
 
+	/// <summary>
+	/// 
+	/// </summary>
 	void TitleR();
+
+	/// <summary>
+	/// カメラリセット
+	/// </summary>
 	void RailReset();
 
-	//Setter
+	/// <summary>
+	/// プレイヤーをレールにセット
+	/// </summary>
+	/// <param name="player_">プレイヤー</param>
 	void SetPlayer(Player* player_);
+	/// <summary>
+	/// 視点をセット
+	/// </summary>
+	/// <param name="view">カメラ</param>
 	void SetEye(Vector3 view);
+
+	/// <summary>
+	/// 注視点をセット
+	/// </summary>
+	/// <param name="target_">注視点</param>
 	void SetTarget(Vector3 target_);
+
+	/// <summary>
+	///  レール上かどうか
+	/// </summary>
+	/// <param name="onrail">レール上フラグ</param>
 	void SetOnRail(bool onrail) { OnRail = onrail; }
 
-	//ベクトルを取得
+	/// <summary>
+	/// Y成分を0にした正面ベクトルを取得
+	/// </summary>
+	/// <param name="a"></param>
+	/// <param name="b"></param>
 	void GetVec(Vector3 a, Vector3 b);
 
-	//Getter
+	/// <summary>
+	/// viewProjection取得
+	/// </summary>
+	/// <returns></returns>
 	ViewProjection* GetView() { return viewProjection; }
+
+	/// <summary>
+	///  レールの最後まで行ったかどうか
+	/// </summary>
+	/// <returns></returns>
 	bool GetIsEnd() { return isEnd; }
+
+	/// <summary>
+	/// レール上かどうかを取得
+	/// </summary>
+	/// <returns></returns>
 	bool GetOnRail() { return OnRail; }
+
+	/// <summary>
+	/// 正面ベクトルを取得
+	/// </summary>
+	/// <returns></returns>
 	Vector3 GetFrontVec() { return frontVec; }
+
+	/// <summary>
+	/// レールカメラオブジェクトを取得
+	/// </summary>
+	/// <returns></returns>
 	Object3d* GetCamera() { return camera; }
+
+	/// <summary>
+	/// レールカメラオブジェクトの座標を取得
+	/// </summary>
+	/// <returns></returns>
 	Vector3 GetCameraPos() { return camera->worldTransform_.position_; }
+
+	/// <summary>
+	/// 通過点を取得
+	/// </summary>
+	/// <returns></returns>
 	float GetPasPoint() { return splineCam.GetT(); }
 private:
 	Input* input_ = nullptr;

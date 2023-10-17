@@ -60,21 +60,49 @@ private://定数
 
 public://メンバ関数
 
-	//OBJファイルからパーティクルモデルを読み込む
+	/// <summary>
+	/// OBJファイルからパーティクルモデルを読み込む
+	/// </summary>
+	/// <param name="fileName">ファイル名</param>
+	/// <returns></returns>
 	static Particle* LoadParticleTexture(const std::string& fileName);
-	// デスクリプタヒープの初期化
+	
+	/// <summary>
+	/// デスクリプタヒープの初期化
+	/// </summary>
 	void InitializeDescriptorHeap();
-	// テクスチャ読み込み
+	
+	/// <summary>
+	/// クスチャ読み込み
+	/// </summary>
+	/// <param name="fileName">ファイル名</param>
 	void LoadTexture(const std::string& fileName);
 
-	//各種バッファ生成
+	/// <summary>
+	/// 各種バッファ生成
+	/// </summary>
 	void CreateBuffers();
-	//更新
+
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
-	// 描画
+	
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="cmdList"></param>
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 
-	//パーティクルの追加
+	/// <summary>
+	/// パーティクルの追加
+	/// </summary>
+	/// <param name="life">存在時間</param>
+	/// <param name="position">位置</param>
+	/// <param name="velocity">速度</param>
+	/// <param name="accel">縦移動</param>
+	/// <param name="start_scale">開始スケール</param>
+	/// <param name="end_scale">終了スケール</param>
 	void Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel,
 		float start_scale, float end_scale);
 
@@ -104,7 +132,10 @@ private://メンバ変数
 	std::forward_list<OneParticle> particles_;
 
 public://setter
-	//デバイス
+	/// <summary>
+	/// デバイスをセット
+	/// </summary>
+	/// <param name="device"></param>
 	static void SetDevice(ID3D12Device* device) { Particle::device_ = device; }
 
 };

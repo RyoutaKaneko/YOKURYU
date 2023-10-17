@@ -118,12 +118,34 @@ private:
 
 public://関数
 	~FbxModel();
+
+	/// <summary>
+	/// バッファ生成
+	/// </summary>
+	/// <param name="device">デバイス</param>
 	void CreateBuffers(ID3D12Device* device);
-	//描画
+	
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="cmdList">コマンドリスト</param>
 	void Draw(ID3D12GraphicsCommandList* cmdList);
-	//モデルの変形行列取得
+	
+	/// <summary>
+	/// モデルの変形を取得
+	/// </summary>
+	/// <returns></returns>
 	const Matrix4& GetModelTransform() { return meshNode->globalTransform; }
-	//getter
+	
+	/// <summary>
+	/// ボーンを取得
+	/// </summary>
+	/// <returns></returns>
 	std::vector<Bone>& GetBones() { return bones; }
+
+	/// <summary>
+	/// fbxシーンを取得
+	/// </summary>
+	/// <returns></returns>
 	FbxScene* GetFbxScene() { return fbxScene; }
 };

@@ -26,16 +26,27 @@ private: // エイリアス
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 public: // 静的メンバ関数
-	/// 静的初期化
+	/// <summary>
+	///  静的初期化
+	/// </summary>
+	/// <param name="device">デバイス</param>
 	static void StaticInitialize(ID3D12Device* device);
 
-	/// 描画前処理
+	/// <summary>
+	///  描画前処理
+	/// </summary>
+	/// <param name="cmdList">コマンドリスト</param>
 	static void PreDraw(ID3D12GraphicsCommandList* cmdList);
 
+	/// <summary>
 	/// 描画後処理
+	/// </summary>
 	static void PostDraw();
 
+	/// <summary>
 	/// 3Dオブジェクト生成
+	/// </summary>
+	/// <returns></returns>
 	static Object3d* Create();
 
 private: // 静的メンバ変数
@@ -50,7 +61,9 @@ private: // 静的メンバ変数
 
 private:// 静的メンバ関数
 
+	/// <summary>
 	/// グラフィックパイプライン生成
+	/// </summary>
 	static void InitializeGraphicsPipeline();
 
 public: // メンバ関数
@@ -61,45 +74,124 @@ public: // メンバ関数
 	//デストラクタ
 	virtual ~Object3d();
 
-	//初期化
+	/// <summary>
+	/// /初期化
+	/// </summary>
+	/// <returns></returns>
 	virtual bool Initialize();
 
+	/// <summary>
 	/// 毎フレーム処理
+	/// </summary>
 	virtual void Update();
 
+	/// <summary>
 	/// 描画
+	/// </summary>
+	/// <param name="viewProjection">カメラ</param>
 	void Draw(ViewProjection* viewProjection);
+
+	/// <summary>
+	/// 透過付き描画
+	/// </summary>
+	/// <param name="viewProjection">カメラ</param>
+	/// <param name="alpha_">透過度</param>
 	void Draw(ViewProjection* viewProjection, float alpha_);
 
-	//ワールド行列の取得
+	/// <summary>
+	/// ワールド行列の取得
+	/// </summary>
+	/// <returns></returns>
 	const Matrix4& GetMatWorld() { return matWorld; }
 
-	// モデルの設定
+	/// <summary>
+	/// モデルの設定
+	/// </summary>
+	/// <param name="model_"></param>
 	void SetModel(Model* model_) { this->model = model_; }
 
-	//コライダーのセット
+	/// <summary>
+	/// コライダーのセット
+	/// </summary>
+	/// <param name="collider"></param>
 	void SetCollider(BaseCollider* collider);
 
-	//衝突時コールバック関数
+	/// <summary>
+	/// 衝突時コールバック関数
+	/// </summary>
+	/// <param name="info">衝突情報</param>
 	virtual void OnCollision([[maybe_unused]] const CollisionInfo& info) {}
+
+	/// <summary>
+	/// 衝突時コールバック関数
+	/// </summary>
+	/// <param name="info">衝突情報</param>
 	virtual void OffCollision([[maybe_unused]] const CollisionInfo& info) {}
 
-	// オブジェクトの座標
+	/// <summary>
+	/// ワールド行列のオブジェクトの座標
+	/// </summary>
+	/// <returns></returns>
 	Vector3 GetWorldPos();
-	const Vector3& GetPosition() const { return worldTransform_.position_; }
-	bool GetIsLocked() { return isLocked; }
-	void SetIsLocked(bool isLock) { isLocked = isLock; }
-	const float& GetPositionZ() const { return worldTransform_.position_.z; }
-	void SetPosition(const Vector3& position) { this->worldTransform_.position_ = position; }
-	// オブジェクトの大きさ
-	void SetScale(const Vector3& scale) { this->worldTransform_.scale_ = scale; }
-	const Vector3& GetScale() const { return worldTransform_.scale_; }
-	// オブジェクトの回転
-	void SetRotation(const Vector3& rotation) { this->worldTransform_.rotation_ = rotation; }
-	const Vector3& GetRotation() const { return worldTransform_.rotation_; }
-	void SetRotationX(const float& rotation) { this->worldTransform_.rotation_.x = rotation; }
-	void SetRotationY(const float& rotation) { this->worldTransform_.rotation_.y = rotation; }
 
+	/// <summary>
+	/// ローカル位置
+	/// </summary>
+	/// <returns></returns>
+	const Vector3& GetPosition() const { return worldTransform_.position_; }
+
+	/// <summary>
+	/// ロック情報を取得
+	/// </summary>
+	/// <returns></returns>
+	bool GetIsLocked() { return isLocked; }
+
+	/// <summary>
+	/// ロック情報を取得
+	/// </summary>
+	/// <param name="isLock"></param>
+	void SetIsLocked(bool isLock) { isLocked = isLock; }
+
+	/// <summary>
+	/// z座標を取得
+	/// </summary>
+	/// <returns></returns>
+	const float& GetPositionZ() const { return worldTransform_.position_.z; }
+
+	/// <summary>
+	/// 位置をセット
+	/// </summary>
+	/// <param name="position">ローカル座標</param>
+	void SetPosition(const Vector3& position) { this->worldTransform_.position_ = position; }
+	
+	/// <summary>
+	/// スケールをセット
+	/// </summary>
+	/// <param name="scale">スケール</param>
+	void SetScale(const Vector3& scale) { this->worldTransform_.scale_ = scale; }
+
+	/// <summary>
+	/// スケールを取得
+	/// </summary>
+	/// <returns></returns>
+	const Vector3& GetScale() const { return worldTransform_.scale_; }
+	
+	/// <summary>
+	/// 回転をセット
+	/// </summary>
+	/// <param name="rotation">回転率</param>
+	void SetRotation(const Vector3& rotation) { this->worldTransform_.rotation_ = rotation; }
+
+	/// <summary>
+	/// 回転をセット
+	/// </summary>
+	/// <returns></returns>
+	const Vector3& GetRotation() const { return worldTransform_.rotation_; }
+
+	/// <summary>
+	/// 名前を取得
+	/// </summary>
+	/// <returns></returns>
 	const char* GetName() const { return name; }
 public:
 	// ワールド変換データ

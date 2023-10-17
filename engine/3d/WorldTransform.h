@@ -24,29 +24,55 @@ public:// サブクラス
 		Matrix4 matWorld;// 行列
 	};
 public:// メンバ関数
-	// 静的初期化
+	/// <summary>
+	/// 静的初期化
+	/// </summary>
+	/// <param name="device">デバイス</param>
 	static void StaticInitialize(ID3D12Device* device);
 
+	/// <summary>
 	/// 初期化
+	/// </summary>
 	void Initialize();
 
+	/// <summary>
 	/// 行列を更新する
+	/// </summary>
 	void UpdateMatrix();
 
-	// 定数バッファのゲッター
+	/// <summary>
+	///  定数バッファのゲッター
+	/// </summary>
+	/// <returns></returns>
 	ID3D12Resource* GetBuff() { return constBuffB0.Get(); }
 
+	/// <summary>
 	/// 定数バッファ生成
+	/// </summary>
 	void CreateConstBuffer();
 
+	/// <summary>
 	/// マッピングする
+	/// </summary>
 	void Map();
 
+	/// <summary>
+	/// 現在位置取得
+	/// </summary>
+	/// <returns></returns>
 	const Vector3& GetPosition()const { return position_; }
 
-	// 度数からラジアンに変換
+	/// <summary>
+	/// 度数からラジアンに変換
+	/// </summary>
+	/// <param name="angle">度数</param>
+	/// <returns></returns>
 	float ToRadian(float angle) { return angle * (PI / 180); }
 
+	/// <summary>
+	/// 親子関係をセット
+	/// </summary>
+	/// <param name="parent"></param>
 	void SetParent3d(WorldTransform* parent) { this->parent_ = parent; }
 
 public:// パブリック変数

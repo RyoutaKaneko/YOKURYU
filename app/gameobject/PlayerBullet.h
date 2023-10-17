@@ -25,18 +25,48 @@ class PlayerBullet : public Object3d
 	///初期化
 	///</summary>
 	void Update();
+
+	/// <summary>
+	///ホーミング弾ベクトル
+	/// </summary>
 	void HomingVec();
 
-
-	//衝突を検出したら呼び出されるコールバック関数
+	/// <summary>
+	/// 衝突を検出したら呼び出されるコールバック関数
+	/// </summary>
+	/// <param name="info">衝突情報</param>
 	void OnCollision(const CollisionInfo& info) override;
 
 
   public:
+	/// <summary>
+	/// 死亡フラグ取得
+	/// </summary>
+	/// <returns></returns>
 	bool IsDead() const { return isDead_; }
+
+	/// <summary>
+	/// ワールドトランスフォームを取得
+	/// </summary>
+	/// <returns></returns>
 	WorldTransform* GetWorldTransForm() { return &worldTransform_; }
+
+	/// <summary>
+	/// ホーミング攻撃かどうか
+	/// </summary>
+	/// <returns></returns>
 	bool GetIsHoming() { return isHoming; }
+	
+	/// <summary>
+	/// ホーミング攻撃かどうか
+	/// </summary>
+	/// <param name="isHoming_"></param>
 	void SetisHoming(bool isHoming_) { isHoming = isHoming_; }
+
+	/// <summary>
+	/// ロックオン情報を設定
+	/// </summary>
+	/// <param name="obj"></param>
 	void SetLock(Object3d* obj) { lockObj = obj; }
 
   private:

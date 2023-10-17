@@ -11,20 +11,43 @@
 class WinApp final
 {
 public: // 静的メンバ関数
+	/// <summary>
+	/// window生成
+	/// </summary>
+	/// <param name="hwnd"></param>
+	/// <param name="msg"></param>
+	/// <param name="wparam"></param>
+	/// <param name="lparam"></param>
+	/// <returns></returns>
 	static LRESULT WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
 public: // メンバ関数
-	// WindowsAPIの初期化
+	/// <summary>
+	/// WindowsAPIの初期化
+	/// </summary>
 	void Initialize();
 
-	// 終了
+	/// <summary>
+	/// 終了
+	/// </summary>
 	void Finalize();
 
-	// getter
+	/// <summary>
+	/// hwnd取得
+	/// </summary>
+	/// <returns></returns>
 	HWND GetHwnd() const { return hwnd; }
+
+	/// <summary>
+	/// インスタンス取得
+	/// </summary>
+	/// <returns></returns>
 	HINSTANCE GetHInstance() const { return wc.hInstance; }
 
-	// メッセージの処理
+	/// <summary>
+	/// メッセージの処理
+	/// </summary>
+	/// <returns></returns>
 	bool ProcessMessage();
 
 public:

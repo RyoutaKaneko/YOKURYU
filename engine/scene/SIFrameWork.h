@@ -20,22 +20,40 @@
 class SIFrameWork
 {
 public://メンバ関数
-	//初期化
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	virtual void Initialize();
-	//終了
+
+
+	/// <summary>
+	/// 終了
+	/// </summary>
 	virtual void Finalize();
-	//更新
+
+	/// <summary>
+	/// 更新
+	/// </summary>
 	virtual void Update();
-	//描画
+	
+	/// <summary>
+	/// 描画
+	/// </summary>
 	virtual void Draw() = 0;
-	//終了チェック
+	
+	/// <summary>
+	/// 終了チェック
+	/// </summary>
+	/// <returns></returns>
 	virtual bool IsEndRequest() { return endRequest; }
 
 public:
 	virtual ~SIFrameWork() = default;
 
 public:
-	//実行
+	/// <summary>
+	/// 実行
+	/// </summary>
 	void Run();
 
 protected:

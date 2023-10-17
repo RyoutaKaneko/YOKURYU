@@ -36,24 +36,84 @@ public:
 
 	~GameScene();
 
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize() override;
-	/*void LoadObjFromLevelEditor(const std::string& fileName);*/
 
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
 
+	/// <summary>
+	/// 描画
+	/// </summary>
 	void Draw();
+
+	/// <summary>
+	/// リセット
+	/// </summary>
 	void Reset();
+
+	/// <summary>
+	/// 終了
+	/// </summary>
 	void Finalize()override;
 
+	/// <summary>
+	/// ステージ読み込み
+	/// </summary>
 	void LoadStage();
+
+	/// <summary>
+	/// 敵読み込み
+	/// </summary>
 	void LoadEnemy();
+
+	/// <summary>
+	/// 索敵
+	/// </summary>
 	void SerchEnemy();
+
+	/// <summary>
+	/// ロックオン情報クリア
+	/// </summary>
 	void LockedClear();
+
+	/// <summary>
+	/// クロスヘアを取得
+	/// </summary>
 	void GetCrosshair();
+
+	/// <summary>
+	/// エネルギー出現
+	/// </summary>
+	/// <param name="pos_">座標</param>
 	static void PopEnergy(Vector3 pos_);
 
+	/// <summary>
+	/// スクリーン座標からワールド座標に
+	/// </summary>
+	/// <param name="sprite_">スプライト</param>
+	/// <param name="rail">レールカメラ</param>
+	/// <returns></returns>
 	Vector3 GetScreenToWorldPos(Sprite& sprite_, RailCamera* rail);
+
+	/// <summary>
+	/// ワールド座標からスクリーン座標に
+	/// </summary>
+	/// <param name="pos_">座標</param>
+	/// <param name="rail">レールカメラ</param>
+	/// <returns></returns>
 	Vector3 GetWorldToScreenPos(Vector3 pos_, RailCamera* rail);
+
+	/// <summary>
+	/// ワールド座標のオブジェクトに合わせてスクリーン座標のスプライトのスケールを取得
+	/// </summary>
+	/// <param name="obj">オブジェクト</param>
+	/// <param name="rail">レールカメラ</param>
+	/// <returns></returns>
 	Vector2 GetWorldToScreenScale(Object3d* obj, RailCamera* rail);
 
 private:

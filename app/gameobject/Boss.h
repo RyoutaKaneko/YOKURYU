@@ -20,28 +20,96 @@ class Boss : public Object3d
 public:
 	//デストラクタ
 	~Boss();
-	//初期化
+	
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void BossInitialize();
 
+	/// <summary>
+	/// 更新
+	/// </summary>
+	/// <param name="velo">弾ベクトル</param>
 	void Update(Vector3 velo);
+
+	/// <summary>
+	/// ボス出現
+	/// </summary>
 	void Pop();
+
+	/// <summary>
+	/// 攻撃
+	/// </summary>
 	void Attack();
+
+	/// <summary>
+	/// 移動
+	/// </summary>
 	void Move();
+
+	/// <summary>
+	/// 状態変化
+	/// </summary>
 	void ChangeState();
 	
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="viewProjection_">カメラ</param>
 	void BossDraw(ViewProjection* viewProjection_);
 
+	/// <summary>
+	/// 死亡フラグ取得
+	/// </summary>
+	/// <returns></returns>
 	bool GetIsDead() const { return isDead_; }
-	//当たり判定
+	
+	/// <summary>
+	/// 当たり判定
+	/// </summary>
+	/// <param name="info">衝突情報</param>
 	void OnCollision(const CollisionInfo& info) override;
-	//Getter
+	
+	/// <summary>
+	/// ボス出現状態を取得
+	/// </summary>
+	/// <returns></returns>
 	bool GetIsInvisible() { return isInvisible; }
+
+	/// <summary>
+	/// 透過度を取得
+	/// </summary>
+	/// <returns></returns>
 	float GetAlpha() { return bossAlpha; }
+
+	/// <summary>
+	/// タイマーを取得
+	/// </summary>
+	/// <returns></returns>
 	int GetTimer() { return appearTimer; }
+
+	/// <summary>
+	/// HPを取得
+	/// </summary>
+	/// <returns></returns>
 	float GetHP() { return hp; }
+
+	/// <summary>
+	/// パーツ数を取得
+	/// </summary>
+	/// <returns></returns>
 	int GetPartsNum() { return PARTS_NUM; }
+
+	/// <summary>
+	/// パーツを取得
+	/// </summary>
+	/// <param name="i">パーツ番号</param>
+	/// <returns></returns>
 	Object3d* GetParts(int i) { return parts[i]; }
-	//演出スキップ
+
+	/// <summary>
+	/// ボス登場演出をスキップ
+	/// </summary>
 	void SkipMovie();
 
 	

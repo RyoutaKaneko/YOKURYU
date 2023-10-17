@@ -50,27 +50,63 @@ protected:
 	XMFLOAT3 up_ = { 0.0f,1.0f,0.0f };
 
 public://アクセッサ
-	//ビュー行列
+	/// <summary>
+	/// ビュー行列作成
+	/// </summary>
+	/// <returns></returns>
 	const XMMATRIX& GetMatView() { return matView_; }
 
-	//プロジェクション行列
+	/// <summary>
+	/// プロジェクション行列作成
+	/// </summary>
+	/// <returns></returns>
 	const XMMATRIX& GetMatProjection() { return matProjection_; }
 
+	/// <summary>
+	/// ビュープロジェクション行列作成
+	/// </summary>
+	/// <returns></returns>
 	const XMMATRIX& GetMatViewProjection() { return matViewProjection_; }
 
-	//ビルボード行列
+	/// <summary>
+	/// ビルボード行列取得
+	/// </summary>
+	/// <returns></returns>
 	const XMMATRIX& GetMatBillboard() { return matBillboard_; }
 	const XMMATRIX& GetMatBillboardY() { return matBillboardY_; }
 
-	//視点
+	/// <summary>
+	/// 視点取得
+	/// </summary>
+	/// <returns></returns>
 	const XMFLOAT3& GetEye() { return eye_; }
+	/// <summary>
+	/// 視点をセット
+	/// </summary>
+	/// <param name="eye"></param>
 	void SetEye(const XMFLOAT3& eye);
 
-	//注視点
+	/// <summary>
+	/// 注視点取得
+	/// </summary>
+	/// <returns></returns>
 	const XMFLOAT3& GetTarget() { return target_; }
+
+	/// <summary>
+	/// 注視点をセット
+	/// </summary>
+	/// <param name="target"></param>
 	void SetTarget(const XMFLOAT3& target);
 
-	//上方向ベクトル
+	/// <summary>
+	/// 上方向ベクトル取得
+	/// </summary>
+	/// <returns></returns>
 	const XMFLOAT3& GetUp() { return up_; }
+
+	/// <summary>
+	/// 上方向ベクトルをセット
+	/// </summary>
+	/// <returns></returns>
 	void SetUp(const XMFLOAT3& up);
 };

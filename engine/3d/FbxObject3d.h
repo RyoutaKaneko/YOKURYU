@@ -22,14 +22,32 @@ class FbxObject3d {
 protected://エイリアス
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 public:
+	/// <summary>
+	/// 静的初期化
+	/// </summary>
+	/// <param name="device">デバイス</param>
 	static void StaticInitialize(ID3D12Device* device);
+
+	/// <summary>
+	/// カメラをセット
+	/// </summary>
+	/// <param name="view_">カメラ</param>
 	static void SetCamera(ViewProjection* view_) { FbxObject3d::view = view_; }
 
+	/// <summary>
 	/// 描画前処理
+	/// </summary>
+	/// <param name="cmdList">コマンドリスト</param>
 	static void PreDraw(ID3D12GraphicsCommandList* cmdList);
-	/// 描画後処理
-	static void PostDraw();
 	
+	/// <summary>
+	/// 描画後処理
+	/// </summary>
+	static void PostDraw();
+
+	/// <summary>
+	/// グラフィックスパイプライン生成
+	/// </summary>
 	static void CreateGraphicsPipeline();
 private://静的メンバ変数
 	static ID3D12Device* device;
@@ -41,21 +59,62 @@ public://サブクラス
 		Vector3 cameraPos;
 	};
 public://メンバ関数
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
 
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
 
+	/// <summary>
+	/// モデルをセット
+	/// </summary>
+	/// <param name="model_">モデル</param>
 	void SetModel(FbxModel* model_) { this->model = model_; }
 
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="viewProjection">カメラ</param>
 	void Draw(ViewProjection* viewProjection);
 
+	/// <summary>
+	/// 座標を取得
+	/// </summary>
+	/// <returns></returns>
 	const Vector3& GetPosition() const { return worldTransform.position_; }
+
+	/// <summary>
+	/// 座標をセット
+	/// </summary>
+	/// <param name="position">座標</param>
 	void SetPosition(const Vector3& position) { this->worldTransform.position_ = position; }
-	// オブジェクトの大きさ
+	
+	/// <summary>
+	/// スケールを取得
+	/// </summary>
+	/// <param name="scale">スケール</param>
 	void SetScale(const Vector3& scale) { this->worldTransform.scale_ = scale; }
+
+	/// <summary>
+	/// スケールを取得
+	/// </summary>
+	/// <returns></returns>
 	const Vector3& GetScale() const { return worldTransform.scale_; }
-	// オブジェクトの回転
+	
+	/// <summary>
+	/// オブジェクトの回転をセット
+	/// </summary>
+	/// <param name="rotation">回転率</param>
 	void SetRotation(const Vector3& rotation) { this->worldTransform.rotation_ = rotation; }
+
+	/// <summary>
+	/// オブジェクトの回転を取得
+	/// </summary>
+	/// <returns></returns>
 	const Vector3& GetRotation() const { return worldTransform.rotation_; }
 
 protected://メンバ変数

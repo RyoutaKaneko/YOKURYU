@@ -20,24 +20,70 @@ class Enemy : public Object3d
 public:
 	//デストラクタ
 	~Enemy();
-	//初期化
+	
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void EnemyInitialize();
 
-
+	/// <summary>
+	/// 死亡フラグを取得
+	/// </summary>
+	/// <returns></returns>
 	bool GetIsDead() const { return isDead_; }
 	
+	/// <summary>
+	/// 更新
+	/// </summary>
+	/// <param name="velo">弾ベクトル</param>
+	/// <param name="t">プレイヤー通過点</param>
 	void Update(Vector3 velo,float t);
+
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="viewProjection_">カメラ</param>
 	void EnemyDraw(ViewProjection* viewProjection_);
 
+	/// <summary>
+	/// 攻撃
+	/// </summary>
 	void Attack();
 
+	/// <summary>
+	/// 当たり判定
+	/// </summary>
+	/// <param name="info">衝突情報</param>
 	void OnCollision(const CollisionInfo& info) override;
+
+	/// <summary>
+	///  出現位置を設定
+	/// </summary>
+	/// <param name="pos_">出現位置</param>
 	void SetStagePoint(float pos_) { stagePoint = pos_; }
+
+	/// <summary>
+	/// 出現位置を取得
+	/// </summary>
+	/// <returns></returns>
 	float GetStagePoint(){return stagePoint;}
+
+	/// <summary>
+	/// 敵オブジェクトポインタを取得
+	/// </summary>
+	/// <returns></returns>
 	Object3d* GetPointer() { return this; }
+
+	/// <summary>
+	/// 敵出現状態を取得
+	/// </summary>
+	/// <returns></returns>
 	bool GetIsInvisible() { return isInvisible; }
 
-	//弾リストを取得
+	/// <summary>
+	/// 弾リストを取得
+	/// </summary>
+	/// <returns></returns>
 	const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets_; }
 
 private:

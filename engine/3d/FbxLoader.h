@@ -30,32 +30,86 @@ public:
 	//<return>インスタンス</return>
 	static FbxLoader* GetInstance();
 
-	//初期化
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="device">デバイス</param>
 	void Initialize(ID3D12Device* device);
 
-	//fbxファイルからモデル読み込み
+	/// <summary>
+	/// fbxファイルからモデル読み込み
+	/// </summary>
+	/// <param name="modelName">モデル名</param>
+	/// <returns></returns>
 	FbxModel* LoadModelFlomFile(const string& modelName);
 
-	//ノード解析
+	/// <summary>
+	/// ノード解析
+	/// </summary>
+	/// <param name="model">モデル名</param>
+	/// <param name="fbxNode">ノード</param>
+	/// <param name="parent">親子</param>
 	void ParseNodeRecursive(FbxModel* model, FbxNode* fbxNode,Node* parent = nullptr);
 
-	//メッシュ解析
+	/// <summary>
+	/// メッシュ解析
+	/// </summary>
+	/// <param name="model">モデル名</param>
+	/// <param name="fbxNode">ノード</param>
 	void ParseMesh(FbxModel* model, FbxNode* fbxNode);
-	//サブ
+	
+	/// <summary>
+	/// メッシュの頂点計算
+	/// </summary>
+	/// <param name="model">モデル名</param>
+	/// <param name="fbxMesh">メッシュ</param>
 	void ParseMeshVertices(FbxModel* model, FbxMesh* fbxMesh);
+
+	/// <summary>
+	/// メッシュの面計算
+	/// </summary>
+	/// <param name="model">モデル名</param>
+	/// <param name="fbxMesh">メッシュ</param>
 	void ParseMeshFaces(FbxModel* model, FbxMesh* fbxMesh);
+
+	/// <summary>
+	/// マテリアル解析
+	/// </summary>
+	/// <param name="model">モデル名</param>
+	/// <param name="fbxNode">ノード</param>
 	void ParseMatrial(FbxModel* model, FbxNode* fbxNode);
+
+	/// <summary>
+	/// テクスチャ読み込み
+	/// </summary>
+	/// <param name="model">モデル名</param>
+	/// <param name="fullPath">マテリアルフルパス</param>
 	void LoadTexture(FbxModel* model, const std::string& fullPath);
 
+	/// <summary>
+	/// fbxAMatrixからMatrix4に変換
+	/// </summary>
+	/// <param name="dst">単位行列</param>
+	/// <param name="src">変換する行列</param>
 	static void ConvertMatrixFromFbx(Matrix4 dst, const FbxAMatrix& src);
 
-	//ファイル名抽出
+	/// <summary>
+	/// ファイル名抽出
+	/// </summary>
+	/// <param name="path">ファイルパス</param>
+	/// <returns></returns>
 	std::string ExtracFileName(const std::string& path);
 
-	//後始末
+	/// <summary>
+	/// 終了
+	/// </summary>
 	void Finalize();
 
-	//スキニング情報の読み取り
+	/// <summary>
+	/// スキニング情報の読み取り
+	/// </summary>
+	/// <param name="model">モデル名</param>
+	/// <param name="fbxMesh">メッシュ</param>
 	void ParseSkin(FbxModel* model, FbxMesh* fbxMesh);
 
 private:

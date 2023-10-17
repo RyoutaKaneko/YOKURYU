@@ -25,38 +25,86 @@ public:
 		float m20, float m21, float m22, float m23,
 		float m30, float m31, float m32, float m33);
 
-	// 単位行列を求める
+	/// <summary>
+	/// 単位行列を求める
+	/// </summary>
+	/// <returns></returns>
 	static Matrix4 identity();
 
-	// 逆行列を求める
+	/// <summary>
+	/// 逆行列を求める
+	/// </summary>
+	/// <returns></returns>
 	Matrix4 MakeInverse();
 
-	// 拡大縮小行列の設定
+	/// <summary>
+	/// 拡大縮小行列の設定
+	/// </summary>
+	/// <param name="s">スケール</param>
+	/// <returns></returns>
 	Matrix4 scale(const Vector3& s);
 
-	// 回転行列の設定
+	/// <summary>
+	/// // 回転行列の設定
+	/// </summary>
+	/// <param name="angle">ラジアンで回転率</param>
+	/// <returns></returns>
 	Matrix4 rotateX(float angle);
 	Matrix4 rotateY(float angle);
 	Matrix4 rotateZ(float angle);
 
-	// 平行移動行列の作成
+	/// <summary>
+	/// 平行移動行列の作成
+	/// </summary>
+	/// <param name="t">移動量</param>
+	/// <returns></returns>
 	Matrix4 translate(const Vector3& t);
 
-	// 座標変換（ベクトルと行列の掛け算をする）
+	/// <summary>
+	/// 座標変換（ベクトルと行列の掛け算をする）
+	/// </summary>
+	/// <param name="v">position</param>
+	/// <param name="m">ワールド行列</param>
+	/// <returns></returns>
 	Vector3 transform(const Vector3& v, const Matrix4& m);
 
-	// ビュー行列作成
+	/// <summary>
+	/// ビュー行列作成
+	/// </summary>
+	/// <param name="eye">視点</param>
+	/// <param name="target">注視点</param>
+	/// <param name="up">自身を中心にした上方向</param>
+	/// <returns></returns>
 	Matrix4 ViewMat(Vector3 eye, Vector3 target, Vector3 up);
 
-	// 射影行列作成
+	/// <summary>
+	/// 射影行列作成
+	/// </summary>
+	/// <param name="fovAngleY">視野角</param>
+	/// <param name="aspectRatio">アスペクト比</param>
+	/// <param name="nearZ"></param> 近距離限界 
+	/// <param name="farZ">遠距離限界</param>
+	/// <returns></returns>
 	Matrix4 ProjectionMat(float fovAngleY, float aspectRatio, float nearZ, float farZ);
+
+	/// <summary>
+	/// ビューポート行列作成
+	/// </summary>
+	/// <param name="width">横幅</param>
+	/// <param name="height">縦幅</param>
+	/// <param name="offset">画面範囲オフセット</param>
+	/// <returns></returns>
 	Matrix4 ViewPortMat(float width, float height, Vector2 offset);
 
 	// 代入演算子オーバーロード
 	Matrix4& operator*=(const Matrix4& m1);
-
 	Matrix4 operator*(const Matrix4& m1);
 
+	/// <summary>
+	///ラジアンから弧度法への変換
+	/// </summary>
+	/// <param name="rad">ラジアン</param>
+	/// <returns></returns>
 	static float ConvertToRadian(float rad);
 
 };

@@ -16,13 +16,41 @@ public:
 public:
 	//コンストラクタ
 	Vector4();								//零ベクトルとする
-	Vector4(float x, float y, float z, float w);		//x成分,y成分,z成分 を指定して生成
 
-	//メンバ関数
-	float length() const;					//ノルム(長さ)を求める
-	Vector4& normalize();					//正規化する
-	float dot(const Vector4& v) const;		//内積を求める
-	Vector4 cross(const Vector4& v) const;	//外積を求める
+	/// <summary>
+	///  x成分,y成分,z成分 を指定して生成
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <param name="z"></param>
+	/// <param name="w"></param>
+	Vector4(float x, float y, float z, float w);
+
+	/// <summary>
+	/// ノルム(長さ)を求める 
+	/// </summary>
+	/// <returns></returns>
+	float length() const;
+
+	/// <summary>
+	/// 正規化する
+	/// </summary>
+	/// <returns></returns>
+	Vector4& normalize();
+
+	/// <summary>
+	///  内積を求める
+	/// </summary>
+	/// <param name="v">掛ける相手のベクトル</param>
+	/// <returns></returns>
+	float dot(const Vector4& v) const;
+
+	/// <summary>
+	///  外積を求める
+	/// </summary>
+	/// <param name="v">掛ける相手のベクトル</param>
+	/// <returns></returns>
+	Vector4 cross(const Vector4& v) const;
 
 
 	//単項演算子オーバーロード

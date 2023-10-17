@@ -26,14 +26,33 @@ struct VertexPosUv {
 class PostEffect
 {
 public:
-	//初期化
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="dev">デバイス</param>
 	void Initialize(ID3D12Device* dev);
-	//描画
+	
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="cmdList_">コマンドリスト</param>
 	void Draw(ID3D12GraphicsCommandList* cmdList_);
-	//描画前後
+	
+	/// <summary>
+	/// 描画前準備
+	/// </summary>
+	/// <param name="cmdList_">コマンドリスト</param>
 	void PreDrawScene(ID3D12GraphicsCommandList* cmdList_);
+
+	/// <summary>
+	/// 描画後処理
+	/// </summary>
+	/// <param name="cmdList_">コマンドリスト</param>
 	void PostDrawScene(ID3D12GraphicsCommandList* cmdList_);
-	//パイプライン生成
+
+	/// <summary>
+	/// パイプライン生成
+	/// </summary>
 	void CreateGraphicsPipelineState();
 
 

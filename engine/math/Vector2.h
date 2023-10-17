@@ -13,13 +13,39 @@ public:
 
 public:
 	// コンストラクタ
-	Vector2();                  // 零ベクトルとして生成
-	Vector2(float x, float y);  // x成分 , y成分を指定しての生成
+	Vector2(); // 零ベクトルとして生成
 
-	// メンバ変数
+	/// <summary>
+	///  x成分 , y成分を指定しての生成
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	Vector2(float x, float y); 
+
+	/// <summary>
+	/// 距離を求める
+	/// </summary>
+	/// <returns></returns>
 	float length() const;
+
+	/// <summary>
+	/// 正規化する
+	/// </summary>
+	/// <returns></returns>
 	Vector2& normalize();
+
+	/// <summary>
+	/// 内積を求める
+	/// </summary>
+	/// <param name="v">掛ける相手のベクトル</param>
+	/// <returns></returns>
 	float dot(const Vector2& v) const;
+
+	/// <summary>
+	/// 外積を求める
+	/// </summary>
+	/// <param name="v">掛ける相手のベクトル</param>
+	/// <returns></returns>
 	float cross(const Vector2& v)const;
 
 	// 単項演算子オーバーロード

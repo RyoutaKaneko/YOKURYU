@@ -44,21 +44,57 @@ public:
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
 public: // メンバ関数
-	// 初期化
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="winApp"></param>
 	void Initialize(WinApp* winApp);
 
-	// 更新
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
 
-	//マウス
+	/// <summary>
+	/// マウス左クリック長押し
+	/// </summary>
+	/// <returns></returns>
 	bool PushMouseLeft();
+
+	/// <summary>
+	///  マウス左クリックしたとき
+	/// </summary>
+	/// <returns></returns>
 	bool TriggerMouseLeft();
+
+	/// <summary>
+	/// マウス右クリック長押し
+	/// </summary>
+	/// <returns></returns>
 	bool PushMouseRight();
+
+	/// <summary>
+	/// マウス右クリックしたとき
+	/// </summary>
+	/// <returns></returns>
 	bool TriggerMouseRight();
-	//座標
+
+	/// <summary>
+	/// マウス位置取得
+	/// </summary>
+	/// <returns></returns>
 	Vector3 GetMousePos();
+
+	/// <summary>
+	/// マウス移動量取得
+	/// </summary>
+	/// <returns></returns>
 	Vector3 GetMouseVelo();
 
+	/// <summary>
+	/// マウス位置設定
+	/// </summary>
+	/// <param name="pos"></param>
 	void SetMousePos(Vector2 pos);
 
 	/// <summary>
@@ -74,6 +110,11 @@ public: // メンバ関数
 	/// </param name="keyNumber">キー番号( DIK_0 等)</param>
 	/// <reutrns>トリガーか</params>
 	bool TriggerKey(BYTE keyNumber);
+
+	/// <summary>
+	/// 全てのキー入力をチェック
+	/// </summary>
+	/// <returns></returns>
 	bool AnyKey();
 
 private:

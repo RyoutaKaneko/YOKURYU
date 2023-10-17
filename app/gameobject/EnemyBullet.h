@@ -27,12 +27,24 @@ public:
 	void Update(const Vector3& playerPos_);
 
 
-	//衝突を検出したら呼び出されるコールバック関数
+	/// <summary>
+	/// 衝突を検出したら呼び出されるコールバック関数
+	/// </summary>
+	/// <param name="info">衝突情報</param>
 	void OnCollision(const CollisionInfo& info) override;
 
 
 public:
+	/// <summary>
+	/// 死亡フラグを取得
+	/// </summary>
+	/// <returns></returns>
 	bool IsDead() const { return isDead_; }
+
+	/// <summary>
+	/// ワールドトランスフォームを取得
+	/// </summary>
+	/// <returns></returns>
 	WorldTransform* GetWorldTransForm() { return &worldTransform_; }
 
 private:

@@ -36,7 +36,11 @@ struct LevelData {
 
 class JsonLoader {
 public:
-	//ファイル読み込み
+	/// <summary>
+	/// ファイル読み込み
+	/// </summary>
+	/// <param name="fileName"></param>
+	/// <returns></returns>
 	LevelData* LoadFile(const std::string& fileName);
 public:
 	// デフォルトの読み込みディレクトリ

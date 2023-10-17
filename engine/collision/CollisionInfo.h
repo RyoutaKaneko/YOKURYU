@@ -12,6 +12,12 @@ class BaseCollider;
 struct CollisionInfo
 {
 public:
+	/// <summary>
+	/// 指定ありの生成
+	/// </summary>
+	/// <param name="object">オブジェクト</param>
+	/// <param name="collider">コライダー</param>
+	/// <param name="inter">衝突点</param>
 	CollisionInfo(Object3d* object, BaseCollider* collider, const Vector3& inter) {
 		this->object = object;
 		this->collider = collider;

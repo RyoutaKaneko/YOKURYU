@@ -34,16 +34,27 @@ public: // サブクラス
 		XMMATRIX matBillboard;	//ビルボード行列
 	};
 public: // 静的メンバ関数
+	/// <summary>
 	/// 静的初期化
+	/// </summary>
+	/// <param name="device">デバイス</param>
 	static void StaticInitialize(ID3D12Device* device);
 
+	/// <summary>
 	/// 描画前処理
+	/// </summary>
+	/// <param name="cmdList">コマンドリスト</param>
 	static void PreDraw(ID3D12GraphicsCommandList* cmdList);
 
+	/// <summary>
 	/// 描画後処理
+	/// </summary>
 	static void PostDraw();
 
+	/// <summary>
 	/// 3Dオブジェクト生成
+	/// </summary>
+	/// <returns></returns>
 	static ParticleManager* Create();
 
 private: // 静的メンバ変数
@@ -58,18 +69,37 @@ private: // 静的メンバ変数
 
 private:// 静的メンバ関数
 
-	/// グラフィックパイプライン生成
+	/// <summary>
+	/// グラフィックスパイプライン生成
+	/// </summary>
 	static void InitializeGraphicsPipeline();
 
 public: // メンバ関数
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <returns></returns>
 	bool Initialize();
-	/// 毎フレーム処理
+
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
 
+	/// <summary>
 	/// 描画
+	/// </summary>
 	void Draw();
 
+	/// <summary>
 	/// パーティクル発射
+	/// </summary>
+	/// <param name="particle">パーティクル</param>
+	/// <param name="setpos">発射位置</param>
+	/// <param name="setvel">発射速度</param>
+	/// <param name="setacc">縦移動</param>
+	/// <param name="setnum">発射個数</param>
+	/// <param name="setscale">スケール</param>
 	void Fire(Particle* particle, const float& setpos, const float& setvel, const float& setacc, const int& setnum, const XMFLOAT2& setscale);
 
 private: // メンバ変数

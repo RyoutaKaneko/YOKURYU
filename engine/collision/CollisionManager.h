@@ -18,19 +18,35 @@ public://静的メンバ関数
 	static CollisionManager* GetInstance();
 
 public://メンバ関数
-	//コライダーの追加
+	/// <summary>
+	/// コライダーの追加
+	/// </summary>
+	/// <param name="collider">コライダー</param>
 	inline void AddCollider(BaseCollider* collider)
 	{
 		colliders.push_front(collider);
 	}
-	//コライダーの削除
+	
+	/// <summary>
+	/// コライダーの削除
+	/// </summary>
+	/// <param name="collider">コライダー</param>
 	inline void RemoveCollider(BaseCollider* collider)
 	{
 		colliders.remove(collider);
 	}
-	//全ての衝突チェック
+	/// <summary>
+	/// 全ての衝突をチェック
+	/// </summary>
 	void CheckAllCollisions();
-	//レイキャスト
+
+	/// <summary>
+	/// レイキャスト
+	/// </summary>
+	/// <param name="ray">レイ</param>
+	/// <param name="hitInfo">判定情報</param>
+	/// <param name="maxDistance">最大距離</param>
+	/// <returns></returns>
 	bool Raycast(const Ray& ray, RaycastHit* hitInfo = nullptr, float maxDistance = D3D12_FLOAT32_MAX);
 private:
 	CollisionManager() = default;

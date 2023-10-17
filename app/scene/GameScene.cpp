@@ -133,15 +133,15 @@ void GameScene::Initialize() {
 	//gage
 	gage.LoadTexture(spriteCommon_, 7, L"Resources/green.png", dxCommon_->GetDevice());
 	gage.SpriteCreate(dxCommon_->GetDevice(), 7, Vector2(0.0f, 0.5f), false, false);
-	gage.SetPosition(Vector3(28, 641, 0));
+	gage.SetPosition(Vector3(28, 618, 0));
 	gage.SetScale(Vector2(2 * 1, 18 * 1));
 	gage.SpriteTransferVertexBuffer(gage, 7);
 	gage.SpriteUpdate(gage, spriteCommon_);
 	//
 	gageBack.LoadTexture(spriteCommon_, 8, L"Resources/green.png", dxCommon_->GetDevice());
 	gageBack.SpriteCreate(dxCommon_->GetDevice(), 8, Vector2(0.0f, 0.5f), false, false);
-	gageBack.SetPosition(Vector3(28, 641, 0));
-	gageBack.SetScale(Vector2(2 * 178, 18 * 1));
+	gageBack.SetPosition(Vector3(28, 618, 0));
+	gageBack.SetScale(Vector2(358, 18 * 1));
 	gageBack.SetAlpha(gageBack, 0.4f);
 	gageBack.SpriteTransferVertexBuffer(gageBack, 8);
 	gageBack.SpriteUpdate(gageBack, spriteCommon_);
@@ -160,6 +160,13 @@ void GameScene::Initialize() {
 	fadeout.SpriteTransferVertexBuffer(fadeout, 10);
 	fadeout.SpriteUpdate(fadeout, spriteCommon_);
 	fadeout.LoadTexture(spriteCommon_, 10, L"Resources/fade.png", dxCommon_->GetDevice());
+	//hpフレーム
+	hpFrame.SpriteCreate(dxCommon_->GetDevice(), 11, Vector2(0.5f, 0.5f), false, false);
+	hpFrame.SetScale(Vector2(428 * 1, 127 * 1));
+	hpFrame.SetPosition(Vector3(226, 651, 0));
+	hpFrame.SpriteTransferVertexBuffer(hpFrame, 11);
+	hpFrame.SpriteUpdate(hpFrame, spriteCommon_);
+	hpFrame.LoadTexture(spriteCommon_, 11, L"Resources/hpFrame.png", dxCommon_->GetDevice());
 
 	//パーティクル初期化
 	particle = Particle::LoadParticleTexture("blue.png");
@@ -172,14 +179,6 @@ void GameScene::Initialize() {
 	//カメラをセット
 	pm->SetXMViewProjection(xmViewProjection);
 	pm_->SetXMViewProjection(xmViewProjection);
-
-	////モデル名を指定して読み込み
-	//obj = new FbxObject3d;
-	//obj->Initialize();
-	//model = FbxLoader::GetInstance()->LoadModelFlomFile("cube");
-	//obj->SetModel(model);
-	//obj->SetPosition(Vector3(1, 0, -10));
-	//obj->SetScale(Vector3((float)0.01, (float)0.01, (float)0.01));
 
 	//boss
 	boss = new Boss;
@@ -268,6 +267,7 @@ void GameScene::Update() {
 				hp.SetScale(hp.GetScale() - Vector2(2.0f, 0.0f));
 			}
 		}
+		
 
 		hp.SpriteTransferVertexBuffer(hp, 2);
 		hp.SpriteUpdate(hp, spriteCommon_);
@@ -531,7 +531,7 @@ void GameScene::Update() {
 		return energys->GetIsDead();
 		});
 	//gameover
-	if (player->GetHP() == 0) {
+	if (player->GetHP() <= 0) {
 		LockedClear();
 		GameSceneManager::GetInstance()->ChangeScene("OVER");
 	}
@@ -610,6 +610,7 @@ void GameScene::Draw() {
 		}
 	}
 	if (isPlayable == true) {
+		hpFrame.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		hpBack.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		gageBack.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		hp.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());

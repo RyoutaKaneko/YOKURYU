@@ -51,14 +51,15 @@ void RailCamera::Update(Player* player_, std::vector<Vector3>& point) {
 		//方向ベクトルの取得
 		GetVec(camera->GetPosition(), target_);
 
+		Vector3 camRot = camera->GetRotation();
 		//カメラ方向に合わせてY軸の回転
 		float radY = std::atan2(frontVec.x, frontVec.z);
-		camera->SetRotationY(radY * 180.0f / 3.1415f);
+		camera->SetRotation({ camRot.x,radY * 180.0f / 3.1415f,camRot.z });
 		//カメラ方向に合わせてX軸の回転
 		Vector3 rotaVec = { frontVec.x,0,frontVec.z };
 		float length = rotaVec.length();
 		float radX = std::atan2(-frontVec.y, length);
-		camera->SetRotationX(radX * 180.0f / 3.1415f);
+		camera->SetRotation({ radX * 180.0f / 3.1415f ,radY * 180.0f / 3.1415f,camRot.z });
 
 		if (spline_.GetIsEnd() == true) {
 			OnRail = false;

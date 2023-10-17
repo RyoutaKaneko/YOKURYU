@@ -138,6 +138,7 @@ private:
 	Sprite gageBack;
 	Sprite hpBack;
 	Sprite fadeout;
+	Sprite hpFrame;
 	//オブジェクトのポインタ
 	//3Dオブジェクト生成
 	Player* player = nullptr;

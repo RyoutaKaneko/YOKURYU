@@ -176,7 +176,7 @@ public: // セッター
 	/// 色設定
 	/// </summary>
 	/// <param name="color">色</param>
-	void SetColor(const Vector4& color) { this->color_ = color; }
+	void SetColor(Sprite sprite,const Vector4& color);
 
 	/// <summary>
 	/// 透過度を設定

@@ -68,6 +68,12 @@ public: // メンバ関数
 	bool TriggerMouseLeft();
 
 	/// <summary>
+	/// マウス左クリック離したとき
+	/// </summary>
+	/// <returns></returns>
+	bool LeftMouseLeft();
+
+	/// <summary>
 	/// マウス右クリック長押し
 	/// </summary>
 	/// <returns></returns>
@@ -78,6 +84,12 @@ public: // メンバ関数
 	/// </summary>
 	/// <returns></returns>
 	bool TriggerMouseRight();
+
+	/// <summary>
+	/// マウス右クリック離したとき
+	/// </summary>
+	/// <returns></returns>
+	bool LeftMouseRight();
 
 	/// <summary>
 	/// マウス位置取得

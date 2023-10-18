@@ -21,6 +21,14 @@ struct LockInfo {
 
 class Player : public Object3d
 {
+private:
+	//体力状況
+	enum Health {
+		FINE,
+		WEEKNESS,
+		DYING
+	};
+
 public:
 	//デストラクタ
 	~Player();
@@ -122,7 +130,13 @@ public:
 	/// <returns></returns>
 	Vector3 GetMove() { return move; }
 
-	///setter
+	/// <summary>
+	/// 体力状況を取得
+	/// </summary>
+	/// <returns></returns>
+	Health GetHealthState() { return healthState; }
+
+	/////setter/////
 	
 	/// <summary>
 	/// 攻撃をくらったかどうか
@@ -172,4 +186,5 @@ private:
 	Vector3 pos_;
 	Vector3 rot_;
 	Vector3 move;
+	Health healthState;
 };

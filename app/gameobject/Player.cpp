@@ -46,6 +46,7 @@ bool Player::PlayerInitialize() {
 	ultTime = 0;
 	pos_ = { 0,0,0 };
 	rot_ = { 0,0,0 };
+	healthState = FINE;
 
 	return true;
 }
@@ -86,6 +87,14 @@ void Player::Update(Vector3 velo, std::vector<LockInfo>& info)
 		if (hitTime == 15) {
 			hitTime = 0;
 			isHit = false;
+		}
+		//6Š„‚è‚Åhp•\Ž¦•Ï‰»
+		if (hp <= 75 && healthState == FINE) {
+			healthState = WEEKNESS;
+		}
+		//4/1‚Å•mŽ€
+		else if (hp <= 25 && healthState == WEEKNESS) {
+			healthState = DYING;
 		}
 	}
 
@@ -197,7 +206,7 @@ void Player::Attack(Vector3 velo) {
 
 void Player::LockAttack(std::vector<LockInfo>& info)
 {
-	if (Input::GetInstance()->TriggerMouseRight() == true) {
+	if (Input::GetInstance()->LeftMouseRight() == true) {
 		for (int i = 0; i < info.size(); i++) {
 			//’e‚ð¶¬‚µ‰Šú‰»
 			std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();

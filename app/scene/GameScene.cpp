@@ -51,16 +51,11 @@ void GameScene::Initialize() {
 	//レベルエディタ読み込み
 	LoadObjFromLevelEditor("scene");
 
+	//レールカメラ
 	railCamera = new RailCamera;
 	railCamera->Initialize(player);
 
 	xmViewProjection = new XMViewProjection;
-
-	////FbxObjectの静的初期化
-	////カメラをセット
-	//FbxObject3d::SetCamera(viewProjection);
-	////グラフィックスパイプラインを初期化
-	//FbxObject3d::CreateGraphicsPipeline();
 
 	// スプライトの初期化
 	// スプライト
@@ -163,10 +158,42 @@ void GameScene::Initialize() {
 	//hpフレーム
 	hpFrame.SpriteCreate(dxCommon_->GetDevice(), 11, Vector2(0.5f, 0.5f), false, false);
 	hpFrame.SetScale(Vector2(428 * 1, 127 * 1));
-	hpFrame.SetPosition(Vector3(226, 651, 0));
+	hpFrame.SetPosition(Vector3(226, 851, 0));
 	hpFrame.SpriteTransferVertexBuffer(hpFrame, 11);
 	hpFrame.SpriteUpdate(hpFrame, spriteCommon_);
 	hpFrame.LoadTexture(spriteCommon_, 11, L"Resources/hpFrame.png", dxCommon_->GetDevice());
+	//攻撃UI
+	attackUI.SpriteCreate(dxCommon_->GetDevice(), 12, Vector2(0.5f, 0.0f), false, false);
+	attackUI.SetScale(Vector2(100 * 1, 100 * 1));
+	attackUI.SetPosition(Vector3(1020, 600, 0));
+	attackUI.SetAlpha(attackUI,0.6f);
+	attackUI.SpriteTransferVertexBuffer(attackUI, 12);
+	attackUI.SpriteUpdate(attackUI, spriteCommon_);
+	attackUI.LoadTexture(spriteCommon_, 12, L"Resources/attackUI.png", dxCommon_->GetDevice());
+	//攻撃Icon
+	attackIcon.SpriteCreate(dxCommon_->GetDevice(), 13, Vector2(0.5f, 0.0f), false, false);
+	attackIcon.SetScale(attackUI.GetScale() - Vector2(16,16));
+	attackIcon.SetPosition(Vector3(1020, 608, 0));
+	attackIcon.SetAlpha(attackIcon, 0.6f);
+	attackIcon.SpriteTransferVertexBuffer(attackIcon, 13);
+	attackIcon.SpriteUpdate(attackIcon, spriteCommon_);
+	attackIcon.LoadTexture(spriteCommon_, 13, L"Resources/attackIcon.png", dxCommon_->GetDevice());
+	//ロックUI
+	lockUI.SpriteCreate(dxCommon_->GetDevice(), 14, Vector2(0.5f, 0.0f), true, false);
+	lockUI.SetScale(Vector2(160 * 1, 160 * 1));
+	lockUI.SetPosition(Vector3(1160, 540, 0));
+	lockUI.SetAlpha(lockUI, 0.6f);
+	lockUI.SpriteTransferVertexBuffer(lockUI, 14);
+	lockUI.SpriteUpdate(lockUI, spriteCommon_);
+	lockUI.LoadTexture(spriteCommon_, 14, L"Resources/attackUI.png", dxCommon_->GetDevice());
+	//ロックIcon
+	lockIcon.SpriteCreate(dxCommon_->GetDevice(), 15, Vector2(0.5f, 0.0f), false, false);
+	lockIcon.SetScale(lockUI.GetScale() - Vector2(12, 12));
+	lockIcon.SetPosition(Vector3(1156, 542, 0));
+	lockIcon.SetAlpha(lockIcon, 0.6f);
+	lockIcon.SpriteTransferVertexBuffer(lockIcon, 15);
+	lockIcon.SpriteUpdate(lockIcon, spriteCommon_);
+	lockIcon.LoadTexture(spriteCommon_, 15, L"Resources/lockIcon.png", dxCommon_->GetDevice());
 
 	//パーティクル初期化
 	particle = Particle::LoadParticleTexture("blue.png");
@@ -268,13 +295,28 @@ void GameScene::Update() {
 			}
 		}
 		
+		//playerの状態により表示変化
+		if (player->GetHealthState() == 0) {
+			hp.SetColor(hp,{ 0.2f,1.0f,0.2f,1.0f });
+			hpBack.SetColor(hpBack,{ 0.2f,1.0f,0.2f,0.4f });
+		}
+		else if (player->GetHealthState() == 1) {
+			hp.SetColor(hp,{ 0.7f,1.0f,0.0f,1.0f });
+			hpBack.SetColor(hpBack,{ 0.7f,1.0f,0.0f,0.4f });
+		}
+		else {
+			hp.SetColor(hp,{ 0.5f,0.0f,0.0f,1.0f });
+			hpBack.SetColor(hpBack,{ 0.5f,0.0f,0.0f,0.4f });
+		}
 
 		hp.SpriteTransferVertexBuffer(hp, 2);
 		hp.SpriteUpdate(hp, spriteCommon_);
+		hpBack.SpriteTransferVertexBuffer(hpBack, 9);
+		hpBack.SpriteUpdate(hpBack, spriteCommon_);
 		//gage
 		float gage_ = player->GetEnergy() - (gage.GetScale().x / 4);
 		if (gage_ > 0) {
-			if (player->GetEnergy() < 100) {
+			if (gage.GetScale().x < 358) {
 				if ((gage_) > 4) {
 					gage.SetScale(gage.GetScale() + Vector2(16.0f, 0.0f));
 				}
@@ -310,8 +352,13 @@ void GameScene::Update() {
 		//ゲームスタート時演出
 		if (gameTime > 0) {
 			//SPACEで演出スキップ
-			if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+			if (Input::GetInstance()->TriggerKey(DIK_SPACE) || Input::GetInstance()->TriggerMouseLeft()) {
 				gameTime = 1;
+			}
+			//UI表示
+			if (gameTime <= 25) {
+				hpFrame.SetPosition(hpFrame.GetPosition() + Vector3(0,-8,0));
+				hpFrame.SpriteUpdate(hpFrame, spriteCommon_);
 			}
 			railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() + Vector3(0, 0.0f, 0.05f));
 			gameTime--;
@@ -526,6 +573,24 @@ void GameScene::Update() {
 	for (const std::unique_ptr<Energy>& energy : energys_) {
 		energy->Update(player->GetWorldPos(), railCamera->GetCamera()->GetRotation());
 	}
+	//UI表示
+	if (Input::GetInstance()->TriggerMouseLeft()) {
+		attackUI.SetColor(attackUI, { 0.9f,1.0f,0.2f,1.0f });
+		attackIcon.SetColor(attackIcon, { 0.9f,1.0f,0.2f,1.0f });
+	}
+	else if (Input::GetInstance()->LeftMouseLeft()) {
+		attackUI.SetColor(attackUI, {1.0f,1.0f,1.0f,0.6f});
+		attackIcon.SetColor(attackIcon, {1.0f,1.0f,1.0f,0.6f});
+	}//lock
+	if (Input::GetInstance()->TriggerMouseRight()) {
+		lockUI.SetColor(lockUI, { 0.9f,1.0f,0.2f,1.0f });
+		lockIcon.SetColor(lockIcon, { 0.9f,1.0f,0.2f,1.0f });
+	}
+	else if (Input::GetInstance()->LeftMouseRight()) {
+		lockUI.SetColor(lockUI, { 1.0f,1.0f,1.0f,0.6f });
+		lockIcon.SetColor(lockIcon, { 1.0f,1.0f,1.0f,0.6f });
+	}
+
 	//デスフラグの立ったエネルギーを削除
 	energys_.remove_if([](std::unique_ptr <Energy>& energys) {
 		return energys->GetIsDead();
@@ -610,12 +675,18 @@ void GameScene::Draw() {
 		}
 	}
 	if (isPlayable == true) {
-		hpFrame.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		hpBack.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		gageBack.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		hp.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		gage.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+		hpFrame.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+		//UI
+		attackUI.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+		attackIcon.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+		lockUI.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+		lockIcon.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 	}
+	hpFrame.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 	if (isPlayable == true) {
 		for (int i = 0; i < 4; i++) {
 			crosshair[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
@@ -703,6 +774,9 @@ void GameScene::Reset() {
 	railCamera->Initialize(player);
 	//enemy
 	LoadEnemy();
+	//必殺技ゲージ
+	gage.SetScale(Vector2(2 * 1, 18 * 1));
+	gage.SpriteTransferVertexBuffer(gage, 7);
 	//変数
 	isCheckPoint = false;
 	isPlayable = false;
@@ -806,7 +880,7 @@ void GameScene::SerchEnemy()
 {
 	Vector3 cur = input->GetMousePos();
 
-	if (input->PushKey(DIK_LSHIFT)) {
+	if (input->PushMouseRight()) {
 		for (int i = 0; i < boss->GetPartsNum(); i++) {
 			Vector3 epos1 = GetWorldToScreenPos(boss->GetParts(i)->GetWorldPos(), railCamera);
 			if (boss->GetIsInvisible() == false) {
@@ -1025,34 +1099,3 @@ Vector2 GameScene::GetWorldToScreenScale(Object3d* obj_, RailCamera* rail)
 
 	return Vector2(x / len, y / len);
 }
-
-//void GameScene::LoadObjFromLevelEditor(const std::string& fileName) {
-//	JsonLoader* file = nullptr;
-//	LevelData* levelData = file->LoadFile(fileName);
-//
-//	//オブジェクト配置
-//	for (auto& objectData : levelData->objects) {
-//		//ファイル名から登録済みモデルを検索
-//		Model* model = nullptr;
-//		decltype(models)::iterator it = models.find(objectData.fileName);
-//		if (it != models.end()) { model = it->second; }
-//		//モデルを指定して3DObjectを生成
-//		Object3d* newObject = Object3d::Create();
-//		newObject->Initialize();
-//		newObject->SetModel(model);
-//		//座標
-//		Vector3 pos;
-//		pos = Vector3(objectData.translation.x, objectData.translation.y, objectData.translation.z);
-//		newObject->SetPosition(pos);
-//		//回転角
-//		Vector3 rot;
-//		rot = Vector3(objectData.rotation.x, objectData.rotation.y, objectData.rotation.z);
-//		newObject->SetRotation(rot);
-//		//スケール
-//		Vector3 scale;
-//		scale = Vector3(objectData.scaling.x, objectData.scaling.y, objectData.scaling.z);
-//		newObject->SetScale(scale);
-//		//配列に登録
-//		objects.push_back(newObject);
-//	}
-//}

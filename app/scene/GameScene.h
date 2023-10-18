@@ -139,6 +139,10 @@ private:
 	Sprite hpBack;
 	Sprite fadeout;
 	Sprite hpFrame;
+	Sprite attackUI;
+	Sprite attackIcon;
+	Sprite lockUI;
+	Sprite lockIcon;
 	//オブジェクトのポインタ
 	//3Dオブジェクト生成
 	Player* player = nullptr;

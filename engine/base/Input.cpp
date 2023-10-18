@@ -105,6 +105,15 @@ bool Input::TriggerMouseLeft()
 	return false;
 }
 
+bool Input::LeftMouseLeft()
+{
+	if (mouseState.rgbButtons[0] == 0 && mouseState_bak.rgbButtons[0] > 0) {
+		return true;
+	}
+
+	return false;
+}
+
 bool Input::PushMouseRight()
 {
 	if (mouseState.rgbButtons[1] > 0) {
@@ -116,6 +125,14 @@ bool Input::PushMouseRight()
 bool Input::TriggerMouseRight()
 {
 	if (mouseState.rgbButtons[1] > 0 && mouseState_bak.rgbButtons[1] == 0) {
+		return true;
+	}
+	return false;
+}
+
+bool Input::LeftMouseRight()
+{
+	if (mouseState.rgbButtons[1] == 0 && mouseState_bak.rgbButtons[1] > 0) {
 		return true;
 	}
 	return false;

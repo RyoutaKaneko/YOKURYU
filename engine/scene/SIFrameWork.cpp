@@ -24,7 +24,7 @@ void SIFrameWork::Initialize()
 	// ビュープロジェクションの初期化
 	ViewProjection::StaticInitialize(dxCommon->GetDevice());
 	// シーンマネージャの生成
-	sceneManager_ = GameSceneManager::GetInstance();
+	sceneManager = GameSceneManager::GetInstance();
 	// パーティクル静的初期化
 	ParticleManager::StaticInitialize(dxCommon->GetDevice());
 	//fbx汎用初期化
@@ -38,9 +38,9 @@ void SIFrameWork::Initialize()
 
 void SIFrameWork::Finalize()
 {
-	sceneManager_->Destroy();
+	sceneManager->Destroy();
 	//シーンファクトリの解放
-	delete sceneFactory_;
+	delete sceneFactory;
 
 	// WindowsAPIの終了処理
 	winApp->Finalize();
@@ -65,7 +65,7 @@ void SIFrameWork::Update()
 	}
 
 	// シーンマネージャの更新
-	sceneManager_->Update();
+	sceneManager->Update();
 }
 
 void SIFrameWork::Run()

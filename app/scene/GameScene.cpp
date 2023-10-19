@@ -366,7 +366,7 @@ void GameScene::Update() {
 				player->SetPosition(Vector3(0, -1.0f, -5.5f));
 				player->SetAlpha(0.0f);
 			}
-			player->worldTransform_.UpdateMatrix();
+			player->GetWorldTransform().UpdateMatrix();
 		}
 		//ゲーム中
 		if (gameTime == 0) {

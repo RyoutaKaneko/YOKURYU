@@ -32,7 +32,7 @@ void EnemyBullet::Update(const Vector3& playerPos_) {
 
 	SetPosition(GetPosition() + velocity);
 
-	worldTransform_.UpdateMatrix();
+	GetWorldTransform().UpdateMatrix();
 
 	//“–‚½‚è”»’èXV
 	if (collider)
@@ -52,13 +52,13 @@ void EnemyBullet::OnCollision([[maybe_unused]] const CollisionInfo& info)
 	const char* str2 = "class PlayerBullet";
 
 	//‘Šè‚ªplayer
-	if (strcmp(toCollisionName, str1) == 0) {
+	if (strcmp(GetToCollName(), str1) == 0) {
 		if (isDead_ == false) {
 			isDead_ = true;
 		}
 	}
 	//‘Šè‚ªplayer‚Ì’e
-	if (strcmp(toCollisionName, str2) == 0) {
+	if (strcmp(GetToCollName(), str2) == 0) {
 		if (isDead_ == false) {
 			isDead_ = true;
 		}

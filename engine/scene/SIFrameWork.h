@@ -64,9 +64,9 @@ protected:
 	//入力のポインタ
 	Input* input = nullptr;
 	// シーンマネージャ
-	GameSceneManager* sceneManager_ = nullptr;
+	GameSceneManager* sceneManager = nullptr;
 	// シーンファクトリー
-	AbstractSceneFactory* sceneFactory_ = nullptr;
+	AbstractSceneFactory* sceneFactory = nullptr;
 private:
 	bool endRequest = false;
 };

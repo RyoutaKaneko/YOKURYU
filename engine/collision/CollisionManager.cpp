@@ -32,8 +32,8 @@ void CollisionManager::CheckAllCollisions()
 			BaseCollider* colA = *itA;
     		BaseCollider* colB = *itB;
 			//Õ“Ë‘ŠŽè‚ð‹L‰¯
-			colA->GetObject3d()->toCollisionName = colB->GetName();
-			colB->GetObject3d()->toCollisionName = colA->GetName();
+			colA->GetObject3d()->SetToCollName(colB->GetName());
+			colB->GetObject3d()->SetToCollName(colA->GetName());
 			
 
 			// ‚Æ‚à‚É‹…

@@ -267,7 +267,7 @@ void GameTitleScene::Update()
 		gameTimer++;
 	}
 	//更新
-	player->worldTransform_.UpdateMatrix();
+	player->GetWorldTransform().UpdateMatrix();
 	viewProjection->UpdateMatrix();
 }
 

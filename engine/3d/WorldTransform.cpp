@@ -8,12 +8,12 @@
 #include<cassert>
 #include <d3dx12.h>
 
-Microsoft::WRL::ComPtr<ID3D12Device> WorldTransform::device_ = nullptr;
+Microsoft::WRL::ComPtr<ID3D12Device> WorldTransform::device = nullptr;
 
-void WorldTransform::StaticInitialize(ID3D12Device* device)
+void WorldTransform::StaticInitialize(ID3D12Device* device_)
 {
-	assert(device);
-	device_ = device;
+	assert(device_);
+	device = device_;
 }
 
 void WorldTransform::Initialize()
@@ -25,7 +25,7 @@ void WorldTransform::Initialize()
 
 void WorldTransform::CreateConstBuffer()
 {
-	assert(device_);
+	assert(device);
 
 	// ヒーププロパティ
 	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
@@ -36,7 +36,7 @@ void WorldTransform::CreateConstBuffer()
 	HRESULT result;
 
 	// 定数バッファの生成
-	result = device_->CreateCommittedResource(
+	result = device->CreateCommittedResource(
 		&heapProps, // アップロード可能
 		D3D12_HEAP_FLAG_NONE,
 		&resourceDesc,
@@ -63,26 +63,26 @@ void WorldTransform::UpdateMatrix()
 
 	//各行列計算
 	matScale = Matrix4::identity();
-	matScale.scale(scale_);
+	matScale.scale(scale);
 	matRot = Matrix4::identity();
-	matRot *= matRotZ.rotateZ(ToRadian(rotation_.z));
-	matRot *= matRotX.rotateX(ToRadian(rotation_.x));
-	matRot *= matRotY.rotateY(ToRadian(rotation_.y));
+	matRot *= matRotZ.rotateZ(ToRadian(rotation.z));
+	matRot *= matRotX.rotateX(ToRadian(rotation.x));
+	matRot *= matRotY.rotateY(ToRadian(rotation.y));
 	matTrans = Matrix4::identity();
-	matTrans.translate(position_);
+	matTrans.translate(position);
 
 	//ワールド行列の合成
-	matWorld_ = Matrix4::identity();
-	matWorld_ *= matScale;
-	matWorld_ *= matRot;
-	matWorld_ *= matTrans;
+	matWorld = Matrix4::identity();
+	matWorld *= matScale;
+	matWorld *= matRot;
+	matWorld *= matTrans;
 
 	//親子構造
-	if (parent_ != nullptr) 
+	if (parent != nullptr) 
 	{
-		matWorld_ *= parent_->matWorld_;
+		matWorld *= parent->matWorld;
 	}
 
 	//定数バッファに転送
-	constMap->matWorld = matWorld_;
+	constMap->matWorld = matWorld;
 }

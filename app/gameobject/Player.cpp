@@ -98,7 +98,7 @@ void Player::Update(Vector3 velo, std::vector<LockInfo>& info)
 		}
 	}
 
-	worldTransform_.UpdateMatrix();
+	GetWorldTransform().UpdateMatrix();
 	//“–‚½‚è”»’èXV
 	if (collider)
 	{
@@ -237,7 +237,7 @@ void Player::Ultimate()
 		isUltimate = false;
 		energy = 0;
 	}
-	worldTransform_.UpdateMatrix();
+	GetWorldTransform().UpdateMatrix();
 	ultTime++;
 }
 
@@ -266,17 +266,17 @@ void Player::OnCollision([[maybe_unused]] const CollisionInfo& info)
 	const char* str4 = "class Energy";
 
 	//‘Šè‚ªenemy
-	if (strcmp(toCollisionName, str1) == 0) {
+	if (strcmp(GetToCollName(), str1) == 0) {
 	}
 	//‘Šè‚ªenemy‚Ì’e
-	if (strcmp(toCollisionName, str2) == 0) {
+	if (strcmp(GetToCollName(), str2) == 0) {
 		if (isHit == false) {
 			hp-=10;
 			isHit = true;
 		}
 	}
 	//‘Šè‚ªboss‚Ì’e
-	if (strcmp(toCollisionName, str3) == 0) {
+	if (strcmp(GetToCollName(), str3) == 0) {
 		if (isHit == false) {
 			hp-=25;
 			isHit = true;
@@ -284,7 +284,7 @@ void Player::OnCollision([[maybe_unused]] const CollisionInfo& info)
 	}
 
 	//‘Šè‚ªenergy
-	if (strcmp(toCollisionName, str4) == 0) {
+	if (strcmp(GetToCollName(), str4) == 0) {
 		if (energy < 100) {
 			energy += 5;
 		}

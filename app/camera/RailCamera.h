@@ -68,8 +68,8 @@ public:
 	/// <summary>
 	/// 注視点をセット
 	/// </summary>
-	/// <param name="target_">注視点</param>
-	void SetTarget(Vector3 target_);
+	/// <param name="target">注視点</param>
+	void SetTarget(Vector3 target);
 
 	/// <summary>
 	///  レール上かどうか
@@ -118,7 +118,7 @@ public:
 	/// レールカメラオブジェクトの座標を取得
 	/// </summary>
 	/// <returns></returns>
-	Vector3 GetCameraPos() { return camera->worldTransform_.position_; }
+	Vector3 GetCameraPos() { return camera->GetWorldTransform().GetPosition(); }
 
 	/// <summary>
 	/// 通過点を取得

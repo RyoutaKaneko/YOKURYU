@@ -14,7 +14,7 @@
 
 class ViewProjection
 {
-public:// サブクラス
+private:// サブクラス
 	// 定数バッファ用データ構造体
 	struct ConstBufferDataViewProjection {
 		Matrix4 view;       // ワールド → ビュー変換行列
@@ -26,7 +26,7 @@ public:// メンバ関数
 	///  静的初期化
 	/// </summary>
 	/// <param name="device">デバイス</param>
-	static void StaticInitialize(ID3D12Device* device);
+	static void StaticInitialize(ID3D12Device* device_);
 
 	/// <summary>
 	/// 初期化
@@ -36,7 +36,7 @@ public:// メンバ関数
 	/// <summary>
 	/// 視点をセット
 	/// </summary>
-	/// <param name="eye_">視点</param>
+	/// <param name="eye">視点</param>
 	void SetEye(Vector3 eye_);
 
 	/// <summary>
@@ -103,7 +103,7 @@ private:// プライベート関数
 	float ToRadian(float angle) { return angle * (PI / 180); }
 
 
-public:// パブリック変数
+private:
 #pragma region ビュー行列の設定
 	// 視点座標
 	Vector3 eye = { 0, 5, -10.0f };
@@ -132,7 +132,7 @@ public:// パブリック変数
 private:// メンバ変数
 
 	// デバイス（借りてくる）
-	static Microsoft::WRL::ComPtr<ID3D12Device> device_;
+	static Microsoft::WRL::ComPtr<ID3D12Device> device;
 
 	// 定数バッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> constBuff;

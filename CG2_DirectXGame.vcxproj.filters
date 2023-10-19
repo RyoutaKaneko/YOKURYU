@@ -94,6 +94,12 @@
     <Filter Include="ソースファイル\Engine\scene">
       <UniqueIdentifier>{6bef14bd-ffae-4ac6-9aee-6e82cdf7d056}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Application\UI">
+      <UniqueIdentifier>{85af1208-a3ce-4200-b447-c98f3d7c6e7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Application\UI">
+      <UniqueIdentifier>{3069da23-4c17-4dc8-b971-95084f2b6e9a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -180,6 +186,9 @@
     <ClCompile Include="engine\scene\SceneFactory.cpp">
       <Filter>ソースファイル\Engine\scene</Filter>
     </ClCompile>
+    <ClCompile Include="engine\scene\SIFrameWork.cpp">
+      <Filter>ソースファイル\Engine\scene</Filter>
+    </ClCompile>
     <ClCompile Include="app\scene\GameClearScene.cpp">
       <Filter>ソースファイル\Application\scene</Filter>
     </ClCompile>
@@ -187,6 +196,9 @@
       <Filter>ソースファイル\Application\scene</Filter>
     </ClCompile>
     <ClCompile Include="app\scene\GameScene.cpp">
+      <Filter>ソースファイル\Application\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="app\scene\GameTitleScene.cpp">
       <Filter>ソースファイル\Application\scene</Filter>
     </ClCompile>
     <ClCompile Include="app\gameobject\Boss.cpp">
@@ -222,11 +234,8 @@
     <ClCompile Include="app\scene\Game.cpp">
       <Filter>ソースファイル\Application\scene</Filter>
     </ClCompile>
-    <ClCompile Include="engine\scene\SIFrameWork.cpp">
-      <Filter>ソースファイル\Engine\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="app\scene\GameTitleScene.cpp">
-      <Filter>ソースファイル\Application\scene</Filter>
+    <ClCompile Include="GameSceneUI.cpp">
+      <Filter>ソースファイル\Application\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -437,6 +446,9 @@
     </ClInclude>
     <ClInclude Include="app\scene\Game.h">
       <Filter>ヘッダー ファイル\Application\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSceneUI.h">
+      <Filter>ヘッダー ファイル\Application\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

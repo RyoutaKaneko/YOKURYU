@@ -32,81 +32,81 @@ public:
 
 protected:
 	// ビュー行列
-	XMMATRIX matView_ = {};
+	XMMATRIX matView = {};
 	// 射影行列
-	XMMATRIX matProjection_ = {};
+	XMMATRIX matProjection = {};
 
-	XMMATRIX matViewProjection_ = {};
+	XMMATRIX matViewProjection = {};
 
 	// ビルボード行列
-	XMMATRIX matBillboard_ = {};
+	XMMATRIX matBillboard = {};
 	// Y軸回りビルボード行列
-	XMMATRIX matBillboardY_ = {};
+	XMMATRIX matBillboardY = {};
 	// 視点座標
-	XMFLOAT3 eye_ = { 0.0f, 0.0f, -100.0f };
+	XMFLOAT3 eye = { 0.0f, 0.0f, -100.0f };
 	// 注視点座標
-	XMFLOAT3 target_ = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 target = { 0.0f,0.0f,0.0f };
 	// 上方向ベクトル
-	XMFLOAT3 up_ = { 0.0f,1.0f,0.0f };
+	XMFLOAT3 up = { 0.0f,1.0f,0.0f };
 
 public://アクセッサ
 	/// <summary>
 	/// ビュー行列作成
 	/// </summary>
 	/// <returns></returns>
-	const XMMATRIX& GetMatView() { return matView_; }
+	const XMMATRIX& GetMatView() { return matView; }
 
 	/// <summary>
 	/// プロジェクション行列作成
 	/// </summary>
 	/// <returns></returns>
-	const XMMATRIX& GetMatProjection() { return matProjection_; }
+	const XMMATRIX& GetMatProjection() { return matProjection; }
 
 	/// <summary>
 	/// ビュープロジェクション行列作成
 	/// </summary>
 	/// <returns></returns>
-	const XMMATRIX& GetMatViewProjection() { return matViewProjection_; }
+	const XMMATRIX& GetMatViewProjection() { return matViewProjection; }
 
 	/// <summary>
 	/// ビルボード行列取得
 	/// </summary>
 	/// <returns></returns>
-	const XMMATRIX& GetMatBillboard() { return matBillboard_; }
-	const XMMATRIX& GetMatBillboardY() { return matBillboardY_; }
+	const XMMATRIX& GetMatBillboard() { return matBillboard; }
+	const XMMATRIX& GetMatBillboardY() { return matBillboardY; }
 
 	/// <summary>
 	/// 視点取得
 	/// </summary>
 	/// <returns></returns>
-	const XMFLOAT3& GetEye() { return eye_; }
+	const XMFLOAT3& GetEye() { return eye; }
 	/// <summary>
 	/// 視点をセット
 	/// </summary>
 	/// <param name="eye"></param>
-	void SetEye(const XMFLOAT3& eye);
+	void SetEye(const XMFLOAT3& eye_);
 
 	/// <summary>
 	/// 注視点取得
 	/// </summary>
 	/// <returns></returns>
-	const XMFLOAT3& GetTarget() { return target_; }
+	const XMFLOAT3& GetTarget() { return target; }
 
 	/// <summary>
 	/// 注視点をセット
 	/// </summary>
 	/// <param name="target"></param>
-	void SetTarget(const XMFLOAT3& target);
+	void SetTarget(const XMFLOAT3& target_);
 
 	/// <summary>
 	/// 上方向ベクトル取得
 	/// </summary>
 	/// <returns></returns>
-	const XMFLOAT3& GetUp() { return up_; }
+	const XMFLOAT3& GetUp() { return up; }
 
 	/// <summary>
 	/// 上方向ベクトルをセット
 	/// </summary>
 	/// <returns></returns>
-	void SetUp(const XMFLOAT3& up);
+	void SetUp(const XMFLOAT3& up_);
 };

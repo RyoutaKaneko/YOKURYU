@@ -108,7 +108,7 @@ public://メンバ関数
 
 private://メンバ変数
 	// デバイス
-	static ID3D12Device* device_;
+	static ID3D12Device* device;
 	//デフォルトテクスチャ格納ディレクトリ
 	static std::string defaultTextureDirectoryPath_;
 
@@ -136,7 +136,7 @@ public://setter
 	/// デバイスをセット
 	/// </summary>
 	/// <param name="device"></param>
-	static void SetDevice(ID3D12Device* device) { Particle::device_ = device; }
+	static void SetDevice(ID3D12Device* device_) { Particle::device = device_; }
 
 };
 

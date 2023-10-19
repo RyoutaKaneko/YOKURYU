@@ -111,7 +111,7 @@ public:
 	///  スプライト単体頂点バッファの転送
 	/// </summary>
 	/// <param name="sprite">スプライト</param>
-	/// <param name="texIndex_">テクスチャ番号</param>
+	/// <param name="texIndex">テクスチャ番号</param>
 	void SpriteTransferVertexBuffer(const Sprite& sprite, uint32_t texIndex_ = UINT32_MAX);
 
 	/// <summary>
@@ -151,20 +151,20 @@ public: // セッター
 	/// <summary>
 	/// 座標設定
 	/// </summary>
-	/// <param name="position_">座標</param>
+	/// <param name="position">座標</param>
 	void SetPosition(Vector3 position_) { this->position = position_; }
 	
 	/// <summary>
 	/// スケール設定
 	/// </summary>
-	/// <param name="scale_">スケール</param>
+	/// <param name="scale">スケール</param>
 	void SetScale(Vector2 scale_) { this->scale = scale_; }
 	
 	/// <summary>
 	/// 回転設定
 	/// </summary>
 	/// <param name="_rotation">回転率</param>
-	void SetRotation(float _rotation) { this->rotation = _rotation; }
+	void SetRotation(float _rotation) { this->rotationZ = _rotation; }
 	
 	/// <summary>
 	/// テクスチャ番号を設定
@@ -189,26 +189,26 @@ public: // セッター
 	/// X反転フラグを設定
 	/// </summary>
 	/// <param name="isFlipX">X反転フラグ</param>
-	void SetIsFlipX(bool isFlipX) { this->isFlipX_ = isFlipX; }
+	void SetIsFlipX(bool isFlipX_) { this->isFlipX = isFlipX_; }
 
 	/// <summary>
 	/// Y反転フラグを設定
 	/// </summary>
 	/// <param name="isFlipY">Y反転フラグ</param>
-	void SetIsFlipY(bool isFlipY) { this->isFlipY_ = isFlipY; }
+	void SetIsFlipY(bool isFlipY_) { this->isFlipY = isFlipY_; }
 	
 	/// <summary>
 	/// テクスチャ左上座標を設定
 	/// </summary>
 	/// <param name="texLeftTop">テクスチャ左上座標</param>
-	void SetTexLeftTop(const Vector2& texLeftTop) { this->texLeftTop_ = texLeftTop; }
+	void SetTexLeftTop(const Vector2& texLeftTop_) { this->texLeftTop = texLeftTop_; }
 
 
 	/// <summary>
 	/// テクスチャ切り出しサイズを設定
 	/// </summary>
 	/// <param name="texSize">テクスチャサイズ</param>
-	void SetTexSize(const Vector2& texSize) { this->texSize_ = texSize; }
+	void SetTexSize(const Vector2& texSize_) { this->texSize = texSize_; }
 
 public: // ゲッター
 	/// <summary>
@@ -233,7 +233,7 @@ public: // ゲッター
 	/// 回転を取得
 	/// </summary>
 	/// <returns></returns>
-	float GetRotation() const { return rotation; }
+	float GetRotation() const { return rotationZ; }
 	
 	/// <summary>
 	/// テクスチャ番号を取得
@@ -245,33 +245,33 @@ public: // ゲッター
 	/// 色取得
 	/// </summary>
 	/// <returns></returns>
-	Vector4 GetColor() const { return color_; }
+	Vector4 GetColor() const { return color; }
 	
 	/// <summary>
 	/// X反転を取得
 	/// </summary>
 	/// <returns></returns>
-	bool GetIsFlipX() const { return isFlipX_; }
+	bool GetIsFlipX() const { return isFlipX; }
 
 	/// <summary>
 	/// Y反転を取得
 	/// </summary>
 	/// <returns></returns>
-	bool GetIsFlipY() const { return isFlipY_; }
+	bool GetIsFlipY() const { return isFlipY; }
 	
 	/// <summary>
 	/// テクスチャ左上を取得
 	/// </summary>
 	/// <returns></returns>
-	Vector2 GetTexLeftTop() const { return texLeftTop_; }
+	Vector2 GetTexLeftTop() const { return texLeftTop; }
 	
 	/// <summary>
 	/// テクスチャ切り出しサイズを取得
 	/// </summary>
 	/// <returns></returns>
-	Vector2 GetTexSize() const { return texSize_; }
+	Vector2 GetTexSize() const { return texSize; }
 
-public:
+private:
 	//頂点バッファ
 	ComPtr<ID3D12Resource> vertBuff;
 	//頂点バッファビュー
@@ -281,7 +281,7 @@ public:
 private:
 	// DirectXCommonのインスタンス
 	DirectXCommon* dXCommon = nullptr;
-	SpriteCommon spriteCommon_;
+	SpriteCommon spriteCommon;
 
 	ComPtr<ID3D12GraphicsCommandList> cmdList;
 	ComPtr<ID3D12DescriptorHeap> descHeap;
@@ -296,30 +296,30 @@ private:
 
 	// テクスチャ番号
 	UINT texNumber = 0;
-	uint32_t texIndex_ = 0;
+	uint32_t texIndex = 0;
 	// 座標
 	Vector3 position = { 0.0f, 0.0f, 0.0f };
 	// サイズ
 	Vector2 scale = { 1.0f, 1.0f };
 	// 回転
-	Vector3 rotation_ = { 0.0f,0.0f,0.0f };
+	Vector3 rotation = { 0.0f,0.0f,0.0f };
 	// ワールド行列
 	Matrix4 matWorld;
 	// アンカーポイント
 	Vector2 anchorpoint = { 0.0f,0.0f };
 	// テクスチャ左上座標設定
-	Vector2 texLeftTop_ = { 50.0f, 50.0f };
+	Vector2 texLeftTop = { 50.0f, 50.0f };
 	// テクスチャ切り出しサイズ
-	Vector2 texSize_ = { 100.0f, 100.0f };
+	Vector2 texSize = { 100.0f, 100.0f };
 	// 色
-	Vector4 color_ = { 1,1,1,1 };
+	Vector4 color = { 1,1,1,1 };
 
 	// Z軸回りの回転
-	float rotation = 0.0f;
+	float rotationZ = 0.0f;
 	// 左右反転
-	bool isFlipX_ = false;
+	bool isFlipX = false;
 	// 上下反転
-	bool isFlipY_ = false;
+	bool isFlipY = false;
 	// 非表示
 	bool isInvisible = false;
 };

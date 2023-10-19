@@ -41,11 +41,7 @@ public:
 	/// <returns></returns>
 	bool IsDead() const { return isDead_; }
 
-	/// <summary>
-	/// ワールドトランフォームを取得
-	/// </summary>
-	/// <returns></returns>
-	WorldTransform* GetWorldTransForm() { return &worldTransform_; }
+
 
 private:
 	//モデル

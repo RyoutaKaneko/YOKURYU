@@ -13,10 +13,10 @@ void Game::Initialize()
 	SIFrameWork::Initialize();
 
 	// シーンファクトリを生成し、マネージャにセット
-	sceneFactory_ = new SceneFactory();
-	sceneManager_->SetSceneFactory(sceneFactory_);
+	sceneFactory = new SceneFactory();
+	sceneManager->SetSceneFactory(sceneFactory);
 	// シーンマネージャに最初のシーンをセット
-	sceneManager_->ChangeScene("TITLE");
+	sceneManager->ChangeScene("TITLE");
 }
 
 void Game::Finalize()
@@ -37,5 +37,5 @@ void Game::Draw()
 	/*ID3D12GraphicsCommandList* cmdList = dxCommon->GetCommandList();*/
 
 	//=== シーンマネージャの描画 ===//
-	sceneManager_->Draw();
+	sceneManager->Draw();
 }

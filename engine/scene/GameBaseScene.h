@@ -49,11 +49,11 @@ public: // メンバ関数
 	void LoadObjFromLevelEditor(const std::string& fileName);
 
 public: // メンバ関数
-	virtual void SetSceneManager(GameSceneManager* gSceneManager) { gSceneManager_ = gSceneManager; }
+	virtual void SetSceneManager(GameSceneManager* gSceneManager_) { gSceneManager = gSceneManager_; }
 
 protected: // メンバ変数
 	// シーンマネージャ（借りてくる）
-	GameSceneManager* gSceneManager_ = nullptr;
+	GameSceneManager* gSceneManager = nullptr;
 	//leveleditor
 	std::map<std::string, Model*> models;
 	std::vector<Object3d*> objects;

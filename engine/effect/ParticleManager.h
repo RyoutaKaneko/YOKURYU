@@ -38,13 +38,13 @@ public: // 静的メンバ関数
 	/// 静的初期化
 	/// </summary>
 	/// <param name="device">デバイス</param>
-	static void StaticInitialize(ID3D12Device* device);
+	static void StaticInitialize(ID3D12Device* device_);
 
 	/// <summary>
 	/// 描画前処理
 	/// </summary>
 	/// <param name="cmdList">コマンドリスト</param>
-	static void PreDraw(ID3D12GraphicsCommandList* cmdList);
+	static void PreDraw(ID3D12GraphicsCommandList* cmdList_);
 
 	/// <summary>
 	/// 描画後処理
@@ -59,7 +59,7 @@ public: // 静的メンバ関数
 
 private: // 静的メンバ変数
 	// デバイス
-	static ID3D12Device* device_;
+	static ID3D12Device* device;
 	// コマンドリスト
 	static ID3D12GraphicsCommandList* cmdList;
 	// ルートシグネチャ

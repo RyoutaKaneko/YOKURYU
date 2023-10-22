@@ -13,7 +13,7 @@ Microsoft::WRL::ComPtr<ID3D12Device> ViewProjection::device = nullptr;
 
 void ViewProjection::StaticInitialize(ID3D12Device* device_)
 {
-	assert(device);
+	assert(device_);
 	device = device_;
 }
 

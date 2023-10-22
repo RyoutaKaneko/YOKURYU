@@ -105,6 +105,7 @@ void GameScene::Initialize() {
 	fadeout.SpriteUpdate(fadeout, spriteCommon_);
 	fadeout.LoadTexture(spriteCommon_, 10, L"Resources/fade.png", dxCommon_->GetDevice());
 	//UI初期化
+	UIs = new GameSceneUI();
 	UIs->Initialize(dxCommon_->GetDevice());
 
 	//パーティクル初期化
@@ -494,8 +495,11 @@ void GameScene::Draw() {
 			bossHP.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		}
 	}
+	Sprite::PostDraw();
+
 	UIs->Draw(dxCommon_->GetDevice(), dxCommon_->GetCommandList());
 
+	Sprite::PreDraw(dxCommon_->GetCommandList(), spriteCommon_);
 	if (isPlayable == true) {
 		for (int i = 0; i < 4; i++) {
 			crosshair[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());

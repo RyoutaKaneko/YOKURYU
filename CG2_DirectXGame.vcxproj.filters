@@ -234,7 +234,7 @@
     <ClCompile Include="app\scene\Game.cpp">
       <Filter>ソースファイル\Application\scene</Filter>
     </ClCompile>
-    <ClCompile Include="GameSceneUI.cpp">
+    <ClCompile Include="app\UI\GameSceneUI.cpp">
       <Filter>ソースファイル\Application\UI</Filter>
     </ClCompile>
   </ItemGroup>
@@ -447,7 +447,7 @@
     <ClInclude Include="app\scene\Game.h">
       <Filter>ヘッダー ファイル\Application\scene</Filter>
     </ClInclude>
-    <ClInclude Include="GameSceneUI.h">
+    <ClInclude Include="app\UI\GameSceneUI.h">
       <Filter>ヘッダー ファイル\Application\UI</Filter>
     </ClInclude>
   </ItemGroup>

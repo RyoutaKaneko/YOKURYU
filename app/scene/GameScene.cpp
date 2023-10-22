@@ -62,13 +62,6 @@ void GameScene::Initialize() {
 	sprite = new Sprite();
 	spriteCommon_ = sprite->SpriteCommonCreate(dxCommon_->GetDevice());
 
-	//titleの画像
-	titleGH.LoadTexture(spriteCommon_, 0, L"Resources/title.png", dxCommon_->GetDevice());
-	titleGH.SpriteCreate(dxCommon_->GetDevice(), 0, Vector2(0.0f, 0.0f), false, false);
-	titleGH.SetScale(Vector2(1280 * 1, 720 * 1));
-	titleGH.SpriteTransferVertexBuffer(titleGH, 0);
-	titleGH.SpriteUpdate(titleGH, spriteCommon_);
-
 	//クロスヘアの画像
 	for (int i = 0; i < 4; i++) {
 		crosshair[i].LoadTexture(spriteCommon_, 1, L"Resources/crosshair.png", dxCommon_->GetDevice());
@@ -78,28 +71,6 @@ void GameScene::Initialize() {
 		crosshair[i].SpriteTransferVertexBuffer(crosshair[i], 1);
 		crosshair[i].SpriteUpdate(crosshair[i], spriteCommon_);
 	}
-
-	//HP用画像
-	hp.SpriteCreate(dxCommon_->GetDevice(), 2, Vector2(0.0f, 0.0f), false, false);
-	hp.SetPosition(Vector3(28, 650, 0));
-	hp.SetScale(Vector2(4 * 1, 48 * 1));
-	hp.LoadTexture(spriteCommon_, 2, L"Resources/life.png", dxCommon_->GetDevice());
-	hp.SpriteTransferVertexBuffer(hp, 2);
-	hp.SpriteUpdate(hp, spriteCommon_);
-
-	//gameclearの画像
-	clearGH.LoadTexture(spriteCommon_, 3, L"Resources/clear.png", dxCommon_->GetDevice());
-	clearGH.SpriteCreate(dxCommon_->GetDevice(), 3, Vector2(0.0f, 0.0f), false, false);
-	clearGH.SetScale(Vector2(1280 * 1, 720 * 1));
-	clearGH.SpriteTransferVertexBuffer(clearGH, 3);
-	clearGH.SpriteUpdate(clearGH, spriteCommon_);
-
-	//gameoverの画像
-	overGH.LoadTexture(spriteCommon_, 4, L"Resources/over.png", dxCommon_->GetDevice());
-	overGH.SpriteCreate(dxCommon_->GetDevice(), 4, Vector2(0.0f, 0.0f), false, false);
-	overGH.SetScale(Vector2(1280 * 1, 720 * 1));
-	overGH.SpriteTransferVertexBuffer(overGH, 4);
-	overGH.SpriteUpdate(overGH, spriteCommon_);
 
 	for (int i = 0; i < 10; i++) {
 		lock[i].LoadTexture(spriteCommon_, 1, L"Resources/crosshair.png", dxCommon_->GetDevice());
@@ -125,29 +96,7 @@ void GameScene::Initialize() {
 	bossHP.SetScale(Vector2(2 * 1, 48 * 1));
 	bossHP.SpriteTransferVertexBuffer(bossHP, 6);
 	bossHP.SpriteUpdate(bossHP, spriteCommon_);
-	//gage
-	gage.LoadTexture(spriteCommon_, 7, L"Resources/green.png", dxCommon_->GetDevice());
-	gage.SpriteCreate(dxCommon_->GetDevice(), 7, Vector2(0.0f, 0.5f), false, false);
-	gage.SetPosition(Vector3(28, 618, 0));
-	gage.SetScale(Vector2(2 * 1, 18 * 1));
-	gage.SpriteTransferVertexBuffer(gage, 7);
-	gage.SpriteUpdate(gage, spriteCommon_);
-	//
-	gageBack.LoadTexture(spriteCommon_, 8, L"Resources/green.png", dxCommon_->GetDevice());
-	gageBack.SpriteCreate(dxCommon_->GetDevice(), 8, Vector2(0.0f, 0.5f), false, false);
-	gageBack.SetPosition(Vector3(28, 618, 0));
-	gageBack.SetScale(Vector2(358, 18 * 1));
-	gageBack.SetAlpha(gageBack, 0.4f);
-	gageBack.SpriteTransferVertexBuffer(gageBack, 8);
-	gageBack.SpriteUpdate(gageBack, spriteCommon_);
-	//
-	hpBack.SpriteCreate(dxCommon_->GetDevice(), 9, Vector2(0.0f, 0.0f), false, false);
-	hpBack.SetPosition(Vector3(28, 650, 0));
-	hpBack.SetScale(Vector2(396, 48 * 1));
-	hpBack.LoadTexture(spriteCommon_, 9, L"Resources/life.png", dxCommon_->GetDevice());
-	hpBack.SetAlpha(hpBack, 0.5f);
-	hpBack.SpriteTransferVertexBuffer(hpBack, 9);
-	hpBack.SpriteUpdate(hpBack, spriteCommon_);
+	
 	//フェードアウト
 	fadeout.SpriteCreate(dxCommon_->GetDevice(), 10, Vector2(0.0f, 0.0f), false, true);
 	fadeout.SetScale(Vector2(1280 * 1, 1120 * 1));
@@ -155,45 +104,8 @@ void GameScene::Initialize() {
 	fadeout.SpriteTransferVertexBuffer(fadeout, 10);
 	fadeout.SpriteUpdate(fadeout, spriteCommon_);
 	fadeout.LoadTexture(spriteCommon_, 10, L"Resources/fade.png", dxCommon_->GetDevice());
-	//hpフレーム
-	hpFrame.SpriteCreate(dxCommon_->GetDevice(), 11, Vector2(0.5f, 0.5f), false, false);
-	hpFrame.SetScale(Vector2(428 * 1, 127 * 1));
-	hpFrame.SetPosition(Vector3(226, 851, 0));
-	hpFrame.SpriteTransferVertexBuffer(hpFrame, 11);
-	hpFrame.SpriteUpdate(hpFrame, spriteCommon_);
-	hpFrame.LoadTexture(spriteCommon_, 11, L"Resources/hpFrame.png", dxCommon_->GetDevice());
-	//攻撃UI
-	attackUI.SpriteCreate(dxCommon_->GetDevice(), 12, Vector2(0.5f, 0.0f), false, false);
-	attackUI.SetScale(Vector2(100 * 1, 100 * 1));
-	attackUI.SetPosition(Vector3(1020, 600, 0));
-	attackUI.SetAlpha(attackUI,0.6f);
-	attackUI.SpriteTransferVertexBuffer(attackUI, 12);
-	attackUI.SpriteUpdate(attackUI, spriteCommon_);
-	attackUI.LoadTexture(spriteCommon_, 12, L"Resources/attackUI.png", dxCommon_->GetDevice());
-	//攻撃Icon
-	attackIcon.SpriteCreate(dxCommon_->GetDevice(), 13, Vector2(0.5f, 0.0f), false, false);
-	attackIcon.SetScale(attackUI.GetScale() - Vector2(16,16));
-	attackIcon.SetPosition(Vector3(1020, 608, 0));
-	attackIcon.SetAlpha(attackIcon, 0.6f);
-	attackIcon.SpriteTransferVertexBuffer(attackIcon, 13);
-	attackIcon.SpriteUpdate(attackIcon, spriteCommon_);
-	attackIcon.LoadTexture(spriteCommon_, 13, L"Resources/attackIcon.png", dxCommon_->GetDevice());
-	//ロックUI
-	lockUI.SpriteCreate(dxCommon_->GetDevice(), 14, Vector2(0.5f, 0.0f), true, false);
-	lockUI.SetScale(Vector2(160 * 1, 160 * 1));
-	lockUI.SetPosition(Vector3(1160, 540, 0));
-	lockUI.SetAlpha(lockUI, 0.6f);
-	lockUI.SpriteTransferVertexBuffer(lockUI, 14);
-	lockUI.SpriteUpdate(lockUI, spriteCommon_);
-	lockUI.LoadTexture(spriteCommon_, 14, L"Resources/attackUI.png", dxCommon_->GetDevice());
-	//ロックIcon
-	lockIcon.SpriteCreate(dxCommon_->GetDevice(), 15, Vector2(0.5f, 0.0f), false, false);
-	lockIcon.SetScale(lockUI.GetScale() - Vector2(12, 12));
-	lockIcon.SetPosition(Vector3(1156, 542, 0));
-	lockIcon.SetAlpha(lockIcon, 0.6f);
-	lockIcon.SpriteTransferVertexBuffer(lockIcon, 15);
-	lockIcon.SpriteUpdate(lockIcon, spriteCommon_);
-	lockIcon.LoadTexture(spriteCommon_, 15, L"Resources/lockIcon.png", dxCommon_->GetDevice());
+	//UI初期化
+	UIs->Initialize(dxCommon_->GetDevice());
 
 	//パーティクル初期化
 	particle = Particle::LoadParticleTexture("blue.png");
@@ -268,81 +180,7 @@ void GameScene::Update() {
 	Vector3 shotVec = { 0,0,0 };
 
 
-  //操作可能状態ならHPを更新
-	if (isPlayable == true) {
-		//playerhp
-		float playerHp_ = player->GetHP() - (hp.GetScale().x / 4);
-		if (playerHp_ > 0) {
-			if ((playerHp_) > 4) {
-				hp.SetScale(hp.GetScale() + Vector2(16.0f, 0.0f));
-			}
-			else if ((playerHp_) > 2) {
-				hp.SetScale(hp.GetScale() + Vector2(8.0f, 0.0f));
-			}
-			else if ((playerHp_) > 1) {
-				hp.SetScale(hp.GetScale() + Vector2(4.0f, 0.0f));
-			}
-		}
-		else if (playerHp_ < 0) {
-			if ((playerHp_) < 4) {
-				hp.SetScale(hp.GetScale() - Vector2(8.0f, 0.0f));
-			}
-			else if ((playerHp_) < 2) {
-				hp.SetScale(hp.GetScale() - Vector2(4.0f, 0.0f));
-			}
-			else if ((playerHp_) < 1) {
-				hp.SetScale(hp.GetScale() - Vector2(2.0f, 0.0f));
-			}
-		}
-		
-		//playerの状態により表示変化
-		if (player->GetHealthState() == 0) {
-			hp.SetColor(hp,{ 0.2f,1.0f,0.2f,1.0f });
-			hpBack.SetColor(hpBack,{ 0.2f,1.0f,0.2f,0.4f });
-		}
-		else if (player->GetHealthState() == 1) {
-			hp.SetColor(hp,{ 0.7f,1.0f,0.0f,1.0f });
-			hpBack.SetColor(hpBack,{ 0.7f,1.0f,0.0f,0.4f });
-		}
-		else {
-			hp.SetColor(hp,{ 0.5f,0.0f,0.0f,1.0f });
-			hpBack.SetColor(hpBack,{ 0.5f,0.0f,0.0f,0.4f });
-		}
-
-		hp.SpriteTransferVertexBuffer(hp, 2);
-		hp.SpriteUpdate(hp, spriteCommon_);
-		hpBack.SpriteTransferVertexBuffer(hpBack, 9);
-		hpBack.SpriteUpdate(hpBack, spriteCommon_);
-		//gage
-		float gage_ = player->GetEnergy() - (gage.GetScale().x / 4);
-		if (gage_ > 0) {
-			if (gage.GetScale().x < 358) {
-				if ((gage_) > 4) {
-					gage.SetScale(gage.GetScale() + Vector2(16.0f, 0.0f));
-				}
-				else if ((gage_) > 2) {
-					gage.SetScale(gage.GetScale() + Vector2(8.0f, 0.0f));
-				}
-				else if ((gage_) > 1) {
-					gage.SetScale(gage.GetScale() + Vector2(4.0f, 0.0f));
-				}
-			}
-		}
-		else if (gage_ < 0) {
-			if ((gage_) < 4) {
-				gage.SetScale(gage.GetScale() - Vector2(8.0f, 0.0f));
-			}
-			else if ((gage_) < 2) {
-				gage.SetScale(gage.GetScale() - Vector2(4.0f, 0.0f));
-			}
-			else if ((gage_) < 1) {
-				gage.SetScale(gage.GetScale() - Vector2(2.0f, 0.0f));
-			}
-		}
-
-		gage.SpriteTransferVertexBuffer(gage, 7);
-		gage.SpriteUpdate(gage, spriteCommon_);
-	}
+	UIs->Update(isPlayable, player);
 
 	//メインゲーム中
 	switch (gameState)
@@ -357,8 +195,7 @@ void GameScene::Update() {
 			}
 			//UI表示
 			if (gameTime <= 25) {
-				hpFrame.SetPosition(hpFrame.GetPosition() + Vector3(0,-8,0));
-				hpFrame.SpriteUpdate(hpFrame, spriteCommon_);
+				UIs->ShowUI();
 			}
 			railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() + Vector3(0, 0.0f, 0.05f));
 			gameTime--;
@@ -573,23 +410,6 @@ void GameScene::Update() {
 	for (const std::unique_ptr<Energy>& energy : energys_) {
 		energy->Update(player->GetWorldPos(), railCamera->GetCamera()->GetRotation());
 	}
-	//UI表示
-	if (Input::GetInstance()->TriggerMouseLeft()) {
-		attackUI.SetColor(attackUI, { 0.9f,1.0f,0.2f,1.0f });
-		attackIcon.SetColor(attackIcon, { 0.9f,1.0f,0.2f,1.0f });
-	}
-	else if (Input::GetInstance()->LeftMouseLeft()) {
-		attackUI.SetColor(attackUI, {1.0f,1.0f,1.0f,0.6f});
-		attackIcon.SetColor(attackIcon, {1.0f,1.0f,1.0f,0.6f});
-	}//lock
-	if (Input::GetInstance()->TriggerMouseRight()) {
-		lockUI.SetColor(lockUI, { 0.9f,1.0f,0.2f,1.0f });
-		lockIcon.SetColor(lockIcon, { 0.9f,1.0f,0.2f,1.0f });
-	}
-	else if (Input::GetInstance()->LeftMouseRight()) {
-		lockUI.SetColor(lockUI, { 1.0f,1.0f,1.0f,0.6f });
-		lockIcon.SetColor(lockIcon, { 1.0f,1.0f,1.0f,0.6f });
-	}
 
 	//デスフラグの立ったエネルギーを削除
 	energys_.remove_if([](std::unique_ptr <Energy>& energys) {
@@ -674,19 +494,8 @@ void GameScene::Draw() {
 			bossHP.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		}
 	}
-	if (isPlayable == true) {
-		hpBack.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
-		gageBack.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
-		hp.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
-		gage.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
-		hpFrame.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
-		//UI
-		attackUI.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
-		attackIcon.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
-		lockUI.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
-		lockIcon.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
-	}
-	hpFrame.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+	UIs->Draw(dxCommon_->GetDevice(), dxCommon_->GetCommandList());
+
 	if (isPlayable == true) {
 		for (int i = 0; i < 4; i++) {
 			crosshair[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
@@ -763,7 +572,7 @@ void GameScene::Reset() {
 	player->PlayerInitialize();
 	player->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 0.7f));
 	player->SetPosition({ 0,0.5f,495 });
-	hp.SetScale(Vector2(0, 48 * 1));
+	//hp.SetScale(Vector2(0, 48 * 1));
 	//boss
 	boss = new Boss;
 	boss->BossInitialize();
@@ -774,9 +583,9 @@ void GameScene::Reset() {
 	railCamera->Initialize(player);
 	//enemy
 	LoadEnemy();
-	//必殺技ゲージ
-	gage.SetScale(Vector2(2 * 1, 18 * 1));
-	gage.SpriteTransferVertexBuffer(gage, 7);
+	////必殺技ゲージ
+	//gage.SetScale(Vector2(2 * 1, 18 * 1));
+	//gage.SpriteTransferVertexBuffer(gage, 7);
 	//変数
 	isCheckPoint = false;
 	isPlayable = false;

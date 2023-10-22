@@ -65,7 +65,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)app\scene;\$(ProjectDir)app\UI;$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\base;$(ProjectDir)engine\effect;$(ProjectDir)engine\math;$(ProjectDir)engine\collision;$(ProjectDir)engine\scene;$(ProjectDir)app\gameobject;$(ProjectDir)app\camera;$(ProjectDir)engine\camera</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)app\scene;$(ProjectDir)app\UI;$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\base;$(ProjectDir)engine\effect;$(ProjectDir)engine\math;$(ProjectDir)engine\collision;$(ProjectDir)engine\scene;$(ProjectDir)app\gameobject;$(ProjectDir)app\camera;$(ProjectDir)engine\camera</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <DisableSpecificWarnings>
@@ -86,7 +86,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;_ITERATOR_DEBUG_LEVEL=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)app\scene;\$(ProjectDir)app\UI;$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\base;$(ProjectDir)engine\effect;$(ProjectDir)engine\math;$(ProjectDir)engine\collision;$(ProjectDir)engine\scene;$(ProjectDir)app\gameobject;$(ProjectDir)app\camera;$(ProjectDir)engine\camera</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)app\scene;$(ProjectDir)app\UI;$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\base;$(ProjectDir)engine\effect;$(ProjectDir)engine\math;$(ProjectDir)engine\collision;$(ProjectDir)engine\scene;$(ProjectDir)app\gameobject;$(ProjectDir)app\camera;$(ProjectDir)engine\camera</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -118,6 +118,7 @@
     <ClCompile Include="app\scene\GameOverScene.cpp" />
     <ClCompile Include="app\scene\GameScene.cpp" />
     <ClCompile Include="app\scene\GameTitleScene.cpp" />
+    <ClCompile Include="app\UI\GameSceneUI.cpp" />
     <ClCompile Include="engine\base\DirectXCommon.cpp" />
     <ClCompile Include="engine\base\FPSFixed.cpp" />
     <ClCompile Include="engine\base\Input.cpp" />
@@ -134,7 +135,6 @@
     <ClCompile Include="engine\scene\GameSceneManager.cpp" />
     <ClCompile Include="engine\scene\SceneFactory.cpp" />
     <ClCompile Include="engine\scene\SIFrameWork.cpp" />
-    <ClCompile Include="GameSceneUI.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="engine\math\Matrix4.cpp" />
     <ClCompile Include="engine\3d\Model.cpp" />
@@ -258,6 +258,7 @@
     <ClInclude Include="app\scene\GameOverScene.h" />
     <ClInclude Include="app\scene\GameScene.h" />
     <ClInclude Include="app\scene\GameTitleScene.h" />
+    <ClInclude Include="app\UI\GameSceneUI.h" />
     <ClInclude Include="engine\base\DirectXCommon.h" />
     <ClInclude Include="engine\base\FPSFixed.h" />
     <ClInclude Include="engine\base\Input.h" />
@@ -294,7 +295,6 @@
     <ClInclude Include="engine\scene\GameSceneManager.h" />
     <ClInclude Include="engine\scene\SceneFactory.h" />
     <ClInclude Include="engine\scene\SIFrameWork.h" />
-    <ClInclude Include="GameSceneUI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

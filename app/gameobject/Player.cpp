@@ -71,6 +71,7 @@ void Player::Update(Vector3 velo, std::vector<LockInfo>& info)
 			}
 		}
 	}
+	//player’e
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		if (bullet->GetIsHoming() == true) {
 			bullet->HomingVec();

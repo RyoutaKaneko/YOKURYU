@@ -34,7 +34,6 @@ void GameSceneUI::Initialize(ID3D12Device* device)
 	gageBack.SpriteCreate(device, 8, Vector2(0.0f, 0.5f), false, false);
 	gageBack.SetPosition(Vector3(28, 618, 0));
 	gageBack.SetScale(Vector2(358, 18 * 1));
-	gageBack.SetAlpha(gageBack, 0.4f);
 	gageBack.SpriteTransferVertexBuffer(gageBack, 8);
 	gageBack.SpriteUpdate(gageBack, spriteCommon_);
 	//
@@ -42,7 +41,6 @@ void GameSceneUI::Initialize(ID3D12Device* device)
 	hpBack.SetPosition(Vector3(28, 650, 0));
 	hpBack.SetScale(Vector2(396, 48 * 1));
 	hpBack.LoadTexture(spriteCommon_, 9, L"Resources/life.png", device);
-	hpBack.SetAlpha(hpBack, 0.5f);
 	hpBack.SpriteTransferVertexBuffer(hpBack, 9);
 	hpBack.SpriteUpdate(hpBack, spriteCommon_);
 	//hpフレーム
@@ -55,7 +53,7 @@ void GameSceneUI::Initialize(ID3D12Device* device)
 	//攻撃UI
 	attackUI.SpriteCreate(device, 12, Vector2(0.5f, 0.0f), false, false);
 	attackUI.SetScale(Vector2(100 * 1, 100 * 1));
-	attackUI.SetPosition(Vector3(1020, 600, 0));
+	attackUI.SetPosition(Vector3(1020, 800, 0));
 	attackUI.SetAlpha(attackUI, 0.6f);
 	attackUI.SpriteTransferVertexBuffer(attackUI, 12);
 	attackUI.SpriteUpdate(attackUI, spriteCommon_);
@@ -63,7 +61,7 @@ void GameSceneUI::Initialize(ID3D12Device* device)
 	//攻撃Icon
 	attackIcon.SpriteCreate(device, 13, Vector2(0.5f, 0.0f), false, false);
 	attackIcon.SetScale(attackUI.GetScale() - Vector2(16, 16));
-	attackIcon.SetPosition(Vector3(1020, 608, 0));
+	attackIcon.SetPosition(Vector3(1020, 808, 0));
 	attackIcon.SetAlpha(attackIcon, 0.6f);
 	attackIcon.SpriteTransferVertexBuffer(attackIcon, 13);
 	attackIcon.SpriteUpdate(attackIcon, spriteCommon_);
@@ -71,7 +69,7 @@ void GameSceneUI::Initialize(ID3D12Device* device)
 	//ロックUI
 	lockUI.SpriteCreate(device, 14, Vector2(0.5f, 0.0f), true, false);
 	lockUI.SetScale(Vector2(160 * 1, 160 * 1));
-	lockUI.SetPosition(Vector3(1160, 540, 0));
+	lockUI.SetPosition(Vector3(1160, 740, 0));
 	lockUI.SetAlpha(lockUI, 0.6f);
 	lockUI.SpriteTransferVertexBuffer(lockUI, 14);
 	lockUI.SpriteUpdate(lockUI, spriteCommon_);
@@ -79,19 +77,31 @@ void GameSceneUI::Initialize(ID3D12Device* device)
 	//ロックIcon
 	lockIcon.SpriteCreate(device, 15, Vector2(0.5f, 0.0f), false, false);
 	lockIcon.SetScale(lockUI.GetScale() - Vector2(12, 12));
-	lockIcon.SetPosition(Vector3(1156, 542, 0));
+	lockIcon.SetPosition(Vector3(1156, 742, 0));
 	lockIcon.SetAlpha(lockIcon, 0.6f);
 	lockIcon.SpriteTransferVertexBuffer(lockIcon, 15);
 	lockIcon.SpriteUpdate(lockIcon, spriteCommon_);
 	lockIcon.LoadTexture(spriteCommon_, 15, L"Resources/lockIcon.png", device);
 
 	isPlayable = false;
+	frameAlpha = 1.0f;
+	barAlpha = 0.4f;
 }
 
 void GameSceneUI::ShowUI()
 {
-	hpFrame.SetPosition(hpFrame.GetPosition() + Vector3(0, -8, 0));
+	hpFrame.SetPosition(hpFrame.GetPosition() + Vector3(0, -4, 0));
 	hpFrame.SpriteUpdate(hpFrame, spriteCommon_);
+
+	attackIcon.SetPosition(attackIcon.GetPosition() + Vector3(0, -4, 0));
+	attackIcon.SpriteUpdate(attackIcon, spriteCommon_);
+	attackUI.SetPosition(attackUI.GetPosition() + Vector3(0, -4, 0));
+	attackUI.SpriteUpdate(attackUI, spriteCommon_);
+
+	lockIcon.SetPosition(lockIcon.GetPosition() + Vector3(0, -4, 0));
+	lockIcon.SpriteUpdate(lockIcon, spriteCommon_);
+	lockUI.SetPosition(lockUI.GetPosition() + Vector3(0, -4, 0));
+	lockUI.SpriteUpdate(lockUI, spriteCommon_);
 }
 
 void GameSceneUI::Update(bool isPlayable_, Player* player)
@@ -139,10 +149,14 @@ void GameSceneUI::Update(bool isPlayable_, Player* player)
 			hpBack.SetColor(hpBack, { 0.5f,0.0f,0.0f,0.4f });
 		}
 
+		hp.SetAlpha(hp, frameAlpha);
+		hpBack.SetAlpha(hpBack, barAlpha);
+		hpFrame.SetAlpha(hpFrame, frameAlpha);
 		hp.SpriteTransferVertexBuffer(hp, 2);
 		hp.SpriteUpdate(hp, spriteCommon_);
 		hpBack.SpriteTransferVertexBuffer(hpBack, 9);
 		hpBack.SpriteUpdate(hpBack, spriteCommon_);
+		hpFrame.SpriteUpdate(hpFrame, spriteCommon_);
 		//gage
 		float gage_ = player->GetEnergy() - (gage.GetScale().x / 4);
 		if (gage_ > 0) {
@@ -169,11 +183,12 @@ void GameSceneUI::Update(bool isPlayable_, Player* player)
 				gage.SetScale(gage.GetScale() - Vector2(2.0f, 0.0f));
 			}
 		}
-
-		gage.SpriteTransferVertexBuffer(gage, 7);
-		gage.SpriteUpdate(gage, spriteCommon_);
 	}
-
+	gage.SetAlpha(gage, frameAlpha);
+	gageBack.SetAlpha(gageBack, barAlpha);
+	gage.SpriteTransferVertexBuffer(gage, 7);
+	gage.SpriteUpdate(gage, spriteCommon_);
+	gageBack.SpriteUpdate(gageBack, spriteCommon_);
 
 	//UI表示
 	if (Input::GetInstance()->TriggerMouseLeft()) {
@@ -201,21 +216,79 @@ void GameSceneUI::Draw(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList)
 
 	///=== スプライト描画 ===///
 
+	hpFrame.SpriteDraw(cmdList, spriteCommon_, device);
+	//UI
+	attackUI.SpriteDraw(cmdList, spriteCommon_, device);
+	attackIcon.SpriteDraw(cmdList, spriteCommon_, device);
+	lockUI.SpriteDraw(cmdList, spriteCommon_, device);
+	lockIcon.SpriteDraw(cmdList, spriteCommon_, device);
 	if (isPlayable == true) {
 		hpBack.SpriteDraw(cmdList, spriteCommon_, device);
 		gageBack.SpriteDraw(cmdList, spriteCommon_, device);
 		hp.SpriteDraw(cmdList, spriteCommon_, device);
 		gage.SpriteDraw(cmdList, spriteCommon_, device);
-		hpFrame.SpriteDraw(cmdList, spriteCommon_, device);
-		//UI
-		attackUI.SpriteDraw(cmdList, spriteCommon_, device);
-		attackIcon.SpriteDraw(cmdList, spriteCommon_, device);
-		lockUI.SpriteDraw(cmdList, spriteCommon_, device);
-		lockIcon.SpriteDraw(cmdList, spriteCommon_, device);
 	}
-	hpFrame.SpriteDraw(cmdList, spriteCommon_, device);
 
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
+}
+
+void GameSceneUI::SetHPAlpha(bool isCollision)
+{
+	if (isCollision == true) {
+		if (frameAlpha > 0.6f) {
+			frameAlpha -= 0.025f;
+		}
+		if (barAlpha > 0.1f) {
+			barAlpha -= 0.025f;
+		}
+	}
+	else {
+		if (frameAlpha < 1.0f) {
+			frameAlpha += 0.025f;
+		}
+		if (barAlpha < 0.4f) {
+			barAlpha += 0.025f;
+		}
+	}
+}
+
+void GameSceneUI::ResetUIPos()
+{
+	//hpフレーム
+	hpFrame.SetPosition(Vector3(226, 851, 0));
+	hpFrame.SpriteUpdate(hpFrame, spriteCommon_);
+	//攻撃UI
+	attackUI.SetPosition(Vector3(1020, 800, 0));
+	attackUI.SpriteUpdate(attackUI, spriteCommon_);
+	//攻撃Icon
+	attackIcon.SetPosition(Vector3(1020, 808, 0));
+	attackIcon.SpriteUpdate(attackIcon, spriteCommon_);
+	//ロックUI
+	lockUI.SetPosition(Vector3(1160, 740, 0));
+	lockUI.SpriteUpdate(lockUI, spriteCommon_);
+	//ロックIcon
+	lockIcon.SetPosition(Vector3(1156, 742, 0));
+	lockIcon.SpriteUpdate(lockIcon, spriteCommon_);
+
+}
+
+void GameSceneUI::SkipUIPos()
+{
+	//hpフレーム
+	hpFrame.SetPosition(Vector3(226, 655, 0));
+	hpFrame.SpriteUpdate(hpFrame, spriteCommon_);
+	//攻撃UI
+	attackUI.SetPosition(Vector3(1020, 604, 0));
+	attackUI.SpriteUpdate(attackUI, spriteCommon_);
+	//攻撃Icon
+	attackIcon.SetPosition(Vector3(1020, 612, 0));
+	attackIcon.SpriteUpdate(attackIcon, spriteCommon_);
+	//ロックUI
+	lockUI.SetPosition(Vector3(1160, 544, 0));
+	lockUI.SpriteUpdate(lockUI, spriteCommon_);
+	//ロックIcon
+	lockIcon.SetPosition(Vector3(1156, 546, 0));
+	lockIcon.SpriteUpdate(lockIcon, spriteCommon_);
 }

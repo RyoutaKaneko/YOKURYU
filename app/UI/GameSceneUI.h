@@ -31,6 +31,28 @@ public:
 	/// <param name="device"></param>
 	void Draw(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList);
 
+	/// <summary>
+	/// HPフレームの座標を取得
+	/// </summary>
+	/// <returns></returns>
+	Vector3 GetHPFramePos() { return hpFrame.GetPosition(); }
+
+	/// <summary>
+	/// 透過率セット
+	/// </summary>
+	/// <param name="isCollision"></param>
+	void SetHPAlpha(bool isCollision);
+
+	/// <summary>
+	/// 
+	/// </summary>
+	void ResetUIPos();
+
+	/// <summary>
+	/// 
+	/// </summary>
+	void SkipUIPos();
+
 private:
 	//スプライトのポインタ
 	Sprite* sprite = new Sprite;
@@ -46,5 +68,7 @@ private:
 	Sprite lockUI;
 	Sprite lockIcon;
 	bool isPlayable;
+	float frameAlpha;
+	float barAlpha;
 };
 

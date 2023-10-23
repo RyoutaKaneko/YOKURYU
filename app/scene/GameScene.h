@@ -93,6 +93,8 @@ public:
 	/// <param name="pos_">座標</param>
 	static void PopEnergy(Vector3 pos_);
 
+	void UIAlpha();
+
 	/// <summary>
 	/// スクリーン座標からワールド座標に
 	/// </summary>
@@ -132,6 +134,7 @@ private:
 	float fadeAlpha;
 	Sprite bossHP;
 	Sprite fadeout;
+	//UI
 	GameSceneUI* UIs = nullptr;
 	//オブジェクトのポインタ
 	//3Dオブジェクト生成

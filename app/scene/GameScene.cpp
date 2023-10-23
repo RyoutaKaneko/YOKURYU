@@ -180,9 +180,6 @@ void GameScene::Update() {
 
 	Vector3 shotVec = { 0,0,0 };
 
-
-	UIs->Update(isPlayable, player);
-
 	//メインゲーム中
 	switch (gameState)
 	{
@@ -193,9 +190,10 @@ void GameScene::Update() {
 			//SPACEで演出スキップ
 			if (Input::GetInstance()->TriggerKey(DIK_SPACE) || Input::GetInstance()->TriggerMouseLeft()) {
 				gameTime = 1;
+				UIs->SkipUIPos();
 			}
 			//UI表示
-			if (gameTime <= 25) {
+			if (gameTime <= 50) {
 				UIs->ShowUI();
 			}
 			railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() + Vector3(0, 0.0f, 0.05f));
@@ -411,7 +409,9 @@ void GameScene::Update() {
 	for (const std::unique_ptr<Energy>& energy : energys_) {
 		energy->Update(player->GetWorldPos(), railCamera->GetCamera()->GetRotation());
 	}
-
+	//UI表示
+	UIAlpha();
+	UIs->Update(isPlayable, player);
 	//デスフラグの立ったエネルギーを削除
 	energys_.remove_if([](std::unique_ptr <Energy>& energys) {
 		return energys->GetIsDead();
@@ -602,6 +602,8 @@ void GameScene::Reset() {
 	fadeAlpha = 1.0f;
 	fade.SetAlpha(fade, fadeAlpha);
 	popEnergyCount = 0;
+	//UI
+	UIs->ResetUIPos();
 }
 
 void GameScene::Finalize()
@@ -821,6 +823,23 @@ void GameScene::PopEnergy(Vector3 pos_)
 	newEnergy->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 2.0f));
 	newEnergy->SetPosition(pos_ + Vector3(dist(engine), dist2(engine), dist3(engine)));
 	energys_.push_back(std::move(newEnergy));
+}
+
+void GameScene::UIAlpha()
+{
+	Vector3 hpPos = UIs->GetHPFramePos();
+	Vector3 pPos = GetWorldToScreenPos(player->GetWorldPos(), railCamera);
+		if ((pPos.x > hpPos.x - 284.0f && pPos.x < hpPos.x + 284.0f)) {
+			if ((pPos.y > hpPos.y - 70.5f && pPos.y < hpPos.y + 70.5f)) {
+				UIs->SetHPAlpha(true);
+		}
+			else {
+				UIs->SetHPAlpha(false);
+			}
+	}
+		else {
+			UIs->SetHPAlpha(false);
+		}
 }
 
 Vector3 GameScene::GetScreenToWorldPos(Sprite& sprite_, RailCamera* rail)

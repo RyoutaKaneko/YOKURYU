@@ -89,7 +89,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)app\scene;$(ProjectDir)app\UI;$(ProjectDir)engine\2d;$(ProjectDir)engine\3d;$(ProjectDir)engine\base;$(ProjectDir)engine\effect;$(ProjectDir)engine\math;$(ProjectDir)engine\collision;$(ProjectDir)engine\scene;$(ProjectDir)app\gameobject;$(ProjectDir)app\camera;$(ProjectDir)engine\camera</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <DisableSpecificWarnings>

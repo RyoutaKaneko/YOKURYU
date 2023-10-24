@@ -26,7 +26,7 @@ void PlayerBullet::Update() {
 
 	SetPosition(GetPosition() + velocity_);
 
-	worldTransform_.UpdateMatrix();
+	GetWorldTransform().UpdateMatrix();
 
 	//当たり判定更新
 	if (collider)
@@ -57,27 +57,27 @@ void PlayerBullet::OnCollision([[maybe_unused]] const CollisionInfo& info)
 	const char* str4 = "class BossBullet";
 
 	//相手がenemy
-	if (strcmp(toCollisionName, str1) == 0) {
+	if (strcmp(GetToCollName(), str1) == 0) {
 		if (isDead_ == false) {
 			isDead_ = true;
 		}
 	}
 
 	//相手がenemyの弾
-	if (strcmp(toCollisionName, str2) == 0) {
+	if (strcmp(GetToCollName(), str2) == 0) {
 		if (isDead_ == false && isHoming == false) {
 			isDead_ = true;
 		}
 	}
 	//相手がボス
-	if (strcmp(toCollisionName, str3) == 0) {
+	if (strcmp(GetToCollName(), str3) == 0) {
 		if (isDead_ == false) {
 			isDead_ = true;
 		}
 	}
 
 	//相手がボスの弾
-	if (strcmp(toCollisionName, str4) == 0) {
+	if (strcmp(GetToCollName(), str4) == 0) {
 		if (isDead_ == false) {
 			isDead_ = true;
 		}

@@ -30,7 +30,7 @@ void Energy::Update(Vector3 pos,Vector3 rot)
 	SetPosition(GetPosition() + velo);
 	SetRotation(rot + Vector3(0,90,0));
 
-	worldTransform_.UpdateMatrix();
+	GetWorldTransform().UpdateMatrix();
 
 	//“–‚½‚è”»’èXV
 	if (collider)
@@ -45,7 +45,7 @@ void Energy::OnCollision([[maybe_unused]] const CollisionInfo& info)
 	const char* str1 = "class Player";
 
 	//‘Šè‚ªplayer‚Ì’e
-	if (strcmp(toCollisionName, str1) == 0) {
+	if (strcmp(GetToCollName(), str1) == 0) {
 		if (isDead == false) {
 			isDead = true;
 		}

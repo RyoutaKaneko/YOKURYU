@@ -105,7 +105,7 @@ void Enemy::Update(Vector3 velo,float t) {
 		{
 			collider->Update();
 		}
-		worldTransform_.UpdateMatrix();
+		GetWorldTransform().UpdateMatrix();
 		timer++;
 	}
 }
@@ -116,7 +116,7 @@ void Enemy::OnCollision([[maybe_unused]] const CollisionInfo& info)
 	const char* str1 = "class PlayerBullet";
 
 	//‘ŠŽè‚ªplayer‚Ì’e
-	if (strcmp(toCollisionName, str1) == 0) {
+	if (strcmp(GetToCollName(), str1) == 0) {
 		if (isInvisible == false) {
 			if (isDead_ == false) {
 				isDead_ = true;

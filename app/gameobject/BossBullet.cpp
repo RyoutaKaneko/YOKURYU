@@ -33,7 +33,7 @@ void BossBullet::Update(const Vector3& playerPos_)
 	//座標を加算
 	SetPosition(GetPosition() + velocity);
 	//更新
-	worldTransform_.UpdateMatrix();
+	GetWorldTransform().UpdateMatrix();
 
 	//当たり判定更新
 	if (collider)
@@ -67,13 +67,13 @@ void BossBullet::OnCollision([[maybe_unused]] const CollisionInfo& info)
 	const char* str2 = "class PlayerBullet";
 
 	//相手がplayer
-	if (strcmp(toCollisionName, str1) == 0) {
+	if (strcmp(GetToCollName(), str1) == 0) {
 		if (isDead_ == false) {
 			isDead_ = true;
 		}
 	}
 	//相手がplayerの弾
-	if (strcmp(toCollisionName, str2) == 0) {
+	if (strcmp(GetToCollName(), str2) == 0) {
 		if (hitTime == 0) {
 			if (hp == 2) {
 				hp--;

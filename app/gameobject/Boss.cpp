@@ -29,7 +29,7 @@ void Boss::BossInitialize()
 	//パーツの初期化
 	for (int i = 0; i < PARTS_NUM; i++) {
 		parts[i] = Create();
-		parts[i]->worldTransform_.SetParent3d(&worldTransform_);
+		parts[i]->GetWorldTransform().SetParent3d(&GetWorldTransform());
 		parts[i]->SetCollider(new SphereCollider());
 	}
 	parts[0]->SetPosition({ -2.0f,0.0f,-0.5f });
@@ -90,7 +90,7 @@ void Boss::Update(Vector3 velo)
 		isDead_ = true;
 	}
 	//更新
-	worldTransform_.UpdateMatrix();
+	GetWorldTransform().UpdateMatrix();
 	//当たり判定更新
 	if (collider)
 	{
@@ -181,7 +181,7 @@ void Boss::OnCollision([[maybe_unused]] const CollisionInfo& info)
 	const char* str1 = "class PlayerBullet";
 
 	//相手がplayerの弾
-	if (strcmp(toCollisionName, str1) == 0) {
+	if (strcmp(GetToCollName(), str1) == 0) {
 		if (isHit == false && isInvisible == false) {
 			isHit = true;
 			hitTimer = 30;

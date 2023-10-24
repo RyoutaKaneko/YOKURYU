@@ -20,7 +20,7 @@ using namespace DirectX;
 using namespace std;
 
 //静的メンバ変数の実体
-ID3D12Device* Particle::device_ = nullptr;
+ID3D12Device* Particle::device = nullptr;
 std::string Particle::defaultTextureDirectoryPath_ = "Resources/";
 
 Particle* Particle::LoadParticleTexture(const std::string& fileName)
@@ -50,13 +50,13 @@ void Particle::InitializeDescriptorHeap()
 	descHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;//シェーダから見えるように
 	descHeapDesc.NumDescriptors = 1; // シェーダーリソースビュー1つ
-	result = device_->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descHeap_));//生成
+	result = device->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descHeap_));//生成
 	if (FAILED(result)) {
 		assert(0);
 	}
 
 	// デスクリプタサイズを取得
-	descriptorHandleIncrementSize_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	descriptorHandleIncrementSize_ = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
 }
 
@@ -115,7 +115,7 @@ void Particle::LoadTexture(const std::string& fileName)
 	textureResourceDesc.SampleDesc.Count = 1;
 
 	//テクスチャバッファの生成
-	result = device_->CreateCommittedResource(
+	result = device->CreateCommittedResource(
 		&textureHeapProp,
 		D3D12_HEAP_FLAG_NONE,
 		&textureResourceDesc,
@@ -153,7 +153,7 @@ void Particle::LoadTexture(const std::string& fileName)
 	srvDesc.Texture2D.MipLevels = textureResourceDesc.MipLevels;
 
 	//ハンドルの指す位置にシェーダーリソースビュー作成
-	device_->CreateShaderResourceView(texBuff_.Get(), &srvDesc, cpuDescHandleSRV_);
+	device->CreateShaderResourceView(texBuff_.Get(), &srvDesc, cpuDescHandleSRV_);
 
 }
 
@@ -171,7 +171,7 @@ void Particle::CreateBuffers()
 	CD3DX12_RESOURCE_DESC resourceDesc = CD3DX12_RESOURCE_DESC::Buffer(sizeVB);
 
 	// 頂点バッファ生成
-	result = device_->CreateCommittedResource(
+	result = device->CreateCommittedResource(
 		&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
 		IID_PPV_ARGS(&vertBuff_));
 	assert(SUCCEEDED(result));
@@ -238,7 +238,7 @@ void Particle::Update()
 void Particle::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	// nullptrチェック
-	assert(device_);
+	assert(device);
 	assert(cmdList);
 
 	// 頂点バッファの設定

@@ -9,7 +9,7 @@
 void SphereCollider::Update()
 {
 	// ワールド行列から座標を抽出
-	const Matrix4& matWorld = object3d->worldTransform_.matWorld_;
+	const Matrix4& matWorld = object3d->GetWorldTransform().GetMatWorld();
 
 	const Vector3& position_ = { matWorld.m[3][0],matWorld.m[3][1] ,matWorld.m[3][2] };
 

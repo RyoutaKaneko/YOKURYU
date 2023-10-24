@@ -53,14 +53,14 @@ public: // メンバ関数
 	void ChangeScene(const std::string& sceneName);
 
 	// シーンファクトリーのsetter
-	void SetSceneFactory(AbstractSceneFactory* sceneFactory) { sceneFactory_ = sceneFactory; }
+	void SetSceneFactory(AbstractSceneFactory* sceneFactory_) { sceneFactory = sceneFactory_; }
 
 private: // メンバ変数
 	// 今のシーン(実行中シーン)
-	GameBaseScene* scene_ = nullptr;
+	GameBaseScene* scene = nullptr;
 	// 次シーン
-	GameBaseScene* nextScene_ = nullptr;
+	GameBaseScene* nextScene = nullptr;
 	// シーンファクトリー（借りてくる）
-	AbstractSceneFactory* sceneFactory_ = nullptr;
+	AbstractSceneFactory* sceneFactory = nullptr;
 };
 

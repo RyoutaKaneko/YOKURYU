@@ -21,8 +21,8 @@ void RailCamera::Initialize(Player* player_) {
 	input = Input::GetInstance();
 	viewProjection->Initialize();
 	camera = Object3d::Create();
-	viewProjection->eye = { 0, 1, 505 };
-	viewProjection->target = { 0.3f,0.5f,499 };
+	viewProjection->SetEye({ 0, 1, 505 });
+	viewProjection->SetTarget({ 0.3f,0.5f,499 });
 	camera->SetPosition({0,0,500});
 	camera->SetRotation(Vector3(0, 0, 0));
 	SetPlayer(player_);
@@ -41,7 +41,7 @@ void RailCamera::ViewUpdate() {
 void RailCamera::Update(Player* player_, std::vector<Vector3>& point) {
 
 	if (OnRail == true) {
-		Vector3 target_ = spline_.Update(point, 0.00001f);
+		Vector3 target = spline_.Update(point, 0.00001f);
 		camera->SetPosition(splineCam.Update(point, 0.0f));
 		//最初の1ループのみ現在位置を入れる
 		if (oldCamera.x == 0 && oldCamera.y == 0 && oldCamera.z == 0) {
@@ -49,7 +49,7 @@ void RailCamera::Update(Player* player_, std::vector<Vector3>& point) {
 		}
 
 		//方向ベクトルの取得
-		GetVec(camera->GetPosition(), target_);
+		GetVec(camera->GetPosition(), target);
 
 		Vector3 camRot = camera->GetRotation();
 		//カメラ方向に合わせてY軸の回転
@@ -68,12 +68,12 @@ void RailCamera::Update(Player* player_, std::vector<Vector3>& point) {
 
 		//更新
 		camera->Update();
-		viewProjection->target = ((target_ + frontVec));
+		viewProjection->SetTarget((target + frontVec));
 		//playerの移動をもとにディレイをかけて更新
-		viewProjection->eye = ((camera->GetPosition() + cameraDelay) - frontVec * player_->GetLen());
-		if (viewProjection->eye.y > (eyeTmp_.y + 1)) {
+		viewProjection->SetEye((camera->GetPosition() + cameraDelay) - frontVec * player_->GetLen());
+		/*if (viewProjection->eye.y > (eyeTmp_.y + 1)) {
 			viewProjection->eye.y += 0.05f;
-		}
+		}*/
 
 		viewProjection->UpdateMatrix();
 		oldCamera = camera->GetPosition();
@@ -121,7 +121,9 @@ void RailCamera::Update(Player* player_, std::vector<Vector3>& point) {
 
 void RailCamera::TitleR()
 {
-	viewProjection->eye.z -= 1.5;
+	Vector3 eye_ = viewProjection->GetEye();
+	const float length = 1.5f;
+	viewProjection->SetEye({ eye_.x,eye_.y,length });
 }
 
 void RailCamera::RailReset()
@@ -157,20 +159,20 @@ void RailCamera::GetVec(Vector3 a, Vector3 b) {
 
 void RailCamera::SetPlayer(Player* player_) {
 	//親子構造のセット
-	player_->worldTransform_.SetParent3d(&camera->worldTransform_);
+	player_->GetWorldTransform().SetParent3d(&camera->GetWorldTransform());
 	//拡大回転座標変換
 	player_->SetPosition(Vector3(0, 0, -1.5f));
 	player_->SetScale(Vector3(0.3f, 0.3f, 0.3f));
 }
 
 void RailCamera::SetEye(Vector3 view) {
-	this->viewProjection->eye = view;
+	this->viewProjection->SetEye(view);
 	viewProjection->UpdateMatrix();
 }
 
 void RailCamera::SetTarget(Vector3 target_)
 {
-	this->viewProjection->target = target_;
+	this->viewProjection->SetTarget(target_);
 	viewProjection->UpdateMatrix();
 }
 
@@ -181,8 +183,8 @@ void RailCamera::ShakeCamera(float x, float y) {
 	std::mt19937_64 engine(seed_gen());
 	std::uniform_real_distribution<float>dist(x, y);
 	std::uniform_real_distribution<float>dist2(x, y);
+	Vector3 randomNum(dist(engine), dist2(engine), dist2(engine));
 
-
-	viewProjection->eye = viewProjection->eye + Vector3(dist(engine), dist2(engine), dist2(engine));
+	viewProjection->SetEye(viewProjection->GetEye() + randomNum);
 	viewProjection->UpdateMatrix();
 }

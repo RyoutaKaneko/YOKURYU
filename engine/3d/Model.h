@@ -23,7 +23,7 @@ private: // エイリアス
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 
-public: // サブクラス
+private: // サブクラス
 	// 頂点データ構造体
 	struct VertexPosNormalUvSkin
 	{
@@ -112,7 +112,7 @@ public: // 静的メンバ関数
 	/// <summary>
 	/// デバイスをセット
 	/// </summary>
-	/// <param name="device_">デバイス</param>
+	/// <param name="device">デバイス</param>
 	static void SetDevice(ID3D12Device* device_) { Model::device = device_; }
 
 	/// <summary>

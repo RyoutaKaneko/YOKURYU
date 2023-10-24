@@ -9,10 +9,10 @@
 GameSceneManager::~GameSceneManager()
 {
 	// 最後のシーンの終了と解放
-	if (scene_ != nullptr) {
-		scene_->Finalize();
-		delete scene_;
-		scene_ = nullptr;
+	if (scene != nullptr) {
+		scene->Finalize();
+		delete scene;
+		scene = nullptr;
 	}
 }
 
@@ -26,49 +26,49 @@ GameSceneManager* GameSceneManager::GetInstance()
 void GameSceneManager::Update()
 {
 	// 予約シーンの予約があるなら
-	if (nextScene_) {
+	if (nextScene) {
 		// 旧シーンの終了
-		if (scene_) {
-			scene_->Finalize();
+		if (scene) {
+			scene->Finalize();
 
-			delete scene_;
+			delete scene;
 		}
 
 		// シーン切り替え
-		scene_ = nextScene_;
-		nextScene_ = nullptr;
+		scene = nextScene;
+		nextScene = nullptr;
 
 		// シーンマネージャをセット
-		scene_->SetSceneManager(this);
+		scene->SetSceneManager(this);
 
 		// 次シーンを初期化する
-		scene_->Initialize();
+		scene->Initialize();
 	}
 
 	// 実行中シーンを更新する
-	scene_->Update();
+	scene->Update();
 }
 
 void GameSceneManager::Draw()
 {
 	// シーンの描画
-	scene_->Draw();
+	scene->Draw();
 }
 
 void GameSceneManager::Destroy()
 {
-	if (scene_ != nullptr) {
-		scene_->Finalize();
-		delete scene_;
-		scene_ = nullptr;
+	if (scene != nullptr) {
+		scene->Finalize();
+		delete scene;
+		scene = nullptr;
 	}
 }
 
 void GameSceneManager::ChangeScene(const std::string& sceneName)
 {
-	assert(sceneFactory_);
-	assert(nextScene_ == nullptr);
+	assert(sceneFactory);
+	assert(nextScene == nullptr);
 
 	// 次シーン生成
-	nextScene_ = sceneFactory_->CreateScene(sceneName);
+	nextScene = sceneFactory->CreateScene(sceneName);
 }

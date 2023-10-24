@@ -27,6 +27,7 @@
 #include "JsonLoader.h"	
 #include "energy.h"
 #include "GameBaseScene.h"
+#include "GameSceneUI.h"
 
 
 class GameScene : public GameBaseScene {
@@ -92,6 +93,8 @@ public:
 	/// <param name="pos_">座標</param>
 	static void PopEnergy(Vector3 pos_);
 
+	void UIAlpha();
+
 	/// <summary>
 	/// スクリーン座標からワールド座標に
 	/// </summary>
@@ -125,24 +128,14 @@ private:
 	//スプライトのポインタ
 	Sprite* sprite = new Sprite;
 	SpriteCommon spriteCommon_;
-	Sprite titleGH;
 	Sprite crosshair[4];
-	Sprite hp;
-	Sprite clearGH;
-	Sprite overGH;
 	Sprite lock[10];
 	Sprite fade;
 	float fadeAlpha;
 	Sprite bossHP;
-	Sprite gage;
-	Sprite gageBack;
-	Sprite hpBack;
 	Sprite fadeout;
-	Sprite hpFrame;
-	Sprite attackUI;
-	Sprite attackIcon;
-	Sprite lockUI;
-	Sprite lockIcon;
+	//UI
+	GameSceneUI* UIs = nullptr;
 	//オブジェクトのポインタ
 	//3Dオブジェクト生成
 	Player* player = nullptr;

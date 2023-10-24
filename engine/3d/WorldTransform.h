@@ -60,7 +60,7 @@ public:// メンバ関数
 	/// 現在位置取得
 	/// </summary>
 	/// <returns></returns>
-	const Vector3& GetPosition()const { return position_; }
+	const Vector3& GetPosition()const { return position; }
 
 	/// <summary>
 	/// 度数からラジアンに変換
@@ -73,33 +73,75 @@ public:// メンバ関数
 	/// 親子関係をセット
 	/// </summary>
 	/// <param name="parent"></param>
-	void SetParent3d(WorldTransform* parent) { this->parent_ = parent; }
+	void SetParent3d(WorldTransform* parent_) { this->parent = parent_; }
 
-public:// パブリック変数
+	/// <summary>
+	/// 座標を取得
+	/// </summary>
+	/// <returns></returns>
+	Vector3& GetPosition() { return position; }
+
+	/// <summary>
+	/// 回転を取得
+	/// </summary>
+	/// <returns></returns>
+	Vector3& GetRotation() { return rotation; }
+
+	/// <summary>
+	/// スケールを取得
+	/// </summary>
+	/// <returns></returns>
+	Vector3& GetScale() { return scale; }
+
+	/// <summary>
+	/// ワールド行列を取得
+	/// </summary>
+	/// <returns></returns>
+	Matrix4 GetMatWorld() { return matWorld; }
+
+	/// <summary>
+	/// 座標を設定
+	/// </summary>
+	/// <param name="position_">座標</param>
+	void SetPosition(Vector3 position_) { position = position_; }
+
+	/// <summary>
+	/// 回転を設定
+	/// </summary>
+	/// <param name="rotation_">回転率</param>
+	void SetRotation(Vector3 rotation_) { rotation = rotation_; }
+
+	/// <summary>
+	/// スケールを設定
+	/// </summary>
+	/// <param name="scale_">スケール</param>
+	void SetScale(Vector3 scale_) { scale = scale_; }
+
+private:// パブリック変数
 	// ローカルスケール
-	Vector3 scale_ = { 1.0f, 1.0f, 1.0f };
+	Vector3 scale = { 1.0f, 1.0f, 1.0f };
 
 	// X,Y,Z軸回りのローカル回転角
-	Vector3 rotation_ = { 0, 0, 0 };
+	Vector3 rotation = { 0, 0, 0 };
 
 	// ローカル座標
-	Vector3 position_ = { 0, 0, 0 };
+	Vector3 position = { 0, 0, 0 };
 
 	// 色
-	Vector4 color_ = { 1,1,1,1 };
+	Vector4 color = { 1,1,1,1 };
 
 	// ローカル → ワールド変換行列
-	Matrix4 matWorld_;
+	Matrix4 matWorld;
 
 	// 親となるワールド変換へのポインタ
-	const WorldTransform* parent_ = nullptr;
+	const WorldTransform* parent = nullptr;
 
 	// 円周率
 	const float PI = 3.141592f;
 
 private:// メンバ変数
 	// デバイス
-	static ComPtr<ID3D12Device> device_;
+	static ComPtr<ID3D12Device> device;
 
 	// 定数バッファ
 	ComPtr<ID3D12Resource> constBuffB0;

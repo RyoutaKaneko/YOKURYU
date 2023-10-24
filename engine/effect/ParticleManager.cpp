@@ -17,19 +17,19 @@ using namespace DirectX;
 using namespace Microsoft::WRL;
 
 /// 静的メンバ変数の実体
-ID3D12Device* ParticleManager::device_ = nullptr;
+ID3D12Device* ParticleManager::device = nullptr;
 ID3D12GraphicsCommandList* ParticleManager::cmdList = nullptr;
 ComPtr<ID3D12RootSignature> ParticleManager::rootsignature;
 ComPtr<ID3D12PipelineState> ParticleManager::pipelinestate;
 
-void ParticleManager::StaticInitialize(ID3D12Device* device)
+void ParticleManager::StaticInitialize(ID3D12Device* device_)
 {
 	// nullptrチェック
-	assert(device);
+	assert(device_);
 
-	device_ = device;
+	device = device_;
 
-	Particle::SetDevice(device_);
+	Particle::SetDevice(device);
 
 	// パイプライン初期化
 	InitializeGraphicsPipeline();
@@ -245,13 +245,13 @@ void ParticleManager::InitializeGraphicsPipeline()
 	// バージョン自動判定のシリアライズ
 	result = D3DX12SerializeVersionedRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1_0, &rootSigBlob, &errorBlob);
 	// ルートシグネチャの生成
-	result = device_->CreateRootSignature(0, rootSigBlob->GetBufferPointer(), rootSigBlob->GetBufferSize(), IID_PPV_ARGS(&rootsignature));
+	result = device->CreateRootSignature(0, rootSigBlob->GetBufferPointer(), rootSigBlob->GetBufferSize(), IID_PPV_ARGS(&rootsignature));
 	assert(SUCCEEDED(result));
 
 	gpipeline.pRootSignature = rootsignature.Get();
 
 	// グラフィックスパイプラインの生成
-	result = device_->CreateGraphicsPipelineState(&gpipeline, IID_PPV_ARGS(&pipelinestate));
+	result = device->CreateGraphicsPipelineState(&gpipeline, IID_PPV_ARGS(&pipelinestate));
 	assert(SUCCEEDED(result));
 
 }
@@ -260,7 +260,7 @@ void ParticleManager::InitializeGraphicsPipeline()
 bool ParticleManager::Initialize()
 {
 	// nullptrチェック
-	assert(device_);
+	assert(device);
 
 	// ヒーププロパティ
 	CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
@@ -271,7 +271,7 @@ bool ParticleManager::Initialize()
 	HRESULT result;
 
 	// 定数バッファの生成
-	result = device_->CreateCommittedResource(
+	result = device->CreateCommittedResource(
 		&heapProps, // アップロード可能
 		D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
 		IID_PPV_ARGS(&constBuff));
@@ -301,7 +301,7 @@ void ParticleManager::Update()
 void ParticleManager::Draw()
 {
 	// nullptrチェック
-	assert(device_);
+	assert(device);
 	assert(ParticleManager::cmdList);
 
 	// 定数バッファビューをセット

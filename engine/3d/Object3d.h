@@ -138,7 +138,7 @@ public: // メンバ関数
 	/// ローカル位置
 	/// </summary>
 	/// <returns></returns>
-	const Vector3& GetPosition() const { return worldTransform_.position_; }
+	const Vector3& GetPosition() const { return worldTransform_.GetPosition(); }
 
 	/// <summary>
 	/// ロック情報を取得
@@ -156,44 +156,62 @@ public: // メンバ関数
 	/// z座標を取得
 	/// </summary>
 	/// <returns></returns>
-	const float& GetPositionZ() const { return worldTransform_.position_.z; }
+	const float& GetPositionZ() const { return worldTransform_.GetPosition().z; }
 
 	/// <summary>
 	/// 位置をセット
 	/// </summary>
 	/// <param name="position">ローカル座標</param>
-	void SetPosition(const Vector3& position) { this->worldTransform_.position_ = position; }
+	void SetPosition(const Vector3& position) { this->worldTransform_.GetPosition() = position; }
 	
 	/// <summary>
 	/// スケールをセット
 	/// </summary>
 	/// <param name="scale">スケール</param>
-	void SetScale(const Vector3& scale) { this->worldTransform_.scale_ = scale; }
+	void SetScale(const Vector3& scale) { this->worldTransform_.GetScale() = scale; }
 
 	/// <summary>
 	/// スケールを取得
 	/// </summary>
 	/// <returns></returns>
-	const Vector3& GetScale() const { return worldTransform_.scale_; }
+	const Vector3& GetScale()  { return worldTransform_.GetScale(); }
 	
 	/// <summary>
 	/// 回転をセット
 	/// </summary>
-	/// <param name="rotation">回転率</param>
-	void SetRotation(const Vector3& rotation) { this->worldTransform_.rotation_ = rotation; }
+	/// <param name="rotationZ">回転率</param>
+	void SetRotation(const Vector3& rotation) { this->worldTransform_.GetRotation() = rotation; }
 
 	/// <summary>
 	/// 回転をセット
 	/// </summary>
 	/// <returns></returns>
-	const Vector3& GetRotation() const { return worldTransform_.rotation_; }
+	const Vector3& GetRotation()  { return worldTransform_.GetRotation(); }
 
 	/// <summary>
 	/// 名前を取得
 	/// </summary>
 	/// <returns></returns>
-	const char* GetName() const { return name; }
-public:
+	const char* GetName() { return name; }
+
+	/// <summary>
+	/// 衝突相手の名前を取得
+	/// </summary>
+	/// <returns></returns>
+	const char* GetToCollName() { return toCollisionName; }
+
+	/// <summary>
+	/// 衝突相手の名前を設定
+	/// </summary>
+	/// <returns></returns>
+	void SetToCollName(const char* toCollName_) { toCollisionName = toCollName_; }
+
+	/// <summary>
+	/// ワールドトランスフォームを取得
+	/// </summary>
+	/// <returns></returns>
+	WorldTransform& GetWorldTransform() { return worldTransform_; }
+private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
 	const char* toCollisionName = nullptr;

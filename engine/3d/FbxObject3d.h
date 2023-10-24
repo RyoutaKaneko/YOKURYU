@@ -85,37 +85,37 @@ public://メンバ関数
 	/// 座標を取得
 	/// </summary>
 	/// <returns></returns>
-	const Vector3& GetPosition() const { return worldTransform.position_; }
+	const Vector3& GetPosition() const { return worldTransform.GetPosition(); }
 
 	/// <summary>
 	/// 座標をセット
 	/// </summary>
 	/// <param name="position">座標</param>
-	void SetPosition(const Vector3& position) { this->worldTransform.position_ = position; }
+	void SetPosition(const Vector3& position) { this->worldTransform.GetPosition() = position; }
 	
 	/// <summary>
 	/// スケールを取得
 	/// </summary>
 	/// <param name="scale">スケール</param>
-	void SetScale(const Vector3& scale) { this->worldTransform.scale_ = scale; }
+	void SetScale(const Vector3& scale) { this->worldTransform.GetScale() = scale; }
 
 	/// <summary>
 	/// スケールを取得
 	/// </summary>
 	/// <returns></returns>
-	const Vector3& GetScale() const { return worldTransform.scale_; }
+	const Vector3& GetScale()  { return worldTransform.GetScale(); }
 	
 	/// <summary>
 	/// オブジェクトの回転をセット
 	/// </summary>
-	/// <param name="rotation">回転率</param>
-	void SetRotation(const Vector3& rotation) { this->worldTransform.rotation_ = rotation; }
+	/// <param name="rotationZ">回転率</param>
+	void SetRotation(const Vector3& rotation) { this->worldTransform.GetRotation() = rotation; }
 
 	/// <summary>
 	/// オブジェクトの回転を取得
 	/// </summary>
 	/// <returns></returns>
-	const Vector3& GetRotation() const { return worldTransform.rotation_; }
+	const Vector3& GetRotation()  { return worldTransform.GetRotation(); }
 
 protected://メンバ変数
 	ComPtr<ID3D12Resource> constBuffTransform;

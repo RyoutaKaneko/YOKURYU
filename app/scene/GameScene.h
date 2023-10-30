@@ -184,10 +184,12 @@ private:
 	enum GameState {
 		MAIN,
 		BOSS,
-		ULT
+		ULT,
+		CONTINUE
 	};
 	GameState gameState;
 	GameState gameState_bak;
 	int bossPass;
 	bool isStart;
+	bool isGameover;
 };

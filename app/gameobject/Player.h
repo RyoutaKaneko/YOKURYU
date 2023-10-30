@@ -26,7 +26,8 @@ private:
 	enum Health {
 		FINE,
 		WEEKNESS,
-		DYING
+		DYING,
+		DIE
 	};
 
 public:
@@ -85,6 +86,11 @@ public:
 	/// <param name="info">衝突情報</param>
 	void OnCollision(const CollisionInfo& info) override;
 
+	/// <summary>
+	/// 死亡時
+	/// </summary>
+	void Dead();
+
 
 	/////getter/////
 	
@@ -136,6 +142,12 @@ public:
 	/// <returns></returns>
 	Health GetHealthState() { return healthState; }
 
+	/// <summary>
+	/// デスタイマーを取得
+	/// </summary>
+	/// <returns></returns>
+	int GetDeathTimer() { return deathTimer; }
+
 	/////setter/////
 	
 	/// <summary>
@@ -186,5 +198,7 @@ private:
 	Vector3 pos_;
 	Vector3 rot_;
 	Vector3 move;
+	Vector3 dMove;
 	Health healthState;
+	int deathTimer;
 };

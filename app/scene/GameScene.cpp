@@ -141,6 +141,7 @@ void GameScene::Initialize() {
 	cameraTmpPos = { 0,0,0 };
 	cameraTmpRot = { 0,0,0 };
 	isStart = false;
+	isGameover = false;
 }
 
 ///-----更新処理-----///
@@ -395,6 +396,41 @@ void GameScene::Update() {
 			gameState = gameState_bak;
 		}
 		break;
+
+	case GameScene::CONTINUE:
+		player->Dead();
+		UIs->DeadUIPos();
+		railCamera->ViewUpdate();
+		if (player->GetDeathTimer() >= 100) {
+			UIs->ContinueText();
+			if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+				if (UIs->GetIsContinue() == true) {
+					Reset();
+					gameState = MAIN;
+					gameTime = 150;
+					railCamera->GetView()->SetEye(Vector3(-1, 0.5f, 490.0f));
+					railCamera->GetView()->SetTarget(Vector3(0.0f, 0.5f, 495));
+					player->SetPosition({ 0,0.5f,495 });
+					Vector3 cursor = GetWorldToScreenPos(Vector3(0, 0, 0), railCamera);
+					input->SetMousePos({ cursor.x,cursor.y });
+					isGameover = false;
+					fadeAlpha = 0.0f;
+					fade.SetAlpha(fade, fadeAlpha);
+				}
+				else {
+					isGameover = true;
+				}
+			}
+			if (isGameover == true) {
+				fadeAlpha += 0.05f;
+				fade.SetAlpha(fade, fadeAlpha);
+				fade.SpriteUpdate(fade,spriteCommon_);
+				if (fadeAlpha >= 1.0f) {
+					GameSceneManager::GetInstance()->ChangeScene("OVER");
+				}
+			}
+		}
+		break;
 	}
 	//////////////操作可能なら更新///////////////////
 	if (player->GetIsUltimate() == true && gameState != ULT) {
@@ -419,7 +455,7 @@ void GameScene::Update() {
 	//gameover
 	if (player->GetHP() <= 0) {
 		LockedClear();
-		GameSceneManager::GetInstance()->ChangeScene("OVER");
+		gameState = CONTINUE;
 	}
 	//当たり判定チェック
 	collisionManager->CheckAllCollisions();
@@ -497,10 +533,13 @@ void GameScene::Draw() {
 	}
 	Sprite::PostDraw();
 
-	UIs->Draw(dxCommon_->GetDevice(), dxCommon_->GetCommandList());
+	UIs->Draw(dxCommon_->GetDevice(), dxCommon_->GetCommandList()); 
+	if (gameState == CONTINUE && player->GetDeathTimer() >= 100) {
+		UIs->DrawContinue(dxCommon_->GetDevice(), dxCommon_->GetCommandList());
+	}
 
 	Sprite::PreDraw(dxCommon_->GetCommandList(), spriteCommon_);
-	if (isPlayable == true) {
+	if (isPlayable == true && gameState != CONTINUE) {
 		for (int i = 0; i < 4; i++) {
 			crosshair[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		}
@@ -510,6 +549,9 @@ void GameScene::Draw() {
 	}
 	fadeout.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 
+	if (gameState == CONTINUE) {
+		fade.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+	}
 	// スプライト描画後処理
 	Sprite::PostDraw();
 
@@ -587,6 +629,7 @@ void GameScene::Reset() {
 	railCamera->Initialize(player);
 	//enemy
 	LoadEnemy();
+
 	////必殺技ゲージ
 	//gage.SetScale(Vector2(2 * 1, 18 * 1));
 	//gage.SpriteTransferVertexBuffer(gage, 7);

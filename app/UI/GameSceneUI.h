@@ -44,14 +44,37 @@ public:
 	void SetHPAlpha(bool isCollision);
 
 	/// <summary>
-	/// 
+	///  リセット時のUIの座標設定
 	/// </summary>
 	void ResetUIPos();
 
 	/// <summary>
-	/// 
+	/// 演出スキップ時のUIの座標設定
 	/// </summary>
 	void SkipUIPos();
+
+	/// <summary>
+	/// 死亡時UI座標
+	/// </summary>
+	void DeadUIPos();
+
+	/// <summary>
+	/// コンティニューテキスト更新
+	/// </summary>
+	void ContinueText();
+
+	/// <summary>
+	/// コンティニュー描画
+	/// </summary>
+	/// <param name="device"></param>
+	/// <param name="cmdList"></param>
+	void DrawContinue(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList);
+
+	/// <summary>
+	/// コンティニューフラグgetter
+	/// </summary>
+	/// <returns></returns>
+	bool GetIsContinue() { return isContinue; }
 
 private:
 	//スプライトのポインタ
@@ -67,8 +90,14 @@ private:
 	Sprite attackIcon;
 	Sprite lockUI;
 	Sprite lockIcon;
+	Sprite continueTextbox;
+	Sprite continueYes;
+	Sprite continueNo;
+	Sprite continueText;
 	bool isPlayable;
 	float frameAlpha;
 	float barAlpha;
+	bool isContinue;
+	bool isShowContinue;
 };
 

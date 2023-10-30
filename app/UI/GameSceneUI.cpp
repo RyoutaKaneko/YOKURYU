@@ -82,10 +82,38 @@ void GameSceneUI::Initialize(ID3D12Device* device)
 	lockIcon.SpriteTransferVertexBuffer(lockIcon, 15);
 	lockIcon.SpriteUpdate(lockIcon, spriteCommon_);
 	lockIcon.LoadTexture(spriteCommon_, 15, L"Resources/lockIcon.png", device);
+	//continueTextbox
+	continueTextbox.SpriteCreate(device, 16, Vector2(0.5f, 0.5f), false, false);
+	continueTextbox.SetScale(Vector2(64,32));
+	continueTextbox.SetPosition(Vector3(640, 360, 0));
+	continueTextbox.SpriteTransferVertexBuffer(continueTextbox, 16);
+	continueTextbox.LoadTexture(spriteCommon_, 16, L"Resources/continueBox.png", device);
+	//continueYes
+	continueYes.SpriteCreate(device, 17, Vector2(0.5f, 0.5f), false, false);
+	continueYes.SetScale(Vector2(128, 64));
+	continueYes.SetPosition(Vector3(460, 410, 0));
+	continueYes.SetColor(continueYes, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
+	continueYes.SpriteTransferVertexBuffer(continueYes, 17);
+	continueYes.LoadTexture(spriteCommon_, 17, L"Resources/continueYes.png", device);
+	//continueNo
+	continueNo.SpriteCreate(device, 18, Vector2(0.5f, 0.5f), false, false);
+	continueNo.SetScale(Vector2(196, 64));
+	continueNo.SetPosition(Vector3(800, 410, 0));
+	continueNo.SpriteTransferVertexBuffer(continueNo, 18);
+	continueNo.LoadTexture(spriteCommon_, 18, L"Resources/continueNo.png", device);
+	//continueText
+	continueText.SpriteCreate(device, 19, Vector2(0.5f, 0.5f), false, false);
+	continueText.SetScale(Vector2(512, 64));
+	continueText.SetPosition(Vector3(640, 250, 0));
+	continueText.SpriteTransferVertexBuffer(continueText, 19);
+	continueText.LoadTexture(spriteCommon_, 19, L"Resources/continue.png", device);
+
 
 	isPlayable = false;
 	frameAlpha = 1.0f;
 	barAlpha = 0.4f;
+	isContinue = true;
+	isShowContinue = false;
 }
 
 void GameSceneUI::ShowUI()
@@ -272,6 +300,22 @@ void GameSceneUI::ResetUIPos()
 	lockIcon.SetPosition(Vector3(1156, 742, 0));
 	lockIcon.SpriteUpdate(lockIcon, spriteCommon_);
 
+	//continueTextbox
+	continueTextbox.SetScale(Vector2(64, 32));
+	continueTextbox.SetPosition(Vector3(640, 360, 0));
+	continueTextbox.SpriteTransferVertexBuffer(continueTextbox, 16);
+	continueTextbox.SpriteUpdate(continueTextbox, spriteCommon_);
+	//continueYes
+	continueYes.SetColor(continueYes, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
+	continueYes.SpriteTransferVertexBuffer(continueYes, 17);
+	continueYes.SpriteUpdate(continueYes, spriteCommon_);
+	//continueNo
+	continueNo.SetColor(continueNo, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+	continueNo.SpriteTransferVertexBuffer(continueNo, 18);
+	continueNo.SpriteUpdate(continueNo, spriteCommon_);
+
+	isShowContinue = false;
+
 }
 
 void GameSceneUI::SkipUIPos()
@@ -291,4 +335,86 @@ void GameSceneUI::SkipUIPos()
 	//ロックIcon
 	lockIcon.SetPosition(Vector3(1156, 546, 0));
 	lockIcon.SpriteUpdate(lockIcon, spriteCommon_);
+}
+
+void GameSceneUI::DeadUIPos()
+{
+	hpFrame.SetPosition(hpFrame.GetPosition() + Vector3(-1.0f, +4.0f, 0.0f));
+	hpFrame.SpriteUpdate(hpFrame, spriteCommon_);
+	hp.SetPosition(hp.GetPosition() + Vector3(-1.0f, +4.0f, 0.0f));
+	hp.SpriteUpdate(hp, spriteCommon_);
+	hpBack.SetPosition(hpBack.GetPosition() + Vector3(-1.0f, +4.0f, 0.0f));
+	hpBack.SpriteUpdate(hpBack, spriteCommon_);
+	gage.SetPosition(gage.GetPosition() + Vector3(-1.0f, +4.0f, 0.0f));
+	gage.SpriteUpdate(gage, spriteCommon_);
+	gageBack.SetPosition(gageBack.GetPosition() + Vector3(-1.0f, +4.0f, 0.0f));
+	gageBack.SpriteUpdate(gageBack, spriteCommon_);
+
+
+	attackIcon.SetPosition(attackIcon.GetPosition() + Vector3(1.0f, +4.0f, 0.0f));
+	attackIcon.SpriteUpdate(attackIcon, spriteCommon_);
+	attackUI.SetPosition(attackUI.GetPosition() + Vector3(1.0f, +4.0f, 0.0f));
+	attackUI.SpriteUpdate(attackUI, spriteCommon_);
+
+	lockIcon.SetPosition(lockIcon.GetPosition() + Vector3(1.0f, +4.0f, 0.0f));
+	lockIcon.SpriteUpdate(lockIcon, spriteCommon_);
+	lockUI.SetPosition(lockUI.GetPosition() + Vector3(1.0f, +4, 0));
+	lockUI.SpriteUpdate(lockUI, spriteCommon_);
+}
+
+void GameSceneUI::ContinueText()
+{
+	Vector2 addScale = { 32, 12};
+	if (continueTextbox.GetScale().x >= 768) {
+		addScale.x = 0;
+	}
+	if (continueTextbox.GetScale().y >= 384) {
+		addScale.y = 0;
+	}
+	if (addScale.x == 0) {
+		isShowContinue = true;
+	}
+	if (isShowContinue == true) {
+		if (Input::GetInstance()->TriggerKey(DIK_A)) {
+			if (isContinue == false) {
+				isContinue = true;
+				continueYes.SetColor(continueYes, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
+				continueNo.SetColor(continueNo, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+			}
+		}
+		else if (Input::GetInstance()->TriggerKey(DIK_D)) {
+			if (isContinue == true) {
+				isContinue = false;
+				continueYes.SetColor(continueYes, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+				continueNo.SetColor(continueNo, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
+			}
+		}
+
+		continueText.SpriteTransferVertexBuffer(continueText, 19);
+		continueText.SpriteUpdate(continueText, spriteCommon_);
+		continueYes.SpriteTransferVertexBuffer(continueYes, 17);
+		continueYes.SpriteUpdate(continueYes, spriteCommon_);
+		continueNo.SpriteTransferVertexBuffer(continueNo, 18);
+		continueNo.SpriteUpdate(continueNo, spriteCommon_);
+	}
+
+	continueTextbox.SetScale(continueTextbox.GetScale() + addScale);
+	continueTextbox.SpriteTransferVertexBuffer(continueTextbox, 16);
+	continueTextbox.SpriteUpdate(continueTextbox, spriteCommon_);
+}
+
+void GameSceneUI::DrawContinue(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList)
+{
+	// スプライト描画前処理
+	Sprite::PreDraw(cmdList, spriteCommon_);
+
+	continueTextbox.SpriteDraw(cmdList, spriteCommon_, device);
+	if (isShowContinue == true) {
+		continueText.SpriteDraw(cmdList, spriteCommon_, device);
+		continueYes.SpriteDraw(cmdList, spriteCommon_, device);
+		continueNo.SpriteDraw(cmdList, spriteCommon_, device);
+	}
+
+	// スプライト描画後処理
+	Sprite::PostDraw();
 }

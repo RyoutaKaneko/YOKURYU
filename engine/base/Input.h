@@ -132,7 +132,9 @@ public: // メンバ関数
 private:
 	Input() = default;
 	~Input() = default;
+	// コピーコンストラクタを無効にする
 	Input(const Input&) = delete;
+	// 代入演算子を無効にする
 	Input& operator=(const Input&) = delete;
 
 private: // メンバ変数

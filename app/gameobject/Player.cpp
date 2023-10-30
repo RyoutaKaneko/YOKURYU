@@ -47,6 +47,8 @@ bool Player::PlayerInitialize() {
 	pos_ = { 0,0,0 };
 	rot_ = { 0,0,0 };
 	healthState = FINE;
+	deathTimer = 0;
+	dMove = { 0,0,0 };
 
 	return true;
 }
@@ -96,6 +98,9 @@ void Player::Update(Vector3 velo, std::vector<LockInfo>& info)
 		//4/1‚Å•mŽ€
 		else if (hp <= 25 && healthState == WEEKNESS) {
 			healthState = DYING;
+		}
+		else if (hp <= 0 && healthState == DYING) {
+			healthState = DIE;
 		}
 	}
 
@@ -272,7 +277,7 @@ void Player::OnCollision([[maybe_unused]] const CollisionInfo& info)
 	//‘ŠŽè‚ªenemy‚Ì’e
 	if (strcmp(GetToCollName(), str2) == 0) {
 		if (isHit == false) {
-			hp-=10;
+			hp-=100;
 			isHit = true;
 		}
 	}
@@ -290,4 +295,43 @@ void Player::OnCollision([[maybe_unused]] const CollisionInfo& info)
 			energy += 5;
 		}
 	}
+}
+
+void Player::Dead()
+{
+	Vector3 addVelo = { 0.0f,0.0f,0.0f };
+
+	if (isHit == true) {
+		hitTime++;
+		if (hitTime == 15) {
+			hitTime = 0;
+			isHit = false;
+		}
+		//6Š„‚è‚Åhp•\Ž¦•Ï‰»
+		if (hp <= 75 && healthState == FINE) {
+			healthState = WEEKNESS;
+		}
+		//4/1‚Å•mŽ€
+		else if (hp <= 25 && healthState == WEEKNESS) {
+			healthState = DYING;
+		}
+		else if (hp <= 0 && healthState == DYING) {
+			healthState = DIE;
+		}
+	}
+
+	if (deathTimer < 25) {}
+	else if (deathTimer < 50) {
+		addVelo = { 0.0f,0.015f,0.0f };
+		dMove = addVelo;
+		SetPosition(GetPosition() + dMove);
+	}
+	else if (deathTimer < 100) {
+		addVelo = { 0.0f,-0.3f,0.0f };
+		dMove = addVelo;
+		SetPosition(GetPosition() + dMove);
+	}
+	//XV
+	deathTimer++;
+	GetWorldTransform().UpdateMatrix();
 }

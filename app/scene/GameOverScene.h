@@ -49,5 +49,16 @@ private: // ƒƒ“ƒo•Ï”
 	Sprite* sprite = new Sprite;
 	SpriteCommon spriteCommon_;
 	Sprite overGH;
+	Sprite fade;
+	Sprite textGH;
+	Object3d* sky = nullptr;
+	Model* skyModel = nullptr;
+	Player* player = nullptr;
+	Object3d* stage = nullptr;
+	Model* stageModel = nullptr;
+	int gameTimer;
+	float fadeAlpha;
+	float textAlpha;
+
 };
 

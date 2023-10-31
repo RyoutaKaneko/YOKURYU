@@ -191,5 +191,4 @@ private:
 	GameState gameState_bak;
 	int bossPass;
 	bool isStart;
-	bool isGameover;
 };

@@ -76,6 +76,23 @@ public:
 	/// <returns></returns>
 	bool GetIsContinue() { return isContinue; }
 
+	/// <summary>
+	/// カーソルアップデート
+	/// </summary>
+	void CursorUpdate();
+	
+	/// <summary>
+	/// ゲームシーンリセットgetter
+	/// </summary>
+	/// <returns></returns>
+	bool GetIsGameSceneReset() { return isGameSceneReset; }
+
+	/// <summary>
+	// ゲームシーンオーバーgetter
+	/// </summary>
+	/// <returns></returns>
+	bool GetIsGameOver() { return isGameOver; }
+
 private:
 	//スプライトのポインタ
 	Sprite* sprite = new Sprite;
@@ -94,10 +111,20 @@ private:
 	Sprite continueYes;
 	Sprite continueNo;
 	Sprite continueText;
+	Sprite cursorGH[9];
+	Sprite circle;
+	Sprite contSelect;
 	bool isPlayable;
 	float frameAlpha;
 	float barAlpha;
 	bool isContinue;
 	bool isShowContinue;
+	float circleSize;
+	float clickEffectAlpha;
+	float circleAlpha;
+	Vector3 cursorPos;
+	Vector3 cursorPosBak;
+	bool isGameSceneReset;
+	bool isGameOver;
 };
 

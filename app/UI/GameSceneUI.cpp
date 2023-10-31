@@ -107,6 +107,30 @@ void GameSceneUI::Initialize(ID3D12Device* device)
 	continueText.SetPosition(Vector3(640, 250, 0));
 	continueText.SpriteTransferVertexBuffer(continueText, 19);
 	continueText.LoadTexture(spriteCommon_, 19, L"Resources/continue.png", device);
+	//カーソル
+	for (int i = 0; i < 9; i++) {
+		cursorGH[i].SpriteCreate(device, 20, Vector2(0.5f, 0.5f), false, false);
+		cursorGH[i].SetScale(Vector2(48 * 1, 48 * 1));
+		cursorGH[i].SetPosition(Input::GetInstance()->GetMousePos());
+		cursorGH[i].SetAlpha(cursorGH[i], 1 - (i * 0.1f));
+		cursorGH[i].SpriteTransferVertexBuffer(cursorGH[i], 20);
+		cursorGH[i].SpriteUpdate(cursorGH[i], spriteCommon_);
+		cursorGH[i].LoadTexture(spriteCommon_, 20, L"Resources/cursor.png", device);
+	}
+	//カーソルエフェクト
+	circle.SpriteCreate(device, 21, Vector2(0.5f, 0.5f), false, false);
+	circle.SetScale(Vector2(48 * circleSize, 48 * circleSize));
+	circle.SetPosition({ 0,0,0 });
+	circle.SpriteTransferVertexBuffer(circle, 21);
+	circle.SpriteUpdate(circle, spriteCommon_);
+	circle.LoadTexture(spriteCommon_, 21, L"Resources/circle.png", device);
+	//コンティニューセレクト
+	contSelect.SpriteCreate(device, 22, Vector2(0.5f, 0.5f), false, false);
+	contSelect.SetScale(Vector2(196,64));
+	contSelect.SetPosition({ 460, 410, 0 });
+	contSelect.SpriteTransferVertexBuffer(contSelect, 22);
+	contSelect.SpriteUpdate(contSelect, spriteCommon_);
+	contSelect.LoadTexture(spriteCommon_, 22, L"Resources/continueSelect.png", device);
 
 
 	isPlayable = false;
@@ -114,6 +138,11 @@ void GameSceneUI::Initialize(ID3D12Device* device)
 	barAlpha = 0.4f;
 	isContinue = true;
 	isShowContinue = false;
+	circleSize = 1.0f;
+	clickEffectAlpha = 1.0f;
+	circleAlpha = 1.0f;
+	isGameSceneReset = false;
+	isGameOver = false;
 }
 
 void GameSceneUI::ShowUI()
@@ -315,6 +344,10 @@ void GameSceneUI::ResetUIPos()
 	continueNo.SpriteUpdate(continueNo, spriteCommon_);
 
 	isShowContinue = false;
+	cursorPos = { 640,360,0 };
+	cursorPosBak = { 0,0,0 };
+	isGameOver = false;
+	isGameSceneReset = false;
 
 }
 
@@ -375,20 +408,72 @@ void GameSceneUI::ContinueText()
 		isShowContinue = true;
 	}
 	if (isShowContinue == true) {
-		if (Input::GetInstance()->TriggerKey(DIK_A)) {
-			if (isContinue == false) {
-				isContinue = true;
-				continueYes.SetColor(continueYes, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
-				continueNo.SetColor(continueNo, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+		CursorUpdate();
+
+		bool onCursor = false;
+
+		if (cursorPos.x > 362 && cursorPos.x < 558) {
+			if (cursorPos.y > 378 && cursorPos.y < 442) {
+				if (isContinue == false) {
+					isContinue = true;
+					continueYes.SetColor(continueYes, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
+					continueNo.SetColor(continueNo, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+					contSelect.SetPosition({ 460, 410, 0 });
+					contSelect.SpriteUpdate(contSelect, spriteCommon_);
+				}
+				if (Input::GetInstance()->TriggerMouseLeft()) {
+					isGameSceneReset = true;
+				}
+				onCursor = true;
 			}
 		}
-		else if (Input::GetInstance()->TriggerKey(DIK_D)) {
-			if (isContinue == true) {
-				isContinue = false;
-				continueYes.SetColor(continueYes, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
-				continueNo.SetColor(continueNo, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
+
+		if (cursorPos.x > 702 && cursorPos.x < 898) {
+			if (cursorPos.y > 378 && cursorPos.y < 442) {
+				if (isContinue == true) {
+					isContinue = false;
+					continueYes.SetColor(continueYes, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+					continueNo.SetColor(continueNo, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
+					contSelect.SetPosition({ 800, 410, 0 });
+					contSelect.SpriteUpdate(contSelect, spriteCommon_);
+				}
+				if (Input::GetInstance()->TriggerMouseLeft()) {
+					isGameOver = true;
+				}
+				onCursor = true;
 			}
 		}
+
+		if (onCursor == false) {
+			if (Input::GetInstance()->TriggerKey(DIK_A)) {
+				if (isContinue == false) {
+					isContinue = true;
+					continueYes.SetColor(continueYes, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
+					continueNo.SetColor(continueNo, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+					contSelect.SetPosition({ 460, 410, 0 });
+					contSelect.SpriteUpdate(contSelect, spriteCommon_);
+				}
+			}
+			else if(Input::GetInstance()->TriggerKey(DIK_D)) {
+				if (isContinue == true) {
+					isContinue = false;
+					continueYes.SetColor(continueYes, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+					continueNo.SetColor(continueNo, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
+					contSelect.SetPosition({ 800, 410, 0 });
+					contSelect.SpriteUpdate(contSelect, spriteCommon_);
+				}
+			}
+			if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+				if (isContinue == false) {
+					isGameOver = true;
+				 }
+				else {
+					isGameSceneReset = true;
+				}
+			}
+		}
+		
+		
 
 		continueText.SpriteTransferVertexBuffer(continueText, 19);
 		continueText.SpriteUpdate(continueText, spriteCommon_);
@@ -411,10 +496,61 @@ void GameSceneUI::DrawContinue(ID3D12Device* device, ID3D12GraphicsCommandList* 
 	continueTextbox.SpriteDraw(cmdList, spriteCommon_, device);
 	if (isShowContinue == true) {
 		continueText.SpriteDraw(cmdList, spriteCommon_, device);
+		contSelect.SpriteDraw(cmdList, spriteCommon_, device);
 		continueYes.SpriteDraw(cmdList, spriteCommon_, device);
 		continueNo.SpriteDraw(cmdList, spriteCommon_, device);
+		circle.SpriteDraw(cmdList, spriteCommon_, device);
+		for (int i = 0; i < 9; i++) {
+			cursorGH[i].SpriteDraw(cmdList, spriteCommon_, device);
+		}
 	}
 
 	// スプライト描画後処理
 	Sprite::PostDraw();
+}
+
+void GameSceneUI::CursorUpdate() {
+	Vector3 cur = Input::GetInstance()->GetMousePos();
+	Vector3 move = cur - cursorPosBak;
+
+	if (cursorPos.x + move.x <= 256 || cursorPos.x + move.x >= 1024) {
+		move.x = 0;
+	}
+	if (cursorPos.y + move.y <= 168 || cursorPos.y + move.y >= 552) {
+		move.y = 0;
+	}
+	cursorPos += move;
+
+	cursorGH[8].SetPosition(cursorGH[7].GetPosition());
+	cursorGH[7].SetPosition(cursorGH[6].GetPosition());
+	cursorGH[6].SetPosition(cursorGH[5].GetPosition());
+	cursorGH[5].SetPosition(cursorGH[4].GetPosition());
+	cursorGH[4].SetPosition(cursorGH[3].GetPosition());
+	cursorGH[3].SetPosition(cursorGH[2].GetPosition());
+	cursorGH[2].SetPosition(cursorGH[1].GetPosition());
+	cursorGH[1].SetPosition(cursorGH[0].GetPosition());
+	cursorGH[0].SetPosition(cursorPos);
+	circle.SetPosition(cursorPos);
+	if (Input::GetInstance()->TriggerMouseLeft() == true) {
+		circleSize = 1.0f;
+		circleAlpha = 1.0f;
+	}
+	else if (circleSize < 6.0f) {
+		circleSize += 0.1f;
+		circleAlpha -= 0.025f;
+	}
+	else {
+		circleSize = 1.0f;
+		circleAlpha = 1.0f;
+	}
+	circle.SetScale(Vector2(16 * circleSize, 16 * circleSize));
+	circle.SetRotation(circle.GetRotation() + 0.005f);
+	circle.SetAlpha(circle, circleAlpha);
+	circle.SpriteTransferVertexBuffer(circle, 7);
+	circle.SpriteUpdate(circle, spriteCommon_);
+	for (int i = 0; i < 9; i++) {
+		cursorGH[i].SpriteUpdate(cursorGH[i], spriteCommon_);
+	}
+
+	cursorPosBak = cursorPos;
 }

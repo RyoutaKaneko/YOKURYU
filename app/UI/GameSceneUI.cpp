@@ -316,6 +316,20 @@ void GameSceneUI::ResetUIPos()
 	//hpÉtÉåÅ[ÉÄ
 	hpFrame.SetPosition(Vector3(226, 851, 0));
 	hpFrame.SpriteUpdate(hpFrame, spriteCommon_);
+	//hp
+	hp.SetScale(Vector2(4 * 1, 48 * 1));
+	hp.SetPosition(Vector3(28, 650, 0));
+	hp.SpriteUpdate(hp, spriteCommon_);
+	hpBack.SetPosition(Vector3(28, 650, 0));
+	hpBack.SetScale(Vector2(396, 48 * 1));
+	hpBack.SpriteUpdate(hpBack, spriteCommon_);
+	//gage
+	gage.SetPosition(Vector3(28, 618, 0));
+	gage.SetScale(Vector2(2 * 1, 18 * 1));
+	gage.SpriteUpdate(gage, spriteCommon_);
+	gageBack.SetPosition(Vector3(28, 618, 0));
+	gageBack.SetScale(Vector2(358, 18 * 1));
+	gageBack.SpriteUpdate(gageBack, spriteCommon_);
 	//çUåÇUI
 	attackUI.SetPosition(Vector3(1020, 800, 0));
 	attackUI.SpriteUpdate(attackUI, spriteCommon_);

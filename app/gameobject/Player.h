@@ -174,6 +174,11 @@ public:
 	/// <returns></returns>
 	const std::list<std::unique_ptr<PlayerBullet>>& GetBullets() { return bullets_; }
 
+	/// <summary>
+	/// HPリセット
+	/// </summary>
+	void ResetHP();
+
 
 private:
 	Input* input = nullptr;

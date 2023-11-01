@@ -148,25 +148,26 @@ void GameTitleScene::Initialize()
 void GameTitleScene::Update()
 {
 
-	if (titleAlpha < 1.0f) {
-		titleAlpha += 0.025f;
-		title.SetAlpha(title, titleAlpha);
-		title.SpriteTransferVertexBuffer(title, 0);
-		title.SpriteUpdate(title, spriteCommon_);
-	}
-	else if (titleAlpha >= 1.0f && fadeTimer < 30) {
-		fadeTimer++;
-	}
-	else if (fadeTimer == 30) {
-		if (blackAlpha >= 0.0f) {
-			blackAlpha -= 0.075f;
-			black.SetAlpha(black, blackAlpha);
-			black.SpriteTransferVertexBuffer(black, 12);
-			black.SpriteUpdate(black, spriteCommon_);
-	   }
-	}
-
 	if (isNext == false) {
+		if (titleAlpha < 1.0f) {
+			titleAlpha += 0.025f;
+			title.SetAlpha(title, titleAlpha);
+			title.SpriteTransferVertexBuffer(title, 0);
+			title.SpriteUpdate(title, spriteCommon_);
+		}
+		else if (titleAlpha >= 1.0f && fadeTimer < 30) {
+			fadeTimer++;
+		}
+		else if (fadeTimer == 30) {
+			if (blackAlpha >= 0.0f) {
+				blackAlpha -= 0.075f;
+				black.SetAlpha(black, blackAlpha);
+				black.SpriteTransferVertexBuffer(black, 12);
+				black.SpriteUpdate(black, spriteCommon_);
+			}
+		}
+
+
 		Vector3 cur = Input::GetInstance()->GetMousePos();
 		cursor[8].SetPosition(cursor[7].GetPosition());
 		cursor[7].SetPosition(cursor[6].GetPosition());
@@ -229,19 +230,6 @@ void GameTitleScene::Update()
 				onCursor = false;
 			}
 		}
-		//タイトル演出
-		if (gameTimer % 8 == 0) {
-			if (isBackNum < 2) {
-				isBackNum++;
-			}
-			else if (isBackNum == 2) {
-				isBackNum = 0;
-			}
-		}
-		title.SpriteUpdate(title, spriteCommon_);
-		for (int i = 0; i < 3; i++) {
-			titleBack[i].SpriteUpdate(titleBack[i], spriteCommon_);
-		}
 		//クリック
 		for (int i = 0; i < 2; i++) {
 			click[i].SpriteUpdate(click[i], spriteCommon_);
@@ -263,6 +251,19 @@ void GameTitleScene::Update()
 		}
 	}
 	else {
+		//タイトルをすっと消す
+		if (titleAlpha > 0.0f) {
+			titleAlpha -= 0.025f;
+			title.SetAlpha(title, titleAlpha);
+			title.SpriteTransferVertexBuffer(title, 0);
+			title.SpriteUpdate(title, spriteCommon_);
+			for (int i = 0; i < 3; i++) {
+				titleBack[i].SetAlpha(titleBack[i], titleAlpha);
+				titleBack[i].SpriteTransferVertexBuffer(titleBack[i], i + 1);
+				titleBack[i].SpriteUpdate(titleBack[i], spriteCommon_);
+			}
+			
+		}
 		if (clickEffectAlpha > 0) {
 			clickEffectAlpha -= 0.025f;
 			clickEffect.SetScale(clickEffect.GetScale() + Vector2(1.0f,1.0f));
@@ -297,6 +298,19 @@ void GameTitleScene::Update()
 		}
 		gameTimer++;
 	}
+	//タイトル演出
+	if (gameTimer % 8 == 0) {
+		if (isBackNum < 2) {
+			isBackNum++;
+		}
+		else if (isBackNum == 2) {
+			isBackNum = 0;
+		}
+	}
+	title.SpriteUpdate(title, spriteCommon_);
+	for (int i = 0; i < 3; i++) {
+		titleBack[i].SpriteUpdate(titleBack[i], spriteCommon_);
+	}
 	//更新
 	player->GetWorldTransform().UpdateMatrix();
 	viewProjection->UpdateMatrix();
@@ -317,8 +331,8 @@ void GameTitleScene::Draw()
 	Object3d::PostDraw();
 
 	Sprite::PreDraw(dxCommon_->GetCommandList(), spriteCommon_);
+	titleBack[isBackNum].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 	if (isNext == false) {
-		titleBack[isBackNum].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		if (onCursor == false) {
 			click[0].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		}
@@ -331,7 +345,6 @@ void GameTitleScene::Draw()
 			cursor[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		}
 		black.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
-		title.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
    }
 	else {
 		click[1].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
@@ -339,6 +352,7 @@ void GameTitleScene::Draw()
 		fade.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		loading.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 	}
+	title.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 
 	Sprite::PostDraw();
 

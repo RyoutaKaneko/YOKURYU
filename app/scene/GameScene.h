@@ -155,8 +155,6 @@ private:
 	//パーティクル
 	Particle* particle = nullptr;
 	ParticleManager* pm = nullptr;
-	Particle* particle_ = nullptr;
-	ParticleManager* pm_ = nullptr;
 	//enemy
 	std::list<std::unique_ptr<Enemy>> enemys_;
 	//energy

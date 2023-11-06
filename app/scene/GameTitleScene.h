@@ -87,4 +87,5 @@ private: // メンバ変数
 	float blackAlpha;
 	float titleAlpha;
 	int fadeTimer;
+	bool isShowTitle;
 };

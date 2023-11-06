@@ -266,23 +266,18 @@ void Player::BackRail()
 void Player::OnCollision([[maybe_unused]] const CollisionInfo& info)
 {
 	//Õ“Ë‘Šè‚Ì–¼‘O
-	const char* str1 = "class Enemy";
-	const char* str2 = "class EnemyBullet";
-	const char* str3 = "class BossBullet";
-	const char* str4 = "class Energy";
-
-	//‘Šè‚ªenemy
-	if (strcmp(GetToCollName(), str1) == 0) {
-	}
+	const char* str1 = "class EnemyBullet";
+	const char* str2 = "class BossBullet";
+	const char* str3= "class Energy";
 	//‘Šè‚ªenemy‚Ì’e
-	if (strcmp(GetToCollName(), str2) == 0) {
+	if (strcmp(GetToCollName(), str1) == 0) {
 		if (isHit == false) {
-			hp-=100;
+			hp-=10;
 			isHit = true;
 		}
 	}
 	//‘Šè‚ªboss‚Ì’e
-	if (strcmp(GetToCollName(), str3) == 0) {
+	if (strcmp(GetToCollName(), str2) == 0) {
 		if (isHit == false) {
 			hp-=25;
 			isHit = true;
@@ -290,7 +285,7 @@ void Player::OnCollision([[maybe_unused]] const CollisionInfo& info)
 	}
 
 	//‘Šè‚ªenergy
-	if (strcmp(GetToCollName(), str4) == 0) {
+	if (strcmp(GetToCollName(), str3) == 0) {
 		if (energy < 100) {
 			energy += 5;
 		}
@@ -327,11 +322,16 @@ void Player::Dead()
 		SetPosition(GetPosition() + dMove);
 	}
 	else if (deathTimer < 100) {
-		addVelo = { 0.0f,-0.3f,0.0f };
+		addVelo = { 0.0f,-0.15f,0.0f };
 		dMove = addVelo;
 		SetPosition(GetPosition() + dMove);
 	}
 	//XV
 	deathTimer++;
 	GetWorldTransform().UpdateMatrix();
+}
+
+void Player::ResetHP() {
+	hp = 100;
+	healthState = FINE;
 }

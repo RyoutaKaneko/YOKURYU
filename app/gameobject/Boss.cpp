@@ -90,6 +90,8 @@ void Boss::Update(Vector3 velo)
 		isDead_ = true;
 	}
 	//更新
+	//Vector3 rot = velo - GetPosition();
+	//SetRotation({0,rot.x,0});
 	GetWorldTransform().UpdateMatrix();
 	//当たり判定更新
 	if (collider)

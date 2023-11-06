@@ -544,7 +544,7 @@ void Sprite::SpriteTransferVertexBuffer(const Sprite& sprite, uint32_t texIndex_
 	VertexPosUv* vertMap = nullptr;
 	result = sprite.vertBuff->Map(0, nullptr, (void**)&vertMap);
 	memcpy(vertMap, vertices, sizeof(vertices));
-	sprite.vertBuff->Unmap(0, nullptr);
+ 	sprite.vertBuff->Unmap(0, nullptr);
 }
 
 void Sprite::Finalize()

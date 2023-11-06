@@ -100,7 +100,7 @@ public: // メンバ関数
 	/// <param name="setacc">縦移動</param>
 	/// <param name="setnum">発射個数</param>
 	/// <param name="setscale">スケール</param>
-	void Fire(Particle* particle, const float& setpos, const float& setvel, const float& setacc, const int& setnum, const XMFLOAT2& setscale);
+	void Fire(Particle* particle, XMFLOAT3 pos, const float& setpos, const float& setvel, const float& setacc, const int& setnum, const XMFLOAT2& setscale);
 
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuff; // 定数バッファ

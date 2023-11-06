@@ -64,11 +64,11 @@ void GameScene::Initialize() {
 
 	//クロスヘアの画像
 	for (int i = 0; i < 4; i++) {
-		crosshair[i].LoadTexture(spriteCommon_, 1, L"Resources/crosshair.png", dxCommon_->GetDevice());
-		crosshair[i].SpriteCreate(dxCommon_->GetDevice(), 1, Vector2(0.5f, 0.5f), false, false);
+		crosshair[i].LoadTexture(spriteCommon_, 0, L"Resources/crosshair.png", dxCommon_->GetDevice());
+		crosshair[i].SpriteCreate(dxCommon_->GetDevice(), 0, Vector2(0.5f, 0.5f), false, false);
 		crosshair[i].SetPosition(Vector3(1100, 0, 0));
 		crosshair[i].SetScale(Vector2(24.0f * (i + 1.0f), 24.0f * (i + 1.0f)));
-		crosshair[i].SpriteTransferVertexBuffer(crosshair[i], 1);
+		crosshair[i].SpriteTransferVertexBuffer(crosshair[i], 0);
 		crosshair[i].SpriteUpdate(crosshair[i], spriteCommon_);
 	}
 
@@ -81,44 +81,41 @@ void GameScene::Initialize() {
 	}
 
 	//fade
-	fade.LoadTexture(spriteCommon_, 5, L"Resources/black.png", dxCommon_->GetDevice());
-	fade.SpriteCreate(dxCommon_->GetDevice(), 5, Vector2(0.0f, 0.0f), false, false);
+	fade.LoadTexture(spriteCommon_, 2, L"Resources/black.png", dxCommon_->GetDevice());
+	fade.SpriteCreate(dxCommon_->GetDevice(), 2, Vector2(0.0f, 0.0f), false, false);
 	fade.SetScale(Vector2(1280 * 1, 720 * 1));
-	fade.SpriteTransferVertexBuffer(fade, 5);
+	fade.SpriteTransferVertexBuffer(fade, 2);
 	fade.SpriteUpdate(fade, spriteCommon_);
 	//alpha
 	fadeAlpha = 1.0f;
 	fade.SetAlpha(fade, fadeAlpha);
 	//boosHP
-	bossHP.LoadTexture(spriteCommon_, 6, L"Resources/hp.png", dxCommon_->GetDevice());
-	bossHP.SpriteCreate(dxCommon_->GetDevice(), 6, Vector2(0.0f, 0.5f), false, false);
+	bossHP.LoadTexture(spriteCommon_, 3, L"Resources/hp.png", dxCommon_->GetDevice());
+	bossHP.SpriteCreate(dxCommon_->GetDevice(), 3, Vector2(0.0f, 0.5f), false, false);
 	bossHP.SetPosition(Vector3(25, 50, 0));
 	bossHP.SetScale(Vector2(2 * 1, 48 * 1));
-	bossHP.SpriteTransferVertexBuffer(bossHP, 6);
+	bossHP.SpriteTransferVertexBuffer(bossHP, 3);
 	bossHP.SpriteUpdate(bossHP, spriteCommon_);
 	
 	//フェードアウト
-	fadeout.SpriteCreate(dxCommon_->GetDevice(), 10, Vector2(0.0f, 0.0f), false, true);
+	fadeout.SpriteCreate(dxCommon_->GetDevice(), 4, Vector2(0.0f, 0.0f), false, true);
 	fadeout.SetScale(Vector2(1280 * 1, 1120 * 1));
 	fadeout.SetPosition({ 0,720,0 });
-	fadeout.SpriteTransferVertexBuffer(fadeout, 10);
+	fadeout.SpriteTransferVertexBuffer(fadeout, 4);
 	fadeout.SpriteUpdate(fadeout, spriteCommon_);
-	fadeout.LoadTexture(spriteCommon_, 10, L"Resources/fade.png", dxCommon_->GetDevice());
+	fadeout.LoadTexture(spriteCommon_, 4, L"Resources/fade.png", dxCommon_->GetDevice());
+
 	//UI初期化
 	UIs = new GameSceneUI();
 	UIs->Initialize(dxCommon_->GetDevice());
 
 	//パーティクル初期化
 	particle = Particle::LoadParticleTexture("blue.png");
-	pm_ = ParticleManager::Create();
-	particle_ = Particle::LoadParticleTexture("crosshair.png");
 	pm = ParticleManager::Create();
 	//オブジェクトにモデルを紐付ける
 	pm->SetParticleModel(particle);
-	pm_->SetParticleModel(particle_);
 	//カメラをセット
 	pm->SetXMViewProjection(xmViewProjection);
-	pm_->SetXMViewProjection(xmViewProjection);
 
 	//boss
 	boss = new Boss;
@@ -141,7 +138,6 @@ void GameScene::Initialize() {
 	cameraTmpPos = { 0,0,0 };
 	cameraTmpRot = { 0,0,0 };
 	isStart = false;
-	isGameover = false;
 }
 
 ///-----更新処理-----///
@@ -403,25 +399,20 @@ void GameScene::Update() {
 		railCamera->ViewUpdate();
 		if (player->GetDeathTimer() >= 100) {
 			UIs->ContinueText();
-			if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-				if (UIs->GetIsContinue() == true) {
-					Reset();
-					gameState = MAIN;
-					gameTime = 150;
-					railCamera->GetView()->SetEye(Vector3(-1, 0.5f, 490.0f));
-					railCamera->GetView()->SetTarget(Vector3(0.0f, 0.5f, 495));
-					player->SetPosition({ 0,0.5f,495 });
-					Vector3 cursor = GetWorldToScreenPos(Vector3(0, 0, 0), railCamera);
-					input->SetMousePos({ cursor.x,cursor.y });
-					isGameover = false;
-					fadeAlpha = 0.0f;
-					fade.SetAlpha(fade, fadeAlpha);
-				}
-				else {
-					isGameover = true;
-				}
+
+			if (UIs->GetIsGameSceneReset() == true) {
+				Reset();
+				gameState = MAIN;
+				gameTime = 150;
+				railCamera->GetView()->SetEye(Vector3(-1, 0.5f, 490.0f));
+				railCamera->GetView()->SetTarget(Vector3(0.0f, 0.5f, 495));
+				player->SetPosition({ 0,0.5f,495 });
+				Vector3 cursor = GetWorldToScreenPos(Vector3(0, 0, 0), railCamera);
+				input->SetMousePos({ cursor.x,cursor.y });
+				fadeAlpha = 0.0f;
+				fade.SetAlpha(fade, fadeAlpha);
 			}
-			if (isGameover == true) {
+			if (UIs->GetIsGameOver() == true) {
 				fadeAlpha += 0.05f;
 				fade.SetAlpha(fade, fadeAlpha);
 				fade.SpriteUpdate(fade,spriteCommon_);
@@ -457,6 +448,13 @@ void GameScene::Update() {
 		LockedClear();
 		gameState = CONTINUE;
 	}
+
+	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+		Vector3 pap = player->GetPosition();
+		pm->Fire(particle, {-20,0,0},1, 0.5f, 0, 15, { 5,0 });
+	}
+	pm->Update();
+
 	//当たり判定チェック
 	collisionManager->CheckAllCollisions();
 }
@@ -494,12 +492,6 @@ void GameScene::Draw() {
 
 #pragma region FBX3Dオブジェクト描画
 
-	//// 3Dオブジェクト描画前処理
-	//FbxObject3d::PreDraw(dxCommon_->GetCommandList());
-
-	//// 3Dオブジェクト描画後処理
-	//FbxObject3d::PostDraw();
-
 #pragma endregion
 
 #pragma region パーティクル描画
@@ -509,8 +501,7 @@ void GameScene::Draw() {
 
 	///==== パーティクル描画 ====///
 	//パーティクル
-	/*pm->Draw();
-	pm_->Draw();*/
+	pm->Draw();
 
 	// パーティクル描画後処理
 	ParticleManager::PostDraw();
@@ -618,7 +609,7 @@ void GameScene::Reset() {
 	player->PlayerInitialize();
 	player->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 0.7f));
 	player->SetPosition({ 0,0.5f,495 });
-	//hp.SetScale(Vector2(0, 48 * 1));
+	player->ResetHP();
 	//boss
 	boss = new Boss;
 	boss->BossInitialize();
@@ -629,10 +620,6 @@ void GameScene::Reset() {
 	railCamera->Initialize(player);
 	//enemy
 	LoadEnemy();
-
-	////必殺技ゲージ
-	//gage.SetScale(Vector2(2 * 1, 18 * 1));
-	//gage.SpriteTransferVertexBuffer(gage, 7);
 	//変数
 	isCheckPoint = false;
 	isPlayable = false;

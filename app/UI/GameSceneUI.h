@@ -71,6 +71,13 @@ public:
 	void DrawContinue(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList);
 
 	/// <summary>
+	/// クリア画面描画
+	/// </summary>
+	/// <param name="device"></param>
+	/// <param name="cmdList"></param>
+	void DrawClear(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList);
+
+	/// <summary>
 	/// コンティニューフラグgetter
 	/// </summary>
 	/// <returns></returns>
@@ -79,7 +86,7 @@ public:
 	/// <summary>
 	/// カーソルアップデート
 	/// </summary>
-	void CursorUpdate();
+	void CursorUpdate(bool isCont);
 	
 	/// <summary>
 	/// ゲームシーンリセットgetter
@@ -114,6 +121,8 @@ private:
 	Sprite cursorGH[9];
 	Sprite circle;
 	Sprite contSelect;
+	Sprite congrat;
+	Sprite clearNext;
 	bool isPlayable;
 	float frameAlpha;
 	float barAlpha;

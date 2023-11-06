@@ -131,6 +131,20 @@ void GameSceneUI::Initialize(ID3D12Device* device)
 	contSelect.SpriteTransferVertexBuffer(contSelect, 22);
 	contSelect.SpriteUpdate(contSelect, spriteCommon_);
 	contSelect.LoadTexture(spriteCommon_, 22, L"Resources/continueSelect.png", device);
+	//クリア
+	congrat.LoadTexture(spriteCommon_, 23, L"Resources/congrat.png", device);
+	congrat.SpriteCreate(device, 23, Vector2(0.5f, 0.5f), false, false);
+	congrat.SetScale(Vector2(1055, 96));
+	congrat.SetPosition({ 640, 310, 0 });
+	congrat.SpriteTransferVertexBuffer(congrat, 23);
+	congrat.SpriteUpdate(congrat, spriteCommon_);
+	//クリア
+	clearNext.LoadTexture(spriteCommon_, 24, L"Resources/clearNext.png", device);
+	clearNext.SpriteCreate(device, 24, Vector2(0.5f, 0.5f), false, false);
+	clearNext.SetScale(Vector2(312.0f * 1.2f, 52.0f * 1.2f));
+	clearNext.SetPosition({ 640,640,0 });
+	clearNext.SpriteTransferVertexBuffer(clearNext, 24);
+	clearNext.SpriteUpdate(clearNext, spriteCommon_);
 
 
 	isPlayable = false;
@@ -422,7 +436,7 @@ void GameSceneUI::ContinueText()
 		isShowContinue = true;
 	}
 	if (isShowContinue == true) {
-		CursorUpdate();
+		CursorUpdate(true);
 
 		bool onCursor = false;
 
@@ -523,15 +537,32 @@ void GameSceneUI::DrawContinue(ID3D12Device* device, ID3D12GraphicsCommandList* 
 	Sprite::PostDraw();
 }
 
-void GameSceneUI::CursorUpdate() {
+void GameSceneUI::DrawClear(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList)
+{
+	// スプライト描画前処理
+	Sprite::PreDraw(cmdList, spriteCommon_);
+
+	congrat.SpriteDraw(cmdList, spriteCommon_, device);
+	clearNext.SpriteDraw(cmdList, spriteCommon_, device);
+	for (int i = 0; i < 9; i++) {
+		cursorGH[i].SpriteDraw(cmdList, spriteCommon_, device);
+	}
+
+	// スプライト描画後処理
+	Sprite::PostDraw();
+}
+
+void GameSceneUI::CursorUpdate(bool isCont) {
 	Vector3 cur = Input::GetInstance()->GetMousePos();
 	Vector3 move = cur - cursorPosBak;
 
-	if (cursorPos.x + move.x <= 256 || cursorPos.x + move.x >= 1024) {
-		move.x = 0;
-	}
-	if (cursorPos.y + move.y <= 168 || cursorPos.y + move.y >= 552) {
-		move.y = 0;
+	if (isCont == true) {
+		if (cursorPos.x + move.x <= 256 || cursorPos.x + move.x >= 1024) {
+			move.x = 0;
+		}
+		if (cursorPos.y + move.y <= 168 || cursorPos.y + move.y >= 552) {
+			move.y = 0;
+		}
 	}
 	cursorPos += move;
 

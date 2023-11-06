@@ -119,6 +119,8 @@ public:
 	/// <returns></returns>
 	Vector2 GetWorldToScreenScale(Object3d* obj, RailCamera* rail);
 
+	void ClearUpdate();
+
 private:
 	//base
 	DirectXCommon* dxCommon_ = nullptr;
@@ -134,6 +136,8 @@ private:
 	float fadeAlpha;
 	Sprite bossHP;
 	Sprite fadeout;
+	Sprite thanks;
+	float thanksAlpha;
 	//UI
 	GameSceneUI* UIs = nullptr;
 	//オブジェクトのポインタ
@@ -155,6 +159,13 @@ private:
 	//パーティクル
 	Particle* particle = nullptr;
 	ParticleManager* pm = nullptr;
+	Particle* clearParticle_01 = nullptr;
+	ParticleManager* clearPM_01 = nullptr;
+	Particle* clearParticle_02 = nullptr;
+	ParticleManager* clearPM_02 = nullptr;
+	Particle* clearParticle_03 = nullptr;
+	ParticleManager* clearPM_03 = nullptr;
+	
 	//enemy
 	std::list<std::unique_ptr<Enemy>> enemys_;
 	//energy
@@ -183,10 +194,16 @@ private:
 		MAIN,
 		BOSS,
 		ULT,
-		CONTINUE
+		CONTINUE,
+		CLEAR
 	};
 	GameState gameState;
 	GameState gameState_bak;
 	int bossPass;
 	bool isStart;
+	int clearTimer;
+	bool isShowUI;
+	int particleTimer;
+	bool isNext;
+	bool isSceneEnd;
 };

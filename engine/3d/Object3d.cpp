@@ -332,3 +332,11 @@ Vector3 Object3d::GetWorldPos() {
 
 	return worldPos;
 }
+
+void Object3d::SetWorldPos(const Vector3& position_)
+{
+	//ワールド行列から座標を取得
+	worldTransform_.GetMatWorld().m[3][0] = position_.x;
+	worldTransform_.GetMatWorld().m[3][1] = position_.y;
+	worldTransform_.GetMatWorld().m[3][2] = position_.z;
+}

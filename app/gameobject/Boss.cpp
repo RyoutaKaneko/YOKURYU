@@ -49,6 +49,8 @@ void Boss::BossInitialize()
 	timer = 0;
 	timeCount = 0;
 	state = WAIT;
+	slainTimer = 0;
+	isSlained = false;
 	//óêêî
 	srand((unsigned int)time(NULL));
 }
@@ -187,12 +189,12 @@ void Boss::OnCollision([[maybe_unused]] const CollisionInfo& info)
 		if (isHit == false && isInvisible == false) {
 			isHit = true;
 			hitTimer = 30;
-			hp-= 5;
+			hp-= 300;
 			for (int i = 0; i < PARTS_NUM; i++) {
 				if (parts[i]->GetIsLocked() == true) {
 					parts[i]->SetIsLocked(false);
 					GameScene::PopEnergy(parts[i]->GetWorldPos());
-					hp -= 5;
+					hp -= 300;
 				}
 			}
 		}
@@ -204,4 +206,23 @@ void Boss::SkipMovie()
 	appearTimer = 0;
 	SetPosition({ 0.0f,49.99f,-200.0f });
 	bossAlpha = 1.0f;
+}
+
+void Boss::SlainUpdate()
+{
+	//óêêîê∂ê¨ëïíu
+	std::random_device seed_gen;
+	std::mt19937_64 engine(seed_gen());
+	std::uniform_real_distribution<float>dist(-5.0f, 5.0f);
+	Vector3 randomNum(dist(engine), dist(engine), dist(engine));
+
+	if (slainTimer < 60) {
+		SetRotation(randomNum);		
+	}
+	else{
+		isSlained = true;
+	}
+
+	GetWorldTransform().UpdateMatrix();
+	slainTimer++;
 }

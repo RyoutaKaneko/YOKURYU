@@ -96,7 +96,7 @@ void GameScene::Initialize() {
 	bossHP.SetScale(Vector2(2 * 1, 48 * 1));
 	bossHP.SpriteTransferVertexBuffer(bossHP, 3);
 	bossHP.SpriteUpdate(bossHP, spriteCommon_);
-	
+
 	//フェードアウト
 	fadeout.SpriteCreate(dxCommon_->GetDevice(), 4, Vector2(0.0f, 0.0f), false, true);
 	fadeout.SetScale(Vector2(1280 * 1, 1120 * 1));
@@ -104,18 +104,42 @@ void GameScene::Initialize() {
 	fadeout.SpriteTransferVertexBuffer(fadeout, 4);
 	fadeout.SpriteUpdate(fadeout, spriteCommon_);
 	fadeout.LoadTexture(spriteCommon_, 4, L"Resources/fade.png", dxCommon_->GetDevice());
+	//thanks
+	thanks.SpriteCreate(dxCommon_->GetDevice(), 5, Vector2(0.5f, 0.5f), false, false);
+	thanks.SetScale(Vector2(832 * 1, 72 * 1));
+	thanks.SetPosition({ 640,360,0 });
+	thanks.SetAlpha(thanks, 0.0f);
+	thanks.SpriteTransferVertexBuffer(thanks, 5);
+	thanks.SpriteUpdate(thanks, spriteCommon_);
+	thanks.LoadTexture(spriteCommon_, 5, L"Resources/ty.png", dxCommon_->GetDevice());
+	thanksAlpha = 0.0f;
 
 	//UI初期化
 	UIs = new GameSceneUI();
 	UIs->Initialize(dxCommon_->GetDevice());
 
 	//パーティクル初期化
-	particle = Particle::LoadParticleTexture("blue.png");
+	particle = Particle::LoadParticleTexture("exp.png");
 	pm = ParticleManager::Create();
+	clearParticle_01 = Particle::LoadParticleTexture("blue.png");
+	clearPM_01 = ParticleManager::Create();
+	clearParticle_02 = Particle::LoadParticleTexture("gp.png");
+	clearPM_02 = ParticleManager::Create();
+	clearParticle_03 = Particle::LoadParticleTexture("red.png");
+	clearPM_03 = ParticleManager::Create();
+
+
+
 	//オブジェクトにモデルを紐付ける
 	pm->SetParticleModel(particle);
+	clearPM_01->SetParticleModel(clearParticle_01);
+	clearPM_02->SetParticleModel(clearParticle_02);
+	clearPM_03->SetParticleModel(clearParticle_03);
 	//カメラをセット
 	pm->SetXMViewProjection(xmViewProjection);
+	clearPM_01->SetXMViewProjection(xmViewProjection);
+	clearPM_02->SetXMViewProjection(xmViewProjection);
+	clearPM_03->SetXMViewProjection(xmViewProjection);
 
 	//boss
 	boss = new Boss;
@@ -138,6 +162,11 @@ void GameScene::Initialize() {
 	cameraTmpPos = { 0,0,0 };
 	cameraTmpRot = { 0,0,0 };
 	isStart = false;
+	clearTimer = 0;
+	isShowUI = true;
+	particleTimer = 0;
+	isNext = false;
+	isSceneEnd = false;
 }
 
 ///-----更新処理-----///
@@ -259,10 +288,12 @@ void GameScene::Update() {
 			if (isPlayable == true) {
 				isPlayable = false;
 				railCamera->GetView()->SetEye(Vector3(-40, 55, -150));
+				isShowUI = false;
 			}
 			//SPACEで演出スキップ
 			if (input->TriggerKey(DIK_SPACE)) {
 				boss->SkipMovie();
+				fadeAlpha = 0.0f;
 			}
 			//演出
 			railCamera->GetView()->SetTarget(boss->GetPosition());
@@ -280,10 +311,10 @@ void GameScene::Update() {
 				railCamera->GetView()->SetTarget(Vector3(0, 52, -200));
 				railCamera->GetCamera()->SetPosition(Vector3(0, 59, -100));
 				railCamera->GetCamera()->SetRotation(Vector3(0, 180, 0));
-				player->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 				fadeAlpha = 1.0f;
 				fade.SetAlpha(fade, fadeAlpha);
 				isPlayable = true;
+				isShowUI = true;
 			}
 			//BossHP
 			float bossHp_ = boss->GetHP() - (bossHP.GetScale().x / 4);
@@ -318,9 +349,6 @@ void GameScene::Update() {
 			if (isPlayable == true) {
 				SerchEnemy();
 				player->Update(shotVec, infos);
-				if (gameState == BOSS && railCamera->GetOnRail() == true) {
-					player->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
-				}
 				LockedClear();
 			}
 
@@ -364,13 +392,25 @@ void GameScene::Update() {
 		}
 		//fadein
 		if (fadeAlpha > 0.0f) {
-			fadeAlpha -= 0.005f;
+			fadeAlpha -= 0.1f;
 			fade.SetAlpha(fade, fadeAlpha);
 		}
 		//gameclear
 		if (boss->GetIsDead() == true) {
 			LockedClear();
-			GameSceneManager::GetInstance()->ChangeScene("CLEAR");
+			player->SetIsHit(false);
+			//playerを操作不可に
+			if (isPlayable == true) {
+				isPlayable = false;
+				Vector3 cameraPos = { 0, 65, -120 };
+				railCamera->GetView()->SetEye(cameraPos);
+				railCamera->GetView()->SetTarget(boss->GetPosition());
+				isShowUI = false;
+			}
+			delete player;
+			player = new Player;
+			player->PlayerInitialize();
+			gameState = CLEAR;
 		}
 		//更新
 		boss->Update(player->GetWorldPos());
@@ -415,12 +455,22 @@ void GameScene::Update() {
 			if (UIs->GetIsGameOver() == true) {
 				fadeAlpha += 0.05f;
 				fade.SetAlpha(fade, fadeAlpha);
-				fade.SpriteUpdate(fade,spriteCommon_);
+				fade.SpriteUpdate(fade, spriteCommon_);
 				if (fadeAlpha >= 1.0f) {
 					GameSceneManager::GetInstance()->ChangeScene("OVER");
 				}
 			}
 		}
+		break;
+
+		//クリアシーンに遷移
+	case GameScene::CLEAR:
+
+		boss->SlainUpdate();
+
+		ClearUpdate();
+
+		railCamera->ViewUpdate();
 		break;
 	}
 	//////////////操作可能なら更新///////////////////
@@ -449,12 +499,6 @@ void GameScene::Update() {
 		gameState = CONTINUE;
 	}
 
-	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
-		Vector3 pap = player->GetPosition();
-		pm->Fire(particle, {-20,0,0},1, 0.5f, 0, 15, { 5,0 });
-	}
-	pm->Update();
-
 	//当たり判定チェック
 	collisionManager->CheckAllCollisions();
 }
@@ -482,6 +526,11 @@ void GameScene::Draw() {
 	if (gameState == BOSS) {
 		boss->BossDraw(railCamera->GetView());
 	}
+	if (gameState == CLEAR) {
+		if (boss->GetISlained() == false) {
+			boss->BossDraw(railCamera->GetView());
+		}
+	}
 	//プレイヤー
 	player->PlayerDraw(railCamera->GetView());
 
@@ -494,19 +543,6 @@ void GameScene::Draw() {
 
 #pragma endregion
 
-#pragma region パーティクル描画
-
-	// パーティクル描画前処理
-	ParticleManager::PreDraw(dxCommon_->GetCommandList());
-
-	///==== パーティクル描画 ====///
-	//パーティクル
-	pm->Draw();
-
-	// パーティクル描画後処理
-	ParticleManager::PostDraw();
-
-#pragma endregion
 
 #pragma region スプライト描画
 
@@ -524,9 +560,15 @@ void GameScene::Draw() {
 	}
 	Sprite::PostDraw();
 
-	UIs->Draw(dxCommon_->GetDevice(), dxCommon_->GetCommandList()); 
+
+	if (isShowUI == true) {
+		UIs->Draw(dxCommon_->GetDevice(), dxCommon_->GetCommandList());
+	}
 	if (gameState == CONTINUE && player->GetDeathTimer() >= 100) {
 		UIs->DrawContinue(dxCommon_->GetDevice(), dxCommon_->GetCommandList());
+	}
+	if (isNext == true) {
+		UIs->DrawClear(dxCommon_->GetDevice(), dxCommon_->GetCommandList());
 	}
 
 	Sprite::PreDraw(dxCommon_->GetCommandList(), spriteCommon_);
@@ -543,8 +585,31 @@ void GameScene::Draw() {
 	if (gameState == CONTINUE) {
 		fade.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 	}
+	if (gameState == CLEAR) {
+		fade.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+		thanks.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+	}
 	// スプライト描画後処理
 	Sprite::PostDraw();
+
+#pragma region パーティクル描画
+
+	// パーティクル描画前処理
+	ParticleManager::PreDraw(dxCommon_->GetCommandList());
+
+	///==== パーティクル描画 ====///
+	//パーティクル
+	if (isSceneEnd == false) {
+		pm->Draw();
+		clearPM_01->Draw();
+		clearPM_02->Draw();
+		clearPM_03->Draw();
+	}
+
+	// パーティクル描画後処理
+	ParticleManager::PostDraw();
+
+#pragma endregion
 
 	dxCommon_->PostDraw();
 }
@@ -634,6 +699,7 @@ void GameScene::Reset() {
 	popEnergyCount = 0;
 	//UI
 	UIs->ResetUIPos();
+	isShowUI = true;
 }
 
 void GameScene::Finalize()
@@ -679,43 +745,43 @@ void GameScene::LoadEnemy() {
 		string word;
 		getline(line_stream, word, ' ');
 
-			// 先頭文字列がｖなら頂点座標
-			if (key == "ea") {
-				//敵の生成
-				std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
-				//敵の初期化
-				newEnemy->EnemyInitialize();
-				////コライダーの追加
-				newEnemy->SetCollider(new SphereCollider());
-				// X,Y,Z座標読み込み
-				Vector3 position{};
-				float t;
+		// 先頭文字列がｖなら頂点座標
+		if (key == "ea") {
+			//敵の生成
+			std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
+			//敵の初期化
+			newEnemy->EnemyInitialize();
+			////コライダーの追加
+			newEnemy->SetCollider(new SphereCollider());
+			// X,Y,Z座標読み込み
+			Vector3 position{};
+			float t;
 
-				if (word.find("L") == 0)
-				{
-					line_stream >> t;
-					newEnemy->SetStagePoint(t);
-					position = spline.EnemyPosition(pointsL, t);
-				}
-				else if (word.find("M") == 0)
-				{
-					line_stream >> t;
-					newEnemy->SetStagePoint(t);
-					position = spline.EnemyPosition(points, t);
-				}
-				else if (word.find("R") == 0)
-				{
-					line_stream >> t;
-					newEnemy->SetStagePoint(t);
-					position = spline.EnemyPosition(pointsR, t);
-				}
-
-				// 座標データに追加
-				newEnemy->SetPosition(position);
-				newEnemy->SetScale({ 0.6f,0.6f,0.6f });
-				//登録
-				enemys_.push_back(std::move(newEnemy));
+			if (word.find("L") == 0)
+			{
+				line_stream >> t;
+				newEnemy->SetStagePoint(t);
+				position = spline.EnemyPosition(pointsL, t);
 			}
+			else if (word.find("M") == 0)
+			{
+				line_stream >> t;
+				newEnemy->SetStagePoint(t);
+				position = spline.EnemyPosition(points, t);
+			}
+			else if (word.find("R") == 0)
+			{
+				line_stream >> t;
+				newEnemy->SetStagePoint(t);
+				position = spline.EnemyPosition(pointsR, t);
+			}
+
+			// 座標データに追加
+			newEnemy->SetPosition(position);
+			newEnemy->SetScale({ 0.6f,0.6f,0.6f });
+			//登録
+			enemys_.push_back(std::move(newEnemy));
+		}
 	}
 	// ファイルと閉じる
 	file.close();
@@ -859,17 +925,17 @@ void GameScene::UIAlpha()
 {
 	Vector3 hpPos = UIs->GetHPFramePos();
 	Vector3 pPos = GetWorldToScreenPos(player->GetWorldPos(), railCamera);
-		if ((pPos.x > hpPos.x - 284.0f && pPos.x < hpPos.x + 284.0f)) {
-			if ((pPos.y > hpPos.y - 70.5f && pPos.y < hpPos.y + 70.5f)) {
-				UIs->SetHPAlpha(true);
+	if ((pPos.x > hpPos.x - 284.0f && pPos.x < hpPos.x + 284.0f)) {
+		if ((pPos.y > hpPos.y - 70.5f && pPos.y < hpPos.y + 70.5f)) {
+			UIs->SetHPAlpha(true);
 		}
-			else {
-				UIs->SetHPAlpha(false);
-			}
-	}
 		else {
 			UIs->SetHPAlpha(false);
 		}
+	}
+	else {
+		UIs->SetHPAlpha(false);
+	}
 }
 
 Vector3 GameScene::GetScreenToWorldPos(Sprite& sprite_, RailCamera* rail)
@@ -960,4 +1026,103 @@ Vector2 GameScene::GetWorldToScreenScale(Object3d* obj_, RailCamera* rail)
 
 
 	return Vector2(x / len, y / len);
+}
+
+void GameScene::ClearUpdate()
+{
+	Vector3 parPos = { 0,0,0 };
+
+	if (boss->GetISlained() == true && isSceneEnd == false) {
+		if (clearTimer < 5) {
+			pm->Fire(particle, { parPos.x,parPos.y,parPos.z }, -1, 2.0f, 0, 15, { 18,0 });
+		}
+		else if (clearTimer == 75) {
+			Vector3 cameraPos = { -30, 65, -120 };
+			railCamera->GetView()->SetEye(cameraPos);
+		}
+		else if (clearTimer > 75 && clearTimer < 80) {
+			pm->Fire(particle, { parPos.x,parPos.y,parPos.z }, -1, 2.0f, 0, 15, { 18,0 });
+		}
+		else if (clearTimer == 140) {
+			Vector3 cameraPos = { 30, 65, -120 };
+			railCamera->GetView()->SetEye(cameraPos);
+		}
+		else if (clearTimer > 140 && clearTimer < 145) {
+			pm->Fire(particle, { parPos.x,parPos.y,parPos.z }, -1, 2.0f, 0, 15, { 18,0 });
+		}
+		else if (clearTimer == 195) {
+			Vector3 cameraPos = { 0, 75, -120 };
+			railCamera->GetView()->SetEye(cameraPos);
+			Vector3 position = { 3.8f, 49.0f, -128.0f };
+			player->SetPosition(position);
+			player->GetWorldTransform().UpdateMatrix();
+		}
+		else if (clearTimer > 195 && clearTimer < 295) {
+			Vector3 move = { 0, -0.25f, 0 };
+			railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() + move);
+		}
+		else if (clearTimer > 295) {
+			if (particleTimer < 69) {
+				if (particleTimer < 3) {
+					Vector3 cParPos = { 40,30,0 };
+					clearPM_01->Fire(clearParticle_01, { cParPos.x,cParPos.y,cParPos.z }, -1, 0.8f, 0, 15, { 5,0 });
+				}
+				else if (particleTimer < 6) {
+					Vector3 cParPos = { 0,30,0 };
+					clearPM_02->Fire(clearParticle_02, { cParPos.x,cParPos.y,cParPos.z }, -1, 0.8f, 0, 15, { 5,0 });
+				}
+				else if (particleTimer < 9) {
+					Vector3 cParPos = { -40,30,0 };
+					clearPM_03->Fire(clearParticle_03, { cParPos.x,cParPos.y,cParPos.z }, -1, 0.8f, 0, 15, { 5,0 });
+				}
+				particleTimer++;
+			}
+			else {
+				particleTimer = 0;
+			}
+			if (clearTimer > 345) {
+				isNext = true;
+			}
+		}
+
+
+
+		pm->Update();
+		clearPM_01->Update();
+		clearPM_02->Update();
+		clearPM_03->Update();
+		clearTimer++;
+
+
+		if (isNext == true) {
+			UIs->CursorUpdate(false);
+			if (Input::GetInstance()->TriggerMouseLeft()) {
+				isNext = false;
+				isSceneEnd = true;
+				clearTimer = 0;
+				fadeAlpha = 0.0f;
+			}
+		}
+	}
+
+	if (isSceneEnd == true) {
+		if (fadeAlpha < 1.0f) {
+			fadeAlpha += 0.025f;
+			fade.SetAlpha(fade, fadeAlpha);
+		}
+		else {
+			if (clearTimer < 40) {
+				thanksAlpha += 0.025f;
+				thanks.SetAlpha(thanks, thanksAlpha);
+			}
+			else if (clearTimer > 90) {
+				thanksAlpha -= 0.025f;
+				thanks.SetAlpha(thanks, thanksAlpha);
+			}
+			else{
+				GameSceneManager::GetInstance()->ChangeScene("TITLE");
+			}
+			clearTimer++;
+		}
+	}
 }

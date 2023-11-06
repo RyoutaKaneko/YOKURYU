@@ -112,6 +112,17 @@ public:
 	/// </summary>
 	void SkipMovie();
 
+	/// <summary>
+	/// “|‚³‚ê‚½‰‰o
+	/// </summary>
+	void SlainUpdate();
+
+	/// <summary>
+	/// “|‚³‚ê‚½ƒtƒ‰ƒOæ“¾
+	/// </summary>
+	/// <returns></returns>
+	bool GetISlained() { return isSlained; }
+
 	
 
 private:
@@ -141,4 +152,6 @@ private:
 	std::list<std::unique_ptr<BossBullet>> bullets_;
 	static const int PARTS_NUM = 5;
 	Object3d* parts[PARTS_NUM];
+	int slainTimer;
+	bool isSlained;
 };

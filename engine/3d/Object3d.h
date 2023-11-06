@@ -183,6 +183,12 @@ public: // メンバ関数
 	void SetRotation(const Vector3& rotation) { this->worldTransform_.GetRotation() = rotation; }
 
 	/// <summary>
+	/// ワールド行列で座標をセット
+	/// </summary>
+	/// <param name="position"></param>
+	void SetWorldPos(const Vector3& position_);
+
+	/// <summary>
 	/// 回転をセット
 	/// </summary>
 	/// <returns></returns>

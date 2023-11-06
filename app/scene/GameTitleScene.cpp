@@ -149,6 +149,7 @@ void GameTitleScene::Initialize()
 void GameTitleScene::Update()
 {
 
+	if(isNext == false){
 	if (titleAlpha < 1.0f) {
 		titleAlpha += 0.025f;
 		title.SetAlpha(title, titleAlpha);
@@ -170,7 +171,7 @@ void GameTitleScene::Update()
 		}
 	}
 
-
+	
 		Vector3 cur = Input::GetInstance()->GetMousePos();
 		cursor[8].SetPosition(cursor[7].GetPosition());
 		cursor[7].SetPosition(cursor[6].GetPosition());
@@ -345,12 +346,6 @@ void GameTitleScene::Draw()
 		clickOutline.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		black.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		title.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
-		if (isShowTitle == true) {
-			circle.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
-			for (int i = 0; i < 9; i++) {
-				cursor[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
-			}
-		}
    }
 	else {
 		click[1].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
@@ -359,6 +354,15 @@ void GameTitleScene::Draw()
 		loading.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 	}
 	title.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+
+	if (isNext == false) {
+		if (isShowTitle == true) {
+			circle.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+			for (int i = 0; i < 9; i++) {
+				cursor[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+			}
+		}
+	}
 
 	Sprite::PostDraw();
 

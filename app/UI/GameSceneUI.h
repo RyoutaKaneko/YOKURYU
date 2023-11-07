@@ -100,7 +100,15 @@ public:
 	/// <returns></returns>
 	bool GetIsGameOver() { return isGameOver; }
 
+	/// <summary>
+	/// クリアUI更新
+	/// </summary>
+	void ClearUpdate();
+
 private:
+	//定数
+	static const int CURSOR_MAX = 9;
+
 	//スプライトのポインタ
 	Sprite* sprite = new Sprite;
 	SpriteCommon spriteCommon_;
@@ -118,11 +126,12 @@ private:
 	Sprite continueYes;
 	Sprite continueNo;
 	Sprite continueText;
-	Sprite cursorGH[9];
+	Sprite cursorGH[CURSOR_MAX];
 	Sprite circle;
 	Sprite contSelect;
 	Sprite congrat;
 	Sprite clearNext;
+	Sprite congratBack;
 	bool isPlayable;
 	float frameAlpha;
 	float barAlpha;
@@ -135,5 +144,6 @@ private:
 	Vector3 cursorPosBak;
 	bool isGameSceneReset;
 	bool isGameOver;
+	float congratAlpha;
 };
 

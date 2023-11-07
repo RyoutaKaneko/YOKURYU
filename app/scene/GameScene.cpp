@@ -55,6 +55,7 @@ void GameScene::Initialize() {
 	railCamera = new RailCamera;
 	railCamera->Initialize(player);
 
+	//パーティクル用
 	xmViewProjection = new XMViewProjection;
 
 	// スプライトの初期化
@@ -433,6 +434,7 @@ void GameScene::Update() {
 		}
 		break;
 
+		//コンティニュー
 	case GameScene::CONTINUE:
 		player->Dead();
 		UIs->DeadUIPos();
@@ -1034,21 +1036,21 @@ void GameScene::ClearUpdate()
 
 	if (boss->GetISlained() == true && isSceneEnd == false) {
 		if (clearTimer < 5) {
-			pm->Fire(particle, { parPos.x,parPos.y,parPos.z }, -1, 2.0f, 0, 15, { 18,0 });
+			pm->Fire(particle, { parPos.x,parPos.y,parPos.z }, -1, 2.0f, 0, 20, { 18,0 });
 		}
 		else if (clearTimer == 75) {
 			Vector3 cameraPos = { -30, 65, -120 };
 			railCamera->GetView()->SetEye(cameraPos);
 		}
 		else if (clearTimer > 75 && clearTimer < 80) {
-			pm->Fire(particle, { parPos.x,parPos.y,parPos.z }, -1, 2.0f, 0, 15, { 18,0 });
+			pm->Fire(particle, { parPos.x,parPos.y,parPos.z }, -1, 2.0f, 0, 20, { 18,0 });
 		}
 		else if (clearTimer == 140) {
 			Vector3 cameraPos = { 30, 65, -120 };
 			railCamera->GetView()->SetEye(cameraPos);
 		}
 		else if (clearTimer > 140 && clearTimer < 145) {
-			pm->Fire(particle, { parPos.x,parPos.y,parPos.z }, -1, 2.0f, 0, 15, { 18,0 });
+			pm->Fire(particle, { parPos.x,parPos.y,parPos.z }, -1, 2.0f, 0, 20, { 18,0 });
 		}
 		else if (clearTimer == 195) {
 			Vector3 cameraPos = { 0, 75, -120 };
@@ -1065,15 +1067,15 @@ void GameScene::ClearUpdate()
 			if (particleTimer < 69) {
 				if (particleTimer < 3) {
 					Vector3 cParPos = { 40,30,0 };
-					clearPM_01->Fire(clearParticle_01, { cParPos.x,cParPos.y,cParPos.z }, -1, 0.8f, 0, 15, { 5,0 });
+					clearPM_01->Fire(clearParticle_01, { cParPos.x,cParPos.y,cParPos.z }, -1, 0.5f, 0, 30, { 3,0 });
 				}
 				else if (particleTimer < 6) {
 					Vector3 cParPos = { 0,30,0 };
-					clearPM_02->Fire(clearParticle_02, { cParPos.x,cParPos.y,cParPos.z }, -1, 0.8f, 0, 15, { 5,0 });
+					clearPM_02->Fire(clearParticle_02, { cParPos.x,cParPos.y,cParPos.z }, -1, 0.5f, 0, 30, { 3,0 });
 				}
 				else if (particleTimer < 9) {
 					Vector3 cParPos = { -40,30,0 };
-					clearPM_03->Fire(clearParticle_03, { cParPos.x,cParPos.y,cParPos.z }, -1, 0.8f, 0, 15, { 5,0 });
+					clearPM_03->Fire(clearParticle_03, { cParPos.x,cParPos.y,cParPos.z }, -1, 0.5f, 0, 30, { 3,0 });
 				}
 				particleTimer++;
 			}
@@ -1085,8 +1087,6 @@ void GameScene::ClearUpdate()
 			}
 		}
 
-
-
 		pm->Update();
 		clearPM_01->Update();
 		clearPM_02->Update();
@@ -1096,8 +1096,8 @@ void GameScene::ClearUpdate()
 
 		if (isNext == true) {
 			UIs->CursorUpdate(false);
+			UIs->ClearUpdate();
 			if (Input::GetInstance()->TriggerMouseLeft()) {
-				isNext = false;
 				isSceneEnd = true;
 				clearTimer = 0;
 				fadeAlpha = 0.0f;

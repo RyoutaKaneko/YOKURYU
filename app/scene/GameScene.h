@@ -127,11 +127,16 @@ private:
 	WinApp* winApp = nullptr;
 	//入力のポインタ
 	Input* input = nullptr;
+
+	//定数
+	static const int CROSSHAIR_MAX = 4;
+	static const int LOCK_MAX = 10;
+
 	//スプライトのポインタ
 	Sprite* sprite = new Sprite;
 	SpriteCommon spriteCommon_;
-	Sprite crosshair[4];
-	Sprite lock[10];
+	Sprite crosshair[CROSSHAIR_MAX];
+	Sprite lock[LOCK_MAX];
 	Sprite fade;
 	float fadeAlpha;
 	Sprite bossHP;

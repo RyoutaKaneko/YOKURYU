@@ -34,7 +34,7 @@ void GameTitleScene::Initialize()
 	title.SpriteUpdate(title, spriteCommon_);
 	title.LoadTexture(spriteCommon_, 0, L"Resources/title.png", dxCommon_->GetDevice());
 	//title背景
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < TITLE_BACK_MAX; i++) {
 		titleBack[i].SpriteCreate(dxCommon_->GetDevice(), i + 1, Vector2(0.0f, 0.0f), false, false);
 		titleBack[i].SetScale(Vector2(1280 * 1.1, 720 * 1.7));
 		titleBack[i].SetPosition({ -418,-192,0 });
@@ -45,7 +45,7 @@ void GameTitleScene::Initialize()
 	titleBack[1].LoadTexture(spriteCommon_, 2, L"Resources/titleBack2.png", dxCommon_->GetDevice());
 	titleBack[2].LoadTexture(spriteCommon_, 3, L"Resources/titleBack3.png", dxCommon_->GetDevice());
 	//カーソル
-	for (int i = 0; i < 9; i++) {
+	for (int i = 0; i < CURSOR_MAX; i++) {
 		cursor[i].SpriteCreate(dxCommon_->GetDevice(), 4, Vector2(0.5f, 0.5f), false, false);
 		cursor[i].SetScale(Vector2(48 * 1, 48 * 1));
 		cursor[i].SetPosition(Input::GetInstance()->GetMousePos());
@@ -55,7 +55,7 @@ void GameTitleScene::Initialize()
 		cursor[i].LoadTexture(spriteCommon_, 4, L"Resources/cursor.png", dxCommon_->GetDevice());
 	}
 	//クリック
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < CLICK_MAX; i++) {
 		click[i].SpriteCreate(dxCommon_->GetDevice(), 5+i, Vector2(0.5f, 0.5f), false, false);
 		click[i].SetScale(Vector2(312.0f * 1.2f, 52.0f * 1.2f));
 		click[i].SetPosition({ 640,640,0 });
@@ -200,7 +200,7 @@ void GameTitleScene::Update()
 		circle.SetAlpha(circle, circleAlpha);
 		circle.SpriteTransferVertexBuffer(circle, 7);
 		circle.SpriteUpdate(circle, spriteCommon_);
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < CURSOR_MAX; i++) {
 			cursor[i].SpriteUpdate(cursor[i], spriteCommon_);
 		}
 		if (outlineSize < 1.04f) {
@@ -235,7 +235,7 @@ void GameTitleScene::Update()
 			}
 		}
 		//クリック
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < CLICK_MAX; i++) {
 			click[i].SpriteUpdate(click[i], spriteCommon_);
 		}
 
@@ -244,10 +244,12 @@ void GameTitleScene::Update()
 			object->Update();
 		}
 		if (gameTimer < 50) {
-			player->SetPosition(player->GetPosition() + Vector3(0, 0.005f, 0));
+			Vector3 move = { 0, 0.005f, 0 };
+			player->SetPosition(player->GetPosition() + move);
 		}
 		else if (gameTimer < 100) {
-			player->SetPosition(player->GetPosition() + Vector3(0, -0.005f, 0));
+			Vector3 move = { 0, -0.005f, 0 };
+			player->SetPosition(player->GetPosition() + move);
 		}
 		gameTimer++;
 		if (gameTimer > 100) {
@@ -261,7 +263,7 @@ void GameTitleScene::Update()
 			title.SetAlpha(title, titleAlpha);
 			title.SpriteTransferVertexBuffer(title, 0);
 			title.SpriteUpdate(title, spriteCommon_);
-			for (int i = 0; i < 3; i++) {
+			for (int i = 0; i < TITLE_BACK_MAX; i++) {
 				titleBack[i].SetAlpha(titleBack[i], titleAlpha);
 				titleBack[i].SpriteTransferVertexBuffer(titleBack[i], i + 1);
 				titleBack[i].SpriteUpdate(titleBack[i], spriteCommon_);
@@ -312,7 +314,7 @@ void GameTitleScene::Update()
 		}
 	}
 	title.SpriteUpdate(title, spriteCommon_);
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < TITLE_BACK_MAX; i++) {
 		titleBack[i].SpriteUpdate(titleBack[i], spriteCommon_);
 	}
 	//更新
@@ -337,12 +339,7 @@ void GameTitleScene::Draw()
 	Sprite::PreDraw(dxCommon_->GetCommandList(), spriteCommon_);
 	titleBack[isBackNum].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 	if (isNext == false) {
-		if (onCursor == false) {
-			click[0].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
-		}
-		else {
-			click[1].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
-		}
+		click[onCursor].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		clickOutline.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		black.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		title.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
@@ -358,7 +355,7 @@ void GameTitleScene::Draw()
 	if (isNext == false) {
 		if (isShowTitle == true) {
 			circle.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
-			for (int i = 0; i < 9; i++) {
+			for (int i = 0; i < CURSOR_MAX; i++) {
 				cursor[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 			}
 		}

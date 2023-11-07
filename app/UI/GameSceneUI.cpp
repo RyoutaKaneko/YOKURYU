@@ -108,7 +108,7 @@ void GameSceneUI::Initialize(ID3D12Device* device)
 	continueText.SpriteTransferVertexBuffer(continueText, 19);
 	continueText.LoadTexture(spriteCommon_, 19, L"Resources/continue.png", device);
 	//カーソル
-	for (int i = 0; i < 9; i++) {
+	for (int i = 0; i < CURSOR_MAX; i++) {
 		cursorGH[i].SpriteCreate(device, 20, Vector2(0.5f, 0.5f), false, false);
 		cursorGH[i].SetScale(Vector2(48 * 1, 48 * 1));
 		cursorGH[i].SetPosition(Input::GetInstance()->GetMousePos());
@@ -135,7 +135,8 @@ void GameSceneUI::Initialize(ID3D12Device* device)
 	congrat.LoadTexture(spriteCommon_, 23, L"Resources/congrat.png", device);
 	congrat.SpriteCreate(device, 23, Vector2(0.5f, 0.5f), false, false);
 	congrat.SetScale(Vector2(1055, 96));
-	congrat.SetPosition({ 640, 310, 0 });
+	congrat.SetPosition({ 640, 305, 0 });
+	congrat.SetAlpha(congrat, congratAlpha);
 	congrat.SpriteTransferVertexBuffer(congrat, 23);
 	congrat.SpriteUpdate(congrat, spriteCommon_);
 	//クリア
@@ -143,8 +144,18 @@ void GameSceneUI::Initialize(ID3D12Device* device)
 	clearNext.SpriteCreate(device, 24, Vector2(0.5f, 0.5f), false, false);
 	clearNext.SetScale(Vector2(312.0f * 1.2f, 52.0f * 1.2f));
 	clearNext.SetPosition({ 640,640,0 });
+	clearNext.SetAlpha(clearNext, congratAlpha);
 	clearNext.SpriteTransferVertexBuffer(clearNext, 24);
 	clearNext.SpriteUpdate(clearNext, spriteCommon_);
+	//congratBack
+	congratBack.SpriteCreate(device, 25, Vector2(0.5f, 0.5f), false, false);
+	congratBack.SetScale(Vector2(1280, 96));
+	congratBack.SetPosition({ 640, 305, 0 });
+	congratBack.SetAlpha(congratBack, congratAlpha);
+	congratBack.SpriteTransferVertexBuffer(congratBack, 25);
+	congratBack.SpriteUpdate(congratBack, spriteCommon_);
+	congratBack.LoadTexture(spriteCommon_, 25, L"Resources/congrat_bak.png", device);
+	congratAlpha = 0.0f;
 
 
 	isPlayable = false;
@@ -528,7 +539,7 @@ void GameSceneUI::DrawContinue(ID3D12Device* device, ID3D12GraphicsCommandList* 
 		continueYes.SpriteDraw(cmdList, spriteCommon_, device);
 		continueNo.SpriteDraw(cmdList, spriteCommon_, device);
 		circle.SpriteDraw(cmdList, spriteCommon_, device);
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < CURSOR_MAX; i++) {
 			cursorGH[i].SpriteDraw(cmdList, spriteCommon_, device);
 		}
 	}
@@ -542,9 +553,10 @@ void GameSceneUI::DrawClear(ID3D12Device* device, ID3D12GraphicsCommandList* cmd
 	// スプライト描画前処理
 	Sprite::PreDraw(cmdList, spriteCommon_);
 
+	congratBack.SpriteDraw(cmdList, spriteCommon_, device);
 	congrat.SpriteDraw(cmdList, spriteCommon_, device);
 	clearNext.SpriteDraw(cmdList, spriteCommon_, device);
-	for (int i = 0; i < 9; i++) {
+	for (int i = 0; i < CURSOR_MAX; i++) {
 		cursorGH[i].SpriteDraw(cmdList, spriteCommon_, device);
 	}
 
@@ -593,9 +605,19 @@ void GameSceneUI::CursorUpdate(bool isCont) {
 	circle.SetAlpha(circle, circleAlpha);
 	circle.SpriteTransferVertexBuffer(circle, 7);
 	circle.SpriteUpdate(circle, spriteCommon_);
-	for (int i = 0; i < 9; i++) {
+	for (int i = 0; i < CURSOR_MAX; i++) {
 		cursorGH[i].SpriteUpdate(cursorGH[i], spriteCommon_);
 	}
 
 	cursorPosBak = cursorPos;
+}
+
+void GameSceneUI::ClearUpdate()
+{
+	if (congratAlpha < 1.0f) {
+		congratAlpha += 0.025f;
+		congrat.SetAlpha(congrat, congratAlpha);
+		congratBack.SetAlpha(congratBack, congratAlpha);
+		clearNext.SetAlpha(clearNext, congratAlpha);
+	}
 }

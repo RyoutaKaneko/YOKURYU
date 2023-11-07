@@ -55,13 +55,18 @@ private: // メンバ変数
 	//カメラ
 	ViewProjection* viewProjection = nullptr;
 
+	//定数
+	static const int TITLE_BACK_MAX = 3;
+	static const int CURSOR_MAX = 9;
+	static const int CLICK_MAX = 2;
+
 	//カーソル
 	Sprite* sprite = new Sprite;
 	SpriteCommon spriteCommon_;
 	Sprite title;
-	Sprite titleBack[3];
-	Sprite cursor[9];
-	Sprite click[2];
+	Sprite titleBack[TITLE_BACK_MAX];
+	Sprite cursor[CURSOR_MAX];
+	Sprite click[CLICK_MAX];
 	Sprite circle;
 	Sprite fade;
 	Sprite loading;

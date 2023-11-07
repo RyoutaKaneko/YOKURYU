@@ -20,6 +20,7 @@ GameTitleScene::~GameTitleScene()
 
 void GameTitleScene::Initialize()
 {
+	//基盤の初期化
 	input_ = Input::GetInstance();
 	dxCommon_ = DirectXCommon::GetInstance();
 	sprite = new Sprite();

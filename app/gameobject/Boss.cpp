@@ -189,12 +189,12 @@ void Boss::OnCollision([[maybe_unused]] const CollisionInfo& info)
 		if (isHit == false && isInvisible == false) {
 			isHit = true;
 			hitTimer = 30;
-			hp-= 300;
+			hp-= 5;
 			for (int i = 0; i < PARTS_NUM; i++) {
 				if (parts[i]->GetIsLocked() == true) {
 					parts[i]->SetIsLocked(false);
 					GameScene::PopEnergy(parts[i]->GetWorldPos());
-					hp -= 300;
+					hp -= 5;
 				}
 			}
 		}

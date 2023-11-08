@@ -108,6 +108,7 @@ public:
 private:
 	//定数
 	static const int CURSOR_MAX = 9;
+	static const int ALPHA_MAX = 1;
 
 	//スプライトのポインタ
 	Sprite* sprite = new Sprite;

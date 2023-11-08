@@ -10,6 +10,10 @@
 #include "SphereCollider.h"
 #include"Input.h"
 
+const float Player::ADD_ALPHA = 0.01f;
+const float Player::MOVE_POWER = 0.03f;
+const float Player::FLOAT_POWER = 0.005f;
+
 //デストラクタ
 Player::~Player() {
 	delete playerModel;
@@ -33,7 +37,7 @@ bool Player::PlayerInitialize() {
 	SetPosition(Vector3(0, 0, 500));
 	SetRotation(Vector3(0, 270, 0));
 
-	hp = 100;
+	hp = HP_MAX;
 	coolTime = 0;
 	len = 6.0f;
 	pTimer = 0;
@@ -64,7 +68,7 @@ void Player::Update(Vector3 velo, std::vector<LockInfo>& info)
 	LockAttack(info);
 	Attack(velo);
 	//ULT
-	if (energy >= 100) {
+	if (energy >= ENERGY_MAX) {
 		if (input->TriggerKey(DIK_Q)) {
 			if (isUltimate == false) {
 				pos_ = GetPosition();
@@ -87,19 +91,19 @@ void Player::Update(Vector3 velo, std::vector<LockInfo>& info)
 
 	if (isHit == true) {
 		hitTime++;
-		if (hitTime == 15) {
+		if (hitTime == HITTIME_MAX) {
 			hitTime = 0;
 			isHit = false;
 		}
 		//6割りでhp表示変化
-		if (hp <= 75 && healthState == FINE) {
+		if (hp <= WEEKNESS_NUM && healthState == FINE) {
 			healthState = WEEKNESS;
 		}
 		//4/1で瀕死
-		else if (hp <= 25 && healthState == WEEKNESS) {
+		else if (hp <= DYING_NUM && healthState == WEEKNESS) {
 			healthState = DYING;
 		}
-		else if (hp <= 0 && healthState == DYING) {
+		else if (hp <= DIE_NUM && healthState == DYING) {
 			healthState = DIE;
 		}
 	}
@@ -110,8 +114,8 @@ void Player::Update(Vector3 velo, std::vector<LockInfo>& info)
 	{
 		collider->Update();
 	}
-	if (alpha < 1.0f) {
-		alpha += 0.01f;
+	if (alpha < ALPHA_MAX) {
+		alpha += ADD_ALPHA;
 	}
 }
 
@@ -122,10 +126,10 @@ void Player::Move()
 	//player移動
 	if (input->PushKey(DIK_W)) {
 		if (input->PushKey(DIK_A) == true && input->PushKey(DIK_D) == false) {
-			move = { -0.03f, 0.03f, 0 };
+			move = { -MOVE_POWER, MOVE_POWER, 0 };
 		}
 		else if (input->PushKey(DIK_A) == false && input->PushKey(DIK_D) == true) {
-			move = { 0.03f, 0.03f, 0 };
+			move = { MOVE_POWER, MOVE_POWER, 0 };
 		}
 		else {
 			move = { 0, 0.04f, 0 };
@@ -133,7 +137,7 @@ void Player::Move()
 	}
 	else if (input->PushKey(DIK_A)) {
 		if (input->PushKey(DIK_S) == true && input->PushKey(DIK_W) == false) {
-			move = { -0.03f, -0.03f, 0 };
+			move = { -MOVE_POWER, -MOVE_POWER, 0 };
 		}
 		else {
 			move = { -0.04f, 0, 0 };
@@ -141,7 +145,7 @@ void Player::Move()
 	}
 	else if (input->PushKey(DIK_D)) {
 		if (input->PushKey(DIK_S) == true && input->PushKey(DIK_W) == false) {
-			move = { 0.03f, -0.03f, 0 };
+			move = { MOVE_POWER, -MOVE_POWER, 0 };
 		}
 		else {
 			move = { 0.04f, 0, 0 };
@@ -153,11 +157,11 @@ void Player::Move()
 
 	Vector3 floating(0, 0, 0);
 	//playerふわふわ
-	if (pTimer < 75) {
-		floating += Vector3(0, 0.005f, 0);
+	if (pTimer < FLOAT_TIME_MID) {
+		floating += Vector3(0, FLOAT_POWER, 0);
 	}
-	else if (pTimer < 150) {
-		floating += Vector3(0, -0.005f, 0);
+	else if (pTimer < FLOAT_TIME_END) {
+		floating += Vector3(0, -FLOAT_POWER, 0);
 	}
 	else {
 		pTimer = 0;
@@ -201,7 +205,7 @@ void Player::Attack(Vector3 velo) {
 
 
 			//クールタイムを設定
-			coolTime = 6;
+			coolTime = COOLTIME_MAX;
 		}
 		else if (coolTime > 0) {
 			coolTime--;
@@ -235,10 +239,10 @@ void Player::LockAttack(std::vector<LockInfo>& info)
 
 void Player::Ultimate()
 {
-	if (ultTime > 50 && ultTime < 175) {
+	if (ultTime > ULT_TIME_MID && ultTime < ULT_TIME_END) {
 		SetPosition(GetPosition() + Vector3(0.0f, 0.05f, 0.0f));
 	}
-	else if (ultTime == 175) {
+	else if (ultTime == ULT_TIME_END) {
 		ultTime = 0;
 		isUltimate = false;
 		energy = 0;
@@ -272,22 +276,22 @@ void Player::OnCollision([[maybe_unused]] const CollisionInfo& info)
 	//相手がenemyの弾
 	if (strcmp(GetToCollName(), str1) == 0) {
 		if (isHit == false) {
-			hp-=10;
+			hp-=ENEMY_DAMAGE;
 			isHit = true;
 		}
 	}
 	//相手がbossの弾
 	if (strcmp(GetToCollName(), str2) == 0) {
 		if (isHit == false) {
-			hp-=25;
+			hp-=BOSS_DAMAGE;
 			isHit = true;
 		}
 	}
 
 	//相手がenergy
 	if (strcmp(GetToCollName(), str3) == 0) {
-		if (energy < 100) {
-			energy += 5;
+		if (energy < ENERGY_MAX) {
+			energy += ADD_ENERGY;
 		}
 	}
 }
@@ -298,30 +302,30 @@ void Player::Dead()
 
 	if (isHit == true) {
 		hitTime++;
-		if (hitTime == 15) {
+		if (hitTime == HITTIME_MAX) {
 			hitTime = 0;
 			isHit = false;
 		}
 		//6割りでhp表示変化
-		if (hp <= 75 && healthState == FINE) {
+		if (hp <= WEEKNESS_NUM && healthState == FINE) {
 			healthState = WEEKNESS;
 		}
 		//4/1で瀕死
-		else if (hp <= 25 && healthState == WEEKNESS) {
+		else if (DYING_NUM <= 25 && healthState == WEEKNESS) {
 			healthState = DYING;
 		}
-		else if (hp <= 0 && healthState == DYING) {
+		else if (hp <= DIE_NUM && healthState == DYING) {
 			healthState = DIE;
 		}
 	}
 
-	if (deathTimer < 25) {}
-	else if (deathTimer < 50) {
+	if (deathTimer < DEATH_TIME_ONE) {}
+	else if (deathTimer < DEATH_TIME_TWO) {
 		addVelo = { 0.0f,0.015f,0.0f };
 		dMove = addVelo;
 		SetPosition(GetPosition() + dMove);
 	}
-	else if (deathTimer < 100) {
+	else if (deathTimer < DEATH_TIME_THREE) {
 		addVelo = { 0.0f,-0.15f,0.0f };
 		dMove = addVelo;
 		SetPosition(GetPosition() + dMove);
@@ -332,6 +336,6 @@ void Player::Dead()
 }
 
 void Player::ResetHP() {
-	hp = 100;
+	hp = HP_MAX;
 	healthState = FINE;
 }

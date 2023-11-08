@@ -159,13 +159,13 @@ void GameSceneUI::Initialize(ID3D12Device* device)
 
 
 	isPlayable = false;
-	frameAlpha = 1.0f;
+	frameAlpha = ALPHA_MAX;
 	barAlpha = 0.4f;
 	isContinue = true;
 	isShowContinue = false;
-	circleSize = 1.0f;
-	clickEffectAlpha = 1.0f;
-	circleAlpha = 1.0f;
+	circleSize = ALPHA_MAX;
+	clickEffectAlpha = ALPHA_MAX;
+	circleAlpha = ALPHA_MAX;
 	isGameSceneReset = false;
 	isGameOver = false;
 }
@@ -327,7 +327,7 @@ void GameSceneUI::SetHPAlpha(bool isCollision)
 		}
 	}
 	else {
-		if (frameAlpha < 1.0f) {
+		if (frameAlpha < ALPHA_MAX) {
 			frameAlpha += 0.025f;
 		}
 		if (barAlpha < 0.4f) {
@@ -590,7 +590,7 @@ void GameSceneUI::CursorUpdate(bool isCont) {
 	circle.SetPosition(cursorPos);
 	if (Input::GetInstance()->TriggerMouseLeft() == true) {
 		circleSize = 1.0f;
-		circleAlpha = 1.0f;
+		circleAlpha = ALPHA_MAX;
 	}
 	else if (circleSize < 6.0f) {
 		circleSize += 0.1f;
@@ -598,7 +598,7 @@ void GameSceneUI::CursorUpdate(bool isCont) {
 	}
 	else {
 		circleSize = 1.0f;
-		circleAlpha = 1.0f;
+		circleAlpha = ALPHA_MAX;
 	}
 	circle.SetScale(Vector2(16 * circleSize, 16 * circleSize));
 	circle.SetRotation(circle.GetRotation() + 0.005f);
@@ -614,7 +614,7 @@ void GameSceneUI::CursorUpdate(bool isCont) {
 
 void GameSceneUI::ClearUpdate()
 {
-	if (congratAlpha < 1.0f) {
+	if (congratAlpha < ALPHA_MAX) {
 		congratAlpha += 0.025f;
 		congrat.SetAlpha(congrat, congratAlpha);
 		congratBack.SetAlpha(congratBack, congratAlpha);

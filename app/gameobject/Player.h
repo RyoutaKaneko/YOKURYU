@@ -181,6 +181,30 @@ public:
 
 
 private:
+	//定数
+	static const int HP_MAX = 100;
+	static const int ENERGY_MAX = 100;
+	static const int ENEMY_DAMAGE = 10;
+	static const int BOSS_DAMAGE = 25;
+	static const int ADD_ENERGY = 5;
+	static const int COOLTIME_MAX = 6;
+	static const int WEEKNESS_NUM = 75;
+	static const int DYING_NUM = 25;
+	static const int DIE_NUM = 0;
+	static const int HITTIME_MAX = 15;
+	static const int ALPHA_MAX = 1;
+	static const int FLOAT_TIME_MID = 75;
+	static const int FLOAT_TIME_END = 150;
+	static const int ULT_TIME_MID = 50;
+	static const int ULT_TIME_END = 175;
+	static const int DEATH_TIME_ONE = 25;
+	static const int DEATH_TIME_TWO = 50;
+	static const int DEATH_TIME_THREE = 100;
+	static const float ADD_ALPHA;
+	static const float MOVE_POWER;
+	static const float FLOAT_POWER;
+
+
 	Input* input = nullptr;
 	// モデル
 	Model* playerModel = nullptr;

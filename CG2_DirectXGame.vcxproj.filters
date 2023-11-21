@@ -450,5 +450,8 @@
     <ClInclude Include="app\UI\GameSceneUI.h">
       <Filter>ヘッダー ファイル\Application\UI</Filter>
     </ClInclude>
+    <ClInclude Include="app\scene\ClearConst.h">
+      <Filter>ヘッダー ファイル\Application\scene</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

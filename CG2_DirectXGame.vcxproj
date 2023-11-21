@@ -253,6 +253,7 @@
     <ClInclude Include="app\gameobject\Energy.h" />
     <ClInclude Include="app\gameobject\Player.h" />
     <ClInclude Include="app\gameobject\PlayerBullet.h" />
+    <ClInclude Include="app\scene\ClearConst.h" />
     <ClInclude Include="app\scene\Game.h" />
     <ClInclude Include="app\scene\GameClearScene.h" />
     <ClInclude Include="app\scene\GameOverScene.h" />

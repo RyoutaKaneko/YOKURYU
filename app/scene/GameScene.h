@@ -131,6 +131,7 @@ private:
 	//定数
 	static const int CROSSHAIR_MAX = 4;
 	static const int LOCK_MAX = 10;
+	static const float ALPHA_MAX;
 
 	//スプライトのポインタ
 	Sprite* sprite = new Sprite;
@@ -211,4 +212,5 @@ private:
 	int particleTimer;
 	bool isNext;
 	bool isSceneEnd;
+	bool isShowEnergy;
 };

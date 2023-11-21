@@ -10,6 +10,7 @@
 #include "SphereCollider.h"
 #include "CollisionManager.h"
 #include "GameSceneManager.h"
+#include "ClearConst.h"
 #include <cassert>
 #include <fstream>
 #include <sstream>
@@ -17,6 +18,7 @@
 
 std::list<std::unique_ptr<Energy>> GameScene::energys_;
 int GameScene::popEnergyCount = 0;
+const float GameScene::ALPHA_MAX = 1.0f;
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
@@ -168,6 +170,7 @@ void GameScene::Initialize() {
 	particleTimer = 0;
 	isNext = false;
 	isSceneEnd = false;
+	isShowEnergy = true;
 }
 
 ///-----更新処理-----///
@@ -175,16 +178,16 @@ void GameScene::Update() {
 	//クロスヘアを更新
 	GetCrosshair();
 	//リセット
-	if (Input::GetInstance()->TriggerKey(DIK_R)) {
-		Reset();
-		gameState = MAIN;
-		gameTime = 150;
-		railCamera->GetView()->SetEye(Vector3(-1, 0.5f, 490.0f));
-		railCamera->GetView()->SetTarget(Vector3(0.0f, 0.5f, 495));
-		player->SetPosition({ 0,0.5f,495 });
-		Vector3 cursor = GetWorldToScreenPos(Vector3(0, 0, 0), railCamera);
-		input->SetMousePos({ cursor.x,cursor.y });
-	}
+	//if (Input::GetInstance()->TriggerKey(DIK_R)) {
+	//	Reset();
+	//	gameState = MAIN;
+	//	gameTime = 150;
+	//	railCamera->GetView()->SetEye(Vector3(-1, 0.5f, 490.0f));
+	//	railCamera->GetView()->SetTarget(Vector3(0.0f, 0.5f, 495));
+	//	player->SetPosition({ 0,0.5f,495 });
+	//	Vector3 cursor = GetWorldToScreenPos(Vector3(0, 0, 0), railCamera);
+	//	input->SetMousePos({ cursor.x,cursor.y });
+	//}
 	if (isStart == false) {
 		fadeAlpha = 0.0f;
 		fade.SetAlpha(fade, fadeAlpha);
@@ -521,8 +524,10 @@ void GameScene::Draw() {
 	for (const std::unique_ptr<Enemy>& enemy_ : enemys_) {
 		enemy_->EnemyDraw(railCamera->GetView());
 	}
-	for (const std::unique_ptr<Energy>& energy : energys_) {
-		energy->Draw(railCamera->GetView());
+	if (isShowEnergy == true) {
+		for (const std::unique_ptr<Energy>& energy : energys_) {
+			energy->Draw(railCamera->GetView());
+		}
 	}
 	//ボス
 	if (gameState == BOSS) {
@@ -994,7 +999,7 @@ Vector3 GameScene::GetWorldToScreenPos(Vector3 pos_, RailCamera* rail)
 	//ビュー行列//
 	Matrix4 view = railCamera->GetView()->GetMatView();
 	//プロジェクション行列//
-	float fovAngleY = 45.0f * (3.141592f / 180.0f);;
+	float fovAngleY = 45.0f * (3.141592f / 180.0f);
 	float aspectRatio = (float)WinApp::window_width / WinApp::window_height;
 	//プロジェクション行列生成
 	Matrix4 projection = projection.ProjectionMat(fovAngleY, aspectRatio, 0.1f, 200.0f);
@@ -1035,45 +1040,46 @@ void GameScene::ClearUpdate()
 	Vector3 parPos = { 0,0,0 };
 
 	if (boss->GetISlained() == true && isSceneEnd == false) {
-		if (clearTimer < 5) {
+		if (clearTimer < CLEARTIME_ONE) {
 			pm->Fire(particle, { parPos.x,parPos.y,parPos.z }, -1, 2.0f, 0, 20, { 18,0 });
 		}
-		else if (clearTimer == 75) {
+		else if (clearTimer == CLEARTIME_TWO) {
 			Vector3 cameraPos = { -30, 65, -120 };
 			railCamera->GetView()->SetEye(cameraPos);
 		}
-		else if (clearTimer > 75 && clearTimer < 80) {
+		else if (clearTimer > CLEARTIME_TWO && clearTimer < CLEARTIME_THREE) {
 			pm->Fire(particle, { parPos.x,parPos.y,parPos.z }, -1, 2.0f, 0, 20, { 18,0 });
 		}
-		else if (clearTimer == 140) {
+		else if (clearTimer == CLEARTIME_FOUR) {
 			Vector3 cameraPos = { 30, 65, -120 };
 			railCamera->GetView()->SetEye(cameraPos);
 		}
-		else if (clearTimer > 140 && clearTimer < 145) {
+		else if (clearTimer > CLEARTIME_FOUR && clearTimer < CLEARTIME_FIVE) {
 			pm->Fire(particle, { parPos.x,parPos.y,parPos.z }, -1, 2.0f, 0, 20, { 18,0 });
 		}
-		else if (clearTimer == 195) {
+		else if (clearTimer == CLEARTIME_SIX) {
 			Vector3 cameraPos = { 0, 75, -120 };
 			railCamera->GetView()->SetEye(cameraPos);
 			Vector3 position = { 3.8f, 49.0f, -128.0f };
 			player->SetPosition(position);
 			player->GetWorldTransform().UpdateMatrix();
+			isShowEnergy = false;
 		}
-		else if (clearTimer > 195 && clearTimer < 295) {
+		else if (clearTimer > CLEARTIME_SIX && clearTimer < CLEARTIME_SEVEN) {
 			Vector3 move = { 0, -0.25f, 0 };
 			railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() + move);
 		}
-		else if (clearTimer > 295) {
-			if (particleTimer < 69) {
-				if (particleTimer < 3) {
+		else if (clearTimer > CLEARTIME_SEVEN) {
+			if (particleTimer < PARTICLENUM) {
+				if (particleTimer < PARTICLENUM_ONE) {
 					Vector3 cParPos = { 40,30,0 };
 					clearPM_01->Fire(clearParticle_01, { cParPos.x,cParPos.y,cParPos.z }, -1, 0.5f, 0, 30, { 3,0 });
 				}
-				else if (particleTimer < 6) {
+				else if (particleTimer < PARTICLENUM_TWO) {
 					Vector3 cParPos = { 0,30,0 };
 					clearPM_02->Fire(clearParticle_02, { cParPos.x,cParPos.y,cParPos.z }, -1, 0.5f, 0, 30, { 3,0 });
 				}
-				else if (particleTimer < 9) {
+				else if (particleTimer < PARTICLENUM_THREE) {
 					Vector3 cParPos = { -40,30,0 };
 					clearPM_03->Fire(clearParticle_03, { cParPos.x,cParPos.y,cParPos.z }, -1, 0.5f, 0, 30, { 3,0 });
 				}
@@ -1082,7 +1088,7 @@ void GameScene::ClearUpdate()
 			else {
 				particleTimer = 0;
 			}
-			if (clearTimer > 345) {
+			if (clearTimer > CLEARTIME_EIGHT) {
 				isNext = true;
 			}
 		}
@@ -1106,16 +1112,16 @@ void GameScene::ClearUpdate()
 	}
 
 	if (isSceneEnd == true) {
-		if (fadeAlpha < 1.0f) {
+		if (fadeAlpha < ALPHA_MAX) {
 			fadeAlpha += 0.025f;
 			fade.SetAlpha(fade, fadeAlpha);
 		}
 		else {
-			if (clearTimer < 40) {
+			if (clearTimer < FADENUM_ONE) {
 				thanksAlpha += 0.025f;
 				thanks.SetAlpha(thanks, thanksAlpha);
 			}
-			else if (clearTimer > 90) {
+			else if (clearTimer > FADENUM_TWO) {
 				thanksAlpha -= 0.025f;
 				thanks.SetAlpha(thanks, thanksAlpha);
 			}

@@ -68,7 +68,7 @@ void Player::Update(Vector3 velo, std::vector<LockInfo>& info)
 	LockAttack(info);
 	Attack(velo);
 	//ULT
-	if (energy >= ENERGY_MAX) {
+	/*if (energy >= ENERGY_MAX) {
 		if (input->TriggerKey(DIK_Q)) {
 			if (isUltimate == false) {
 				pos_ = GetPosition();
@@ -76,7 +76,7 @@ void Player::Update(Vector3 velo, std::vector<LockInfo>& info)
 				isUltimate = true;
 			}
 		}
-	}
+	}*/
 	//player’e
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		if (bullet->GetIsHoming() == true) {

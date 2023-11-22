@@ -59,6 +59,7 @@ private: // メンバ変数
 	static const int TITLE_BACK_MAX = 3;
 	static const int CURSOR_MAX = 9;
 	static const int CLICK_MAX = 2;
+	static const float ALPHA_MAX;
 
 	//カーソル
 	Sprite* sprite = new Sprite;
@@ -73,6 +74,7 @@ private: // メンバ変数
 	Sprite clickEffect;
 	Sprite clickOutline;
 	Sprite black;
+	Sprite tips;
 
 	Model* skyModel = nullptr;
 	Model* seaModel = nullptr;

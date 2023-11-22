@@ -69,7 +69,9 @@ void Boss::Update(Vector3 velo)
 	}
 	//基本挙動
 	Move();
-	ChangeState();
+	if (appearTimer == 0) {
+		ChangeState();
+	}
 
 	//弾があるなら更新
 	for (std::unique_ptr<BossBullet>& bullet : bullets_) {
@@ -103,10 +105,6 @@ void Boss::Update(Vector3 velo)
 	//ボスパーツアップデート
 	for (int i = 0; i < PARTS_NUM; i++) {
 		parts[i]->Update();
-	}
-	//カウントリセット
-	if (timeCount == 4) {
-		timeCount = 0;
 	}
 }
 
@@ -146,7 +144,6 @@ void Boss::Move()
 		}
 		else {
 			timer = 0;
-			timeCount++;
 		}
 		timer++;
 	}
@@ -156,12 +153,17 @@ void Boss::ChangeState()
 {
 	//待機状態
 	if (state == WAIT) {
-		if (timeCount == 4) {
+		if (timeCount >= 50) {
 			//乱数により行動を決定
-			int random = rand() % 1 + 1;
+			/*int random = rand() % 1 + 1;*/
 			//抽選された行動
-			state = (State)random;
-		}						 
+			/*state = (State)random;*/
+			state = SHOT;
+			timeCount = 0;
+		}	
+		else {
+			timeCount++;
+		}
 	}
 	//射撃状態
 	else if (state == SHOT) {

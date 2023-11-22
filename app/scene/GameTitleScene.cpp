@@ -7,6 +7,7 @@
 #include "GameTitleScene.h"
 
 using namespace DirectX;
+const float GameTitleScene::ALPHA_MAX = 1.0f;
 
 GameTitleScene::GameTitleScene()
 {
@@ -82,7 +83,7 @@ void GameTitleScene::Initialize()
 	//loading
 	loading.SpriteCreate(dxCommon_->GetDevice(), 9, Vector2(0.0f, 0.0f), false, false);
 	loading.SetScale(Vector2(256 * 1, 48 * 1));
-	loading.SetPosition({ 1000,600,0 });
+	loading.SetPosition({ 1000,640,0 });
 	loading.SpriteTransferVertexBuffer(loading, 9);
 	loading.LoadTexture(spriteCommon_, 9, L"Resources/loading.png", dxCommon_->GetDevice());
 	//clickEffect
@@ -106,6 +107,12 @@ void GameTitleScene::Initialize()
 	black.SpriteTransferVertexBuffer(black, 12);
 	black.LoadTexture(spriteCommon_, 12, L"Resources/black.png", dxCommon_->GetDevice());
 	black.SpriteUpdate(black, spriteCommon_);
+	//tips
+	tips.SpriteCreate(dxCommon_->GetDevice(), 13, Vector2(0.0f, 0.0f), false, false);
+	tips.SetScale(Vector2(800, 48));
+	tips.SetPosition({ 150,620,0 });
+	tips.SpriteTransferVertexBuffer(tips, 13);
+	tips.LoadTexture(spriteCommon_, 13, L"Resources/tips.png", dxCommon_->GetDevice());
 
 
 	//player
@@ -149,15 +156,49 @@ void GameTitleScene::Initialize()
 
 void GameTitleScene::Update()
 {
+	//マウス更新
+	Vector3 cur = Input::GetInstance()->GetMousePos();
+	cursor[8].SetPosition(cursor[7].GetPosition());
+	cursor[7].SetPosition(cursor[6].GetPosition());
+	cursor[6].SetPosition(cursor[5].GetPosition());
+	cursor[5].SetPosition(cursor[4].GetPosition());
+	cursor[4].SetPosition(cursor[3].GetPosition());
+	cursor[3].SetPosition(cursor[2].GetPosition());
+	cursor[2].SetPosition(cursor[1].GetPosition());
+	cursor[1].SetPosition(cursor[0].GetPosition());
+	cursor[0].SetPosition(cur);
+	circle.SetPosition(cur);
+	if (Input::GetInstance()->TriggerMouseLeft() == true) {
+		circleSize = 1.0f;
+		circleAlpha = ALPHA_MAX;
+	}
+	else if (circleSize < 6.0f) {
+		circleSize += 0.1f;
+		circleAlpha -= 0.025f;
+	}
+	else {
+		circleSize = 1.0f;
+		circleAlpha = ALPHA_MAX;
+	}
+	circle.SetScale(Vector2(16 * circleSize, 16 * circleSize));
+	circle.SetRotation(circle.GetRotation() + 0.005f);
+	circle.SetAlpha(circle, circleAlpha);
+	circle.SpriteTransferVertexBuffer(circle, 7);
+	circle.SpriteUpdate(circle, spriteCommon_);
+	for (int i = 0; i < CURSOR_MAX; i++) {
+		cursor[i].SpriteUpdate(cursor[i], spriteCommon_);
+	}
 
+
+	//タイトルふわっと描画
 	if(isNext == false){
-	if (titleAlpha < 1.0f) {
+	if (titleAlpha < ALPHA_MAX) {
 		titleAlpha += 0.025f;
 		title.SetAlpha(title, titleAlpha);
 		title.SpriteTransferVertexBuffer(title, 0);
 		title.SpriteUpdate(title, spriteCommon_);
 	}
-	else if (titleAlpha >= 1.0f && fadeTimer < 30) {
+	else if (titleAlpha >= ALPHA_MAX && fadeTimer < 30) {
 		fadeTimer++;
 	}
 	else if (fadeTimer == 30) {
@@ -173,37 +214,7 @@ void GameTitleScene::Update()
 	}
 
 	
-		Vector3 cur = Input::GetInstance()->GetMousePos();
-		cursor[8].SetPosition(cursor[7].GetPosition());
-		cursor[7].SetPosition(cursor[6].GetPosition());
-		cursor[6].SetPosition(cursor[5].GetPosition());
-		cursor[5].SetPosition(cursor[4].GetPosition());
-		cursor[4].SetPosition(cursor[3].GetPosition());
-		cursor[3].SetPosition(cursor[2].GetPosition());
-		cursor[2].SetPosition(cursor[1].GetPosition());
-		cursor[1].SetPosition(cursor[0].GetPosition());
-		cursor[0].SetPosition(cur);
-		circle.SetPosition(cur);
-		if (Input::GetInstance()->TriggerMouseLeft() == true) {
-			circleSize = 1.0f;
-			circleAlpha = 1.0f;
-		}
-		else if (circleSize < 6.0f) {
-			circleSize += 0.1f;
-			circleAlpha -= 0.025f;
-		}
-		else {
-			circleSize = 1.0f;
-			circleAlpha = 1.0f;
-		}
-		circle.SetScale(Vector2(16 * circleSize, 16 * circleSize));
-		circle.SetRotation(circle.GetRotation() + 0.005f);
-		circle.SetAlpha(circle, circleAlpha);
-		circle.SpriteTransferVertexBuffer(circle, 7);
-		circle.SpriteUpdate(circle, spriteCommon_);
-		for (int i = 0; i < CURSOR_MAX; i++) {
-			cursor[i].SpriteUpdate(cursor[i], spriteCommon_);
-		}
+		
 		if (outlineSize < 1.04f) {
 			outlineSize += 0.00075f;
 		}
@@ -214,15 +225,11 @@ void GameTitleScene::Update()
 		clickOutline.SpriteTransferVertexBuffer(clickOutline, 11);
 		clickOutline.SpriteUpdate(clickOutline, spriteCommon_);
 		//クリック判定
-		if (cur.x > click[0].GetPosition().x - 156 && cur.x < click[0].GetPosition().x + 156) {
-			if (cur.y > click[0].GetPosition().y - 26 && cur.y < click[0].GetPosition().y + 26) {
+		if (cur.x > click[0].GetPosition().x - click[0].GetScale().x / 2 && cur.x < click[0].GetPosition().x + click[0].GetScale().x / 2) {
+			if (cur.y > click[0].GetPosition().y - click[0].GetScale().y / 2 && cur.y < click[0].GetPosition().y + click[0].GetScale().y / 2) {
 				if (onCursor == false) {
 					onCursor = true;
-				}
-				if (Input::GetInstance()->TriggerMouseLeft()) {
-					isNext = true;
-					gameTimer = 0;
-				}
+				}	
 			}
 			else {
 				if (onCursor == true) {
@@ -234,6 +241,10 @@ void GameTitleScene::Update()
 			if (onCursor == true) {
 				onCursor = false;
 			}
+		}
+		if (Input::GetInstance()->TriggerMouseLeft()) {
+			isNext = true;
+			gameTimer = 0;
 		}
 		//クリック
 		for (int i = 0; i < CLICK_MAX; i++) {
@@ -300,6 +311,7 @@ void GameTitleScene::Update()
 		}
 		else {
 			loading.SpriteUpdate(loading, spriteCommon_);
+			tips.SpriteUpdate(tips, spriteCommon_);
 			//次シーンへ
 			GameSceneManager::GetInstance()->ChangeScene("GAMEPLAY");
 		}
@@ -349,6 +361,7 @@ void GameTitleScene::Draw()
 		click[1].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		clickEffect.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		fade.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+		tips.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		loading.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 	}
 	title.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());

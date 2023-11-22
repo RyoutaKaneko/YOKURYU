@@ -295,7 +295,7 @@ void GameScene::Update() {
 				isShowUI = false;
 			}
 			//SPACEで演出スキップ
-			if (input->TriggerKey(DIK_SPACE)) {
+			if (input->TriggerKey(DIK_SPACE) || input->TriggerMouseLeft() == true) {
 				boss->SkipMovie();
 				fadeAlpha = 0.0f;
 			}

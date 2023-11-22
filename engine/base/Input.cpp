@@ -88,21 +88,21 @@ void Input::Update()
 	result = mouse->GetDeviceState(sizeof(DIMOUSESTATE), &mouseState);
 
 	//マウスを画面内に固定
-	//POINT left = {0,0};
-	//POINT right = { WinApp::window_width,0 };
-	//POINT top = { 0,0 };
-	//POINT bottom = { 0,WinApp::window_height };
-	//ScreenToClient(WinApp::GetInstance()->GetHwnd(), &left);
-	//ScreenToClient(WinApp::GetInstance()->GetHwnd(), &top);
-	//ScreenToClient(WinApp::GetInstance()->GetHwnd(), &bottom);
-	//ScreenToClient(WinApp::GetInstance()->GetHwnd(), &right);
-	//RECT rect = {
-	//left.x,
-	//top.y,
-	//right.x,
-	//bottom.y
-	//};
-	//ClipCursor(&rect);
+	POINT left = {0,0};
+	POINT right = { WinApp::window_width,0 };
+	POINT top = { 0,0 };
+	POINT bottom = { 0,WinApp::window_height };
+	ClientToScreen(WinApp::GetInstance()->GetHwnd(), &left);
+	ClientToScreen(WinApp::GetInstance()->GetHwnd(), &top);
+	ClientToScreen(WinApp::GetInstance()->GetHwnd(), &bottom);
+	ClientToScreen(WinApp::GetInstance()->GetHwnd(), &right);
+	RECT rect = {
+	left.x,
+	top.y,
+	right.x,
+	bottom.y
+	};
+	ClipCursor(&rect);
 }
 
 //マウス左

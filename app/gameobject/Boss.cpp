@@ -153,7 +153,7 @@ void Boss::ChangeState()
 {
 	//待機状態
 	if (state == WAIT) {
-		if (timeCount >= 50) {
+		if (timeCount >= 250) {
 			//乱数により行動を決定
 			/*int random = rand() % 1 + 1;*/
 			//抽選された行動

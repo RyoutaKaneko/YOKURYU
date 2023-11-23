@@ -252,9 +252,9 @@ void GameScene::Update() {
 				}
 			}
 			/////デバック用(ボスまでスキップ)/////
-			if (input->TriggerKey(DIK_B)) {
+		/*	if (input->TriggerKey(DIK_B)) {
 				railCamera->SetOnRail(false);
-			}
+			}*/
 
 			//player更新(カメラの前)
 			if (input->PushMouseLeft()) {

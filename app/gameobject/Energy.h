@@ -10,6 +10,8 @@
 #include "Vector3.h"
 #include "Model.h"
 #include <list>
+#include <iostream>
+#include <random>
 
 //GameSceneの前方宣言
 class GameScene;
@@ -20,7 +22,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void EnergyInitialize();
+	void EnergyInitialize(const std::string& model_);
 
 	/// <summary>
 	/// 更新
@@ -28,6 +30,8 @@ public:
 	/// <param name="pos">座標</param>
 	/// <param name="rot">回転</param>
 	void Update(Vector3 pos, Vector3 rot);
+
+	void DeadEffect();
 
 	/// <summary>
 	/// 当たり判定
@@ -44,6 +48,9 @@ public:
 private:
 	// モデル
 	Model* energyModel = nullptr;
+
+	std::random_device seed_gen;
+	Vector3 randomNum;
 	
 	bool isDead;
 };

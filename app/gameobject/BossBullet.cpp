@@ -12,15 +12,14 @@ void BossBullet::BulletInitialize()
 	Initialize();
 
 	// OBJからモデルデータを読み込む
-	bulletModel = Model::LoadFromOBJ("triangle_mat");
-	bulletModel->LoadTexture("Resources/blue.png");
+	bulletModel = Model::LoadFromOBJ("bossBullet");
 	// 3Dオブジェクト生成
 	Create();
 	// オブジェクトにモデルをひも付ける
 	SetModel(bulletModel);
 
 	//体力指定
-	hp = 4;
+	hp = 3;
 	hitTime = 0;
 	isHit = false;
 }
@@ -45,13 +44,18 @@ void BossBullet::Update(const Vector3& playerPos_)
 		hitTime--;
 		if (isHit == false) {
 			isHit = true;
-			bulletModel->LoadTexture("Resources/red.png");
+			bulletModel->LoadTexture("Resources/bossBullet/stonedmg.png");
 		}
 	}
 	else {
 		if (isHit == true) {
 			isHit = false;
-			bulletModel->LoadTexture("Resources/blue.png");
+			if (hp == 2) {
+				bulletModel->LoadTexture("Resources/bossBullet/stone3.png");
+			}
+			else if (hp == 1) {
+				bulletModel->LoadTexture("Resources/bossBullet/stone3.png");
+			}
 		}
 	}
 	//時間経過でデス

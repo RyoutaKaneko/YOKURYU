@@ -32,6 +32,7 @@ void Enemy::EnemyInitialize()
 	isAttack = false;
 	timeCount = 0;
 	alpha = 0;
+	deathTimer = DEATH_TIMER;
 }
 
 void Enemy::Update(Vector3 velo,float t) {
@@ -92,11 +93,26 @@ void Enemy::Update(Vector3 velo,float t) {
 		else {
 			Attack();
 		}
+		//死亡時演出
+		if (isParticle == true) {
+			if (deathTimer > 50) {
+				PopParticle();
+			}
+			else if (deathTimer == 0) {
+				isDead_ = true;
+			}
+			//更新
+			for (std::unique_ptr<Energy>& particle : deadParticles) {
+				particle->DeadEffect();
+			}
+
+			deathTimer--;
+		}
 
 		for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
 			bullet->Update(velo);
 		}
-		//デスフラグの立った敵を削除
+		//デスフラグの立った弾を削除
 		bullets_.remove_if([](std::unique_ptr <EnemyBullet>& bullets_) {
 			return bullets_->IsDead();
 			});
@@ -118,13 +134,25 @@ void Enemy::OnCollision([[maybe_unused]] const CollisionInfo& info)
 	//相手がplayerの弾
 	if (strcmp(GetToCollName(), str1) == 0) {
 		if (isInvisible == false) {
-			if (isDead_ == false) {
-				isDead_ = true;
+			if (isParticle == false) {
+				isParticle = true;
 				for (int i = 0; i < 3; i++) {
 					GameScene::PopEnergy(GetPosition());
 				}
 			}
 		}
+	}
+}
+
+void Enemy::PopParticle()
+{
+	//弾を生成し初期化
+													   
+	for (int i = 0; i < 2; i++) {
+		std::unique_ptr<Energy> particle = std::make_unique<Energy>();
+		particle->EnergyInitialize("dead");
+		particle->SetPosition(GetPosition());
+		deadParticles.push_back(std::move(particle));
 	}
 }
 
@@ -156,9 +184,14 @@ void Enemy::Attack() {
 }
 
 void Enemy::EnemyDraw(ViewProjection* viewProjection_) {
-	Draw(viewProjection_, alpha);
+	if (isParticle == false) {
+		Draw(viewProjection_, alpha);
+	}
 	//弾描画
 	for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
 		bullet->Draw(viewProjection_);
+	}
+	for (std::unique_ptr<Energy>& particle : deadParticles) {
+		particle->Draw(viewProjection_,0.8f);
 	}
 }

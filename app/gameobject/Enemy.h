@@ -11,6 +11,7 @@
 #include "Model.h"
 #include <list>
 #include "EnemyBullet.h"
+#include "Energy.h"
 
 //GameSceneの前方宣言
 class GameScene;
@@ -86,15 +87,22 @@ public:
 	/// <returns></returns>
 	const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets_; }
 
+	void PopParticle();
+
 private:
+
+	static const int DEATH_TIMER = 60;
 
 	//デスフラグ
 	bool isDead_ = false;
 	//
 	bool isInvisible = true;
+	bool isParticle = false;
 
 	//敵
 	std::list<std::unique_ptr<EnemyBullet>> bullets_;
+
+	std::list<std::unique_ptr<Energy>> deadParticles;
 
 	// モデル
 	Model* enemyModel = nullptr;
@@ -105,6 +113,7 @@ private:
 	float radius = 1.0f;
 	int coolTime = 0;
 	float stagePoint;
+	int deathTimer;
 
 	bool isAttack;
 	int timeCount;

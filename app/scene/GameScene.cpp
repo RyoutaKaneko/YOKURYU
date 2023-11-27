@@ -252,9 +252,9 @@ void GameScene::Update() {
 				}
 			}
 			/////デバック用(ボスまでスキップ)/////
-		/*	if (input->TriggerKey(DIK_B)) {
+			if (input->TriggerKey(DIK_B)) {
 				railCamera->SetOnRail(false);
-			}*/
+			}
 
 			//player更新(カメラの前)
 			if (input->PushMouseLeft()) {
@@ -922,7 +922,7 @@ void GameScene::PopEnergy(Vector3 pos_)
 	std::unique_ptr<Energy> newEnergy = std::make_unique<Energy>();
 
 	//単発													   
-	newEnergy->EnergyInitialize();
+	newEnergy->EnergyInitialize("panel");
 	newEnergy->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 2.0f));
 	newEnergy->SetPosition(pos_ + Vector3(dist(engine), dist2(engine), dist3(engine)));
 	energys_.push_back(std::move(newEnergy));

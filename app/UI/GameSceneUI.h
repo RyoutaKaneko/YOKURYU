@@ -167,6 +167,9 @@ private:
 	Sprite goTitle;
 	Sprite goReset;
 	Sprite pause;
+	Sprite pauseBack;
+	Sprite esc;
+	Sprite escClose;
 	bool isPlayable;
 	float frameAlpha;
 	float barAlpha;

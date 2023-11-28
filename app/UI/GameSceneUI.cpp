@@ -184,6 +184,27 @@ void GameSceneUI::Initialize(ID3D12Device* device)
 	pause.SetPosition(Vector3(640, 250, 0));
 	pause.SpriteTransferVertexBuffer(pause, 29);
 	pause.LoadTexture(spriteCommon_, 29, L"Resources/pause.png", device);
+	//pauseBack
+	pauseBack.SpriteCreate(device, 30, Vector2(0.5f, 0.5f), false, false);
+	pauseBack.SetScale(Vector2(1280, 720));
+	pauseBack.SetPosition(Vector3(640, 360, 0));
+	pauseBack.SpriteTransferVertexBuffer(pauseBack, 30);
+	pauseBack.SpriteUpdate(pauseBack, spriteCommon_);
+	pauseBack.LoadTexture(spriteCommon_, 30, L"Resources/pauseBack.png", device);
+	//esc
+	esc.SpriteCreate(device, 31, Vector2(0.5f, 0.5f), false, false);
+	esc.SetScale(Vector2(64, 32));
+	esc.SetPosition(Vector3(64, -152, 0));
+	esc.SpriteTransferVertexBuffer(esc, 31);
+	esc.SpriteUpdate(esc, spriteCommon_);
+	esc.LoadTexture(spriteCommon_, 31, L"Resources/esc.png", device);
+	//escClose
+	escClose.SpriteCreate(device, 32, Vector2(0.0f, 0.5f), false, false);
+	escClose.SetScale(Vector2(128, 32));
+	escClose.SetPosition(Vector3(96, 48, 0));
+	escClose.SpriteTransferVertexBuffer(escClose, 32);
+	escClose.SpriteUpdate(escClose, spriteCommon_);
+	escClose.LoadTexture(spriteCommon_, 32, L"Resources/escClose.png", device);
 
 
 	isPlayable = false;
@@ -201,6 +222,8 @@ void GameSceneUI::Initialize(ID3D12Device* device)
 
 void GameSceneUI::ShowUI()
 {
+	esc.SetPosition(esc.GetPosition() + Vector3(0, +4, 0));
+	esc.SpriteUpdate(esc, spriteCommon_);
 	hpFrame.SetPosition(hpFrame.GetPosition() + Vector3(0, -4, 0));
 	hpFrame.SpriteUpdate(hpFrame, spriteCommon_);
 
@@ -327,6 +350,7 @@ void GameSceneUI::Draw(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList)
 
 	///=== スプライト描画 ===///
 
+	esc.SpriteDraw(cmdList, spriteCommon_, device);
 	hpFrame.SpriteDraw(cmdList, spriteCommon_, device);
 	//UI
 	attackUI.SpriteDraw(cmdList, spriteCommon_, device);
@@ -367,6 +391,9 @@ void GameSceneUI::SetHPAlpha(bool isCollision)
 
 void GameSceneUI::ResetUIPos()
 {
+	//esc
+	esc.SetPosition(Vector3(64, -152, 0));
+	esc.SpriteUpdate(esc, spriteCommon_);
 	//hpフレーム
 	hpFrame.SetPosition(Vector3(226, 851, 0));
 	hpFrame.SpriteUpdate(hpFrame, spriteCommon_);
@@ -416,6 +443,7 @@ void GameSceneUI::ResetUIPos()
 	cursorPosBak = { 0,0,0 };
 	isGameOver = false;
 	isGameSceneReset = false;
+	isPlayable = false;
 
 }
 
@@ -906,7 +934,9 @@ void GameSceneUI::PauseText() {
 void GameSceneUI::DrawPause(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList) {
 	// スプライト描画前処理
 	Sprite::PreDraw(cmdList, spriteCommon_);
-
+	pauseBack.SpriteDraw(cmdList, spriteCommon_, device);
+	esc.SpriteDraw(cmdList, spriteCommon_, device);
+	escClose.SpriteDraw(cmdList, spriteCommon_, device);
 	if (isClose == false) {
 		continueTextbox.SpriteDraw(cmdList, spriteCommon_, device);
 		if (isShowContinue == true) {

@@ -44,7 +44,7 @@ void Energy::Update(Vector3 pos,Vector3 rot)
 	}
 }
 
-void Energy::DeadEffect()
+void Energy::DeadEffect(Vector3 rot)
 {
 	//óêêîê∂ê¨ëïíu
 
@@ -52,6 +52,7 @@ void Energy::DeadEffect()
 	SetPosition(GetPosition() + randomNum);
 	Vector3 minScale(0.01f, 0.01f, 0.01f);
 	SetScale(GetScale() - minScale);
+	SetRotation(rot + Vector3(0, 90, 0));
 
 	if (GetScale().x < 0.01f) {
 		isDead = true;

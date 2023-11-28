@@ -162,6 +162,7 @@ private:
 	Sprite fadeout;
 	Sprite thanks;
 	Sprite loading;
+	Sprite tips;
 	float thanksAlpha;
 	//UI
 	GameSceneUI* UIs = nullptr;

@@ -12,6 +12,7 @@
 #include <list>
 #include "EnemyBullet.h"
 #include "Energy.h"
+#include "RailCamera.h"
 
 //GameSceneの前方宣言
 class GameScene;
@@ -38,7 +39,7 @@ public:
 	/// </summary>
 	/// <param name="velo">弾ベクトル</param>
 	/// <param name="t">プレイヤー通過点</param>
-	void Update(Vector3 velo,float t);
+	void Update(Vector3 velo,RailCamera* rail);
 
 	/// <summary>
 	/// 描画

@@ -161,6 +161,7 @@ void GameTitleScene::Initialize()
 	isShowEnd = false;
 	endTimer = 0;
 	isPushEsc = false;
+	isOpenEndText = false;
 }
 
 void GameTitleScene::Update()
@@ -341,33 +342,41 @@ void GameTitleScene::Update()
 	for (int i = 0; i < TITLE_BACK_MAX; i++) {
 		titleBack[i].SpriteUpdate(titleBack[i], spriteCommon_);
 	}
-
-	//ゲーム終了
-	if (Input::GetInstance()->TriggerKey(DIK_ESCAPE) && isShowEnd == false) {
-		isShowEnd = true;
-		isPushEsc = true;
-		endTimer = 15;
-	}
-	if (isShowEnd == true) {
-		UIs->EndText();
-
-
-		if (UIs->GetIsGameSceneReset() == true) {
-			isEnd = true;
+	
+	if (isShowTitle == true && isNext == false) {
+		//ゲーム終了
+		if (Input::GetInstance()->TriggerKey(DIK_ESCAPE) && isShowEnd == false) {
+			isShowEnd = true;
+			isPushEsc = true;
+			isOpenEndText = true;
+			endTimer = 15;
 		}
+		if (isOpenEndText == true) {
+			UIs->EndText();
 
-		if (UIs->GetIsGameOver() == true) {
-			isShowEnd = false;
+
+			if (UIs->GetIsGameSceneReset() == true) {
+				isEnd = true;
+			}
+
+			if (UIs->GetIsGameOver() == true) {
+				isOpenEndText = false;
+			}
+
+			if (Input::GetInstance()->TriggerKey(DIK_ESCAPE) && isPushEsc == false) {
+				isOpenEndText = false;
+			}
+
 		}
-
-		if (Input::GetInstance()->TriggerKey(DIK_ESCAPE) && isPushEsc == false) {
-			isShowEnd = false;
+		else {
+			UIs->CloseText();
+			if (UIs->GetIsClose() == true) {
+				isShowEnd = false;
+			}
 		}
+	}
 
-	}
-	else {
-		UIs->CloseText();
-	}
+	
 
 	//更新
 	player->GetWorldTransform().UpdateMatrix();
@@ -391,7 +400,12 @@ void GameTitleScene::Draw()
 	Sprite::PreDraw(dxCommon_->GetCommandList(), spriteCommon_);
 	titleBack[isBackNum].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 	if (isNext == false) {
-		click[onCursor].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+		if (isShowEnd == false) {
+			click[onCursor].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+		}
+		else {
+			click[0].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+		}
 		clickOutline.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		black.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		title.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
@@ -416,7 +430,9 @@ void GameTitleScene::Draw()
 
 	Sprite::PostDraw();
 
-	UIs->DrawEnd(dxCommon_->GetDevice(), dxCommon_->GetCommandList());
+	if (isNext == false && isShowEnd == true) {
+		UIs->DrawEnd(dxCommon_->GetDevice(), dxCommon_->GetCommandList());
+	}
 
 	dxCommon_->PostDraw();
 }

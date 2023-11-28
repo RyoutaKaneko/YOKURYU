@@ -106,4 +106,5 @@ private: // メンバ変数
 	bool isShowEnd;
 	static bool isEnd;
 	bool isPushEsc;
+	bool isOpenEndText;
 };

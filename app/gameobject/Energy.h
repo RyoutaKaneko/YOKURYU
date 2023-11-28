@@ -31,7 +31,7 @@ public:
 	/// <param name="rot">‰ñ“]</param>
 	void Update(Vector3 pos, Vector3 rot);
 
-	void DeadEffect();
+	void DeadEffect(Vector3 rot);
 
 	/// <summary>
 	/// “–‚½‚è”»’è

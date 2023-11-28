@@ -122,6 +122,12 @@ void GameScene::Initialize() {
 	loading.SetPosition({ 1000,640,0 });
 	loading.SpriteTransferVertexBuffer(loading, 6);
 	loading.LoadTexture(spriteCommon_, 6, L"Resources/loading.png", dxCommon_->GetDevice());
+	//tips
+	tips.SpriteCreate(dxCommon_->GetDevice(), 7, Vector2(0.0f, 0.0f), false, false);
+	tips.SetScale(Vector2(800, 48));
+	tips.SetPosition({ 150,620,0 });
+	tips.SpriteTransferVertexBuffer(tips, 7);
+	tips.LoadTexture(spriteCommon_, 7, L"Resources/tips.png", dxCommon_->GetDevice());
 
 	//UI初期化
 	UIs = new GameSceneUI();
@@ -185,17 +191,6 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	//クロスヘアを更新
 	GetCrosshair();
-	//リセット
-	//if (Input::GetInstance()->TriggerKey(DIK_R)) {
-	//	Reset();
-	//	gameState = MAIN;
-	//	gameTime = 150;
-	//	railCamera->GetView()->SetEye(Vector3(-1, 0.5f, 490.0f));
-	//	railCamera->GetView()->SetTarget(Vector3(0.0f, 0.5f, 495));
-	//	player->SetPosition({ 0,0.5f,495 });
-	//	Vector3 cursor = GetWorldToScreenPos(Vector3(0, 0, 0), railCamera);
-	//	input->SetMousePos({ cursor.x,cursor.y });
-	//}
 	if (isStart == false) {
 		fadeAlpha = 0.0f;
 		fade.SetAlpha(fade, fadeAlpha);
@@ -403,6 +398,7 @@ void GameScene::Draw() {
 		fade.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 	}
 	if (gameState == PAUSE) {
+		tips.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		loading.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 	}
 	if (gameState == CLEAR) {
@@ -972,6 +968,7 @@ void GameScene::PauseUpdate() {
 			fade.SetAlpha(fade, fadeAlpha);
 			fade.SpriteUpdate(fade, spriteCommon_);
 			if (fadeAlpha >= 1.0f) {
+				tips.SpriteUpdate(tips, spriteCommon_);
 				loading.SpriteUpdate(loading, spriteCommon_);
 				GameSceneManager::GetInstance()->ChangeScene("TITLE");
 			}
@@ -1204,7 +1201,7 @@ void GameScene::MainUpdate() {
 			});
 		//敵キャラの更新
 		for (const std::unique_ptr<Enemy>& enemy_ : enemys_) {
-			enemy_->Update(player->GetWorldPos(), railCamera->GetPasPoint());
+			enemy_->Update(player->GetWorldPos(), railCamera);
 		}
 		//UI表示
 		UIAlpha();

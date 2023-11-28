@@ -35,10 +35,10 @@ void Enemy::EnemyInitialize()
 	deathTimer = DEATH_TIMER;
 }
 
-void Enemy::Update(Vector3 velo,float t) {
+void Enemy::Update(Vector3 velo, RailCamera* rail) {
 	//ìßñæèÛë‘Ç»ÇÁ
 	if (isInvisible == true) {
-		float len = stagePoint - t + 1.0f;
+		float len = stagePoint - rail->GetPasPoint() + 1.0f;
  		if (len < 4.0f) {
 			isInvisible = false;
 		}
@@ -77,7 +77,7 @@ void Enemy::Update(Vector3 velo,float t) {
 			}
 		}
 		//playerÇ™ìGÇí«Ç¢âzÇµÇΩÇÁçUåÇÇµÇ»Ç¢
-		if (stagePoint < t + 1.0f) {
+		if (stagePoint < rail->GetPasPoint() + 1.0f) {
 			if (isAttack == true) {
 				isAttack = false;
 			}
@@ -103,7 +103,7 @@ void Enemy::Update(Vector3 velo,float t) {
 			}
 			//çXêV
 			for (std::unique_ptr<Energy>& particle : deadParticles) {
-				particle->DeadEffect();
+				particle->DeadEffect(rail->GetCamera()->GetRotation());
 			}
 
 			deadParticles.remove_if([](std::unique_ptr <Energy>& particle) {
@@ -154,7 +154,7 @@ void Enemy::PopParticle()
 													   
 	for (int i = 0; i < 1; i++) {
 		std::unique_ptr<Energy> particle = std::make_unique<Energy>();
-		particle->EnergyInitialize("dead");
+		particle->EnergyInitialize("dp");
 		particle->SetPosition(GetPosition());
 		deadParticles.push_back(std::move(particle));
 	}

@@ -161,6 +161,7 @@ private:
 	Sprite bossHP;
 	Sprite fadeout;
 	Sprite thanks;
+	Sprite loading;
 	float thanksAlpha;
 	//UI
 	GameSceneUI* UIs = nullptr;

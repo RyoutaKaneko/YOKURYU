@@ -116,6 +116,12 @@ void GameScene::Initialize() {
 	thanks.SpriteUpdate(thanks, spriteCommon_);
 	thanks.LoadTexture(spriteCommon_, 5, L"Resources/ty.png", dxCommon_->GetDevice());
 	thanksAlpha = 0.0f;
+	//loading
+	loading.SpriteCreate(dxCommon_->GetDevice(), 6, Vector2(0.0f, 0.0f), false, false);
+	loading.SetScale(Vector2(256 * 1, 48 * 1));
+	loading.SetPosition({ 1000,640,0 });
+	loading.SpriteTransferVertexBuffer(loading, 6);
+	loading.LoadTexture(spriteCommon_, 6, L"Resources/loading.png", dxCommon_->GetDevice());
 
 	//UI初期化
 	UIs = new GameSceneUI();
@@ -395,6 +401,9 @@ void GameScene::Draw() {
 
 	if (gameState == CONTINUE || gameState == PAUSE) {
 		fade.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+	}
+	if (gameState == PAUSE) {
+		loading.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 	}
 	if (gameState == CLEAR) {
 		fade.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
@@ -963,6 +972,7 @@ void GameScene::PauseUpdate() {
 			fade.SetAlpha(fade, fadeAlpha);
 			fade.SpriteUpdate(fade, spriteCommon_);
 			if (fadeAlpha >= 1.0f) {
+				loading.SpriteUpdate(loading, spriteCommon_);
 				GameSceneManager::GetInstance()->ChangeScene("TITLE");
 			}
 		}

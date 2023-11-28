@@ -95,7 +95,7 @@ void Enemy::Update(Vector3 velo,float t) {
 		}
 		//€–S‰‰o
 		if (isParticle == true) {
-			if (deathTimer > 50) {
+			if (deathTimer > 45) {
 				PopParticle();
 			}
 			else if (deathTimer == 0) {
@@ -105,6 +105,10 @@ void Enemy::Update(Vector3 velo,float t) {
 			for (std::unique_ptr<Energy>& particle : deadParticles) {
 				particle->DeadEffect();
 			}
+
+			deadParticles.remove_if([](std::unique_ptr <Energy>& particle) {
+				return particle->GetIsDead();
+				});
 
 			deathTimer--;
 		}
@@ -148,7 +152,7 @@ void Enemy::PopParticle()
 {
 	//’e‚ğ¶¬‚µ‰Šú‰»
 													   
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 1; i++) {
 		std::unique_ptr<Energy> particle = std::make_unique<Energy>();
 		particle->EnergyInitialize("dead");
 		particle->SetPosition(GetPosition());

@@ -46,6 +46,11 @@ public: // メンバ関数
 	/// </summary>
 	void Finalize() override;
 
+	/// <summary>
+	/// 終了リクエスト
+	/// </summary>
+	static bool GetIsEnd() { return isEnd; }
+
 private: // メンバ変数
 	// 入力
 	Input* input_ = nullptr;
@@ -75,6 +80,8 @@ private: // メンバ変数
 	Sprite clickOutline;
 	Sprite black;
 	Sprite tips;
+	//UI
+	GameSceneUI* UIs = nullptr;
 
 	Model* skyModel = nullptr;
 	Model* seaModel = nullptr;
@@ -85,6 +92,7 @@ private: // メンバ変数
 
 	int gameTimer;
 	int isBackNum;
+	int endTimer;
 	bool onCursor;
 	bool isNext;
 	float circleSize;
@@ -95,4 +103,7 @@ private: // メンバ変数
 	float titleAlpha;
 	int fadeTimer;
 	bool isShowTitle;
+	bool isShowEnd;
+	static bool isEnd;
+	bool isPushEsc;
 };

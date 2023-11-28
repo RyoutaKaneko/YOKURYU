@@ -1,5 +1,8 @@
 #include "GameSceneUI.h"
 
+const Vector2 GameSceneUI::SELECT_CONTINUE_SCALE(196,64);
+const Vector2 GameSceneUI::SELECT_PAUSE_SCALE(272, 64);
+
 void GameSceneUI::Initialize(ID3D12Device* device)
 {
 	// スプライトの初期化
@@ -126,7 +129,7 @@ void GameSceneUI::Initialize(ID3D12Device* device)
 	circle.LoadTexture(spriteCommon_, 21, L"Resources/circle.png", device);
 	//コンティニューセレクト
 	contSelect.SpriteCreate(device, 22, Vector2(0.5f, 0.5f), false, false);
-	contSelect.SetScale(Vector2(196,64));
+	contSelect.SetScale(SELECT_CONTINUE_SCALE);
 	contSelect.SetPosition({ 460, 410, 0 });
 	contSelect.SpriteTransferVertexBuffer(contSelect, 22);
 	contSelect.SpriteUpdate(contSelect, spriteCommon_);
@@ -156,6 +159,31 @@ void GameSceneUI::Initialize(ID3D12Device* device)
 	congratBack.SpriteUpdate(congratBack, spriteCommon_);
 	congratBack.LoadTexture(spriteCommon_, 25, L"Resources/congrat_bak.png", device);
 	congratAlpha = 0.0f;
+	//endText
+	end.SpriteCreate(device, 26, Vector2(0.5f, 0.5f), false, false);
+	end.SetScale(Vector2(448, 64));
+	end.SetPosition(Vector3(640, 250, 0));
+	end.SpriteTransferVertexBuffer(end, 26);
+	end.LoadTexture(spriteCommon_, 26, L"Resources/end.png", device);
+	//titltText
+	goTitle.SpriteCreate(device, 27, Vector2(0.5f, 0.5f), false, false);
+	goTitle.SetScale(Vector2(272, 64));
+	goTitle.SetPosition(Vector3(460, 410, 0));
+	goTitle.SetColor(goTitle, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
+	goTitle.SpriteTransferVertexBuffer(goTitle, 27);
+	goTitle.LoadTexture(spriteCommon_, 27, L"Resources/gotitle.png", device);
+	//resetText
+	goReset.SpriteCreate(device, 28, Vector2(0.5f, 0.5f), false, false);
+	goReset.SetScale(Vector2(240, 64));
+	goReset.SetPosition(Vector3(800, 410, 0));
+	goReset.SpriteTransferVertexBuffer(goReset, 28);
+	goReset.LoadTexture(spriteCommon_, 28, L"Resources/goreset.png", device);
+	//pauseText
+	pause.SpriteCreate(device, 29, Vector2(0.5f, 0.5f), false, false);
+	pause.SetScale(Vector2(272, 64));
+	pause.SetPosition(Vector3(640, 250, 0));
+	pause.SpriteTransferVertexBuffer(pause, 29);
+	pause.LoadTexture(spriteCommon_, 29, L"Resources/pause.png", device);
 
 
 	isPlayable = false;
@@ -168,6 +196,7 @@ void GameSceneUI::Initialize(ID3D12Device* device)
 	circleAlpha = ALPHA_MAX;
 	isGameSceneReset = false;
 	isGameOver = false;
+	isClose = false;
 }
 
 void GameSceneUI::ShowUI()
@@ -436,6 +465,10 @@ void GameSceneUI::DeadUIPos()
 
 void GameSceneUI::ContinueText()
 {
+	if (isClose == true) {
+		isClose = false;
+	}
+
 	Vector2 addScale = { 32, 12};
 	if (continueTextbox.GetScale().x >= 768) {
 		addScale.x = 0;
@@ -446,6 +479,7 @@ void GameSceneUI::ContinueText()
 	if (addScale.x == 0) {
 		isShowContinue = true;
 	}
+	contSelect.SetScale(SELECT_CONTINUE_SCALE);
 	if (isShowContinue == true) {
 		CursorUpdate(true);
 
@@ -532,15 +566,17 @@ void GameSceneUI::DrawContinue(ID3D12Device* device, ID3D12GraphicsCommandList* 
 	// スプライト描画前処理
 	Sprite::PreDraw(cmdList, spriteCommon_);
 
-	continueTextbox.SpriteDraw(cmdList, spriteCommon_, device);
-	if (isShowContinue == true) {
-		continueText.SpriteDraw(cmdList, spriteCommon_, device);
-		contSelect.SpriteDraw(cmdList, spriteCommon_, device);
-		continueYes.SpriteDraw(cmdList, spriteCommon_, device);
-		continueNo.SpriteDraw(cmdList, spriteCommon_, device);
-		circle.SpriteDraw(cmdList, spriteCommon_, device);
-		for (int i = 0; i < CURSOR_MAX; i++) {
-			cursorGH[i].SpriteDraw(cmdList, spriteCommon_, device);
+	if (isClose == false) {
+		continueTextbox.SpriteDraw(cmdList, spriteCommon_, device);
+		if (isShowContinue == true) {
+			continueText.SpriteDraw(cmdList, spriteCommon_, device);
+			contSelect.SpriteDraw(cmdList, spriteCommon_, device);
+			continueYes.SpriteDraw(cmdList, spriteCommon_, device);
+			continueNo.SpriteDraw(cmdList, spriteCommon_, device);
+			circle.SpriteDraw(cmdList, spriteCommon_, device);
+			for (int i = 0; i < CURSOR_MAX; i++) {
+				cursorGH[i].SpriteDraw(cmdList, spriteCommon_, device);
+			}
 		}
 	}
 
@@ -620,4 +656,271 @@ void GameSceneUI::ClearUpdate()
 		congratBack.SetAlpha(congratBack, congratAlpha);
 		clearNext.SetAlpha(clearNext, congratAlpha);
 	}
+}
+
+void GameSceneUI::EndText() {
+	if (isClose == true) {
+		isClose = false;
+	}
+
+	Vector2 addScale = { 32, 12 };
+	if (continueTextbox.GetScale().x >= 768) {
+		addScale.x = 0;
+	}
+	if (continueTextbox.GetScale().y >= 384) {
+		addScale.y = 0;
+	}
+	if (addScale.x == 0) {
+		isShowContinue = true;
+	}
+
+	contSelect.SetScale(SELECT_CONTINUE_SCALE);
+	if (isShowContinue == true) {
+		CursorUpdate(true);
+
+		bool onCursor = false;
+
+		if (cursorPos.x > 362 && cursorPos.x < 558) {
+			if (cursorPos.y > 378 && cursorPos.y < 442) {
+				if (isContinue == false) {
+					isContinue = true;
+					continueYes.SetColor(continueYes, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
+					continueNo.SetColor(continueNo, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+					contSelect.SetPosition({ 460, 410, 0 });
+					contSelect.SpriteUpdate(contSelect, spriteCommon_);
+				}
+				if (Input::GetInstance()->TriggerMouseLeft()) {
+					isGameSceneReset = true;
+				}
+				onCursor = true;
+			}
+		}
+
+		if (cursorPos.x > 702 && cursorPos.x < 898) {
+			if (cursorPos.y > 378 && cursorPos.y < 442) {
+				if (isContinue == true) {
+					isContinue = false;
+					continueYes.SetColor(continueYes, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+					continueNo.SetColor(continueNo, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
+					contSelect.SetPosition({ 800, 410, 0 });
+					contSelect.SpriteUpdate(contSelect, spriteCommon_);
+				}
+				if (Input::GetInstance()->TriggerMouseLeft()) {
+					isGameOver = true;
+				}
+				onCursor = true;
+			}
+		}
+
+		if (onCursor == false) {
+			if (Input::GetInstance()->TriggerKey(DIK_A)) {
+				if (isContinue == false) {
+					isContinue = true;
+					continueYes.SetColor(continueYes, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
+					continueNo.SetColor(continueNo, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+					contSelect.SetPosition({ 460, 410, 0 });
+					contSelect.SpriteUpdate(contSelect, spriteCommon_);
+				}
+			}
+			else if (Input::GetInstance()->TriggerKey(DIK_D)) {
+				if (isContinue == true) {
+					isContinue = false;
+					continueYes.SetColor(continueYes, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+					continueNo.SetColor(continueNo, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
+					contSelect.SetPosition({ 800, 410, 0 });
+					contSelect.SpriteUpdate(contSelect, spriteCommon_);
+				}
+			}
+			if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+				if (isContinue == false) {
+					isGameOver = true;
+				}
+				else {
+					isGameSceneReset = true;
+				}
+			}
+		}
+
+
+
+		end.SpriteTransferVertexBuffer(end, 26);
+		end.SpriteUpdate(end, spriteCommon_);
+		continueYes.SpriteTransferVertexBuffer(continueYes, 17);
+		continueYes.SpriteUpdate(continueYes, spriteCommon_);
+		continueNo.SpriteTransferVertexBuffer(continueNo, 18);
+		continueNo.SpriteUpdate(continueNo, spriteCommon_);
+	}
+
+	continueTextbox.SetScale(continueTextbox.GetScale() + addScale);
+	continueTextbox.SpriteTransferVertexBuffer(continueTextbox, 16);
+	continueTextbox.SpriteUpdate(continueTextbox, spriteCommon_);
+}
+
+void GameSceneUI::DrawEnd(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList) {
+	// スプライト描画前処理
+	Sprite::PreDraw(cmdList, spriteCommon_);
+			  
+	if (isClose == false) {
+		continueTextbox.SpriteDraw(cmdList, spriteCommon_, device);
+		if (isShowContinue == true) {
+			end.SpriteDraw(cmdList, spriteCommon_, device);
+			contSelect.SpriteDraw(cmdList, spriteCommon_, device);
+			continueYes.SpriteDraw(cmdList, spriteCommon_, device);
+			continueNo.SpriteDraw(cmdList, spriteCommon_, device);
+			circle.SpriteDraw(cmdList, spriteCommon_, device);
+			for (int i = 0; i < CURSOR_MAX; i++) {
+				cursorGH[i].SpriteDraw(cmdList, spriteCommon_, device);
+			}
+		}
+	}
+
+	// スプライト描画後処理
+	Sprite::PostDraw();
+}
+
+void GameSceneUI::CloseText() {
+	if (isGameOver == true) {
+		isGameOver = false;
+	}
+	if (isGameSceneReset == true) {
+		isGameSceneReset = false;
+	}
+	if (isShowContinue == true) {
+		isShowContinue = false;
+	}
+
+	Vector2 addScale = { 32, 24 };
+	if (continueTextbox.GetScale().x < 64) {
+		addScale.x = 0;
+	}
+	if (continueTextbox.GetScale().y < 32) {
+		addScale.y = 0;
+	}
+	if (addScale.x == 0) {
+		isClose = true;
+	}
+	if (isClose == false) {
+		continueTextbox.SetScale(continueTextbox.GetScale() - addScale);
+		continueTextbox.SpriteTransferVertexBuffer(continueTextbox, 16);
+		continueTextbox.SpriteUpdate(continueTextbox, spriteCommon_);
+	}
+
+}
+
+void GameSceneUI::PauseText() {
+	if (isClose == true) {
+		isClose = false;
+	}
+
+	Vector2 addScale = { 32, 12 };
+	if (continueTextbox.GetScale().x >= 768) {
+		addScale.x = 0;
+	}
+	if (continueTextbox.GetScale().y >= 384) {
+		addScale.y = 0;
+	}
+	if (addScale.x == 0) {
+		isShowContinue = true;
+	}
+
+	contSelect.SetScale(SELECT_PAUSE_SCALE);
+	if (isShowContinue == true) {
+		CursorUpdate(true);
+
+		bool onCursor = false;
+
+		if (cursorPos.x > 324 && cursorPos.x < 596) {
+			if (cursorPos.y > 378 && cursorPos.y < 442) {
+				if (isContinue == false) {
+					isContinue = true;
+					goTitle.SetColor(goTitle, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
+					goReset.SetColor(goReset, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+					contSelect.SetPosition({ 460, 410, 0 });
+				}
+				if (Input::GetInstance()->TriggerMouseLeft()) {
+					isGameSceneReset = true;
+				}
+				onCursor = true;
+			}
+		}
+
+		if (cursorPos.x > 664 && cursorPos.x < 936) {
+			if (cursorPos.y > 378 && cursorPos.y < 442) {
+				if (isContinue == true) {
+					isContinue = false;
+					goTitle.SetColor(goTitle, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+					goReset.SetColor(goReset, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
+					contSelect.SetPosition({ 800, 410, 0 });
+				}
+				if (Input::GetInstance()->TriggerMouseLeft()) {
+					isGameOver = true;
+				}
+				onCursor = true;
+			}
+		}
+
+		if (onCursor == false) {
+			if (Input::GetInstance()->TriggerKey(DIK_A)) {
+				if (isContinue == false) {
+					isContinue = true;
+					goTitle.SetColor(goTitle, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
+					goReset.SetColor(goReset, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+					contSelect.SetPosition({ 460, 410, 0 });
+				}
+			}
+			else if (Input::GetInstance()->TriggerKey(DIK_D)) {
+				if (isContinue == true) {
+					isContinue = false;
+					goTitle.SetColor(goTitle, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+					goReset.SetColor(goReset, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
+					contSelect.SetPosition({ 800, 410, 0 });
+				}
+			}
+			if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+				if (isContinue == false) {
+					isGameOver = true;
+				}
+				else {
+					isGameSceneReset = true;
+				}
+			}
+		}
+
+
+
+		pause.SpriteTransferVertexBuffer(pause, 29);
+		pause.SpriteUpdate(pause, spriteCommon_);
+		goTitle.SpriteTransferVertexBuffer(goTitle, 27);
+		goTitle.SpriteUpdate(goTitle, spriteCommon_);
+		goReset.SpriteTransferVertexBuffer(goReset, 28);
+		goReset.SpriteUpdate(goReset, spriteCommon_);
+	}
+
+	continueTextbox.SetScale(continueTextbox.GetScale() + addScale);
+	continueTextbox.SpriteTransferVertexBuffer(continueTextbox, 16);
+	continueTextbox.SpriteUpdate(continueTextbox, spriteCommon_);
+	contSelect.SpriteTransferVertexBuffer(contSelect, 22);
+	contSelect.SpriteUpdate(contSelect, spriteCommon_);
+}
+
+void GameSceneUI::DrawPause(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList) {
+	// スプライト描画前処理
+	Sprite::PreDraw(cmdList, spriteCommon_);
+
+	if (isClose == false) {
+		continueTextbox.SpriteDraw(cmdList, spriteCommon_, device);
+		if (isShowContinue == true) {
+			pause.SpriteDraw(cmdList, spriteCommon_, device);
+			contSelect.SpriteDraw(cmdList, spriteCommon_, device);
+			goTitle.SpriteDraw(cmdList, spriteCommon_, device);
+			goReset.SpriteDraw(cmdList, spriteCommon_, device);
+			circle.SpriteDraw(cmdList, spriteCommon_, device);
+			for (int i = 0; i < CURSOR_MAX; i++) {
+				cursorGH[i].SpriteDraw(cmdList, spriteCommon_, device);
+			}
+		}
+	}
+
+	// スプライト描画後処理
+	Sprite::PostDraw();
 }

@@ -119,7 +119,25 @@ public:
 	/// <returns></returns>
 	Vector2 GetWorldToScreenScale(Object3d* obj, RailCamera* rail);
 
+	/// <summary>
+	///  クリア更新
+	/// </summary>
 	void ClearUpdate();
+
+	/// <summary>
+	///  ポーズ更新
+	/// </summary>
+	void PauseUpdate();
+
+	/// <summary>
+	/// 
+	/// </summary>
+	void BossUpdate();
+
+	/// <summary>
+	/// 
+	/// </summary>
+	void MainUpdate();
 
 private:
 	//base
@@ -195,13 +213,15 @@ private:
 	std::vector<LockInfo> infos;
 	int gameTime;
 	float cursorRotate;
+	Vector3 shotVec;
 	//ゲームステータス
 	enum GameState {
 		MAIN,
 		BOSS,
 		ULT,
 		CONTINUE,
-		CLEAR
+		CLEAR,
+		PAUSE
 	};
 	GameState gameState;
 	GameState gameState_bak;
@@ -213,4 +233,5 @@ private:
 	bool isNext;
 	bool isSceneEnd;
 	bool isShowEnergy;
+	bool isPause;
 };

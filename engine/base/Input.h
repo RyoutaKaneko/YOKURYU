@@ -153,4 +153,5 @@ private: // メンバ変数
 	DIMOUSESTATE mouseState_bak = {};	// マウス情報(変化検知用)
 	// WindowsAPI
 	WinApp* winApp = nullptr;
+	bool isVailCursor;
 };

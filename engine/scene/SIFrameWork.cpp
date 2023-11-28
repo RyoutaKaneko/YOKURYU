@@ -5,6 +5,7 @@
  */
 
 #include "SIFrameWork.h"
+#include "GameTitleScene.h"
 
 void SIFrameWork::Initialize()
 {
@@ -60,7 +61,7 @@ void SIFrameWork::Update()
 	// “ü—Í‚ÌXV
 	input->Update();
 
-	if (Input::GetInstance()->TriggerKey(DIK_ESCAPE)) {
+	if (GameTitleScene::GetIsEnd() == true) {
 		endRequest = true;
 	}
 

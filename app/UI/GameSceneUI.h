@@ -105,10 +105,40 @@ public:
 	/// </summary>
 	void ClearUpdate();
 
+	/// <summary>
+	/// ゲーム終了
+	/// </summary>
+	void EndText();
+
+	/// <summary>
+	/// ゲーム終了テキスト描画
+	/// </summary>
+	void DrawEnd(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList);
+
+	//ポーズ画面
+	void PauseText();
+
+	/// <summary>
+    /// ポーズ画面テキスト描画
+    /// </summary>
+	void DrawPause(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList);
+
+	/// <summary>
+	/// テキストとじる
+	/// </summary>
+	void CloseText();
+
+	/// <summary>
+	/// 
+	/// </summary>
+	bool GetIsClose() { return isClose; }
+
 private:
 	//定数
 	static const int CURSOR_MAX = 9;
 	static const int ALPHA_MAX = 1;
+	static const Vector2 SELECT_CONTINUE_SCALE;
+	static const Vector2 SELECT_PAUSE_SCALE;
 
 	//スプライトのポインタ
 	Sprite* sprite = new Sprite;
@@ -133,6 +163,10 @@ private:
 	Sprite congrat;
 	Sprite clearNext;
 	Sprite congratBack;
+	Sprite end;
+	Sprite goTitle;
+	Sprite goReset;
+	Sprite pause;
 	bool isPlayable;
 	float frameAlpha;
 	float barAlpha;
@@ -146,5 +180,6 @@ private:
 	bool isGameSceneReset;
 	bool isGameOver;
 	float congratAlpha;
+	bool isClose;
 };
 

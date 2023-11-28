@@ -53,6 +53,10 @@ void Energy::DeadEffect()
 	Vector3 minScale(0.01f, 0.01f, 0.01f);
 	SetScale(GetScale() - minScale);
 
+	if (GetScale().x < 0.01f) {
+		isDead = true;
+	}
+
 	GetWorldTransform().UpdateMatrix();
 }
 

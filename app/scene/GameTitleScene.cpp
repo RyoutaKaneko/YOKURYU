@@ -9,6 +9,8 @@
 using namespace DirectX;
 const float GameTitleScene::ALPHA_MAX = 1.0f;
 
+bool GameTitleScene::isEnd = false;
+
 GameTitleScene::GameTitleScene()
 {
 	//// サウンドの静的初期化
@@ -58,10 +60,10 @@ void GameTitleScene::Initialize()
 	}
 	//クリック
 	for (int i = 0; i < CLICK_MAX; i++) {
-		click[i].SpriteCreate(dxCommon_->GetDevice(), 5+i, Vector2(0.5f, 0.5f), false, false);
+		click[i].SpriteCreate(dxCommon_->GetDevice(), 5 + i, Vector2(0.5f, 0.5f), false, false);
 		click[i].SetScale(Vector2(312.0f * 1.2f, 52.0f * 1.2f));
 		click[i].SetPosition({ 640,640,0 });
-		click[i].SpriteTransferVertexBuffer(click[i], 5+i);
+		click[i].SpriteTransferVertexBuffer(click[i], 5 + i);
 		click[i].SpriteUpdate(click[i], spriteCommon_);
 	}
 	click[0].LoadTexture(spriteCommon_, 5, L"Resources/click1.png", dxCommon_->GetDevice());
@@ -101,7 +103,7 @@ void GameTitleScene::Initialize()
 	clickOutline.LoadTexture(spriteCommon_, 11, L"Resources/clickOutline.png", dxCommon_->GetDevice());
 	//black
 	black.SpriteCreate(dxCommon_->GetDevice(), 12, Vector2(0.5f, 0.5f), false, false);
-	black.SetScale(Vector2(1280,720));
+	black.SetScale(Vector2(1280, 720));
 	black.SetPosition({ 640,360,0 });
 	black.SetAlpha(black, 1.0f);
 	black.SpriteTransferVertexBuffer(black, 12);
@@ -114,6 +116,10 @@ void GameTitleScene::Initialize()
 	tips.SpriteTransferVertexBuffer(tips, 13);
 	tips.LoadTexture(spriteCommon_, 13, L"Resources/tips.png", dxCommon_->GetDevice());
 
+	//UI初期化
+	UIs = new GameSceneUI();
+	UIs->Initialize(dxCommon_->GetDevice());
+
 
 	//player
 	player = new Player;
@@ -125,7 +131,7 @@ void GameTitleScene::Initialize()
 	viewProjection = new ViewProjection();
 	viewProjection->Initialize();
 	viewProjection->SetEye({ 3.5f,34.5f,298.0f });
-	viewProjection->SetTarget({0,40,-400});
+	viewProjection->SetTarget({ 0,40,-400 });
 
 	//モデル読み込み
 	skyModel = Model::LoadFromOBJ("sky");
@@ -152,10 +158,16 @@ void GameTitleScene::Initialize()
 	blackAlpha = 1.0f;
 	fadeTimer = 0;
 	isShowTitle = false;
+	isShowEnd = false;
+	endTimer = 0;
+	isPushEsc = false;
 }
 
 void GameTitleScene::Update()
 {
+	if (isPushEsc == true) {
+		isPushEsc = false;
+	}
 	//マウス更新
 	Vector3 cur = Input::GetInstance()->GetMousePos();
 	cursor[8].SetPosition(cursor[7].GetPosition());
@@ -191,30 +203,29 @@ void GameTitleScene::Update()
 
 
 	//タイトルふわっと描画
-	if(isNext == false){
-	if (titleAlpha < ALPHA_MAX) {
-		titleAlpha += 0.025f;
-		title.SetAlpha(title, titleAlpha);
-		title.SpriteTransferVertexBuffer(title, 0);
-		title.SpriteUpdate(title, spriteCommon_);
-	}
-	else if (titleAlpha >= ALPHA_MAX && fadeTimer < 30) {
-		fadeTimer++;
-	}
-	else if (fadeTimer == 30) {
-		if (blackAlpha >= 0.0f) {
-			blackAlpha -= 0.075f;
-			black.SetAlpha(black, blackAlpha);
-			black.SpriteTransferVertexBuffer(black, 12);
-			black.SpriteUpdate(black, spriteCommon_);
-	   }
-		else {
-			isShowTitle = true;
+	if (isNext == false) {
+		if (titleAlpha < ALPHA_MAX) {
+			titleAlpha += 0.025f;
+			title.SetAlpha(title, titleAlpha);
+			title.SpriteTransferVertexBuffer(title, 0);
+			title.SpriteUpdate(title, spriteCommon_);
 		}
-	}
+		else if (titleAlpha >= ALPHA_MAX && fadeTimer < 30) {
+			fadeTimer++;
+		}
+		else if (fadeTimer == 30) {
+			if (blackAlpha >= 0.0f) {
+				blackAlpha -= 0.075f;
+				black.SetAlpha(black, blackAlpha);
+				black.SpriteTransferVertexBuffer(black, 12);
+				black.SpriteUpdate(black, spriteCommon_);
+			}
+			else {
+				isShowTitle = true;
+			}
+		}
 
-	
-		
+
 		if (outlineSize < 1.04f) {
 			outlineSize += 0.00075f;
 		}
@@ -229,7 +240,7 @@ void GameTitleScene::Update()
 			if (cur.y > click[0].GetPosition().y - click[0].GetScale().y / 2 && cur.y < click[0].GetPosition().y + click[0].GetScale().y / 2) {
 				if (onCursor == false) {
 					onCursor = true;
-				}	
+				}
 			}
 			else {
 				if (onCursor == true) {
@@ -242,7 +253,7 @@ void GameTitleScene::Update()
 				onCursor = false;
 			}
 		}
-		if (Input::GetInstance()->TriggerMouseLeft()) {
+		if (Input::GetInstance()->TriggerMouseLeft() && isShowEnd == false) {
 			isNext = true;
 			gameTimer = 0;
 		}
@@ -280,16 +291,16 @@ void GameTitleScene::Update()
 				titleBack[i].SpriteTransferVertexBuffer(titleBack[i], i + 1);
 				titleBack[i].SpriteUpdate(titleBack[i], spriteCommon_);
 			}
-			
+
 		}
 		if (clickEffectAlpha > 0) {
 			clickEffectAlpha -= 0.025f;
-			clickEffect.SetScale(clickEffect.GetScale() + Vector2(1.0f,1.0f));
+			clickEffect.SetScale(clickEffect.GetScale() + Vector2(1.0f, 1.0f));
 			clickEffect.SpriteTransferVertexBuffer(clickEffect, 10);
 			clickEffect.SetAlpha(clickEffect, clickEffectAlpha);
 			click[1].SetAlpha(click[1], clickEffectAlpha);
 			click[1].SpriteUpdate(click[1], spriteCommon_);
-		  }
+		}
 		clickEffect.SpriteUpdate(clickEffect, spriteCommon_);
 		//シーン遷移
 		if (gameTimer < 10) {
@@ -301,9 +312,9 @@ void GameTitleScene::Update()
 		else if (gameTimer < 75) {
 			player->SetPosition(player->GetPosition() + Vector3(0, -0.0025f, 0));
 		}
-		else if(player->GetPosition().y < 60.0f) {
+		else if (player->GetPosition().y < 60.0f) {
 			player->SetPosition(player->GetPosition() + Vector3(0, 0.8f, 0));
-			viewProjection->SetTarget(viewProjection->GetTarget() + Vector3(0,3.0f,0));
+			viewProjection->SetTarget(viewProjection->GetTarget() + Vector3(0, 3.0f, 0));
 		}
 		else if (fade.GetPosition().y < 0) {
 			fade.SetPosition(fade.GetPosition() + Vector3(0, +40, 0));
@@ -330,6 +341,34 @@ void GameTitleScene::Update()
 	for (int i = 0; i < TITLE_BACK_MAX; i++) {
 		titleBack[i].SpriteUpdate(titleBack[i], spriteCommon_);
 	}
+
+	//ゲーム終了
+	if (Input::GetInstance()->TriggerKey(DIK_ESCAPE) && isShowEnd == false) {
+		isShowEnd = true;
+		isPushEsc = true;
+		endTimer = 15;
+	}
+	if (isShowEnd == true) {
+		UIs->EndText();
+
+
+		if (UIs->GetIsGameSceneReset() == true) {
+			isEnd = true;
+		}
+
+		if (UIs->GetIsGameOver() == true) {
+			isShowEnd = false;
+		}
+
+		if (Input::GetInstance()->TriggerKey(DIK_ESCAPE) && isPushEsc == false) {
+			isShowEnd = false;
+		}
+
+	}
+	else {
+		UIs->CloseText();
+	}
+
 	//更新
 	player->GetWorldTransform().UpdateMatrix();
 	viewProjection->UpdateMatrix();
@@ -356,7 +395,7 @@ void GameTitleScene::Draw()
 		clickOutline.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		black.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		title.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
-   }
+	}
 	else {
 		click[1].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		clickEffect.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
@@ -367,7 +406,7 @@ void GameTitleScene::Draw()
 	title.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 
 	if (isNext == false) {
-		if (isShowTitle == true) {
+		if (isShowTitle == true && isShowEnd == false) {
 			circle.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 			for (int i = 0; i < CURSOR_MAX; i++) {
 				cursor[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
@@ -376,6 +415,8 @@ void GameTitleScene::Draw()
 	}
 
 	Sprite::PostDraw();
+
+	UIs->DrawEnd(dxCommon_->GetDevice(), dxCommon_->GetCommandList());
 
 	dxCommon_->PostDraw();
 }

@@ -13,7 +13,7 @@ void GameSceneUI::Initialize(ID3D12Device* device)
 
 	//HP用画像
 	hp.SpriteCreate(device, 2, Vector2(0.0f, 0.0f), false, false);
-	hp.SetPosition(Vector3(28, 650, 0));
+	hp.SetPosition(Vector3(28, 651, 0));
 	hp.SetScale(Vector2(4 * 1, 48 * 1));
 	hp.LoadTexture(spriteCommon_, 2, L"Resources/life.png", device);
 	hp.SpriteTransferVertexBuffer(hp, 2);
@@ -25,23 +25,9 @@ void GameSceneUI::Initialize(ID3D12Device* device)
 	bossHP.SetScale(Vector2(2 * 1, 48 * 1));
 	bossHP.SpriteTransferVertexBuffer(bossHP, 6);
 	bossHP.SpriteUpdate(bossHP, spriteCommon_);
-	//gage
-	gage.LoadTexture(spriteCommon_, 7, L"Resources/green.png", device);
-	gage.SpriteCreate(device, 7, Vector2(0.0f, 0.5f), false, false);
-	gage.SetPosition(Vector3(28, 618, 0));
-	gage.SetScale(Vector2(2 * 1, 18 * 1));
-	gage.SpriteTransferVertexBuffer(gage, 7);
-	gage.SpriteUpdate(gage, spriteCommon_);
-	//
-	gageBack.LoadTexture(spriteCommon_, 8, L"Resources/green.png", device);
-	gageBack.SpriteCreate(device, 8, Vector2(0.0f, 0.5f), false, false);
-	gageBack.SetPosition(Vector3(28, 618, 0));
-	gageBack.SetScale(Vector2(358, 18 * 1));
-	gageBack.SpriteTransferVertexBuffer(gageBack, 8);
-	gageBack.SpriteUpdate(gageBack, spriteCommon_);
 	//
 	hpBack.SpriteCreate(device, 9, Vector2(0.0f, 0.0f), false, false);
-	hpBack.SetPosition(Vector3(28, 650, 0));
+	hpBack.SetPosition(Vector3(28, 651, 0));
 	hpBack.SetScale(Vector2(396, 48 * 1));
 	hpBack.LoadTexture(spriteCommon_, 9, L"Resources/life.png", device);
 	hpBack.SpriteTransferVertexBuffer(hpBack, 9);
@@ -222,19 +208,19 @@ void GameSceneUI::Initialize(ID3D12Device* device)
 
 void GameSceneUI::ShowUI()
 {
-	esc.SetPosition(esc.GetPosition() + Vector3(0, +4, 0));
+	esc.SetPosition(esc.GetPosition() + Vector3(0, +8, 0));
 	esc.SpriteUpdate(esc, spriteCommon_);
-	hpFrame.SetPosition(hpFrame.GetPosition() + Vector3(0, -4, 0));
+	hpFrame.SetPosition(hpFrame.GetPosition() + Vector3(0, -8, 0));
 	hpFrame.SpriteUpdate(hpFrame, spriteCommon_);
 
-	attackIcon.SetPosition(attackIcon.GetPosition() + Vector3(0, -4, 0));
+	attackIcon.SetPosition(attackIcon.GetPosition() + Vector3(0, -8, 0));
 	attackIcon.SpriteUpdate(attackIcon, spriteCommon_);
-	attackUI.SetPosition(attackUI.GetPosition() + Vector3(0, -4, 0));
+	attackUI.SetPosition(attackUI.GetPosition() + Vector3(0, -8, 0));
 	attackUI.SpriteUpdate(attackUI, spriteCommon_);
 
-	lockIcon.SetPosition(lockIcon.GetPosition() + Vector3(0, -4, 0));
+	lockIcon.SetPosition(lockIcon.GetPosition() + Vector3(0, -8, 0));
 	lockIcon.SpriteUpdate(lockIcon, spriteCommon_);
-	lockUI.SetPosition(lockUI.GetPosition() + Vector3(0, -4, 0));
+	lockUI.SetPosition(lockUI.GetPosition() + Vector3(0, -8, 0));
 	lockUI.SpriteUpdate(lockUI, spriteCommon_);
 }
 
@@ -291,55 +277,24 @@ void GameSceneUI::Update(bool isPlayable_, Player* player)
 		hpBack.SpriteTransferVertexBuffer(hpBack, 9);
 		hpBack.SpriteUpdate(hpBack, spriteCommon_);
 		hpFrame.SpriteUpdate(hpFrame, spriteCommon_);
-		//gage
-		float gage_ = player->GetEnergy() - (gage.GetScale().x / 4);
-		if (gage_ > 0) {
-			if (gage.GetScale().x < 358) {
-				if ((gage_) > 4) {
-					gage.SetScale(gage.GetScale() + Vector2(16.0f, 0.0f));
-				}
-				else if ((gage_) > 2) {
-					gage.SetScale(gage.GetScale() + Vector2(8.0f, 0.0f));
-				}
-				else if ((gage_) > 1) {
-					gage.SetScale(gage.GetScale() + Vector2(4.0f, 0.0f));
-				}
-			}
-		}
-		else if (gage_ < 0) {
-			if ((gage_) < 4) {
-				gage.SetScale(gage.GetScale() - Vector2(8.0f, 0.0f));
-			}
-			else if ((gage_) < 2) {
-				gage.SetScale(gage.GetScale() - Vector2(4.0f, 0.0f));
-			}
-			else if ((gage_) < 1) {
-				gage.SetScale(gage.GetScale() - Vector2(2.0f, 0.0f));
-			}
-		}
-	}
-	gage.SetAlpha(gage, frameAlpha);
-	gageBack.SetAlpha(gageBack, barAlpha);
-	gage.SpriteTransferVertexBuffer(gage, 7);
-	gage.SpriteUpdate(gage, spriteCommon_);
-	gageBack.SpriteUpdate(gageBack, spriteCommon_);
 
-	//UI表示
-	if (Input::GetInstance()->TriggerMouseLeft()) {
-		attackUI.SetColor(attackUI, { 0.9f,1.0f,0.2f,1.0f });
-		attackIcon.SetColor(attackIcon, { 0.9f,1.0f,0.2f,1.0f });
-	}
-	else if (Input::GetInstance()->LeftMouseLeft()) {
-		attackUI.SetColor(attackUI, { 1.0f,1.0f,1.0f,0.6f });
-		attackIcon.SetColor(attackIcon, { 1.0f,1.0f,1.0f,0.6f });
-	}//lock
-	if (Input::GetInstance()->TriggerMouseRight()) {
-		lockUI.SetColor(lockUI, { 0.9f,1.0f,0.2f,1.0f });
-		lockIcon.SetColor(lockIcon, { 0.9f,1.0f,0.2f,1.0f });
-	}
-	else if (Input::GetInstance()->LeftMouseRight()) {
-		lockUI.SetColor(lockUI, { 1.0f,1.0f,1.0f,0.6f });
-		lockIcon.SetColor(lockIcon, { 1.0f,1.0f,1.0f,0.6f });
+		//UI表示
+		if (Input::GetInstance()->TriggerMouseLeft()) {
+			attackUI.SetColor(attackUI, { 0.9f,1.0f,0.2f,1.0f });
+			attackIcon.SetColor(attackIcon, { 0.9f,1.0f,0.2f,1.0f });
+		}
+		else if (Input::GetInstance()->LeftMouseLeft()) {
+			attackUI.SetColor(attackUI, { 1.0f,1.0f,1.0f,0.6f });
+			attackIcon.SetColor(attackIcon, { 1.0f,1.0f,1.0f,0.6f });
+		}//lock
+		if (Input::GetInstance()->TriggerMouseRight()) {
+			lockUI.SetColor(lockUI, { 0.9f,1.0f,0.2f,1.0f });
+			lockIcon.SetColor(lockIcon, { 0.9f,1.0f,0.2f,1.0f });
+		}
+		else if (Input::GetInstance()->LeftMouseRight()) {
+			lockUI.SetColor(lockUI, { 1.0f,1.0f,1.0f,0.6f });
+			lockIcon.SetColor(lockIcon, { 1.0f,1.0f,1.0f,0.6f });
+		}
 	}
 }
 
@@ -359,9 +314,7 @@ void GameSceneUI::Draw(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList)
 	lockIcon.SpriteDraw(cmdList, spriteCommon_, device);
 	if (isPlayable == true) {
 		hpBack.SpriteDraw(cmdList, spriteCommon_, device);
-		gageBack.SpriteDraw(cmdList, spriteCommon_, device);
 		hp.SpriteDraw(cmdList, spriteCommon_, device);
-		gage.SpriteDraw(cmdList, spriteCommon_, device);
 	}
 
 
@@ -373,18 +326,18 @@ void GameSceneUI::SetHPAlpha(bool isCollision)
 {
 	if (isCollision == true) {
 		if (frameAlpha > 0.6f) {
-			frameAlpha -= 0.025f;
+			frameAlpha -= 0.05f;
 		}
 		if (barAlpha > 0.1f) {
-			barAlpha -= 0.025f;
+			barAlpha -= 0.05f;
 		}
 	}
 	else {
 		if (frameAlpha < ALPHA_MAX) {
-			frameAlpha += 0.025f;
+			frameAlpha += 0.05f;
 		}
 		if (barAlpha < 0.4f) {
-			barAlpha += 0.025f;
+			barAlpha += 0.05f;
 		}
 	}
 }
@@ -404,13 +357,6 @@ void GameSceneUI::ResetUIPos()
 	hpBack.SetPosition(Vector3(28, 650, 0));
 	hpBack.SetScale(Vector2(396, 48 * 1));
 	hpBack.SpriteUpdate(hpBack, spriteCommon_);
-	//gage
-	gage.SetPosition(Vector3(28, 618, 0));
-	gage.SetScale(Vector2(2 * 1, 18 * 1));
-	gage.SpriteUpdate(gage, spriteCommon_);
-	gageBack.SetPosition(Vector3(28, 618, 0));
-	gageBack.SetScale(Vector2(358, 18 * 1));
-	gageBack.SpriteUpdate(gageBack, spriteCommon_);
 	//攻撃UI
 	attackUI.SetPosition(Vector3(1020, 800, 0));
 	attackUI.SpriteUpdate(attackUI, spriteCommon_);
@@ -449,8 +395,11 @@ void GameSceneUI::ResetUIPos()
 
 void GameSceneUI::SkipUIPos()
 {
+	//esc
+	esc.SetPosition(Vector3(64, 40, 0));
+	esc.SpriteUpdate(esc, spriteCommon_);
 	//hpフレーム
-	hpFrame.SetPosition(Vector3(226, 655, 0));
+	hpFrame.SetPosition(Vector3(226, 658, 0));
 	hpFrame.SpriteUpdate(hpFrame, spriteCommon_);
 	//攻撃UI
 	attackUI.SetPosition(Vector3(1020, 604, 0));
@@ -468,26 +417,22 @@ void GameSceneUI::SkipUIPos()
 
 void GameSceneUI::DeadUIPos()
 {
-	hpFrame.SetPosition(hpFrame.GetPosition() + Vector3(-1.0f, +4.0f, 0.0f));
+	hpFrame.SetPosition(hpFrame.GetPosition() + Vector3(-2.0f, +8.0f, 0.0f));
 	hpFrame.SpriteUpdate(hpFrame, spriteCommon_);
-	hp.SetPosition(hp.GetPosition() + Vector3(-1.0f, +4.0f, 0.0f));
+	hp.SetPosition(hp.GetPosition() + Vector3(-2.0f, +8.0f, 0.0f));
 	hp.SpriteUpdate(hp, spriteCommon_);
-	hpBack.SetPosition(hpBack.GetPosition() + Vector3(-1.0f, +4.0f, 0.0f));
+	hpBack.SetPosition(hpBack.GetPosition() + Vector3(-2.0f, +8.0f, 0.0f));
 	hpBack.SpriteUpdate(hpBack, spriteCommon_);
-	gage.SetPosition(gage.GetPosition() + Vector3(-1.0f, +4.0f, 0.0f));
-	gage.SpriteUpdate(gage, spriteCommon_);
-	gageBack.SetPosition(gageBack.GetPosition() + Vector3(-1.0f, +4.0f, 0.0f));
-	gageBack.SpriteUpdate(gageBack, spriteCommon_);
 
 
-	attackIcon.SetPosition(attackIcon.GetPosition() + Vector3(1.0f, +4.0f, 0.0f));
+	attackIcon.SetPosition(attackIcon.GetPosition() + Vector3(2.0f, +8.0f, 0.0f));
 	attackIcon.SpriteUpdate(attackIcon, spriteCommon_);
-	attackUI.SetPosition(attackUI.GetPosition() + Vector3(1.0f, +4.0f, 0.0f));
+	attackUI.SetPosition(attackUI.GetPosition() + Vector3(2.0f, +8.0f, 0.0f));
 	attackUI.SpriteUpdate(attackUI, spriteCommon_);
 
-	lockIcon.SetPosition(lockIcon.GetPosition() + Vector3(1.0f, +4.0f, 0.0f));
+	lockIcon.SetPosition(lockIcon.GetPosition() + Vector3(2.0f, +8.0f, 0.0f));
 	lockIcon.SpriteUpdate(lockIcon, spriteCommon_);
-	lockUI.SetPosition(lockUI.GetPosition() + Vector3(1.0f, +4, 0));
+	lockUI.SetPosition(lockUI.GetPosition() + Vector3(2.0f, +8, 0));
 	lockUI.SpriteUpdate(lockUI, spriteCommon_);
 }
 
@@ -497,7 +442,7 @@ void GameSceneUI::ContinueText()
 		isClose = false;
 	}
 
-	Vector2 addScale = { 32, 12};
+	Vector2 addScale = { 64, 28};
 	if (continueTextbox.GetScale().x >= 768) {
 		addScale.x = 0;
 	}
@@ -658,14 +603,14 @@ void GameSceneUI::CursorUpdate(bool isCont) {
 	}
 	else if (circleSize < 6.0f) {
 		circleSize += 0.1f;
-		circleAlpha -= 0.025f;
+		circleAlpha -= 0.05f;
 	}
 	else {
 		circleSize = 1.0f;
 		circleAlpha = ALPHA_MAX;
 	}
 	circle.SetScale(Vector2(16 * circleSize, 16 * circleSize));
-	circle.SetRotation(circle.GetRotation() + 0.005f);
+	circle.SetRotation(circle.GetRotation() + 0.01f);
 	circle.SetAlpha(circle, circleAlpha);
 	circle.SpriteTransferVertexBuffer(circle, 7);
 	circle.SpriteUpdate(circle, spriteCommon_);
@@ -679,7 +624,7 @@ void GameSceneUI::CursorUpdate(bool isCont) {
 void GameSceneUI::ClearUpdate()
 {
 	if (congratAlpha < ALPHA_MAX) {
-		congratAlpha += 0.025f;
+		congratAlpha += 0.05f;
 		congrat.SetAlpha(congrat, congratAlpha);
 		congratBack.SetAlpha(congratBack, congratAlpha);
 		clearNext.SetAlpha(clearNext, congratAlpha);
@@ -691,7 +636,7 @@ void GameSceneUI::EndText() {
 		isClose = false;
 	}
 
-	Vector2 addScale = { 32, 12 };
+	Vector2 addScale = { 64, 28 };
 	if (continueTextbox.GetScale().x >= 768) {
 		addScale.x = 0;
 	}
@@ -817,7 +762,7 @@ void GameSceneUI::CloseText() {
 		isShowContinue = false;
 	}
 
-	Vector2 addScale = { 32, 24 };
+	Vector2 addScale = { 64, 48 };
 	if (continueTextbox.GetScale().x < 64) {
 		addScale.x = 0;
 	}
@@ -840,7 +785,7 @@ void GameSceneUI::PauseText() {
 		isClose = false;
 	}
 
-	Vector2 addScale = { 32, 12 };
+	Vector2 addScale = { 64, 28 };
 	if (continueTextbox.GetScale().x >= 768) {
 		addScale.x = 0;
 	}

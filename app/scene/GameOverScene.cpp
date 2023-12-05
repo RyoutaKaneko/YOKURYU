@@ -80,29 +80,29 @@ void GameOverScene::Initialize()
 
 void GameOverScene::Update()
 {
-	if (gameTimer < 50) {
+	if (gameTimer < 25) {
 		if (fadeAlpha > 0.0f) {
-			fadeAlpha -= 0.05f;
+			fadeAlpha -= 0.1f;
 			fade.SetAlpha(fade, fadeAlpha);
 			fade.SpriteUpdate(fade, spriteCommon_);
 		}
 	}
-	else if (gameTimer < 200) {}
-	else if(gameTimer < 250){
+	else if (gameTimer < 100) {}
+	else if(gameTimer < 125){
 		if (fadeAlpha < 1.0f) {
-			fadeAlpha += 0.05f;
+			fadeAlpha += 0.1f;
 			fade.SetAlpha(fade, fadeAlpha);
 			fade.SpriteUpdate(fade, spriteCommon_);
 		}
 		if (textAlpha < 1.0f) {
-			textAlpha += 0.025f;
+			textAlpha += 0.05f;
 			textGH.SetAlpha(textGH, textAlpha);
 			textGH.SpriteUpdate(textGH, spriteCommon_);
 		}
 	}
-	else if(gameTimer < 300){
+	else if(gameTimer < 150){
 		if (textAlpha > 0.0f) {
-			textAlpha -= 0.025f;
+			textAlpha -= 0.05f;
 			textGH.SetAlpha(textGH, textAlpha);
 			textGH.SpriteUpdate(textGH, spriteCommon_);
 		}

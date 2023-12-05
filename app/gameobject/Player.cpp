@@ -10,7 +10,7 @@
 #include "SphereCollider.h"
 #include"Input.h"
 
-const float Player::ADD_ALPHA = 0.01f;
+const float Player::ADD_ALPHA = 0.02f;
 const float Player::MOVE_POWER = 0.03f;
 const float Player::FLOAT_POWER = 0.005f;
 
@@ -67,16 +67,6 @@ void Player::Update(Vector3 velo, std::vector<LockInfo>& info)
 	Move();
 	LockAttack(info);
 	Attack(velo);
-	//ULT
-	/*if (energy >= ENERGY_MAX) {
-		if (input->TriggerKey(DIK_Q)) {
-			if (isUltimate == false) {
-				pos_ = GetPosition();
-				rot_ = GetRotation();
-				isUltimate = true;
-			}
-		}
-	}*/
 	//player’e
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		if (bullet->GetIsHoming() == true) {
@@ -132,7 +122,7 @@ void Player::Move()
 			move = { MOVE_POWER, MOVE_POWER, 0 };
 		}
 		else {
-			move = { 0, 0.04f, 0 };
+			move = { 0, 0.08f, 0 };
 		}
 	}
 	else if (input->PushKey(DIK_A)) {
@@ -140,7 +130,7 @@ void Player::Move()
 			move = { -MOVE_POWER, -MOVE_POWER, 0 };
 		}
 		else {
-			move = { -0.04f, 0, 0 };
+			move = { -0.08f, 0, 0 };
 		}
 	}
 	else if (input->PushKey(DIK_D)) {
@@ -148,11 +138,11 @@ void Player::Move()
 			move = { MOVE_POWER, -MOVE_POWER, 0 };
 		}
 		else {
-			move = { 0.04f, 0, 0 };
+			move = { 0.08f, 0, 0 };
 		}
 	}
 	else if (input->PushKey(DIK_S)) {
-		move = { 0, -0.04f, 0 };
+		move = { 0, -0.08f, 0 };
 	}
 
 	Vector3 floating(0, 0, 0);
@@ -172,7 +162,7 @@ void Player::Move()
 	if (abs(tmp.x) <= 3.0f) {
 		if (tmp.y >= -1.5f && tmp.y <= 2.0f) {
 			if (GetPosition().z < -1.6f) {
-				SetPosition(GetPosition() + move + floating + Vector3(0.0f,0.0f,0.05f));
+				SetPosition(GetPosition() + move + floating + Vector3(0.0f,0.0f,0.1f));
 			}
 			else {
 				SetPosition(GetPosition() + move + floating);
@@ -252,7 +242,7 @@ void Player::Ultimate()
 }
 
 void Player::PlayerDraw(ViewProjection* viewProjection_) {
-	if (hitTime % 5 == 0) {
+	if (hitTime % 3 == 0) {
 		Draw(viewProjection_,alpha);
 	}
 	//’e•`‰æ
@@ -272,7 +262,6 @@ void Player::OnCollision([[maybe_unused]] const CollisionInfo& info)
 	//Õ“Ë‘ŠŽè‚Ì–¼‘O
 	const char* str1 = "class EnemyBullet";
 	const char* str2 = "class BossBullet";
-	const char* str3= "class Energy";
 	//‘ŠŽè‚ªenemy‚Ì’e
 	if (strcmp(GetToCollName(), str1) == 0) {
 		if (isHit == false) {
@@ -285,13 +274,6 @@ void Player::OnCollision([[maybe_unused]] const CollisionInfo& info)
 		if (isHit == false) {
 			hp-=BOSS_DAMAGE;
 			isHit = true;
-		}
-	}
-
-	//‘ŠŽè‚ªenergy
-	if (strcmp(GetToCollName(), str3) == 0) {
-		if (energy < ENERGY_MAX) {
-			energy += ADD_ENERGY;
 		}
 	}
 }
@@ -311,7 +293,7 @@ void Player::Dead()
 			healthState = WEEKNESS;
 		}
 		//4/1‚Å•mŽ€
-		else if (DYING_NUM <= 25 && healthState == WEEKNESS) {
+		else if (hp<= DYING_NUM && healthState == WEEKNESS) {
 			healthState = DYING;
 		}
 		else if (hp <= DIE_NUM && healthState == DYING) {
@@ -321,12 +303,12 @@ void Player::Dead()
 
 	if (deathTimer < DEATH_TIME_ONE) {}
 	else if (deathTimer < DEATH_TIME_TWO) {
-		addVelo = { 0.0f,0.015f,0.0f };
+		addVelo = { 0.0f,0.03f,0.0f };
 		dMove = addVelo;
 		SetPosition(GetPosition() + dMove);
 	}
 	else if (deathTimer < DEATH_TIME_THREE) {
-		addVelo = { 0.0f,-0.15f,0.0f };
+		addVelo = { 0.0f,-0.3f,0.0f };
 		dMove = addVelo;
 		SetPosition(GetPosition() + dMove);
 	}

@@ -145,8 +145,6 @@ private:
 	SpriteCommon spriteCommon_;
 	Sprite hp;
 	Sprite bossHP;
-	Sprite gage;
-	Sprite gageBack;
 	Sprite hpBack;
 	Sprite hpFrame;
 	Sprite attackUI;

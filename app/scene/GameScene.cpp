@@ -171,7 +171,7 @@ void GameScene::Initialize() {
 	isPlayable = false;
 	gameState = MAIN;
 	infos.clear();
-	gameTime = 150;
+	gameTime = 75;
 	cursorRotate = 0.001f;
 	bossPass = 0;
 	cameraTmpPos = { 0,0,0 };
@@ -207,7 +207,7 @@ void GameScene::Update() {
 	}
 	//メインゲーム開始時フェードアウト
 	if (fadeout.GetPosition().y < 18200) {
-		fadeout.SetPosition(fadeout.GetPosition() + Vector3(0, 40, 0));
+		fadeout.SetPosition(fadeout.GetPosition() + Vector3(0, 80, 0));
 		fadeout.SpriteUpdate(fadeout, spriteCommon_);
 	}
 
@@ -850,21 +850,21 @@ void GameScene::ClearUpdate()
 
 	if (boss->GetISlained() == true && isSceneEnd == false) {
 		if (clearTimer < CLEARTIME_ONE) {
-			pm->Fire(particle, { parPos.x,parPos.y,parPos.z }, -1, 2.0f, 0, 20, { 18,0 });
+			pm->Fire(particle, { parPos.x,parPos.y,parPos.z }, -1, 4.0f, 0, 20, { 18,0 });
 		}
 		else if (clearTimer == CLEARTIME_TWO) {
 			Vector3 cameraPos = { -30, 65, -120 };
 			railCamera->GetView()->SetEye(cameraPos);
 		}
 		else if (clearTimer > CLEARTIME_TWO && clearTimer < CLEARTIME_THREE) {
-			pm->Fire(particle, { parPos.x,parPos.y,parPos.z }, -1, 2.0f, 0, 20, { 18,0 });
+			pm->Fire(particle, { parPos.x,parPos.y,parPos.z }, -1, 4.0f, 0, 20, { 18,0 });
 		}
 		else if (clearTimer == CLEARTIME_FOUR) {
 			Vector3 cameraPos = { 30, 65, -120 };
 			railCamera->GetView()->SetEye(cameraPos);
 		}
 		else if (clearTimer > CLEARTIME_FOUR && clearTimer < CLEARTIME_FIVE) {
-			pm->Fire(particle, { parPos.x,parPos.y,parPos.z }, -1, 2.0f, 0, 20, { 18,0 });
+			pm->Fire(particle, { parPos.x,parPos.y,parPos.z }, -1, 4.0f, 0, 20, { 18,0 });
 		}
 		else if (clearTimer == CLEARTIME_SIX) {
 			Vector3 cameraPos = { 0, 75, -120 };
@@ -875,22 +875,22 @@ void GameScene::ClearUpdate()
 			isShowEnergy = false;
 		}
 		else if (clearTimer > CLEARTIME_SIX && clearTimer < CLEARTIME_SEVEN) {
-			Vector3 move = { 0, -0.25f, 0 };
+			Vector3 move = { 0, -0.5f, 0 };
 			railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() + move);
 		}
 		else if (clearTimer > CLEARTIME_SEVEN) {
 			if (particleTimer < PARTICLENUM) {
 				if (particleTimer < PARTICLENUM_ONE) {
 					Vector3 cParPos = { 40,30,0 };
-					clearPM_01->Fire(clearParticle_01, { cParPos.x,cParPos.y,cParPos.z }, -1, 0.5f, 0, 30, { 3,0 });
+					clearPM_01->Fire(clearParticle_01, { cParPos.x,cParPos.y,cParPos.z }, -1, 1.0f, 0, 30, { 3,0 });
 				}
 				else if (particleTimer < PARTICLENUM_TWO) {
 					Vector3 cParPos = { 0,30,0 };
-					clearPM_02->Fire(clearParticle_02, { cParPos.x,cParPos.y,cParPos.z }, -1, 0.5f, 0, 30, { 3,0 });
+					clearPM_02->Fire(clearParticle_02, { cParPos.x,cParPos.y,cParPos.z }, -1, 1.0f, 0, 30, { 3,0 });
 				}
 				else if (particleTimer < PARTICLENUM_THREE) {
 					Vector3 cParPos = { -40,30,0 };
-					clearPM_03->Fire(clearParticle_03, { cParPos.x,cParPos.y,cParPos.z }, -1, 0.5f, 0, 30, { 3,0 });
+					clearPM_03->Fire(clearParticle_03, { cParPos.x,cParPos.y,cParPos.z }, -1, 1.0f, 0, 30, { 3,0 });
 				}
 				particleTimer++;
 			}
@@ -922,16 +922,16 @@ void GameScene::ClearUpdate()
 
 	if (isSceneEnd == true) {
 		if (fadeAlpha < ALPHA_MAX) {
-			fadeAlpha += 0.025f;
+			fadeAlpha += 0.05f;
 			fade.SetAlpha(fade, fadeAlpha);
 		}
 		else {
 			if (clearTimer < FADENUM_ONE) {
-				thanksAlpha += 0.025f;
+				thanksAlpha += 0.05f;
 				thanks.SetAlpha(thanks, thanksAlpha);
 			}
 			else if (clearTimer > FADENUM_TWO) {
-				thanksAlpha -= 0.025f;
+				thanksAlpha -= 0.05f;
 				thanks.SetAlpha(thanks, thanksAlpha);
 			}
 			else{
@@ -954,7 +954,7 @@ void GameScene::PauseUpdate() {
 		if (UIs->GetIsGameOver() == true) {
 			Reset();
 			gameState = MAIN;
-			gameTime = 150;
+			gameTime = 75;
 			railCamera->GetView()->SetEye(Vector3(-1, 0.5f, 490.0f));
 			railCamera->GetView()->SetTarget(Vector3(0.0f, 0.5f, 495));
 			player->SetPosition({ 0,0.5f,495 });
@@ -1002,11 +1002,11 @@ void GameScene::BossUpdate() {
 		}
 		//演出
 		railCamera->GetView()->SetTarget(boss->GetPosition());
-		if (boss->GetTimer() == 150) {
+		if (boss->GetTimer() == 75) {
 			railCamera->GetView()->SetEye(Vector3(-80, 55, -300));
 		}
-		else if (boss->GetTimer() < 150) {
-			railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() + Vector3(0.5f, 0.0f, 0.05f));
+		else if (boss->GetTimer() < 75) {
+			railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() + Vector3(0.75f, 0.0f, 0.25f));
 		}
 	}
 	else {
@@ -1014,7 +1014,7 @@ void GameScene::BossUpdate() {
 		if (isPlayable == false) {
 			railCamera->GetView()->SetEye(Vector3(0, 60, -95));
 			railCamera->GetView()->SetTarget(Vector3(0, 52, -200));
-			railCamera->GetCamera()->SetPosition(Vector3(0, 59, -100));
+			railCamera->GetCamera()->SetPosition(Vector3(0, 50, -100));
 			railCamera->GetCamera()->SetRotation(Vector3(0, 180, 0));
 			fadeAlpha = 1.0f;
 			fade.SetAlpha(fade, fadeAlpha);
@@ -1060,14 +1060,13 @@ void GameScene::BossUpdate() {
 		//カメラ更新
 		if (railCamera->GetOnRail() == false) {
 			gameTime++;
-			if (gameTime == 300) {
+			if (gameTime == 150) {
 				railCamera->SetOnRail(true);
 				gameTime = 0;
 			}
 		}
 		railCamera->Update(player, bossPoint);
-		railCamera->GetView()->SetTarget(boss->GetPosition());
-		railCamera->GetCamera()->SetRotation(railCamera->GetView()->GetTarget());
+		/*railCamera->GetView()->SetTarget(boss->GetPosition());*/
 		//カメラ制御
 		if (bossPass == 0) {
 			if (railCamera->GetPasPoint() + 1.0f > 3.0f) {
@@ -1143,7 +1142,7 @@ void GameScene::MainUpdate() {
 			UIs->SkipUIPos();
 		}
 		//UI表示
-		if (gameTime <= 50) {
+		if (gameTime <= 25) {
 			UIs->ShowUI();
 		}
 		railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() + Vector3(0, 0.0f, 0.05f));
@@ -1160,6 +1159,10 @@ void GameScene::MainUpdate() {
 		if (isPlayable == false) {
 			isPlayable = true;
 		}
+		/////デバック用(ボスまでスキップ)/////
+		if (input->TriggerKey(DIK_B)) {
+			railCamera->SetOnRail(false);
+		}
 		//boss戦へ
 		if (railCamera->GetOnRail() == false) {
 			if (isCheckPoint == false) {
@@ -1171,10 +1174,6 @@ void GameScene::MainUpdate() {
 				railCamera->Initialize(player);
 			}
 		}
-		/////デバック用(ボスまでスキップ)/////
-		/*if (input->TriggerKey(DIK_B)) {
-			railCamera->SetOnRail(false);
-		}*/
 
 		//ポーズ画面へ
 		if (Input::GetInstance()->TriggerKey(DIK_ESCAPE)) {

@@ -11,10 +11,6 @@ float4 main(VSOutput input) : SV_TARGET
 	shade_color = m_ambient; // アンビエント項
 	shade_color += m_diffuse * light_diffuse; // ディフーズ項
 	float4 texcolor = tex.Sample(smp, input.uv);
-    if (texcolor.r == 0 && texcolor.g == 0 && texcolor.b == 1)
-    {
-        discard;
-		
-    }
+
 	return float4(texcolor.rgb * shade_color, texcolor.a * m_alpha);
 }

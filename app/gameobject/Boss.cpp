@@ -59,11 +59,11 @@ void Boss::Update(Vector3 velo)
 {
 	//登場時
 	if (appearTimer > 0) {
-		if (appearTimer > 150) {
-			SetPosition(GetPosition() + Vector3(0.5f, -0.1f, 0));
+		if (appearTimer > 75) {
+			SetPosition(GetPosition() + Vector3(1.0f, -0.2f, 0));
 		}
-		if (appearTimer > 100) {
-			bossAlpha += 0.02f;
+		if (bossAlpha < 1.0f) {
+			bossAlpha += 0.04f;
 		}
 		appearTimer--;
 	}
@@ -113,7 +113,7 @@ void Boss::Pop()
 	if (isInvisible == true) {
 		isInvisible = false;
 	}
-	appearTimer = 300;
+	appearTimer = 150;
 }
 
 void Boss::Attack()
@@ -136,10 +136,10 @@ void Boss::Move()
 {
 	//ボス登場後
 	if (isInvisible == false) {
-		if (timer < 75) {
+		if (timer < 35) {
 			SetPosition(GetPosition() + Vector3(0.0f, 0.01f, 0.0f));
 		}
-		else if (timer < 150) {
+		else if (timer < 70) {
 			SetPosition(GetPosition() + Vector3(0.0f, -0.01f, 0.0f));
 		}
 		else {
@@ -153,7 +153,7 @@ void Boss::ChangeState()
 {
 	//待機状態
 	if (state == WAIT) {
-		if (timeCount >= 250) {
+		if (timeCount >= 125) {
 			//乱数により行動を決定
 			/*int random = rand() % 1 + 1;*/
 			//抽選された行動
@@ -195,7 +195,6 @@ void Boss::OnCollision([[maybe_unused]] const CollisionInfo& info)
 			for (int i = 0; i < PARTS_NUM; i++) {
 				if (parts[i]->GetIsLocked() == true) {
 					parts[i]->SetIsLocked(false);
-					GameScene::PopEnergy(parts[i]->GetWorldPos());
 					hp -= 5;
 				}
 			}
@@ -218,7 +217,7 @@ void Boss::SlainUpdate()
 	std::uniform_real_distribution<float>dist(-5.0f, 5.0f);
 	Vector3 randomNum(dist(engine), dist(engine), dist(engine));
 
-	if (slainTimer < 60) {
+	if (slainTimer < 30) {
 		SetRotation(randomNum);		
 	}
 	else{

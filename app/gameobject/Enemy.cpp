@@ -140,9 +140,6 @@ void Enemy::OnCollision([[maybe_unused]] const CollisionInfo& info)
 		if (isInvisible == false) {
 			if (isParticle == false) {
 				isParticle = true;
-				for (int i = 0; i < 3; i++) {
-					GameScene::PopEnergy(GetPosition());
-				}
 			}
 		}
 	}

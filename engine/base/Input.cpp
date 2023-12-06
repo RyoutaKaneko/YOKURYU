@@ -88,37 +88,6 @@ void Input::Update()
 
 	result = mouse->GetDeviceState(sizeof(DIMOUSESTATE), &mouseState);
 
-	//マウス制御解除
-	if (PushKey(DIK_LCONTROL)) {
-		isVailCursor = true;
-		ShowCursor(TRUE);
-	}
-	else {
-		isVailCursor = false;
-		ShowCursor(FALSE);
-	}
-
-	if (isVailCursor == false) {
-		//マウスを画面内に固定
-		POINT left = { 0,0 };
-		POINT right = { WinApp::window_width,0 };
-		POINT top = { 0,0 };
-		POINT bottom = { 0,WinApp::window_height };
-		ClientToScreen(WinApp::GetInstance()->GetHwnd(), &left);
-		ClientToScreen(WinApp::GetInstance()->GetHwnd(), &top);
-		ClientToScreen(WinApp::GetInstance()->GetHwnd(), &bottom);
-		ClientToScreen(WinApp::GetInstance()->GetHwnd(), &right);
-		RECT rect = {
-		left.x,
-		top.y,
-		right.x,
-		bottom.y
-		};
-		ClipCursor(&rect);
-	}
-	else {
-		ClipCursor(nullptr);
-	}
 	
 }
 
@@ -221,4 +190,33 @@ bool Input::AnyKey()
 	}
 
 	return false;
+}
+
+void Input::IsClipCursor(bool isClip)
+{
+	//マウス制御解除
+	if (isClip == true) {
+		isVailCursor = true;
+		//マウスを画面内に固定
+		POINT left = { 0,0 };
+		POINT right = { WinApp::window_width,0 };
+		POINT top = { 0,0 };
+		POINT bottom = { 0,WinApp::window_height };
+		ClientToScreen(WinApp::GetInstance()->GetHwnd(), &left);
+		ClientToScreen(WinApp::GetInstance()->GetHwnd(), &top);
+		ClientToScreen(WinApp::GetInstance()->GetHwnd(), &bottom);
+		ClientToScreen(WinApp::GetInstance()->GetHwnd(), &right);
+		RECT rect = {
+		left.x,
+		top.y,
+		right.x,
+		bottom.y
+		};
+		ClipCursor(&rect);
+	}
+	else {
+		isVailCursor = false;
+		ClipCursor(nullptr);
+	}
+
 }

@@ -139,6 +139,11 @@ public:
 	/// </summary>
 	void MainUpdate();
 
+	/// <summary>
+	///　ボス戦開始!
+	/// </summary>
+	void BossStart();
+
 private:
 	//base
 	DirectXCommon* dxCommon_ = nullptr;
@@ -236,4 +241,6 @@ private:
 	bool isSceneEnd;
 	bool isShowEnergy;
 	bool isPause;
+	bool isbossStart;
+	int bossStartTime;
 };

@@ -16,6 +16,10 @@ GameOverScene::~GameOverScene()
 
 void GameOverScene::Initialize()
 {
+	//ƒJ[ƒ\ƒ‹‚ð‰æ–Ê“àŒÅ’è‚ð‰ðœ
+	if (Input::GetInstance()->GetIsVailCursor() == true) {
+		Input::GetInstance()->IsClipCursor(false);
+	}
 	input_ = Input::GetInstance();
 	dxCommon = DirectXCommon::GetInstance();
 

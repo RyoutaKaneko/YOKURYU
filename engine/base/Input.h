@@ -129,6 +129,17 @@ public: // メンバ関数
 	/// <returns></returns>
 	bool AnyKey();
 
+	/// <summary>
+	/// カーゾル画面内クリップ
+	/// </summary>
+	/// <param name="isClip"></param>
+	void IsClipCursor(bool isClip);
+
+	/// <summary>
+	/// クリップ状態取得
+	/// </summary>
+	bool GetIsVailCursor() { return isVailCursor; }
+
 private:
 	Input() = default;
 	~Input() = default;

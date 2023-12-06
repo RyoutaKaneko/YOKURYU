@@ -172,7 +172,7 @@ void GameScene::Initialize() {
 	gameState = MAIN;
 	infos.clear();
 	gameTime = 75;
-	cursorRotate = 0.001f;
+	cursorRotate = 0.002f;
 	bossPass = 0;
 	cameraTmpPos = { 0,0,0 };
 	cameraTmpRot = { 0,0,0 };
@@ -185,6 +185,8 @@ void GameScene::Initialize() {
 	isSceneEnd = false;
 	isShowEnergy = true;
 	isPause = false;
+	isbossStart = false;
+	bossStartTime = 0;
 }
 
 ///-----更新処理-----///
@@ -504,7 +506,7 @@ void GameScene::Reset() {
 	//変数
 	isCheckPoint = false;
 	isPlayable = false;
-	cursorRotate = 0.001f;
+	cursorRotate = 0.002f;
 	LockedClear();
 	infos.clear();
 	gameState = MAIN;
@@ -516,6 +518,8 @@ void GameScene::Reset() {
 	//UI
 	UIs->ResetUIPos();
 	isShowUI = true;
+	isbossStart = false;
+	bossStartTime = 0;
 }
 
 void GameScene::Finalize()
@@ -627,7 +631,7 @@ void GameScene::SerchEnemy()
 			Vector3 epos2 = GetWorldToScreenPos(enemy_->GetWorldPos(), railCamera);
 			Vector3 len = enemy_->GetWorldPos() - player->GetWorldPos();
 			if (pow((epos2.x - cur.x), 2) + pow((epos2.y - cur.y), 2) < pow(30, 2)) {
-				if (enemy_->GetIsLocked() == false && infos.size() < 10) {
+				if (enemy_->GetIsLocked() == false && infos.size() < 10 && enemy_->GetIsParticle() == false) {
 					LockInfo info;
 					info.vec = enemy_->GetWorldPos();
 					info.obj = enemy_->GetPointer();
@@ -636,13 +640,13 @@ void GameScene::SerchEnemy()
 				}
 			}
 		}
-		if (cursorRotate < 0.005f) {
-			cursorRotate += 0.0001f;
+		if (cursorRotate < 0.01f) {
+			cursorRotate += 0.0005f;
 		}
 	}
 	else {
-		if (cursorRotate > 0.001f) {
-			cursorRotate -= 0.0001f;
+		if (cursorRotate > 0.002f) {
+			cursorRotate -= 0.0005f;
 		}
 	}
 	//ロックオン画像の更新
@@ -818,7 +822,7 @@ Vector3 GameScene::GetWorldToScreenPos(Vector3 pos_, RailCamera* rail)
 	Matrix4 matVPV = view * projection * viewPort;
 
 	Matrix4 mat;
-	Vector3 posScreen = pos_;
+	Vector3 posScreen = pos_;																									  
 	posScreen = mat.transform(posScreen, matVPV);
 	posScreen.z = 0;
 
@@ -846,6 +850,11 @@ Vector2 GameScene::GetWorldToScreenScale(Object3d* obj_, RailCamera* rail)
 
 void GameScene::ClearUpdate()
 {
+	//カーソルを画面内固定を解除
+	if (Input::GetInstance()->GetIsVailCursor() == true) {
+		Input::GetInstance()->IsClipCursor(false);
+	}
+
 	Vector3 parPos = { 0,0,0 };
 
 	if (boss->GetISlained() == true && isSceneEnd == false) {
@@ -944,6 +953,10 @@ void GameScene::ClearUpdate()
 
 
 void GameScene::PauseUpdate() {
+	//カーソルを画面内固定を解除
+	if (Input::GetInstance()->GetIsVailCursor() == true) {
+		Input::GetInstance()->IsClipCursor(false);
+	}
 	if (isPause == true) {
 		UIs->PauseText();
 
@@ -986,9 +999,12 @@ void GameScene::PauseUpdate() {
 }
 
 void GameScene::BossUpdate() {
+	//カーソルを画面内に固定
+	if (Input::GetInstance()->GetIsVailCursor() == false) {
+		Input::GetInstance()->IsClipCursor(true);
+	}
 
-	if (boss->GetTimer() > 0) {
-		player->SetIsHit(false);
+	if (isbossStart == false) {
 		//playerを操作不可に
 		if (isPlayable == true) {
 			isPlayable = false;
@@ -1002,7 +1018,14 @@ void GameScene::BossUpdate() {
 		}
 		//演出
 		railCamera->GetView()->SetTarget(boss->GetPosition());
-		if (boss->GetTimer() == 75) {
+		
+		if (boss->GetTimer() == 0) {
+			railCamera->GetView()->SetEye(Vector3(0, 52, -80));
+			railCamera->GetCamera()->SetPosition(Vector3(0, 52, -85));
+			railCamera->GetCamera()->Update();
+			railCamera->GetView()->SetTarget(player->GetPosition());
+		}
+		else if (boss->GetTimer() == 75) {
 			railCamera->GetView()->SetEye(Vector3(-80, 55, -300));
 		}
 		else if (boss->GetTimer() < 75) {
@@ -1126,7 +1149,7 @@ void GameScene::BossUpdate() {
 	UIAlpha();
 	UIs->Update(isPlayable, player);
 	//更新
-	boss->Update(player->GetWorldPos());
+	boss->Update(player->GetPosition());
 	//ダメージをくらったときに画面シェイク
 	if (player->GetIsHit() == true) {
 		railCamera->ShakeCamera(-2.0f, 2.0f);
@@ -1134,6 +1157,11 @@ void GameScene::BossUpdate() {
 }
 
 void GameScene::MainUpdate() {
+	//カーソルを画面内に固定
+	if (Input::GetInstance()->GetIsVailCursor() == false) {
+		Input::GetInstance()->IsClipCursor(true);
+	}
+
 	//ゲームスタート時演出
 	if (gameTime > 0) {
 		//SPACEで演出スキップ
@@ -1169,6 +1197,12 @@ void GameScene::MainUpdate() {
 				isCheckPoint = true;
 				boss->Pop();
 				gameState = BOSS;
+				delete player;
+				//player
+				player = new Player;
+				player->PlayerInitialize();
+				player->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 0.7f));
+				player->SetAlpha(1.0f);
 				delete railCamera;
 				railCamera = new RailCamera;
 				railCamera->Initialize(player);
@@ -1212,4 +1246,8 @@ void GameScene::MainUpdate() {
 			railCamera->ShakeCamera(-0.2f, 0.2f);
 		}
 	}
+}
+
+void GameScene::BossStart() {
+
 }

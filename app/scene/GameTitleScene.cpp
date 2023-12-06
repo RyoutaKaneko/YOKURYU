@@ -166,6 +166,10 @@ void GameTitleScene::Initialize()
 
 void GameTitleScene::Update()
 {
+	//カーソルを画面内固定を解除
+	if (Input::GetInstance()->GetIsVailCursor() == true) {
+		Input::GetInstance()->IsClipCursor(false);
+	}
 	if (isPushEsc == true) {
 		isPushEsc = false;
 	}
@@ -283,7 +287,7 @@ void GameTitleScene::Update()
 	else {
 		//タイトルをすっと消す
 		if (titleAlpha > 0.0f) {
-			titleAlpha -= 0.5f;
+			titleAlpha -= 0.025f;
 			title.SetAlpha(title, titleAlpha);
 			title.SpriteTransferVertexBuffer(title, 0);
 			title.SpriteUpdate(title, spriteCommon_);
@@ -295,7 +299,7 @@ void GameTitleScene::Update()
 
 		}
 		if (clickEffectAlpha > 0) {
-			clickEffectAlpha -= 0.5f;
+			clickEffectAlpha -= 0.025f;
 			clickEffect.SetScale(clickEffect.GetScale() + Vector2(2.0f, 2.0f));
 			clickEffect.SpriteTransferVertexBuffer(clickEffect, 10);
 			clickEffect.SetAlpha(clickEffect, clickEffectAlpha);
@@ -310,7 +314,7 @@ void GameTitleScene::Update()
 		else if (gameTimer < 25) {
 			player->SetPosition(player->GetPosition() + Vector3(0, -0.02f, 0));
 		}
-		else if (gameTimer < 75) {
+		else if (gameTimer < 60) {
 			player->SetPosition(player->GetPosition() + Vector3(0, -0.005f, 0));
 		}
 		else if (player->GetPosition().y < 60.0f) {

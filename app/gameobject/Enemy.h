@@ -88,7 +88,12 @@ public:
 	/// <returns></returns>
 	const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets_; }
 
+	/// <summary>
+	/// €–S‰‰o
+	/// </summary>
 	void PopParticle();
+
+	bool GetIsParticle() { return isParticle; }
 
 private:
 

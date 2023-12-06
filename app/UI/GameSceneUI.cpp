@@ -454,7 +454,7 @@ void GameSceneUI::ContinueText()
 	}
 	contSelect.SetScale(SELECT_CONTINUE_SCALE);
 	if (isShowContinue == true) {
-		CursorUpdate(true);
+		CursorUpdate(false);
 
 		bool onCursor = false;
 
@@ -649,7 +649,7 @@ void GameSceneUI::EndText() {
 
 	contSelect.SetScale(SELECT_CONTINUE_SCALE);
 	if (isShowContinue == true) {
-		CursorUpdate(true);
+		CursorUpdate(false);
 
 		bool onCursor = false;
 
@@ -798,7 +798,7 @@ void GameSceneUI::PauseText() {
 
 	contSelect.SetScale(SELECT_PAUSE_SCALE);
 	if (isShowContinue == true) {
-		CursorUpdate(true);
+		CursorUpdate(false);
 
 		bool onCursor = false;
 

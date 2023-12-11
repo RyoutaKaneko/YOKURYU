@@ -23,7 +23,7 @@ public:
 	///  初期化
 	/// </summary>
 	/// <param name="player_">プレイヤー</param>
-	void Initialize(Player* player_);
+	void Initialize();
 	
 	/// <summary>
 	/// 更新

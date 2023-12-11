@@ -55,7 +55,8 @@ void GameScene::Initialize() {
 
 	//レールカメラ
 	railCamera = new RailCamera;
-	railCamera->Initialize(player);
+	railCamera->Initialize();
+	railCamera->SetPlayer(player);
 
 	//パーティクル用
 	xmViewProjection = new XMViewProjection;
@@ -391,8 +392,10 @@ void GameScene::Draw() {
 			crosshair[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		}
 	}
-	for (int i = 0; i < infos.size(); i++) {
-		lock[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+	if (gameState == CLEAR) {
+		for (int i = 0; i < infos.size(); i++) {
+			lock[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+		}
 	}
 	fadeout.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 
@@ -500,7 +503,8 @@ void GameScene::Reset() {
 	bossHP.SetScale(Vector2(12 * 1, 48 * 1));
 	//camera
 	railCamera = new RailCamera;
-	railCamera->Initialize(player);
+	railCamera->Initialize();
+	railCamera->SetPlayer(player);
 	//enemy
 	LoadEnemy();
 	//変数
@@ -1020,9 +1024,19 @@ void GameScene::BossUpdate() {
 		railCamera->GetView()->SetTarget(boss->GetPosition());
 		
 		if (boss->GetTimer() == 0) {
-			railCamera->GetView()->SetEye(Vector3(0, 52, -80));
-			railCamera->GetCamera()->SetPosition(Vector3(0, 52, -85));
-			railCamera->GetCamera()->Update();
+			player->SetAlpha(player->GetAlpha() - 0.025f);
+			player->GetWorldTransform().UpdateMatrix();
+			railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() - Vector3(0.0f,0.05f,0.5f));
+			if (bossStartTime == 40) {
+				isbossStart = true;
+				railCamera->SetPlayer(player);
+			}
+			bossStartTime++;
+		}
+		else if (boss->GetTimer() == 1) {
+			railCamera->GetView()->SetEye(Vector3(0, 53, -80));
+			player->SetPosition(Vector3(0, 50, -100));
+			player->GetWorldTransform().UpdateMatrix();
 			railCamera->GetView()->SetTarget(player->GetPosition());
 		}
 		else if (boss->GetTimer() == 75) {
@@ -1089,7 +1103,8 @@ void GameScene::BossUpdate() {
 			}
 		}
 		railCamera->Update(player, bossPoint);
-		/*railCamera->GetView()->SetTarget(boss->GetPosition());*/
+		railCamera->GetCamera()->SetPosition(railCamera->GetView()->GetEye());
+		railCamera->GetView()->SetTarget(boss->GetPosition());
 		//カメラ制御
 		if (bossPass == 0) {
 			if (railCamera->GetPasPoint() + 1.0f > 3.0f) {
@@ -1205,7 +1220,7 @@ void GameScene::MainUpdate() {
 				player->SetAlpha(1.0f);
 				delete railCamera;
 				railCamera = new RailCamera;
-				railCamera->Initialize(player);
+				railCamera->Initialize();
 			}
 		}
 

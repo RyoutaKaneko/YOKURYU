@@ -16,7 +16,7 @@ RailCamera::~RailCamera() {
 }
 
 //‰Šú‰»
-void RailCamera::Initialize(Player* player_) {
+void RailCamera::Initialize() {
 	viewProjection = new ViewProjection;
 	input = Input::GetInstance();
 	viewProjection->Initialize();
@@ -25,7 +25,6 @@ void RailCamera::Initialize(Player* player_) {
 	viewProjection->SetTarget({ 0.3f,0.5f,499 });
 	camera->SetPosition({0,0,500});
 	camera->SetRotation(Vector3(0, 0, 0));
-	SetPlayer(player_);
 	oldCamera = { 0,0,0 };
 	isEnd = false;
 	OnRail = true;

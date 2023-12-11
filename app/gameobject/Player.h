@@ -148,6 +148,12 @@ public:
 	/// <returns></returns>
 	int GetDeathTimer() { return deathTimer; }
 
+	/// <summary>
+	/// 透過度を取得
+	/// </summary>
+	/// <returns></returns>
+	float GetAlpha() { return alpha; }
+
 	/////setter/////
 	
 	/// <summary>

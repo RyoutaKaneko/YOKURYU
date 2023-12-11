@@ -40,8 +40,8 @@ void RailCamera::ViewUpdate() {
 void RailCamera::Update(Player* player_, std::vector<Vector3>& point) {
 
 	if (OnRail == true) {
-		Vector3 target = spline_.Update(point, 0.00004f);
-		camera->SetPosition(splineCam.Update(point, 0.0f));
+		Vector3 target = spline_.Update(point, 0.001f);
+		camera->SetPosition(splineCam.Update(point, 0.0001f));
 		//Å‰‚Ì1ƒ‹[ƒv‚Ì‚ÝŒ»ÝˆÊ’u‚ð“ü‚ê‚é
 		if (oldCamera.x == 0 && oldCamera.y == 0 && oldCamera.z == 0) {
 			oldCamera = camera->GetPosition();

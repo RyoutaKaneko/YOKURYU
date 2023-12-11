@@ -176,8 +176,10 @@ void Boss::BossDraw(ViewProjection* viewProjection_)
 {
 	Draw(viewProjection_, bossAlpha);
 	//’e•`‰æ
-	for (std::unique_ptr<BossBullet>& bullet : bullets_) {
-		bullet->Draw(viewProjection_);
+	if (isSlained == false) {
+		for (std::unique_ptr<BossBullet>& bullet : bullets_) {
+			bullet->Draw(viewProjection_);
+		}
 	}
 }
 

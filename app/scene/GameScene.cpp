@@ -392,7 +392,7 @@ void GameScene::Draw() {
 			crosshair[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		}
 	}
-	if (gameState == CLEAR) {
+	if (gameState == MAIN || gameState == BOSS) {
 		for (int i = 0; i < infos.size(); i++) {
 			lock[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		}
@@ -1030,6 +1030,7 @@ void GameScene::BossUpdate() {
 			if (bossStartTime == 40) {
 				isbossStart = true;
 				railCamera->SetPlayer(player);
+				player->SetPosition({ 0,0,0 });
 			}
 			bossStartTime++;
 		}
@@ -1091,6 +1092,7 @@ void GameScene::BossUpdate() {
 		if (isPlayable == true) {
 			SerchEnemy();
 			player->Update(shotVec, infos);
+			player->SetAlpha(0.0f);
 			LockedClear();
 		}
 
@@ -1164,7 +1166,7 @@ void GameScene::BossUpdate() {
 	UIAlpha();
 	UIs->Update(isPlayable, player);
 	//更新
-	boss->Update(player->GetPosition());
+	boss->Update(player->GetWorldPos());
 	//ダメージをくらったときに画面シェイク
 	if (player->GetIsHit() == true) {
 		railCamera->ShakeCamera(-2.0f, 2.0f);

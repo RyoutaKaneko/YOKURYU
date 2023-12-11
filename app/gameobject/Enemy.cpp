@@ -123,7 +123,9 @@ void Enemy::Update(Vector3 velo, RailCamera* rail) {
 		//“–‚½‚è”»’èXV
 		if (collider)
 		{
-			collider->Update();
+			if (isParticle == false) {
+				collider->Update();
+			}
 		}
 		GetWorldTransform().UpdateMatrix();
 		timer++;

@@ -141,15 +141,6 @@
     <ClCompile Include="engine\effect\ParticleManager.cpp">
       <Filter>ソースファイル\Engine\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="engine\3d\FbxLoader.cpp">
-      <Filter>ソースファイル\Engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\FbxModel.cpp">
-      <Filter>ソースファイル\Engine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="engine\3d\FbxObject3d.cpp">
-      <Filter>ソースファイル\Engine\3d</Filter>
-    </ClCompile>
     <ClCompile Include="engine\math\Spline.cpp">
       <Filter>ソースファイル\Engine\Math</Filter>
     </ClCompile>
@@ -338,15 +329,6 @@
     </ClInclude>
     <ClInclude Include="engine\effect\ParticleManager.h">
       <Filter>ヘッダー ファイル\Engine\Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\FbxLoader.h">
-      <Filter>ヘッダー ファイル\Engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\FbxModel.h">
-      <Filter>ヘッダー ファイル\Engine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="engine\3d\FbxObject3d.h">
-      <Filter>ヘッダー ファイル\Engine\3d</Filter>
     </ClInclude>
     <ClInclude Include="engine\math\Spline.h">
       <Filter>ヘッダー ファイル\Engine\Math</Filter>

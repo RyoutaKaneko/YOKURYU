@@ -29,9 +29,9 @@ void SIFrameWork::Initialize()
 	// パーティクル静的初期化
 	ParticleManager::StaticInitialize(dxCommon->GetDevice());
 	//fbx汎用初期化
-	FbxLoader::GetInstance()->Initialize(dxCommon->GetDevice());
-	//
-	FbxObject3d::StaticInitialize(dxCommon->GetDevice());
+	//FbxLoader::GetInstance()->Initialize(dxCommon->GetDevice());
+	////
+	//FbxObject3d::StaticInitialize(dxCommon->GetDevice());
 
 	/*postEffect.Initialize(dxCommon->GetDevice());*/
 	

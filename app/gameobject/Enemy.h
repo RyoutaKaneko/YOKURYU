@@ -98,6 +98,8 @@ public:
 private:
 
 	static const int DEATH_TIMER = 60;
+	static const float MOVE_POWER;
+	static const float UPDOWN_POWER;
 
 	//デスフラグ
 	bool isDead_ = false;

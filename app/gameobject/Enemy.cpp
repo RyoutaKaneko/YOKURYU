@@ -10,6 +10,9 @@
 #include "SphereCollider.h"
 #include "GameScene.h"
 
+const float Enemy::MOVE_POWER = 0.05f;
+const float Enemy::UPDOWN_POWER = 0.005f;
+
 //デストラクタ
 Enemy::~Enemy() {
 	delete enemyModel;
@@ -39,33 +42,33 @@ void Enemy::Update(Vector3 velo, RailCamera* rail) {
 	//透明状態なら
 	if (isInvisible == true) {
 		float len = stagePoint - rail->GetPasPoint() + 1.0f;
- 		if (len < 4.0f) {
+ 		if (len < 3.0f) {
 			isInvisible = false;
 		}
 	}
 	else {
 		if (alpha < 1) {
-			alpha += 0.05f;
+			alpha += MOVE_POWER;
 		}
 		float moveX;
 		if (timeCount == 0) {
-			moveX = -0.05f;
+			moveX = -MOVE_POWER;
 		}
 		else if (timeCount == 1) {
-			moveX = 0.05f;
+			moveX = MOVE_POWER;
 		}
 		else if (timeCount == 2) {
-			moveX = 0.05f;
+			moveX = MOVE_POWER;
 		}
 		else {
-			moveX = -0.05f;
+			moveX = -MOVE_POWER;
 		}
 
 		if (timer < 75) {
-			SetPosition(GetPosition() + Vector3(moveX, 0.005f, 0));
+			SetPosition(GetPosition() + Vector3(moveX, UPDOWN_POWER, 0));
 		}
 		else if (timer < 150) {
-			SetPosition(GetPosition() + Vector3(moveX, -0.005f, 0));
+			SetPosition(GetPosition() + Vector3(moveX, -UPDOWN_POWER, 0));
 		}
 		else {
 			timer = 0;

@@ -204,9 +204,6 @@ private:
 	static int popEnergyCount;
 	//“–‚½‚è”»’è
 	CollisionManager* collisionManager = nullptr;
-	//FBX
-	FbxModel* model = nullptr;
-	FbxObject3d* obj = nullptr;
 	//ƒJƒƒ‰ˆÚ“®—pƒŒ[ƒ‹
 	std::vector<Vector3> points{};
 	std::vector<Vector3> pointsL;

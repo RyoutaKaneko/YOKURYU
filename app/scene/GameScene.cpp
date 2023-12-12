@@ -5,8 +5,6 @@
  */
 
 #include "GameScene.h"
-#include "FbxLoader.h"
-#include "FbxObject3d.h"
 #include "SphereCollider.h"
 #include "CollisionManager.h"
 #include "GameSceneManager.h"
@@ -209,7 +207,7 @@ void GameScene::Update() {
 		isStart = true;
 	}
 	//メインゲーム開始時フェードアウト
-	if (fadeout.GetPosition().y < 18200) {
+	if (fadeout.GetPosition().y < 1820) {
 		fadeout.SetPosition(fadeout.GetPosition() + Vector3(0, 80, 0));
 		fadeout.SpriteUpdate(fadeout, spriteCommon_);
 	}
@@ -392,7 +390,7 @@ void GameScene::Draw() {
 			crosshair[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		}
 	}
-	if (gameState == MAIN || gameState == BOSS) {
+	if (isPlayable == true && gameState != CONTINUE && gameState != PAUSE) {
 		for (int i = 0; i < infos.size(); i++) {
 			lock[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		}
@@ -775,7 +773,7 @@ Vector3 GameScene::GetScreenToWorldPos(Sprite& sprite_, RailCamera* rail)
 	Matrix4 invViewPort = viewPort;
 	invViewPort.MakeInverse();
 	//プロジェクション行列//
-	float fovAngleY = 45.0f * (3.141592f / 180.0f);;
+	float fovAngleY = 45.0f * (3.141592f / 180.0f);
 	float aspectRatio = (float)WinApp::window_width / WinApp::window_height;
 	//プロジェクション行列生成
 	Matrix4 projection = projection.ProjectionMat(fovAngleY, aspectRatio, 0.1f, 200.0f);

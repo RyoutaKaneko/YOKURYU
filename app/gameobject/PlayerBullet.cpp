@@ -52,9 +52,8 @@ void PlayerBullet::OnCollision([[maybe_unused]] const CollisionInfo& info)
 {
 	//衝突相手の名前
 	const char* str1 = "class Enemy";
-	const char* str2 = "class EnemyBullet";
-	const char* str3 = "class Boss";
-	const char* str4 = "class BossBullet";
+	const char* str2 = "class Boss";
+	const char* str3 = "class BossBullet";
 
 	//相手がenemy
 	if (strcmp(GetToCollName(), str1) == 0) {
@@ -63,21 +62,14 @@ void PlayerBullet::OnCollision([[maybe_unused]] const CollisionInfo& info)
 		}
 	}
 
-	//相手がenemyの弾
+	//相手がボス
 	if (strcmp(GetToCollName(), str2) == 0) {
 		if (isDead_ == false && isHoming == false) {
 			isDead_ = true;
 		}
 	}
-	//相手がボス
-	if (strcmp(GetToCollName(), str3) == 0) {
-		if (isDead_ == false) {
-			isDead_ = true;
-		}
-	}
-
 	//相手がボスの弾
-	if (strcmp(GetToCollName(), str4) == 0) {
+	if (strcmp(GetToCollName(), str3) == 0) {
 		if (isDead_ == false) {
 			isDead_ = true;
 		}

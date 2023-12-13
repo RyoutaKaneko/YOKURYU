@@ -228,6 +228,9 @@
     <ClCompile Include="app\UI\GameSceneUI.cpp">
       <Filter>ソースファイル\Application\UI</Filter>
     </ClCompile>
+    <ClCompile Include="engine\3d\light.cpp">
+      <Filter>ソースファイル\Engine\3d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -240,9 +243,6 @@
       <Filter>シェーダーファイル</Filter>
     </None>
     <None Include="Resources\shaders\Particle.hlsli">
-      <Filter>シェーダーファイル</Filter>
-    </None>
-    <None Include="Resources\shaders\FBX.hlsli">
       <Filter>シェーダーファイル</Filter>
     </None>
     <None Include="Resources\shaders\PostEffect.hlsli">
@@ -275,12 +275,6 @@
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
     <FxCompile Include="Resources\shaders\ParticleVS.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\FBXPS.hlsl">
-      <Filter>シェーダーファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\FBXVS.hlsl">
       <Filter>シェーダーファイル</Filter>
     </FxCompile>
     <FxCompile Include="Resources\shaders\PostEffectPS.hlsl">
@@ -434,6 +428,9 @@
     </ClInclude>
     <ClInclude Include="app\scene\ClearConst.h">
       <Filter>ヘッダー ファイル\Application\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\3d\light.h">
+      <Filter>ヘッダー ファイル\Engine\3d</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

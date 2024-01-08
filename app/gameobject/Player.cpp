@@ -29,13 +29,26 @@ bool Player::PlayerInitialize() {
 	Initialize();
 
 	// OBJからモデルデータを読み込む
-	playerModel = Model::LoadFromOBJ("box");
+	playerModel = Model::LoadFromOBJ("dragonbody");
+	fangModel = Model::LoadFromOBJ("dragonbite");
+	eyeModel = Model::LoadFromOBJ("dragoneye");
 	// 3Dオブジェクト生成
 	Create();
+	fang = new Object3d();
+	fang->Initialize();
+	fang = Object3d::Create();
+	eye = new Object3d();
+	eye->Initialize();
+	eye = Object3d::Create();
 	// オブジェクトにモデルをひも付ける
 	SetModel(playerModel);
 	SetPosition(Vector3(0, 0, 500));
 	SetRotation(Vector3(0, 270, 0));
+	SetScale({ 1.5f, 1.5f, 1.5f });
+	fang->SetModel(fangModel);
+	fang->GetWorldTransform().SetParent3d(&GetWorldTransform());
+	eye->SetModel(eyeModel);
+	eye->GetWorldTransform().SetParent3d(&GetWorldTransform());
 
 	hp = HP_MAX;
 	coolTime = 0;
@@ -99,6 +112,8 @@ void Player::Update(Vector3 velo, std::vector<LockInfo>& info)
 	}
 
 	GetWorldTransform().UpdateMatrix();
+	fang->Update();
+	eye->Update();
 	//当たり判定更新
 	if (collider)
 	{
@@ -244,6 +259,8 @@ void Player::Ultimate()
 void Player::PlayerDraw(ViewProjection* viewProjection_) {
 	if (hitTime % 3 == 0) {
 		Draw(viewProjection_,alpha);
+		fang->Draw(viewProjection_, alpha);
+		eye->Draw(viewProjection_, alpha);
 	}
 	//弾描画
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
@@ -251,10 +268,23 @@ void Player::PlayerDraw(ViewProjection* viewProjection_) {
 	}
 }
 
+void Player::DrawDead(ViewProjection* viewProjection_)
+{
+	Draw(viewProjection_);
+	fang->Draw(viewProjection_);
+}
+
 void Player::BackRail()
 {
 	SetPosition(pos_);
 	SetRotation(rot_);
+}
+
+void Player::ViewUpdate()
+{
+	GetWorldTransform().UpdateMatrix();
+	fang->Update();
+	eye->Update();
 }
 
 void Player::OnCollision([[maybe_unused]] const CollisionInfo& info)
@@ -315,6 +345,8 @@ void Player::Dead()
 	//更新
 	deathTimer++;
 	GetWorldTransform().UpdateMatrix();
+	fang->Update();
+	eye->Update();
 }
 
 void Player::ResetHP() {

@@ -49,8 +49,9 @@ void GameOverScene::Initialize()
 	//player
 	player = new Player;
 	player->PlayerInitialize();
-	player->SetPosition({ 0.0f,-1.0f,0.0f });
-	player->SetRotation({ 0,90,0 });
+	player->SetPosition({ 0.0f,-1.0f,-1.0f });
+	player->SetRotation({ 20,80,90 });
+	player->SetScale({ 1.5f,1.5f,1.5f });
 	viewProjection->SetTarget(player->GetWorldPos());
 
 	sprite = new Sprite();
@@ -116,7 +117,7 @@ void GameOverScene::Update()
 	}
 
 
-	player->GetWorldTransform().UpdateMatrix();
+	player->ViewUpdate();
 	sky->Update();
 	stage->Update();
 	viewProjection->UpdateMatrix();
@@ -133,7 +134,7 @@ void GameOverScene::Draw()
 
 	sky->Draw(viewProjection);
 	stage->Draw(viewProjection);
-	player->PlayerDraw(viewProjection);
+	player->DrawDead(viewProjection);
 
 	Object3d::PostDraw();
 	Sprite::PreDraw(dxCommon->GetCommandList(), spriteCommon_);

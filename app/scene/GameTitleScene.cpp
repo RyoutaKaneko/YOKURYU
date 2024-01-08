@@ -124,13 +124,14 @@ void GameTitleScene::Initialize()
 	//player
 	player = new Player;
 	player->PlayerInitialize();
-	player->SetPosition({ 0.0f,33.3f,288.0f });
-	player->SetRotation({ 0,90,0 });
+	player->SetPosition({ 0.0f,34.0f,288.0f });
+	player->SetRotation({ 0,70,0 });
+	player->SetScale({ 1.5f,1.5f,1.5f });
 
 	//カメラ初期化
 	viewProjection = new ViewProjection();
 	viewProjection->Initialize();
-	viewProjection->SetEye({ 3.5f,34.5f,298.0f });
+	viewProjection->SetEye({ 4.0f,34.7f,298.0f });
 	viewProjection->SetTarget({ 0,40,-400 });
 
 	//モデル読み込み
@@ -380,10 +381,13 @@ void GameTitleScene::Update()
 		}
 	}
 
+	if (Input::GetInstance()->TriggerKey(DIK_O)) {
+		GameSceneManager::GetInstance()->ChangeScene("OVER");
+	}
 	
 
 	//更新
-	player->GetWorldTransform().UpdateMatrix();
+	player->ViewUpdate();
 	viewProjection->UpdateMatrix();
 }
 
@@ -393,7 +397,7 @@ void GameTitleScene::Draw()
 
 	Object3d::PreDraw(dxCommon_->GetCommandList());
 
-	player->Draw(viewProjection);
+	player->PlayerDraw(viewProjection);
 	//背景オブジェクト
 	for (auto& object : objects) {
 		object->Draw(viewProjection);

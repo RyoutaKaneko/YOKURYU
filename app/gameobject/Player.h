@@ -76,9 +76,17 @@ public:
 	void PlayerDraw(ViewProjection* viewProjection_);
 
 	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="viewProjection_"></param>
+	void DrawDead(ViewProjection* viewProjection_);
+
+	/// <summary>
 	/// レールに戻る
 	/// </summary>
 	void BackRail();
+
+	void ViewUpdate();
 
 	/// <summary>
 	/// 衝突時コールバック関数
@@ -185,6 +193,18 @@ public:
 	/// </summary>
 	void ResetHP();
 
+	/// <summary>
+	/// fang
+	/// </summary>
+	/// <returns></returns>
+	Object3d* GetFang() { return fang; }
+
+	/// <summary>
+	/// eye
+	/// </summary>
+	/// <returns></returns>
+	Object3d* GetEye() { return eye; }
+
 
 private:
 	//定数
@@ -212,8 +232,14 @@ private:
 
 
 	Input* input = nullptr;
+
+	//obj
+	Object3d* fang = nullptr;
+	Object3d* eye = nullptr;
 	// モデル
 	Model* playerModel = nullptr;
+	Model* fangModel = nullptr;
+	Model* eyeModel = nullptr;
 	//パーティクル
 	Particle* particle = nullptr;
 	//弾 

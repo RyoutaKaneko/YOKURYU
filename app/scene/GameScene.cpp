@@ -199,6 +199,7 @@ void GameScene::Update() {
 		railCamera->GetView()->SetEye(Vector3(-1, 0.5f, 490.0f));
 		railCamera->GetView()->SetTarget(Vector3(0.0f, 0.5f, 495));
 		player->SetPosition({ 0,0.5f,495 });
+		player->SetRotation({ 0,90,0 });
 		Vector3 cursor = GetWorldToScreenPos(Vector3(-230, 85, 0), railCamera);
 		input->SetMousePos({ cursor.x,cursor.y });
 		for (auto& object : objects) {
@@ -882,7 +883,7 @@ void GameScene::ClearUpdate()
 			railCamera->GetView()->SetEye(cameraPos);
 			Vector3 position = { 3.8f, 49.0f, -128.0f };
 			player->SetPosition(position);
-			player->GetWorldTransform().UpdateMatrix();
+			player->ViewUpdate();
 			isShowEnergy = false;
 		}
 		else if (clearTimer > CLEARTIME_SIX && clearTimer < CLEARTIME_SEVEN) {
@@ -1023,7 +1024,7 @@ void GameScene::BossUpdate() {
 		
 		if (boss->GetTimer() == 0) {
 			player->SetAlpha(player->GetAlpha() - 0.025f);
-			player->GetWorldTransform().UpdateMatrix();
+			player->ViewUpdate();
 			railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() - Vector3(0.0f,0.05f,0.5f));
 			if (bossStartTime == 40) {
 				isbossStart = true;
@@ -1035,7 +1036,7 @@ void GameScene::BossUpdate() {
 		else if (boss->GetTimer() == 1) {
 			railCamera->GetView()->SetEye(Vector3(0, 53, -80));
 			player->SetPosition(Vector3(0, 50, -100));
-			player->GetWorldTransform().UpdateMatrix();
+			player->ViewUpdate();
 			railCamera->GetView()->SetTarget(player->GetPosition());
 		}
 		else if (boss->GetTimer() == 75) {
@@ -1194,12 +1195,13 @@ void GameScene::MainUpdate() {
 			player->SetPosition(Vector3(0, -1.0f, -5.5f));
 			player->SetAlpha(0.0f);
 		}
-		player->GetWorldTransform().UpdateMatrix();
+		player->ViewUpdate();
 	}
 	//ゲーム中
 	if (gameTime == 0) {
 		//操作不可状態を解除
 		if (isPlayable == false) {
+			player->SetRotation({ 0,270,0 });
 			isPlayable = true;
 		}
 		/////デバック用(ボスまでスキップ)/////

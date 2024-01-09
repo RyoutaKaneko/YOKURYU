@@ -381,10 +381,10 @@ void GameTitleScene::Update()
 		}
 	}
 
-	if (Input::GetInstance()->TriggerKey(DIK_O)) {
-		GameSceneManager::GetInstance()->ChangeScene("OVER");
-	}
-	
+	//if (Input::GetInstance()->TriggerKey(DIK_O)) {
+	//	GameSceneManager::GetInstance()->ChangeScene("OVER");
+	//}
+	//
 
 	//更新
 	player->ViewUpdate();

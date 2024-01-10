@@ -494,6 +494,7 @@ void GameScene::Reset() {
 	player->PlayerInitialize();
 	player->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 0.7f));
 	player->SetPosition({ 0,0.5f,495 });
+	player->SetRotation({ 0,90,0 });
 	player->ResetHP();
 	//boss
 	boss = new Boss;
@@ -1030,12 +1031,14 @@ void GameScene::BossUpdate() {
 				isbossStart = true;
 				railCamera->SetPlayer(player);
 				player->SetPosition({ 0,0,0 });
+				player->SetRotation({ 0,270,0 });
 			}
 			bossStartTime++;
 		}
 		else if (boss->GetTimer() == 1) {
 			railCamera->GetView()->SetEye(Vector3(0, 53, -80));
 			player->SetPosition(Vector3(0, 50, -100));
+			player->SetRotation({ 0,90,0 });
 			player->ViewUpdate();
 			railCamera->GetView()->SetTarget(player->GetPosition());
 		}
@@ -1205,9 +1208,9 @@ void GameScene::MainUpdate() {
 			isPlayable = true;
 		}
 		/////デバック用(ボスまでスキップ)/////
-		if (input->TriggerKey(DIK_B)) {
+		/*if (input->TriggerKey(DIK_B)) {
 			railCamera->SetOnRail(false);
-		}
+		}*/
 		//boss戦へ
 		if (railCamera->GetOnRail() == false) {
 			if (isCheckPoint == false) {

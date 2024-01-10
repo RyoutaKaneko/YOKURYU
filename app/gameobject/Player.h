@@ -51,6 +51,11 @@ public:
 	/// 移動
 	/// </summary>
 	void Move();
+
+	/// <summary>
+	/// 翼の動き
+	/// </summary>
+	void WingMove();
 	
 	/// <summary>
 	/// 攻撃
@@ -183,6 +188,12 @@ public:
 	void SetIsUltimate(bool ult) { isUltimate = ult; }
 
 	/// <summary>
+	/// 状態を指定
+	/// </summary>
+	/// <param name="state"></param>
+	void SetDie() { healthState = DIE; }
+
+	/// <summary>
 	/// 弾リストを取得
 	/// </summary>
 	/// <returns></returns>
@@ -236,10 +247,14 @@ private:
 	//obj
 	Object3d* fang = nullptr;
 	Object3d* eye = nullptr;
+	Object3d* wingR = nullptr;
+	Object3d* wingL = nullptr;
 	// モデル
 	Model* playerModel = nullptr;
 	Model* fangModel = nullptr;
 	Model* eyeModel = nullptr;
+	Model* wingRModel = nullptr;
+	Model* wingLModel = nullptr;
 	//パーティクル
 	Particle* particle = nullptr;
 	//弾 
@@ -262,4 +277,6 @@ private:
 	Vector3 dMove;
 	Health healthState;
 	int deathTimer;
+	float wingRRotate;
+	float wingLRotate;
 };

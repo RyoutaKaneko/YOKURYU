@@ -24,7 +24,7 @@ public:
 	///< summary>
 	///‰Šú‰»
 	///</summary>
-	void Update(const Vector3& playerPos_);
+	void Update(const Vector3& playerPos_, bool isDead);
 
 
 	/// <summary>

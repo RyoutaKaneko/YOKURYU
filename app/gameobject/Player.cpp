@@ -32,6 +32,8 @@ bool Player::PlayerInitialize() {
 	playerModel = Model::LoadFromOBJ("dragonbody");
 	fangModel = Model::LoadFromOBJ("dragonbite");
 	eyeModel = Model::LoadFromOBJ("dragoneye");
+	wingRModel = Model::LoadFromOBJ("wingR");
+	wingLModel = Model::LoadFromOBJ("wingL");
 	// 3Dオブジェクト生成
 	Create();
 	fang = new Object3d();
@@ -40,6 +42,12 @@ bool Player::PlayerInitialize() {
 	eye = new Object3d();
 	eye->Initialize();
 	eye = Object3d::Create();
+	wingR = new Object3d();
+	wingR->Initialize();
+	wingR = Object3d::Create();
+	wingL = new Object3d();
+	wingL->Initialize();
+	wingL = Object3d::Create();
 	// オブジェクトにモデルをひも付ける
 	SetModel(playerModel);
 	SetPosition(Vector3(0, 0, 500));
@@ -49,6 +57,12 @@ bool Player::PlayerInitialize() {
 	fang->GetWorldTransform().SetParent3d(&GetWorldTransform());
 	eye->SetModel(eyeModel);
 	eye->GetWorldTransform().SetParent3d(&GetWorldTransform());
+	wingR->SetModel(wingRModel);
+	wingR->GetWorldTransform().SetParent3d(&GetWorldTransform());
+	wingR->SetPosition({-0.5f,-0.2f,0});
+	wingL->SetModel(wingLModel);
+	wingL->GetWorldTransform().SetParent3d(&GetWorldTransform());
+	wingL->SetPosition({-0.5f,-0.2f,0.2f});
 
 	hp = HP_MAX;
 	coolTime = 0;
@@ -66,6 +80,8 @@ bool Player::PlayerInitialize() {
 	healthState = FINE;
 	deathTimer = 0;
 	dMove = { 0,0,0 };
+	wingRRotate = -2.0f;
+	wingLRotate = 2.0f;
 
 	return true;
 }
@@ -110,10 +126,13 @@ void Player::Update(Vector3 velo, std::vector<LockInfo>& info)
 			healthState = DIE;
 		}
 	}
+	WingMove();
 
 	GetWorldTransform().UpdateMatrix();
 	fang->Update();
 	eye->Update();
+	wingR->Update();
+	wingL->Update();
 	//当たり判定更新
 	if (collider)
 	{
@@ -190,6 +209,26 @@ void Player::Move()
 	pTimer++;
 }
 
+void Player::WingMove()
+{
+	if (wingR->GetRotation().x < -45) {
+		wingRRotate *= -1;
+	}
+	else if (wingR->GetRotation().x > 10) {
+		wingRRotate *= -1;
+	}
+
+	if (wingL->GetRotation().x > 45) {
+		wingLRotate *= -1;
+	}
+	else if (wingL->GetRotation().x < -10) {
+		wingLRotate *= -1;
+	}
+
+	wingR->SetRotation(wingR->GetRotation() + Vector3(wingRRotate, 0, 0));
+	wingL->SetRotation(wingL->GetRotation() + Vector3(wingLRotate, 0, 0));
+}
+
 void Player::Attack(Vector3 velo) {
 	
 	if (Input::GetInstance()->PushMouseLeft()) {
@@ -259,6 +298,8 @@ void Player::Ultimate()
 void Player::PlayerDraw(ViewProjection* viewProjection_) {
 	if (hitTime % 3 == 0) {
 		Draw(viewProjection_,alpha);
+		wingR->Draw(viewProjection_, alpha);
+		wingL->Draw(viewProjection_, alpha);
 		fang->Draw(viewProjection_, alpha);
 		eye->Draw(viewProjection_, alpha);
 	}
@@ -272,6 +313,8 @@ void Player::DrawDead(ViewProjection* viewProjection_)
 {
 	Draw(viewProjection_);
 	fang->Draw(viewProjection_);
+	wingR->Draw(viewProjection_);
+	wingL->Draw(viewProjection_);
 }
 
 void Player::BackRail()
@@ -282,9 +325,14 @@ void Player::BackRail()
 
 void Player::ViewUpdate()
 {
+	if (healthState != DIE) {
+		WingMove();
+	}
 	GetWorldTransform().UpdateMatrix();
 	fang->Update();
 	eye->Update();
+	wingR->Update();
+	wingL->Update();
 }
 
 void Player::OnCollision([[maybe_unused]] const CollisionInfo& info)
@@ -347,6 +395,8 @@ void Player::Dead()
 	GetWorldTransform().UpdateMatrix();
 	fang->Update();
 	eye->Update();
+	wingR->Update();
+	wingL->Update();
 }
 
 void Player::ResetHP() {

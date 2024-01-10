@@ -23,12 +23,12 @@ void Enemy::EnemyInitialize()
 {
 	Initialize();
 	// OBJからモデルデータを読み込む
-	enemyModel = Model::LoadFromOBJ("triangle_mat");
-	enemyModel->LoadTexture("Resources/red.png");
+	enemyModel = Model::LoadFromOBJ("enemy");
 	// 3Dオブジェクト生成
 	Create();
 	// オブジェクトにモデルをひも付ける
 	SetModel(enemyModel);
+	SetRotation({ 0,290,0 });
 	isDead_ = false;
 	isInvisible = true;
 	timer = 0;
@@ -86,7 +86,7 @@ void Enemy::Update(Vector3 velo, RailCamera* rail) {
 			}
 		}
 		//攻撃
-		if (isAttack == false) {
+		if (isAttack == false && isParticle == false) {
 			Vector3 playerVec = velo - GetPosition();
 			float len = playerVec.length();
 			if (len < 70.0f) {
@@ -117,7 +117,7 @@ void Enemy::Update(Vector3 velo, RailCamera* rail) {
 		}
 
 		for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
-			bullet->Update(velo);
+			bullet->Update(velo,isParticle);
 		}
 		//デスフラグの立った弾を削除
 		bullets_.remove_if([](std::unique_ptr <EnemyBullet>& bullets_) {

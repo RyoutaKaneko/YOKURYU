@@ -9,6 +9,13 @@
 
 #include <DirectXMath.h>
 
+enum Health {
+	FINE,
+	WEEKNESS,
+	DYING,
+	DIE
+};
+
 class GameOverScene : public GameBaseScene
 {
 public: // ƒƒ“ƒoŠÖ”

@@ -52,6 +52,7 @@ void GameOverScene::Initialize()
 	player->SetPosition({ 0.0f,-1.0f,-1.0f });
 	player->SetRotation({ 20,80,90 });
 	player->SetScale({ 1.5f,1.5f,1.5f });
+	player->SetDie();
 	viewProjection->SetTarget(player->GetWorldPos());
 
 	sprite = new Sprite();

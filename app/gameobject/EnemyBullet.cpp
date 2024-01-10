@@ -22,7 +22,7 @@ void EnemyBullet::BulletInitialize() {
 	bulletTime = 0;
 }
 
-void EnemyBullet::Update(const Vector3& playerPos_) {
+void EnemyBullet::Update(const Vector3& playerPos_,bool isDead) {
 
 	if (bulletTime < 25) {
 		velocity = (playerPos_ - GetPosition());
@@ -41,6 +41,9 @@ void EnemyBullet::Update(const Vector3& playerPos_) {
 	}
 	//ŽžŠÔŒo‰ß‚ÅƒfƒX
 	if (--deathTimer_ <= 0) {
+		isDead_ = true;
+	}
+	if (isDead == true) {
 		isDead_ = true;
 	}
 }

@@ -186,6 +186,7 @@ void GameScene::Initialize() {
 	isPause = false;
 	isbossStart = false;
 	bossStartTime = 0;
+	isBoss = false;
 }
 
 ///-----更新処理-----///
@@ -373,7 +374,7 @@ void GameScene::Draw() {
 
 
 	if (isShowUI == true) {
-		UIs->Draw(dxCommon_->GetDevice(), dxCommon_->GetCommandList());
+		UIs->Draw(dxCommon_->GetDevice(), dxCommon_->GetCommandList(),isBoss);
 	}
 	if (gameState == CONTINUE && player->GetDeathTimer() >= 100) {
 		UIs->DrawContinue(dxCommon_->GetDevice(), dxCommon_->GetCommandList());
@@ -524,6 +525,7 @@ void GameScene::Reset() {
 	isShowUI = true;
 	isbossStart = false;
 	bossStartTime = 0;
+	isBoss = false;
 }
 
 void GameScene::Finalize()
@@ -1226,6 +1228,7 @@ void GameScene::MainUpdate() {
 				delete railCamera;
 				railCamera = new RailCamera;
 				railCamera->Initialize();
+				isBoss = true;
 			}
 		}
 

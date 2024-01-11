@@ -298,14 +298,16 @@ void GameSceneUI::Update(bool isPlayable_, Player* player)
 	}
 }
 
-void GameSceneUI::Draw(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList)
+void GameSceneUI::Draw(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, bool isBoss)
 {
 	// スプライト描画前処理
 	Sprite::PreDraw(cmdList, spriteCommon_);
 
 	///=== スプライト描画 ===///
 
-	esc.SpriteDraw(cmdList, spriteCommon_, device);
+	if (isBoss == false) {
+		esc.SpriteDraw(cmdList, spriteCommon_, device);
+	}
 	hpFrame.SpriteDraw(cmdList, spriteCommon_, device);
 	//UI
 	attackUI.SpriteDraw(cmdList, spriteCommon_, device);

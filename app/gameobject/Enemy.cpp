@@ -64,6 +64,8 @@ void Enemy::Update(Vector3 velo, RailCamera* rail) {
 			moveX = -MOVE_POWER;
 		}
 
+		SetRotation(GetRotation() + Vector3(0, 2, 0));
+
 		if (timer < 75) {
 			SetPosition(GetPosition() + Vector3(moveX, UPDOWN_POWER, 0));
 		}

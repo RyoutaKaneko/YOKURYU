@@ -12,11 +12,12 @@ void PlayerBullet::BulletInitialize(const Vector3& velocity) {
 	Initialize();
 
 	// OBJからモデルデータを読み込む
-	bulletModel = Model::LoadFromOBJ("triangle_mat");
+	bulletModel = Model::LoadFromOBJ("bullet");
 	// 3Dオブジェクト生成
 	Create();
 	// オブジェクトにモデルをひも付ける
 	SetModel(bulletModel);
+	SetScale({ 3.0,3.0,3.0 });
 
 	//引数で受け取った速度をメンバ変数に代入
 	velocity_ = velocity;

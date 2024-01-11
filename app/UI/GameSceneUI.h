@@ -29,7 +29,7 @@ public:
 	/// •`‰æ
 	/// </summary>
 	/// <param name="device"></param>
-	void Draw(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList);
+	void Draw(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList,bool isBoss);
 
 	/// <summary>
 	/// HPƒtƒŒ[ƒ€‚ÌÀ•W‚ğæ“¾

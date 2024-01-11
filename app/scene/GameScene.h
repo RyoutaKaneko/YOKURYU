@@ -240,4 +240,5 @@ private:
 	bool isPause;
 	bool isbossStart;
 	int bossStartTime;
+	bool isBoss;
 };

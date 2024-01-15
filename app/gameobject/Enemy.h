@@ -100,9 +100,11 @@ private:
 	static const int DEATH_TIMER = 60;
 	static const float MOVE_POWER;
 	static const float UPDOWN_POWER;
+	static const Vector3 ADDSCALE;
 
 	//デスフラグ
 	bool isDead_ = false;
+	bool isHit = false;
 	//
 	bool isInvisible = true;
 	bool isParticle = false;

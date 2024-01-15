@@ -4,6 +4,7 @@
  * @author カネコ_リョウタ
  */
 
+
 #include "Boss.h"
 #include "SphereCollider.h"
 #include "time.h"
@@ -84,6 +85,8 @@ void Boss::Update(Vector3 velo)
 	
 	 //ダメージ判定
 	if (hitTimer > 0) {
+		SetPosition(GetPosition() + movePower);
+		movePower *= -1;
 		hitTimer--;
 		if (hitTimer == 0) {
 			isHit = false;
@@ -94,8 +97,6 @@ void Boss::Update(Vector3 velo)
 		isDead_ = true;
 	}
 	//更新
-	//Vector3 rot = velo - GetPosition();
-	//SetRotation({0,rot.x,0});
 	GetWorldTransform().UpdateMatrix();
 	//当たり判定更新
 	if (collider)
@@ -192,7 +193,7 @@ void Boss::OnCollision([[maybe_unused]] const CollisionInfo& info)
 	if (strcmp(GetToCollName(), str1) == 0) {
 		if (isHit == false && isInvisible == false) {
 			isHit = true;
-			hitTimer = 30;
+			hitTimer = 10;
 			hp-= 5;
 			for (int i = 0; i < PARTS_NUM; i++) {
 				if (parts[i]->GetIsLocked() == true) {

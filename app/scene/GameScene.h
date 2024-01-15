@@ -169,6 +169,8 @@ private:
 	Sprite loading;
 	Sprite tips;
 	float thanksAlpha;
+	Sprite dmg;
+	float dmgAlpha;
 	//UI
 	GameSceneUI* UIs = nullptr;
 	//オブジェクトのポインタ

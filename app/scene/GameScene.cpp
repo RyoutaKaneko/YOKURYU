@@ -127,6 +127,13 @@ void GameScene::Initialize() {
 	tips.SetPosition({ 150,620,0 });
 	tips.SpriteTransferVertexBuffer(tips, 7);
 	tips.LoadTexture(spriteCommon_, 7, L"Resources/tips.png", dxCommon_->GetDevice());
+	//dmg
+	dmg.SpriteCreate(dxCommon_->GetDevice(), 8, Vector2(0.0f, 0.0f), false, false);
+	dmg.SetScale(Vector2(1280, 720));
+	dmg.SpriteTransferVertexBuffer(dmg, 8);
+	dmg.LoadTexture(spriteCommon_, 8, L"Resources/dmg.png", dxCommon_->GetDevice());
+	dmgAlpha = 0.0f;
+	
 
 	//UI初期化
 	UIs = new GameSceneUI();
@@ -287,26 +294,20 @@ void GameScene::Update() {
 		break;
 	}
 	//////////////操作可能なら更新///////////////////
-	if (player->GetIsUltimate() == true && gameState != ULT) {
-		cameraTmpPos = railCamera->GetView()->GetEye();
-		cameraTmpRot = railCamera->GetView()->GetTarget();
-		railCamera->SetEye(player->GetWorldPos() + Vector3(-2, 0, -3));
-		railCamera->SetTarget(player->GetWorldPos());
-		gameState_bak = gameState;
-		gameState = ULT;
-	}
-	//必殺技エネルギー
-	for (const std::unique_ptr<Energy>& energy : energys_) {
-		energy->Update(player->GetWorldPos(), railCamera->GetCamera()->GetRotation());
-	}
-	//デスフラグの立ったエネルギーを削除
-	energys_.remove_if([](std::unique_ptr <Energy>& energys) {
-		return energys->GetIsDead();
-		});
 	//gameover
 	if (player->GetHP() <= 0) {
 		LockedClear();
 		gameState = CONTINUE;
+	}
+	if (player->GetIsHit() == true) {
+		dmgAlpha += 0.05f;
+		dmg.SetAlpha(dmg, dmgAlpha);
+	}
+	else {
+		if (dmgAlpha >= 0) {
+			dmgAlpha -= 0.05f;
+			dmg.SetAlpha(dmg, dmgAlpha);
+		}
 	}
 
 	//当たり判定チェック
@@ -409,6 +410,9 @@ void GameScene::Draw() {
 	if (gameState == CLEAR) {
 		fade.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		thanks.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
+	}
+	if (gameState != CLEAR) {
+		dmg.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 	}
 	// スプライト描画後処理
 	Sprite::PostDraw();
@@ -526,6 +530,7 @@ void GameScene::Reset() {
 	isbossStart = false;
 	bossStartTime = 0;
 	isBoss = false;
+	dmgAlpha = 0.0f;
 }
 
 void GameScene::Finalize()
@@ -1110,7 +1115,7 @@ void GameScene::BossUpdate() {
 		}
 		railCamera->Update(player, bossPoint);
 		railCamera->GetCamera()->SetPosition(railCamera->GetView()->GetEye());
-		railCamera->GetView()->SetTarget(boss->GetPosition());
+		railCamera->GetView()->SetTarget(Vector3(0, 52, -200));
 		//カメラ制御
 		if (bossPass == 0) {
 			if (railCamera->GetPasPoint() + 1.0f > 3.0f) {
@@ -1210,9 +1215,9 @@ void GameScene::MainUpdate() {
 			isPlayable = true;
 		}
 		/////デバック用(ボスまでスキップ)/////
-		/*if (input->TriggerKey(DIK_B)) {
+		if (input->TriggerKey(DIK_B)) {
 			railCamera->SetOnRail(false);
-		}*/
+		}
 		//boss戦へ
 		if (railCamera->GetOnRail() == false) {
 			if (isCheckPoint == false) {

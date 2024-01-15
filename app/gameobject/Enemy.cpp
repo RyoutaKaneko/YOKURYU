@@ -12,6 +12,7 @@
 
 const float Enemy::MOVE_POWER = 0.05f;
 const float Enemy::UPDOWN_POWER = 0.005f;
+const Vector3 Enemy::ADDSCALE = {0.5f,0.5f,0.5f};
 
 //デストラクタ
 Enemy::~Enemy() {
@@ -36,6 +37,7 @@ void Enemy::EnemyInitialize()
 	timeCount = 0;
 	alpha = 0;
 	deathTimer = DEATH_TIMER;
+	isHit = false;
 }
 
 void Enemy::Update(Vector3 velo, RailCamera* rail) {
@@ -99,6 +101,15 @@ void Enemy::Update(Vector3 velo, RailCamera* rail) {
 			Attack();
 		}
 		//死亡時演出
+		if (isHit == true) {
+			if (GetScale().x < 3) {
+				SetScale(GetScale() + ADDSCALE);
+				alpha -= 0.2f;
+			}
+			else {
+				isParticle = true;
+			}
+		}
 		if (isParticle == true) {
 			if (deathTimer > 45) {
 				PopParticle();
@@ -106,17 +117,16 @@ void Enemy::Update(Vector3 velo, RailCamera* rail) {
 			else if (deathTimer == 0) {
 				isDead_ = true;
 			}
-			//更新
-			for (std::unique_ptr<Energy>& particle : deadParticles) {
-				particle->DeadEffect(rail->GetCamera()->GetRotation());
-			}
-
-			deadParticles.remove_if([](std::unique_ptr <Energy>& particle) {
-				return particle->GetIsDead();
-				});
-
 			deathTimer--;
 		}
+		//更新
+		for (std::unique_ptr<Energy>& particle : deadParticles) {
+			particle->DeadEffect(rail->GetCamera()->GetRotation());
+		}
+
+		deadParticles.remove_if([](std::unique_ptr <Energy>& particle) {
+			return particle->GetIsDead();
+			});
 
 		for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
 			bullet->Update(velo,isParticle);
@@ -145,8 +155,8 @@ void Enemy::OnCollision([[maybe_unused]] const CollisionInfo& info)
 	//相手がplayerの弾
 	if (strcmp(GetToCollName(), str1) == 0) {
 		if (isInvisible == false) {
-			if (isParticle == false) {
-				isParticle = true;
+			if (isHit == false) {
+				isHit = true;
 			}
 		}
 	}

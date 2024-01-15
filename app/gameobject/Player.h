@@ -91,6 +91,9 @@ public:
 	/// </summary>
 	void BackRail();
 
+	/// <summary>
+	/// 見た目のみの更新
+	/// </summary>
 	void ViewUpdate();
 
 	/// <summary>

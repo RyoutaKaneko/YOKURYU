@@ -127,6 +127,8 @@ public:
 
 private:
 
+	static const Vector3 ADDSCALE;
+
 	//デスフラグ
 	bool isDead_ = false;
 	bool isInvisible = true;
@@ -152,6 +154,8 @@ private:
 	std::list<std::unique_ptr<BossBullet>> bullets_;
 	static const int PARTS_NUM = 5;
 	Object3d* parts[PARTS_NUM];
+	Vector3 movePower = {0.5f,0.5f,0.5f};
+	Vector3 postmp;
 	int slainTimer;
 	bool isSlained;
 };

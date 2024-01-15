@@ -65,7 +65,7 @@ void PlayerBullet::OnCollision([[maybe_unused]] const CollisionInfo& info)
 
 	//‘ŠŽè‚ªƒ{ƒX
 	if (strcmp(GetToCollName(), str2) == 0) {
-		if (isDead_ == false && isHoming == false) {
+		if (isDead_ == false) {
 			isDead_ = true;
 		}
 	}

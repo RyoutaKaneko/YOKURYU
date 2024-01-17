@@ -7,6 +7,8 @@
 #include "PlayerBullet.h"
 #include "BaseCollider.h"
 
+const float PlayerBullet::correction = 0.25f;
+
 void PlayerBullet::BulletInitialize(const Vector3& velocity) {
 
 	Initialize();
@@ -46,7 +48,7 @@ void PlayerBullet::HomingVec()
 	//ƒƒbƒNƒIƒ“æ‚É”ò‚ñ‚Å‚¢‚­
 	if (isHoming == true) {
 		velocity_ = lockObj->GetWorldPos() - GetPosition();
-		velocity_ = velocity_ * 0.25f;
+		velocity_ = velocity_ * correction;
 	}
 }
 

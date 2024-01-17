@@ -64,6 +64,10 @@ class PlayerBullet : public Object3d
 	/// <param name="obj"></param>
 	void SetLock(Object3d* obj) { lockObj = obj; }
 
+//’è”
+  private:
+	static const float correction;
+
   private:
 	//ƒ‚ƒfƒ‹
 	Model* bulletModel = nullptr;

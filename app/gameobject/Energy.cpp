@@ -9,6 +9,10 @@
 #include "BaseCollider.h"
 #include "SphereCollider.h"
 
+const Vector3 Energy::ROTATE = { 0,90,0 };
+const Vector3 Energy::SUB_SCALE = { 0.01f, 0.01f, 0.01f };
+const float Energy::MIN_SCALE = 0.01f;
+
 void Energy::EnergyInitialize(const std::string &model_)
 {
 	Initialize();
@@ -27,49 +31,18 @@ void Energy::EnergyInitialize(const std::string &model_)
 	randomNum = { dist(engine), dist2(engine), dist2(engine) };
 }
 
-void Energy::Update(Vector3 pos,Vector3 rot)
-{
-	//playerのもとへ
-	Vector3 velo = pos - GetPosition();
-	velo = velo.normalize();
-	SetPosition(GetPosition() + velo);
-	SetRotation(rot + Vector3(0,90,0));
-
-	GetWorldTransform().UpdateMatrix();
-
-	//当たり判定更新
-	if (collider)
-	{
-		collider->Update();
-	}
-}
-
-void Energy::DeadEffect(Vector3 rot)
+void Energy::Update(Vector3 rot)
 {
 	//乱数生成装置
 
 
 	SetPosition(GetPosition() + randomNum);
-	Vector3 minScale(0.01f, 0.01f, 0.01f);
-	SetScale(GetScale() - minScale);
-	SetRotation(rot + Vector3(0, 90, 0));
+	SetScale(GetScale() - SUB_SCALE);
+	SetRotation(rot + ROTATE);
 
-	if (GetScale().x < 0.01f) {
+	if (GetScale().x < MIN_SCALE) {
 		isDead = true;
 	}
 
 	GetWorldTransform().UpdateMatrix();
-}
-
-void Energy::OnCollision([[maybe_unused]] const CollisionInfo& info)
-{
-	//衝突相手の名前
-	const char* str1 = "class Player";
-
-	//相手がplayerの弾
-	if (strcmp(GetToCollName(), str1) == 0) {
-		if (isDead == false) {
-			isDead = true;
-		}
-	}
 }

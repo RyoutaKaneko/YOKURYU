@@ -234,19 +234,6 @@ void GameScene::Update() {
 	case GameScene::BOSS:
 		BossUpdate();
 		break;
-	case GameScene::ULT:
-		if (isPlayable == true) {
-			isPlayable = false;
-		}
-		player->Ultimate();
-		railCamera->SetTarget(player->GetWorldPos());
-		if (player->GetIsUltimate() == false) {
-			player->BackRail();
-			railCamera->SetEye(cameraTmpPos);
-			railCamera->SetTarget(cameraTmpRot);
-			gameState = gameState_bak;
-		}
-		break;
 
 		//コンティニュー
 	case GameScene::CONTINUE:
@@ -971,9 +958,6 @@ void GameScene::PauseUpdate() {
 	if (isPause == true) {
 		UIs->PauseText();
 
-		if (Input::GetInstance()->TriggerKey(DIK_ESCAPE)) {
-			isPause = false;
-		}
 
 		if (UIs->GetIsGameOver() == true) {
 			Reset();
@@ -987,7 +971,7 @@ void GameScene::PauseUpdate() {
 			fadeAlpha = 0.0f;
 			fade.SetAlpha(fade, fadeAlpha);
 		}
-		if (UIs->GetIsGameSceneReset() == true) {
+		else if (UIs->GetIsGameSceneReset() == true) {
 			fadeAlpha += 0.05f;
 			fade.SetAlpha(fade, fadeAlpha);
 			fade.SpriteUpdate(fade, spriteCommon_);
@@ -995,6 +979,11 @@ void GameScene::PauseUpdate() {
 				tips.SpriteUpdate(tips, spriteCommon_);
 				loading.SpriteUpdate(loading, spriteCommon_);
 				GameSceneManager::GetInstance()->ChangeScene("TITLE");
+			}
+		}
+		else {
+			if (Input::GetInstance()->TriggerKey(DIK_ESCAPE)) {
+				isPause = false;
 			}
 		}
 	}

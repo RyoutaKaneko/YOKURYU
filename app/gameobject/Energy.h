@@ -27,23 +27,19 @@ public:
 	/// <summary>
 	/// 更新
 	/// </summary>
-	/// <param name="pos">座標</param>
 	/// <param name="rot">回転</param>
-	void Update(Vector3 pos, Vector3 rot);
-
-	void DeadEffect(Vector3 rot);
-
-	/// <summary>
-	/// 当たり判定
-	/// </summary>
-	/// <param name="info">衝突情報</param>
-	void OnCollision(const CollisionInfo& info) override;
+	void Update(Vector3 rot);
 
 	/// <summary>
 	/// 死亡フラグを取得
 	/// </summary>
 	/// <returns></returns>
 	bool GetIsDead() const { return isDead; }
+
+private:
+	static const Vector3 ROTATE;
+	static const Vector3 SUB_SCALE;
+	static const float MIN_SCALE;
 
 private:
 	// モデル

@@ -41,6 +41,8 @@ public:
 	/// <returns></returns>
 	bool IsDead() const { return isDead_; }
 
+private:
+	static const int HOMING_TIME = 25;
 
 private:
 	//ƒ‚ƒfƒ‹

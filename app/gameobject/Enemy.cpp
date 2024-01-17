@@ -12,7 +12,10 @@
 
 const float Enemy::MOVE_POWER = 0.05f;
 const float Enemy::UPDOWN_POWER = 0.005f;
+const float Enemy::MAX_ALPHA = 1.0f;
+const float Enemy::ATTACK_RANGE = 70.0f;
 const Vector3 Enemy::ADDSCALE = {0.5f,0.5f,0.5f};
+const float Enemy::POP_RANGE = 3.0f;
 
 //デストラクタ
 Enemy::~Enemy() {
@@ -38,20 +41,25 @@ void Enemy::EnemyInitialize()
 	alpha = 0;
 	deathTimer = DEATH_TIMER;
 	isHit = false;
+	rotePower = { 0,2,0 };
 }
 
 void Enemy::Update(Vector3 velo, RailCamera* rail) {
 	//透明状態なら
 	if (isInvisible == true) {
+		//近づいたときに出現
 		float len = stagePoint - rail->GetPasPoint() + 1.0f;
- 		if (len < 3.0f) {
+ 		if (len < POP_RANGE) {
 			isInvisible = false;
 		}
 	}
+	//出現
 	else {
-		if (alpha < 1) {
+		//透過状態を解除
+		if (alpha < MAX_ALPHA) {
 			alpha += MOVE_POWER;
 		}
+		//左右に動く
 		float moveX;
 		if (timeCount == 0) {
 			moveX = -MOVE_POWER;
@@ -65,18 +73,19 @@ void Enemy::Update(Vector3 velo, RailCamera* rail) {
 		else {
 			moveX = -MOVE_POWER;
 		}
+		//とりあえず回してみる
+		SetRotation(GetRotation() + rotePower);
 
-		SetRotation(GetRotation() + Vector3(0, 2, 0));
-
-		if (timer < 75) {
+		//ふわふわ浮く
+		if (timer < MOVE_TIME_ONE) {
 			SetPosition(GetPosition() + Vector3(moveX, UPDOWN_POWER, 0));
 		}
-		else if (timer < 150) {
+		else if (timer < MOVE_TIME_TWO) {
 			SetPosition(GetPosition() + Vector3(moveX, -UPDOWN_POWER, 0));
 		}
 		else {
 			timer = 0;
-			if (timeCount == 4) {
+			if (timeCount == TIMECOUNT_MAX) {
 				timeCount = 0;
 			}
 			else {
@@ -93,7 +102,7 @@ void Enemy::Update(Vector3 velo, RailCamera* rail) {
 		if (isAttack == false && isParticle == false) {
 			Vector3 playerVec = velo - GetPosition();
 			float len = playerVec.length();
-			if (len < 70.0f) {
+			if (len < ATTACK_RANGE) {
 				isAttack = true;
 			}
 		}
@@ -102,16 +111,18 @@ void Enemy::Update(Vector3 velo, RailCamera* rail) {
 		}
 		//死亡時演出
 		if (isHit == true) {
-			if (GetScale().x < 3) {
+			//破裂させる
+			if (GetScale().x < SCALE_MAX) {
 				SetScale(GetScale() + ADDSCALE);
-				alpha -= 0.2f;
+				alpha -= subAlpha;
 			}
 			else {
 				isParticle = true;
 			}
 		}
 		if (isParticle == true) {
-			if (deathTimer > 45) {
+			//死亡時パーティクル
+			if (deathTimer > DEAD_PARTICLE) {
 				PopParticle();
 			}
 			else if (deathTimer == 0) {
@@ -121,13 +132,13 @@ void Enemy::Update(Vector3 velo, RailCamera* rail) {
 		}
 		//更新
 		for (std::unique_ptr<Energy>& particle : deadParticles) {
-			particle->DeadEffect(rail->GetCamera()->GetRotation());
+			particle->Update(rail->GetCamera()->GetRotation());
 		}
-
+		//パーティクルを削除
 		deadParticles.remove_if([](std::unique_ptr <Energy>& particle) {
 			return particle->GetIsDead();
 			});
-
+		//弾の更新
 		for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
 			bullet->Update(velo,isParticle);
 		}
@@ -193,7 +204,7 @@ void Enemy::Attack() {
 
 
 			//クールタイムを設定
-			coolTime = 200;
+			coolTime = COOLTIME_MAX;
 		}
 		else if (coolTime > 0) {
 			coolTime--;

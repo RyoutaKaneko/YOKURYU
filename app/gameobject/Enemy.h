@@ -95,12 +95,23 @@ public:
 
 	bool GetIsParticle() { return isParticle; }
 
+//定数
 private:
-
 	static const int DEATH_TIMER = 60;
 	static const float MOVE_POWER;
 	static const float UPDOWN_POWER;
+	static const float MAX_ALPHA;
 	static const Vector3 ADDSCALE;
+	static const float ATTACK_RANGE;
+	static const int COOLTIME_MAX = 200;
+	static const int SCALE_MAX = 3;
+	static const int DEAD_PARTICLE = 45;
+	static const int MOVE_TIME_ONE = 75;
+	static const int MOVE_TIME_TWO = 150;
+	static const int TIMECOUNT_MAX = 4;
+	static const float POP_RANGE;
+
+private:
 
 	//デスフラグ
 	bool isDead_ = false;
@@ -124,6 +135,8 @@ private:
 	int coolTime = 0;
 	float stagePoint;
 	int deathTimer;
+	float subAlpha = 0.2f;
+	Vector3 rotePower;
 
 	bool isAttack;
 	int timeCount;

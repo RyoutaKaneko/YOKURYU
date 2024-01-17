@@ -127,8 +127,18 @@ public:
 
 private:
 
-	static const Vector3 ADDSCALE;
+	static const int STATE_TIME = 125;
+	static const int HIT_TIME_MAX = 10;
+	static const int DAMAGE_NUM = 5;
+	static const int SLAIN_TIME = 30;
+	static const int POP_TIME_ONE = 35;
+	static const int POP_TIME_TWO = 70;
+	static const int POP_TIME_MAX = 150;
+	static const int APPEAR_TIME = 75;
+	static const float MAX_ALPHA;
+	static const float ADD_ALPHA;
 
+private:
 	//デスフラグ
 	bool isDead_ = false;
 	bool isInvisible = true;
@@ -156,6 +166,8 @@ private:
 	Object3d* parts[PARTS_NUM];
 	Vector3 movePower = {0.5f,0.5f,0.5f};
 	Vector3 postmp;
+	Vector3 bossSkipPos;
+	Vector3 addVec;
 	int slainTimer;
 	bool isSlained;
 };

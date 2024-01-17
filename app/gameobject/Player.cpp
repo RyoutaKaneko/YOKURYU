@@ -108,6 +108,7 @@ void Player::Update(Vector3 velo, std::vector<LockInfo>& info)
 		return bullets_->IsDead();
 		});
 
+	//”í’eˆ—
 	if (isHit == true) {
 		hitTime++;
 		if (hitTime == HITTIME_MAX) {
@@ -128,6 +129,7 @@ void Player::Update(Vector3 velo, std::vector<LockInfo>& info)
 	}
 	WingMove();
 
+	//XV
 	GetWorldTransform().UpdateMatrix();
 	fang->Update();
 	eye->Update();
@@ -191,8 +193,8 @@ void Player::Move()
 		pTimer = 0;
 	}
 
+	//ƒJƒƒ‰‚Æ‚Ì‹——£Š´’²®
 	Vector3 tmp = GetPosition() + move + floating;
-	//
 	if (abs(tmp.x) <= 3.0f) {
 		if (tmp.y >= -1.5f && tmp.y <= 2.0f) {
 			if (GetPosition().z < -1.6f) {
@@ -211,6 +213,7 @@ void Player::Move()
 
 void Player::WingMove()
 {
+	//‰H‚Ì“®‚«
 	if (wingR->GetRotation().x < -45) {
 		wingRRotate *= -1;
 	}

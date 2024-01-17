@@ -42,6 +42,10 @@ public:
 	bool IsDead() const { return isDead_; }
 
 
+private:
+	static const int HIT_TIME = 10;
+	static const int BULLET_HP_MAX = 3;
+
 
 private:
 	//ƒ‚ƒfƒ‹
@@ -60,5 +64,6 @@ private:
 	int hitTime;
 	bool isHit;
 	bool isDead_ = false;
+	float correction;
 
 };

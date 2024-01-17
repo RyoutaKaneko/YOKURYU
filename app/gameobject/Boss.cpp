@@ -11,6 +11,9 @@
 #include "stdlib.h"
 #include "GameScene.h"
 
+const float Boss::MAX_ALPHA = 1.0f;
+const float Boss::ADD_ALPHA = 0.04f;
+
 Boss::~Boss()
 {
 	delete bossModel;
@@ -52,6 +55,8 @@ void Boss::BossInitialize()
 	state = WAIT;
 	slainTimer = 0;
 	isSlained = false;
+	bossSkipPos = { 0.0f,49.99f,-200.0f };
+	addVec = { 0.0f,0.01f,0.0f };
 	//乱数
 	srand((unsigned int)time(NULL));
 }
@@ -60,11 +65,12 @@ void Boss::Update(Vector3 velo)
 {
 	//登場時
 	if (appearTimer > 0) {
-		if (appearTimer > 75) {
-			SetPosition(GetPosition() + Vector3(1.0f, -0.2f, 0));
+		if (appearTimer > APPEAR_TIME) {
+			Vector3 velocity = { 1.0f, -0.2f, 0 };
+			SetPosition(GetPosition() + velocity);
 		}
-		if (bossAlpha < 1.0f) {
-			bossAlpha += 0.04f;
+		if (bossAlpha < MAX_ALPHA) {
+			bossAlpha += ADD_ALPHA;
 		}
 		appearTimer--;
 	}
@@ -114,7 +120,7 @@ void Boss::Pop()
 	if (isInvisible == true) {
 		isInvisible = false;
 	}
-	appearTimer = 150;
+	appearTimer = POP_TIME_MAX;
 }
 
 void Boss::Attack()
@@ -137,11 +143,11 @@ void Boss::Move()
 {
 	//ボス登場後
 	if (isInvisible == false) {
-		if (timer < 35) {
-			SetPosition(GetPosition() + Vector3(0.0f, 0.01f, 0.0f));
+		if (timer < POP_TIME_ONE) {
+			SetPosition(GetPosition() + addVec);
 		}
-		else if (timer < 70) {
-			SetPosition(GetPosition() + Vector3(0.0f, -0.01f, 0.0f));
+		else if (timer < POP_TIME_TWO) {
+			SetPosition(GetPosition() + (addVec * -1));
 		}
 		else {
 			timer = 0;
@@ -154,7 +160,7 @@ void Boss::ChangeState()
 {
 	//待機状態
 	if (state == WAIT) {
-		if (timeCount >= 125) {
+		if (timeCount >= STATE_TIME) {
 			//乱数により行動を決定
 			/*int random = rand() % 1 + 1;*/
 			//抽選された行動
@@ -193,12 +199,12 @@ void Boss::OnCollision([[maybe_unused]] const CollisionInfo& info)
 	if (strcmp(GetToCollName(), str1) == 0) {
 		if (isHit == false && isInvisible == false) {
 			isHit = true;
-			hitTimer = 10;
-			hp-= 5;
+			hitTimer = HIT_TIME_MAX;
+			hp-= DAMAGE_NUM;
 			for (int i = 0; i < PARTS_NUM; i++) {
 				if (parts[i]->GetIsLocked() == true) {
 					parts[i]->SetIsLocked(false);
-					hp -= 5;
+					hp -= DAMAGE_NUM;
 				}
 			}
 		}
@@ -208,8 +214,8 @@ void Boss::OnCollision([[maybe_unused]] const CollisionInfo& info)
 void Boss::SkipMovie()
 {
 	appearTimer = 0;
-	SetPosition({ 0.0f,49.99f,-200.0f });
-	bossAlpha = 1.0f;
+	SetPosition(bossSkipPos);
+	bossAlpha = MAX_ALPHA;
 }
 
 void Boss::SlainUpdate()
@@ -220,7 +226,7 @@ void Boss::SlainUpdate()
 	std::uniform_real_distribution<float>dist(-5.0f, 5.0f);
 	Vector3 randomNum(dist(engine), dist(engine), dist(engine));
 
-	if (slainTimer < 30) {
+	if (slainTimer < SLAIN_TIME) {
 		SetRotation(randomNum);		
 	}
 	else{

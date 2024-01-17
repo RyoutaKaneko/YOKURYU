@@ -19,9 +19,10 @@ void BossBullet::BulletInitialize()
 	SetModel(bulletModel);
 
 	//体力指定
-	hp = 3;
+	hp = BULLET_HP_MAX;
 	hitTime = 0;
 	isHit = false;
+	correction = 0.5f;
 }
 
 void BossBullet::Update(const Vector3& playerPos_)
@@ -30,7 +31,7 @@ void BossBullet::Update(const Vector3& playerPos_)
 	velocity = playerPos_ - GetPosition();
 	velocity.normalize();
 	//座標を加算
-	SetPosition(GetPosition() + (velocity * 0.5f));
+	SetPosition(GetPosition() + (velocity * correction));
 	//更新
 	GetWorldTransform().UpdateMatrix();
 
@@ -84,7 +85,7 @@ void BossBullet::OnCollision([[maybe_unused]] const CollisionInfo& info)
 			}
 			else {
 				hp--;
-				hitTime = 10;
+				hitTime = HIT_TIME;
 			}
 		}
 	}

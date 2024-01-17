@@ -655,8 +655,10 @@ void GameSceneUI::EndText() {
 
 		bool onCursor = false;
 
-		if (cursorPos.x > 362 && cursorPos.x < 558) {
-			if (cursorPos.y > 378 && cursorPos.y < 442) {
+		if (cursorPos.x > continueYes.GetPosition().x - continueYes.GetScale().x / 2 && 
+			cursorPos.x < continueYes.GetPosition().x + continueYes.GetScale().x / 2) {
+			if (cursorPos.y > continueYes.GetPosition().y - continueYes.GetScale().y / 2 &&
+				cursorPos.y < continueYes.GetPosition().y + continueYes.GetScale().y / 2) {
 				if (isContinue == false) {
 					isContinue = true;
 					continueYes.SetColor(continueYes, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
@@ -671,8 +673,10 @@ void GameSceneUI::EndText() {
 			}
 		}
 
-		if (cursorPos.x > 702 && cursorPos.x < 898) {
-			if (cursorPos.y > 378 && cursorPos.y < 442) {
+		if (cursorPos.x > continueNo.GetPosition().x - continueNo.GetScale().x / 2 &&
+			cursorPos.x < continueNo.GetPosition().x + continueNo.GetScale().x / 2) {
+			if (cursorPos.y > continueNo.GetPosition().y - continueNo.GetScale().y / 2 &&
+				cursorPos.y < continueNo.GetPosition().y + continueNo.GetScale().y / 2) {
 				if (isContinue == true) {
 					isContinue = false;
 					continueYes.SetColor(continueYes, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
@@ -804,8 +808,10 @@ void GameSceneUI::PauseText() {
 
 		bool onCursor = false;
 
-		if (cursorPos.x > 324 && cursorPos.x < 596) {
-			if (cursorPos.y > 378 && cursorPos.y < 442) {
+		if (cursorPos.x > goTitle.GetPosition().x - goTitle.GetScale().x / 2 && 
+			cursorPos.x < goTitle.GetPosition().x + goTitle.GetScale().x / 2) {
+			if (cursorPos.y > goTitle.GetPosition().y - goTitle.GetScale().y / 2 &&
+				cursorPos.y < goTitle.GetPosition().y + goTitle.GetScale().y / 2) {
 				if (isContinue == false) {
 					isContinue = true;
 					goTitle.SetColor(goTitle, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
@@ -819,8 +825,10 @@ void GameSceneUI::PauseText() {
 			}
 		}
 
-		if (cursorPos.x > 664 && cursorPos.x < 936) {
-			if (cursorPos.y > 378 && cursorPos.y < 442) {
+		if (cursorPos.x > goReset.GetPosition().x - goReset.GetScale().x / 2 &&
+			cursorPos.x < goReset.GetPosition().x + goReset.GetScale().x / 2) {
+			if (cursorPos.y > goReset.GetPosition().y - goReset.GetScale().y / 2 &&
+				cursorPos.y < goReset.GetPosition().y + goReset.GetScale().y / 2) {
 				if (isContinue == true) {
 					isContinue = false;
 					goTitle.SetColor(goTitle, Vector4(0.8f, 0.8f, 0.8f, 1.0f));

@@ -11,8 +11,15 @@
 #include"Input.h"
 
 const float Player::ADD_ALPHA = 0.02f;
-const float Player::MOVE_POWER = 0.03f;
+const float Player::SLANTING_POWER = 0.03f;
 const float Player::FLOAT_POWER = 0.005f;
+const float Player::MOVE_POWER = 0.08f;
+const float Player::ADD_Y_VEC = 0.03f;
+const float Player::SUB_Y_VEC = -0.3f;
+const float Player::CAMERA_LEN_X = 2.5f;
+const float Player::CAMERA_LEN_Y_MAX = 2.0f;
+const float Player::CAMERA_LEN_Y_MIN = -1.5f;
+const float Player::CAMERA_LEN_Z = -1.6f;
 
 //デストラクタ
 Player::~Player() {
@@ -73,8 +80,6 @@ bool Player::PlayerInitialize() {
 	hitTime = 0;
 	alpha = 1.0f;
 	energy = 0;
-	isUltimate = false;
-	ultTime = 0;
 	pos_ = { 0,0,0 };
 	rot_ = { 0,0,0 };
 	healthState = FINE;
@@ -82,6 +87,7 @@ bool Player::PlayerInitialize() {
 	dMove = { 0,0,0 };
 	wingRRotate = -2.0f;
 	wingLRotate = 2.0f;
+	addCameraLen = { 0,0,0.1f };
 
 	return true;
 }
@@ -152,33 +158,33 @@ void Player::Move()
 	//player移動
 	if (input->PushKey(DIK_W)) {
 		if (input->PushKey(DIK_A) == true && input->PushKey(DIK_D) == false) {
-			move = { -MOVE_POWER, MOVE_POWER, 0 };
+			move = { -SLANTING_POWER, SLANTING_POWER, 0 };
 		}
 		else if (input->PushKey(DIK_A) == false && input->PushKey(DIK_D) == true) {
-			move = { MOVE_POWER, MOVE_POWER, 0 };
+			move = { SLANTING_POWER, SLANTING_POWER, 0 };
 		}
 		else {
-			move = { 0, 0.08f, 0 };
+			move = { 0, MOVE_POWER, 0 };
 		}
 	}
 	else if (input->PushKey(DIK_A)) {
 		if (input->PushKey(DIK_S) == true && input->PushKey(DIK_W) == false) {
-			move = { -MOVE_POWER, -MOVE_POWER, 0 };
+			move = { -SLANTING_POWER, -SLANTING_POWER, 0 };
 		}
 		else {
-			move = { -0.08f, 0, 0 };
+			move = { -MOVE_POWER, 0, 0 };
 		}
 	}
 	else if (input->PushKey(DIK_D)) {
 		if (input->PushKey(DIK_S) == true && input->PushKey(DIK_W) == false) {
-			move = { MOVE_POWER, -MOVE_POWER, 0 };
+			move = { SLANTING_POWER, -SLANTING_POWER, 0 };
 		}
 		else {
-			move = { 0.08f, 0, 0 };
+			move = { MOVE_POWER, 0, 0 };
 		}
 	}
 	else if (input->PushKey(DIK_S)) {
-		move = { 0, -0.08f, 0 };
+		move = { 0, -MOVE_POWER, 0 };
 	}
 
 	Vector3 floating(0, 0, 0);
@@ -195,14 +201,17 @@ void Player::Move()
 
 	//カメラとの距離感調整
 	Vector3 tmp = GetPosition() + move + floating;
-	if (abs(tmp.x) <= 3.0f) {
-		if (tmp.y >= -1.5f && tmp.y <= 2.0f) {
-			if (GetPosition().z < -1.6f) {
-				SetPosition(GetPosition() + move + floating + Vector3(0.0f,0.0f,0.1f));
+	if (abs(tmp.x) <= CAMERA_LEN_X) {
+		if (tmp.y >= CAMERA_LEN_Y_MIN && tmp.y <= CAMERA_LEN_Y_MAX) {
+			if (GetPosition().z < CAMERA_LEN_Z) {
+				SetPosition(GetPosition() + move + floating + addCameraLen);
 			}
 			else {
 				SetPosition(GetPosition() + move + floating);
 			}
+		}
+		else {
+			move = { 0,0,0 };
 		}
 	}
 	else {
@@ -214,17 +223,17 @@ void Player::Move()
 void Player::WingMove()
 {
 	//羽の動き
-	if (wingR->GetRotation().x < -45) {
+	if (wingR->GetRotation().x < -WING_ROTATE_MAX) {
 		wingRRotate *= -1;
 	}
-	else if (wingR->GetRotation().x > 10) {
+	else if (wingR->GetRotation().x > WING_ROTATE_MIN) {
 		wingRRotate *= -1;
 	}
 
-	if (wingL->GetRotation().x > 45) {
+	if (wingL->GetRotation().x > WING_ROTATE_MAX) {
 		wingLRotate *= -1;
 	}
-	else if (wingL->GetRotation().x < -10) {
+	else if (wingL->GetRotation().x < -WING_ROTATE_MIN) {
 		wingLRotate *= -1;
 	}
 
@@ -284,22 +293,8 @@ void Player::LockAttack(std::vector<LockInfo>& info)
 	}
 }
 
-void Player::Ultimate()
-{
-	if (ultTime > ULT_TIME_MID && ultTime < ULT_TIME_END) {
-		SetPosition(GetPosition() + Vector3(0.0f, 0.05f, 0.0f));
-	}
-	else if (ultTime == ULT_TIME_END) {
-		ultTime = 0;
-		isUltimate = false;
-		energy = 0;
-	}
-	GetWorldTransform().UpdateMatrix();
-	ultTime++;
-}
-
 void Player::PlayerDraw(ViewProjection* viewProjection_) {
-	if (hitTime % 3 == 0) {
+	if (hitTime % HIT_TIME == 0) {
 		Draw(viewProjection_,alpha);
 		wingR->Draw(viewProjection_, alpha);
 		wingL->Draw(viewProjection_, alpha);
@@ -384,12 +379,12 @@ void Player::Dead()
 
 	if (deathTimer < DEATH_TIME_ONE) {}
 	else if (deathTimer < DEATH_TIME_TWO) {
-		addVelo = { 0.0f,0.03f,0.0f };
+		addVelo = { 0.0f,ADD_Y_VEC,0.0f };
 		dMove = addVelo;
 		SetPosition(GetPosition() + dMove);
 	}
 	else if (deathTimer < DEATH_TIME_THREE) {
-		addVelo = { 0.0f,-0.3f,0.0f };
+		addVelo = { 0.0f,SUB_Y_VEC,0.0f };
 		dMove = addVelo;
 		SetPosition(GetPosition() + dMove);
 	}

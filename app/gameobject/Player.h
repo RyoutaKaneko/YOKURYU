@@ -70,18 +70,13 @@ public:
 	void LockAttack(std::vector<LockInfo>& info);
 
 	/// <summary>
-	/// 必殺技
-	/// </summary>
-	void Ultimate();
-
-	/// <summary>
 	/// 描画
 	/// </summary>
 	/// <param name="viewProjection_"></param>
 	void PlayerDraw(ViewProjection* viewProjection_);
 
 	/// <summary>
-	/// 
+	///  ゲームオーバー時の描画
 	/// </summary>
 	/// <param name="viewProjection_"></param>
 	void DrawDead(ViewProjection* viewProjection_);
@@ -141,12 +136,6 @@ public:
 	float GetLen() { return len; }
 
 	/// <summary>
-	/// 必殺技中かどうか
-	/// </summary>
-	/// <returns></returns>
-	bool GetIsUltimate() { return isUltimate; }
-
-	/// <summary>
 	/// 移動量
 	/// </summary>
 	/// <returns></returns>
@@ -183,12 +172,6 @@ public:
 	/// </summary>
 	/// <param name="alpha_">透過度</param>
 	void SetAlpha(float alpha_) { alpha = alpha_; }
-
-	/// <summary>
-	/// 必殺技
-	/// </summary>
-	/// <param name="ult">必殺技フラグ</param>
-	void SetIsUltimate(bool ult) { isUltimate = ult; }
 
 	/// <summary>
 	/// 状態を指定
@@ -240,11 +223,21 @@ private:
 	static const int DEATH_TIME_ONE = 25;
 	static const int DEATH_TIME_TWO = 50;
 	static const int DEATH_TIME_THREE = 100;
+	static const int HIT_TIME = 3;
+	static const int WING_ROTATE_MAX = 45;
+	static const int WING_ROTATE_MIN = 10;
 	static const float ADD_ALPHA;
-	static const float MOVE_POWER;
+	static const float SLANTING_POWER;
 	static const float FLOAT_POWER;
+	static const float MOVE_POWER;
+	static const float ADD_Y_VEC;
+	static const float SUB_Y_VEC;
+	static const float CAMERA_LEN_X;
+	static const float CAMERA_LEN_Y_MAX;
+	static const float CAMERA_LEN_Y_MIN;
+	static const float CAMERA_LEN_Z;
 
-
+  private:
 	Input* input = nullptr;
 
 	//obj
@@ -272,13 +265,12 @@ private:
 	int hitTime;
 	float alpha;
 	float energy;
-	bool isUltimate;
-	int ultTime;
 	Vector3 pos_;
 	Vector3 rot_;
 	Vector3 move;
 	Vector3 dMove;
 	Health healthState;
+	Vector3 addCameraLen;
 	int deathTimer;
 	float wingRRotate;
 	float wingLRotate;

@@ -126,6 +126,12 @@ public:
 	/// <returns></returns>
 	float GetPasPoint() { return splineCam.GetT(); }
 private:
+	static const float PI;
+	static const float DEGREES;
+	static const float DELAY;
+	static const float ADD_DELAY;
+
+private:
 	Input* input_ = nullptr;
 	ViewProjection* viewProjection = nullptr;
 	Object3d* camera = nullptr;
@@ -147,8 +153,11 @@ private:
 	//tmp
 	Vector3 eyeTmp{};
 	Vector3 targetTmp{};
+	Vector3 up;
 
 	bool isEnd;
 	bool OnRail;
+	float targetVel;
+	float cameraVel;
 };
 

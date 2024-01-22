@@ -115,7 +115,6 @@
     <ClCompile Include="app\gameobject\Player.cpp" />
     <ClCompile Include="app\gameobject\PlayerBullet.cpp" />
     <ClCompile Include="app\scene\Game.cpp" />
-    <ClCompile Include="app\scene\GameClearScene.cpp" />
     <ClCompile Include="app\scene\GameOverScene.cpp" />
     <ClCompile Include="app\scene\GameScene.cpp" />
     <ClCompile Include="app\scene\GameTitleScene.cpp" />
@@ -236,7 +235,6 @@
     <ClInclude Include="app\gameobject\PlayerBullet.h" />
     <ClInclude Include="app\scene\ClearConst.h" />
     <ClInclude Include="app\scene\Game.h" />
-    <ClInclude Include="app\scene\GameClearScene.h" />
     <ClInclude Include="app\scene\GameOverScene.h" />
     <ClInclude Include="app\scene\GameScene.h" />
     <ClInclude Include="app\scene\GameTitleScene.h" />

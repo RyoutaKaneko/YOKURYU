@@ -8,7 +8,6 @@
 #include "AbstractSceneFactory.h"
 #include "GameTitleScene.h"
 #include "GameScene.h"
-#include "GameClearScene.h"
 #include "GameOverScene.h"
 
 /// <summary>

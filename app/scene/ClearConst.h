@@ -1,3 +1,9 @@
+/**
+ * @file GameScene.cpp
+ * @brief クリア演出に使う定数
+ * @author カネコ_リョウタ
+ */
+
 #pragma once
 
 static const int CLEARTIME_ONE = 3;

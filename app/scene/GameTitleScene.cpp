@@ -176,14 +176,10 @@ void GameTitleScene::Update()
 	}
 	//マウス更新
 	Vector3 cur = Input::GetInstance()->GetMousePos();
-	cursor[8].SetPosition(cursor[7].GetPosition());
-	cursor[7].SetPosition(cursor[6].GetPosition());
-	cursor[6].SetPosition(cursor[5].GetPosition());
-	cursor[5].SetPosition(cursor[4].GetPosition());
-	cursor[4].SetPosition(cursor[3].GetPosition());
-	cursor[3].SetPosition(cursor[2].GetPosition());
-	cursor[2].SetPosition(cursor[1].GetPosition());
-	cursor[1].SetPosition(cursor[0].GetPosition());
+	//残像
+	for (int i = 8; i > 0; i--) {
+		cursor[i].SetPosition(cursor[i - 1].GetPosition());
+	}
 	cursor[0].SetPosition(cur);
 	circle.SetPosition(cur);
 	if (Input::GetInstance()->TriggerMouseLeft() == true) {
@@ -401,6 +397,7 @@ void GameTitleScene::Draw()
 
 	Object3d::PostDraw();
 
+	//スプライト描画
 	Sprite::PreDraw(dxCommon_->GetCommandList(), spriteCommon_);
 	titleBack[isBackNum].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 	if (isNext == false) {

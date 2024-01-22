@@ -6,13 +6,13 @@
 
 #include "GameOverScene.h"
 
-GameOverScene::GameOverScene()
-{
-}
+const float GameOverScene::MAX_ALPHA = 1.0f;
+const float  GameOverScene::ADD_FADE_ALPHA = 0.1f;
+const float  GameOverScene::ADD_TEXT_ALPHA = 0.05f;
 
-GameOverScene::~GameOverScene()
-{
-}
+GameOverScene::GameOverScene(){}
+
+GameOverScene::~GameOverScene(){}
 
 void GameOverScene::Initialize()
 {
@@ -86,34 +86,36 @@ void GameOverScene::Initialize()
 
 void GameOverScene::Update()
 {
-	if (gameTimer < 25) {
+	//ゲームオーバー演出
+	if (gameTimer < GAMETIME_ONE) {
 		if (fadeAlpha > 0.0f) {
-			fadeAlpha -= 0.1f;
+			fadeAlpha -= ADD_FADE_ALPHA;
 			fade.SetAlpha(fade, fadeAlpha);
 			fade.SpriteUpdate(fade, spriteCommon_);
 		}
 	}
-	else if (gameTimer < 100) {}
-	else if(gameTimer < 125){
-		if (fadeAlpha < 1.0f) {
-			fadeAlpha += 0.1f;
+	else if (gameTimer < GAMETIME_TWO) {}
+	else if(gameTimer < GAMETIME_THREE){
+		if (fadeAlpha < MAX_ALPHA) {
+			fadeAlpha += ADD_FADE_ALPHA;
 			fade.SetAlpha(fade, fadeAlpha);
 			fade.SpriteUpdate(fade, spriteCommon_);
 		}
-		if (textAlpha < 1.0f) {
-			textAlpha += 0.05f;
+		if (textAlpha < MAX_ALPHA) {
+			textAlpha += ADD_TEXT_ALPHA;
 			textGH.SetAlpha(textGH, textAlpha);
 			textGH.SpriteUpdate(textGH, spriteCommon_);
 		}
 	}
-	else if(gameTimer < 150){
+	else if(gameTimer < GAMETIME_FOUR){
 		if (textAlpha > 0.0f) {
-			textAlpha -= 0.05f;
+			textAlpha -= ADD_TEXT_ALPHA;
 			textGH.SetAlpha(textGH, textAlpha);
 			textGH.SpriteUpdate(textGH, spriteCommon_);
 		}
 	}
 	else {
+		//タイトルへ
 		GameSceneManager::GetInstance()->ChangeScene("TITLE");
 	}
 
@@ -148,6 +150,10 @@ void GameOverScene::Draw()
 	dxCommon->PostDraw();
 }
 
+//解放
 void GameOverScene::Finalize()
 {
+	delete player;
+	delete sprite;
+	delete viewProjection;
 }

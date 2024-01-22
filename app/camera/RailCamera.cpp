@@ -1,10 +1,15 @@
-/**
+/**											  p
  * @file RaikCamera.h
  * @brief ゲーム内のレールカメラ制御に使う関数群をまとめてある
  * @author カネコ_リョウタ
  */
 
 #include "RailCamera.h"
+   
+const float RailCamera::PI = 3.1415f;
+const float RailCamera::DEGREES = 180.0f;
+const float RailCamera::DELAY = 0.05f;
+const float RailCamera::ADD_DELAY = 0.02f;
 
 RailCamera::RailCamera() {
 	isEnd = false;
@@ -30,6 +35,9 @@ void RailCamera::Initialize() {
 	OnRail = true;
 	playerMoveVel = { 0,0,0 };
 	cameraDelay = { 0,0,0 };
+	targetVel = 0.001f;
+	cameraVel = 0.0001f;
+	up = { 1,-1,1 };
 }
 
 void RailCamera::ViewUpdate() {
@@ -40,8 +48,8 @@ void RailCamera::ViewUpdate() {
 void RailCamera::Update(Player* player_, std::vector<Vector3>& point) {
 
 	if (OnRail == true) {
-		Vector3 target = spline_.Update(point, 0.001f);
-		camera->SetPosition(splineCam.Update(point, 0.0001f));
+		Vector3 target = spline_.Update(point, targetVel);
+		camera->SetPosition(splineCam.Update(point, cameraVel));
 		//最初の1ループのみ現在位置を入れる
 		if (oldCamera.x == 0 && oldCamera.y == 0 && oldCamera.z == 0) {
 			oldCamera = camera->GetPosition();
@@ -53,12 +61,12 @@ void RailCamera::Update(Player* player_, std::vector<Vector3>& point) {
 		Vector3 camRot = camera->GetRotation();
 		//カメラ方向に合わせてY軸の回転
 		float radY = std::atan2(frontVec.x, frontVec.z);
-		camera->SetRotation({ camRot.x,radY * 180.0f / 3.1415f,camRot.z });
+		camera->SetRotation({ camRot.x,radY * DEGREES / PI,camRot.z });
 		//カメラ方向に合わせてX軸の回転
 		Vector3 rotaVec = { frontVec.x,0,frontVec.z };
 		float length = rotaVec.length();
 		float radX = std::atan2(-frontVec.y, length);
-		camera->SetRotation({ radX * 180.0f / 3.1415f ,radY * 180.0f / 3.1415f,camRot.z });
+		camera->SetRotation({ radX * DEGREES / PI ,radY * DEGREES / PI,camRot.z });
 
 		if (spline_.GetIsEnd() == true) {
 			OnRail = false;
@@ -70,9 +78,6 @@ void RailCamera::Update(Player* player_, std::vector<Vector3>& point) {
 		viewProjection->SetTarget((target + frontVec));
 		//playerの移動をもとにディレイをかけて更新
 		viewProjection->SetEye((camera->GetPosition() + cameraDelay) - frontVec * player_->GetLen());
-		/*if (viewProjection->eye.y > (eyeTmp_.y + 1)) {
-			viewProjection->eye.y += 0.05f;
-		}*/
 
 		viewProjection->UpdateMatrix();
 		oldCamera = camera->GetPosition();
@@ -82,36 +87,23 @@ void RailCamera::Update(Player* player_, std::vector<Vector3>& point) {
 		camera->Update();
 	}
 	//cameraDelay
-	playerMoveVel += (player_->GetMove() *= Vector3(1,-1,1));
-	//
-	if (playerMoveVel.x > 2.0f) {
-		playerMoveVel.x = 2.0f;
-	}
-	else if (playerMoveVel.x < -2.0f) {
-		playerMoveVel.x = -2.0f;
-	}
-	if (playerMoveVel.y > 1.2f) {
-		playerMoveVel.y = 1.2f;
-	}
-	else if (playerMoveVel.y < -1.2f) {
-		playerMoveVel.y = -1.2f;
-	}
-	//
-	if (abs((playerMoveVel.x - cameraDelay.x)) > abs(0.05f)) {
+	playerMoveVel += (player_->GetMove() *= up);
+	//カメラのディレイを次フレームのために保存
+	if (abs((playerMoveVel.x - cameraDelay.x)) > abs(DELAY)) {
 		if (playerMoveVel.x > cameraDelay.x) {
-			cameraDelay.x += 0.02f;
+			cameraDelay.x += ADD_DELAY;
 		}
 		else if (playerMoveVel.x < cameraDelay.x) {
-			cameraDelay.x += -0.02f;
+			cameraDelay.x += -ADD_DELAY;
 		}
 		else{}
 	}
-	if (abs((playerMoveVel.y - cameraDelay.y)) > abs(0.05f)) {
+	if (abs((playerMoveVel.y - cameraDelay.y)) > abs(DELAY)) {
 		if (playerMoveVel.y > cameraDelay.y) {
-			cameraDelay.y += 0.02f;
+			cameraDelay.y += ADD_DELAY;
 		}
 		else if (playerMoveVel.y < cameraDelay.y) {
-			cameraDelay.y += -0.02f;
+			cameraDelay.y += -ADD_DELAY;
 		}
 		else {}
 	}
@@ -175,6 +167,7 @@ void RailCamera::SetTarget(Vector3 target_)
 	viewProjection->UpdateMatrix();
 }
 
+//カメラシェイク
 void RailCamera::ShakeCamera(float x, float y) {
 
 	//乱数生成装置

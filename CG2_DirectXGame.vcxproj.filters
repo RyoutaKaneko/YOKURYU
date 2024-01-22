@@ -180,9 +180,6 @@
     <ClCompile Include="engine\scene\SIFrameWork.cpp">
       <Filter>ソースファイル\Engine\scene</Filter>
     </ClCompile>
-    <ClCompile Include="app\scene\GameClearScene.cpp">
-      <Filter>ソースファイル\Application\scene</Filter>
-    </ClCompile>
     <ClCompile Include="app\scene\GameOverScene.cpp">
       <Filter>ソースファイル\Application\scene</Filter>
     </ClCompile>
@@ -374,9 +371,6 @@
     </ClInclude>
     <ClInclude Include="engine\scene\SIFrameWork.h">
       <Filter>ヘッダー ファイル\Engine\scene</Filter>
-    </ClInclude>
-    <ClInclude Include="app\scene\GameClearScene.h">
-      <Filter>ヘッダー ファイル\Application\scene</Filter>
     </ClInclude>
     <ClInclude Include="app\scene\GameOverScene.h">
       <Filter>ヘッダー ファイル\Application\scene</Filter>

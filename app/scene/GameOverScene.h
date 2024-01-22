@@ -1,3 +1,9 @@
+/**
+ * @file GameScene.cpp
+ * @brief ゲームオーバーシーン
+ * @author カネコ_リョウタ
+ */
+
 #pragma once
 #include "Input.h"
 #include "DirectXCommon.h"
@@ -6,15 +12,7 @@
 #include "GameSceneManager.h"
 #include "GameTitleScene.h"
 #include "Object3d.h"
-
 #include <DirectXMath.h>
-
-enum Health {
-	FINE,
-	WEEKNESS,
-	DYING,
-	DIE
-};
 
 class GameOverScene : public GameBaseScene
 {
@@ -45,6 +43,16 @@ public: // メンバ関数
 	/// 解放
 	/// </summary>
 	void Finalize() override;
+
+//定数
+private:
+	static const float MAX_ALPHA;
+	static const float ADD_FADE_ALPHA;
+	static const float ADD_TEXT_ALPHA;
+	static const int GAMETIME_ONE = 25;
+	static const int GAMETIME_TWO = 100;
+	static const int GAMETIME_THREE = 125;
+	static const int GAMETIME_FOUR = 150;
 
 private: // メンバ変数
 	Input* input_ = nullptr;

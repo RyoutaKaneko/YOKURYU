@@ -204,6 +204,8 @@ void GameSceneUI::Initialize(ID3D12Device* device)
 	isGameSceneReset = false;
 	isGameOver = false;
 	isClose = false;
+	selectColor = { 0.7f, 0.9f, 0.0f, 1.0f };
+	anotherColor = { 0.8f, 0.8f, 0.8f, 1.0f };
 }
 
 void GameSceneUI::ShowUI()
@@ -464,8 +466,8 @@ void GameSceneUI::ContinueText()
 			if (cursorPos.y > 378 && cursorPos.y < 442) {
 				if (isContinue == false) {
 					isContinue = true;
-					continueYes.SetColor(continueYes, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
-					continueNo.SetColor(continueNo, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+					continueYes.SetColor(continueYes, selectColor);
+					continueNo.SetColor(continueNo,anotherColor);
 					contSelect.SetPosition({ 460, 410, 0 });
 					contSelect.SpriteUpdate(contSelect, spriteCommon_);
 				}
@@ -480,8 +482,8 @@ void GameSceneUI::ContinueText()
 			if (cursorPos.y > 378 && cursorPos.y < 442) {
 				if (isContinue == true) {
 					isContinue = false;
-					continueYes.SetColor(continueYes, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
-					continueNo.SetColor(continueNo, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
+					continueYes.SetColor(continueYes, anotherColor);
+					continueNo.SetColor(continueNo, selectColor);
 					contSelect.SetPosition({ 800, 410, 0 });
 					contSelect.SpriteUpdate(contSelect, spriteCommon_);
 				}
@@ -496,8 +498,8 @@ void GameSceneUI::ContinueText()
 			if (Input::GetInstance()->TriggerKey(DIK_A)) {
 				if (isContinue == false) {
 					isContinue = true;
-					continueYes.SetColor(continueYes, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
-					continueNo.SetColor(continueNo, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+					continueYes.SetColor(continueYes, selectColor);
+					continueNo.SetColor(continueNo, anotherColor);
 					contSelect.SetPosition({ 460, 410, 0 });
 					contSelect.SpriteUpdate(contSelect, spriteCommon_);
 				}
@@ -505,8 +507,8 @@ void GameSceneUI::ContinueText()
 			else if(Input::GetInstance()->TriggerKey(DIK_D)) {
 				if (isContinue == true) {
 					isContinue = false;
-					continueYes.SetColor(continueYes, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
-					continueNo.SetColor(continueNo, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
+					continueYes.SetColor(continueYes,anotherColor);
+					continueNo.SetColor(continueNo, selectColor);
 					contSelect.SetPosition({ 800, 410, 0 });
 					contSelect.SpriteUpdate(contSelect, spriteCommon_);
 				}
@@ -589,14 +591,11 @@ void GameSceneUI::CursorUpdate(bool isCont) {
 	}
 	cursorPos += move;
 
-	cursorGH[8].SetPosition(cursorGH[7].GetPosition());
-	cursorGH[7].SetPosition(cursorGH[6].GetPosition());
-	cursorGH[6].SetPosition(cursorGH[5].GetPosition());
-	cursorGH[5].SetPosition(cursorGH[4].GetPosition());
-	cursorGH[4].SetPosition(cursorGH[3].GetPosition());
-	cursorGH[3].SetPosition(cursorGH[2].GetPosition());
-	cursorGH[2].SetPosition(cursorGH[1].GetPosition());
-	cursorGH[1].SetPosition(cursorGH[0].GetPosition());
+	//残像
+	for (int i = CURSOR_MAX - 1; i > 0; i--) {
+		cursorGH[i].SetPosition(cursorGH[i - 1].GetPosition());
+	}
+	circle.SetPosition(cur);
 	cursorGH[0].SetPosition(cursorPos);
 	circle.SetPosition(cursorPos);
 	if (Input::GetInstance()->TriggerMouseLeft() == true) {
@@ -655,14 +654,15 @@ void GameSceneUI::EndText() {
 
 		bool onCursor = false;
 
+		//カーソル選択
 		if (cursorPos.x > continueYes.GetPosition().x - continueYes.GetScale().x / 2 && 
 			cursorPos.x < continueYes.GetPosition().x + continueYes.GetScale().x / 2) {
 			if (cursorPos.y > continueYes.GetPosition().y - continueYes.GetScale().y / 2 &&
 				cursorPos.y < continueYes.GetPosition().y + continueYes.GetScale().y / 2) {
 				if (isContinue == false) {
 					isContinue = true;
-					continueYes.SetColor(continueYes, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
-					continueNo.SetColor(continueNo, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+					continueYes.SetColor(continueYes, selectColor);
+					continueNo.SetColor(continueNo, anotherColor);
 					contSelect.SetPosition({ 460, 410, 0 });
 					contSelect.SpriteUpdate(contSelect, spriteCommon_);
 				}
@@ -672,15 +672,14 @@ void GameSceneUI::EndText() {
 				onCursor = true;
 			}
 		}
-
 		if (cursorPos.x > continueNo.GetPosition().x - continueNo.GetScale().x / 2 &&
 			cursorPos.x < continueNo.GetPosition().x + continueNo.GetScale().x / 2) {
 			if (cursorPos.y > continueNo.GetPosition().y - continueNo.GetScale().y / 2 &&
 				cursorPos.y < continueNo.GetPosition().y + continueNo.GetScale().y / 2) {
 				if (isContinue == true) {
 					isContinue = false;
-					continueYes.SetColor(continueYes, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
-					continueNo.SetColor(continueNo, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
+					continueYes.SetColor(continueYes, anotherColor);
+					continueNo.SetColor(continueNo, selectColor);
 					contSelect.SetPosition({ 800, 410, 0 });
 					contSelect.SpriteUpdate(contSelect, spriteCommon_);
 				}
@@ -690,13 +689,13 @@ void GameSceneUI::EndText() {
 				onCursor = true;
 			}
 		}
-
+		//キーボード選択(カーソルがないとき)
 		if (onCursor == false) {
 			if (Input::GetInstance()->TriggerKey(DIK_A)) {
 				if (isContinue == false) {
 					isContinue = true;
-					continueYes.SetColor(continueYes, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
-					continueNo.SetColor(continueNo, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+					continueYes.SetColor(continueYes, selectColor);
+					continueNo.SetColor(continueNo,anotherColor);
 					contSelect.SetPosition({ 460, 410, 0 });
 					contSelect.SpriteUpdate(contSelect, spriteCommon_);
 				}
@@ -704,8 +703,8 @@ void GameSceneUI::EndText() {
 			else if (Input::GetInstance()->TriggerKey(DIK_D)) {
 				if (isContinue == true) {
 					isContinue = false;
-					continueYes.SetColor(continueYes, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
-					continueNo.SetColor(continueNo, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
+					continueYes.SetColor(continueYes, anotherColor);
+					continueNo.SetColor(continueNo, selectColor);
 					contSelect.SetPosition({ 800, 410, 0 });
 					contSelect.SpriteUpdate(contSelect, spriteCommon_);
 				}
@@ -807,15 +806,15 @@ void GameSceneUI::PauseText() {
 		CursorUpdate(false);
 
 		bool onCursor = false;
-
+		//カーソル選択
 		if (cursorPos.x > goTitle.GetPosition().x - goTitle.GetScale().x / 2 && 
 			cursorPos.x < goTitle.GetPosition().x + goTitle.GetScale().x / 2) {
 			if (cursorPos.y > goTitle.GetPosition().y - goTitle.GetScale().y / 2 &&
 				cursorPos.y < goTitle.GetPosition().y + goTitle.GetScale().y / 2) {
 				if (isContinue == false) {
 					isContinue = true;
-					goTitle.SetColor(goTitle, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
-					goReset.SetColor(goReset, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+					goTitle.SetColor(goTitle, selectColor);
+					goReset.SetColor(goReset,anotherColor);
 					contSelect.SetPosition({ 460, 410, 0 });
 				}
 				if (Input::GetInstance()->TriggerMouseLeft()) {
@@ -824,15 +823,14 @@ void GameSceneUI::PauseText() {
 				onCursor = true;
 			}
 		}
-
 		if (cursorPos.x > goReset.GetPosition().x - goReset.GetScale().x / 2 &&
 			cursorPos.x < goReset.GetPosition().x + goReset.GetScale().x / 2) {
 			if (cursorPos.y > goReset.GetPosition().y - goReset.GetScale().y / 2 &&
 				cursorPos.y < goReset.GetPosition().y + goReset.GetScale().y / 2) {
 				if (isContinue == true) {
 					isContinue = false;
-					goTitle.SetColor(goTitle, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
-					goReset.SetColor(goReset, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
+					goTitle.SetColor(goTitle, anotherColor);
+					goReset.SetColor(goReset,selectColor);
 					contSelect.SetPosition({ 800, 410, 0 });
 				}
 				if (Input::GetInstance()->TriggerMouseLeft()) {
@@ -841,21 +839,21 @@ void GameSceneUI::PauseText() {
 				onCursor = true;
 			}
 		}
-
+		//キーボード選択
 		if (onCursor == false) {
 			if (Input::GetInstance()->TriggerKey(DIK_A)) {
 				if (isContinue == false) {
 					isContinue = true;
-					goTitle.SetColor(goTitle, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
-					goReset.SetColor(goReset, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
+					goTitle.SetColor(goTitle, selectColor);
+					goReset.SetColor(goReset, anotherColor);
 					contSelect.SetPosition({ 460, 410, 0 });
 				}
 			}
 			else if (Input::GetInstance()->TriggerKey(DIK_D)) {
 				if (isContinue == true) {
 					isContinue = false;
-					goTitle.SetColor(goTitle, Vector4(0.8f, 0.8f, 0.8f, 1.0f));
-					goReset.SetColor(goReset, Vector4(0.7f, 0.9f, 0.0f, 1.0f));
+					goTitle.SetColor(goTitle, anotherColor);
+					goReset.SetColor(goReset, selectColor);
 					contSelect.SetPosition({ 800, 410, 0 });
 				}
 			}
@@ -885,7 +883,7 @@ void GameSceneUI::PauseText() {
 	contSelect.SpriteTransferVertexBuffer(contSelect, 22);
 	contSelect.SpriteUpdate(contSelect, spriteCommon_);
 }
-
+//ポーズ画面描画
 void GameSceneUI::DrawPause(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList) {
 	// スプライト描画前処理
 	Sprite::PreDraw(cmdList, spriteCommon_);

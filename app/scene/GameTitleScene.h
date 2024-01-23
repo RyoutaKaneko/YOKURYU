@@ -51,6 +51,31 @@ public: // メンバ関数
 	/// </summary>
 	static bool GetIsEnd() { return isEnd; }
 
+private:
+	//定数
+	static const int TITLE_BACK_MAX = 3;
+	static const int CURSOR_MAX = 9;
+	static const int CLICK_MAX = 2;
+	static const float ALPHA_MAX;
+	static const float SUB_ALPHA;
+	static const int END_MAX = 15;
+	static const int TITLEBACK_MAX = 2;
+	static const int CIRCLE_GRAPH_SCALE = 16;
+	static const int CIRCLE_MAX = 6;
+	static const int CIRCLE_MIN = 1;
+	static const float CIRCLE_ADD_ALPHA;
+	static const float CIRCLE_ADD_SCALE;
+	static const float OUTLINE_MAX;
+	static const float ADD_OUTLINE;
+	static const float SUB_TITLEBACK; 
+	static const int FADE_TIME = 15;
+	static const int WAIT_TITLE_ONE = 50;
+	static const int WAIT_TITLE_TWO = 100;
+	static const int PLAYER_LIMIT = 60;
+	static const int NEXT_TIME_ONE = 10;
+	static const int NEXT_TIME_TWO = 25;
+	static const int NEXT_TIME_THREE = 60;
+
 private: // メンバ変数
 	// 入力
 	Input* input_ = nullptr;
@@ -59,12 +84,6 @@ private: // メンバ変数
 
 	//カメラ
 	ViewProjection* viewProjection = nullptr;
-
-	//定数
-	static const int TITLE_BACK_MAX = 3;
-	static const int CURSOR_MAX = 9;
-	static const int CLICK_MAX = 2;
-	static const float ALPHA_MAX;
 
 	//カーソル
 	Sprite* sprite = new Sprite;
@@ -90,6 +109,15 @@ private: // メンバ変数
 	Model* stoneModel = nullptr;
 	Player* player = nullptr;
 
+	Vector3 floating;
+	Vector3 cameraUp;
+	Vector3 fadeDown;
+	Vector3 upforce;
+	Vector3 playerUp;
+	Vector3 playerDown;
+	Vector3 Downforce;
+	Vector2 addScale;
+
 	int gameTimer;
 	int isBackNum;
 	int endTimer;
@@ -107,4 +135,5 @@ private: // メンバ変数
 	static bool isEnd;
 	bool isPushEsc;
 	bool isOpenEndText;
+	float rotateCircle;
 };

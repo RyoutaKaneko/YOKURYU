@@ -45,7 +45,7 @@ public:
 	/// </summary>
 	/// <param name="velo">弾ベクトル</param>
 	/// <param name="info">ロックオン情報</param>
-	void Update(Vector3 velo, std::vector<LockInfo>& info);
+	void Update(Vector3 vec, std::vector<LockInfo>& info);
 
 	/// <summary>
 	/// 移動

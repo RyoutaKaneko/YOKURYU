@@ -237,6 +237,7 @@
     <ClInclude Include="app\scene\Game.h" />
     <ClInclude Include="app\scene\GameOverScene.h" />
     <ClInclude Include="app\scene\GameScene.h" />
+    <ClInclude Include="app\scene\GameSceneConst.h" />
     <ClInclude Include="app\scene\GameTitleScene.h" />
     <ClInclude Include="app\UI\GameSceneUI.h" />
     <ClInclude Include="engine\3d\light.h" />

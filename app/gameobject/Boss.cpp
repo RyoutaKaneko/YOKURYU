@@ -64,7 +64,7 @@ void Boss::BossInitialize()
 void Boss::Update(Vector3 velo)
 {
 	//“oêŽž
-	if (appearTimer > 0) {
+	if (appearTimer >= 0) {
 		if (appearTimer > APPEAR_TIME) {
 			Vector3 velocity = { 1.0f, -0.2f, 0 };
 			SetPosition(GetPosition() + velocity);
@@ -76,7 +76,7 @@ void Boss::Update(Vector3 velo)
 	}
 	//Šî–{‹““®
 	Move();
-	if (appearTimer == 0) {
+	if (appearTimer < 0) {
 		ChangeState();
 	}
 

@@ -30,14 +30,7 @@ public:
 	/// <param name="points">spline制御点</param>
 	/// <param name="val">加速度</param>
 	/// <returns></returns>
-	Vector3 EnemyPosition(std::vector<Vector3>& points, float val);
-
-	/// <summary>
-	/// 位置計算
-	/// </summary>
-	/// <param name="points">spline制御点</param>
-	/// <returns></returns>
-	Vector3 pointCal(std::vector<Vector3>& points);
+	Vector3 LinePosition(std::vector<Vector3>& points, float val);
 
 	/// <summary>
 	/// リセット

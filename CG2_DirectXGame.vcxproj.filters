@@ -426,5 +426,8 @@
     <ClInclude Include="engine\3d\light.h">
       <Filter>ヘッダー ファイル\Engine\3d</Filter>
     </ClInclude>
+    <ClInclude Include="app\scene\GameSceneConst.h">
+      <Filter>ヘッダー ファイル\Application\scene</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -92,7 +92,7 @@ bool Player::PlayerInitialize() {
 	return true;
 }
 
-void Player::Update(Vector3 velo, std::vector<LockInfo>& info)
+void Player::Update(Vector3 vec, std::vector<LockInfo>& info)
 {
 	if (isShooted == true) {
 		isShooted = false;
@@ -101,7 +101,7 @@ void Player::Update(Vector3 velo, std::vector<LockInfo>& info)
 
 	Move();
 	LockAttack(info);
-	Attack(velo);
+	Attack(vec);
 	//player’e
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
 		if (bullet->GetIsHoming() == true) {

@@ -34,40 +34,17 @@ Vector3 Spline::Update(std::vector<Vector3>& points, float val) {
 
 	Vector3 pos = SplinePosition(points, startIndex, t);
 
-	t += (float)0.002;
-	//float integer = (float)floor(val);
-	//float few = (float)fmod(val, 1);
-
-	//Vector3 pos = SplinePosition(points, (size_t)integer, few);
-
-	//if (integer >= (float)points.size() - 3.0f) {
-	//	isEnd = true;
-	//}
+	t += (float)0.002f;
 	
 	return pos;
 }
-
-Vector3 Spline::EnemyPosition(std::vector<Vector3>& points, float val)
+//曲線中の座標を指定(レールからの距離で一地点を指定できる)
+Vector3 Spline::LinePosition(std::vector<Vector3>& points, float val)
 {
 	float integer_ = (float)floor(val);
 	float few = (float)fmod(val, 1);
 
 	Vector3 pos = SplinePosition(points, (size_t)integer_, few);
-
-	return pos;
-}
-
-Vector3 Spline::pointCal(std::vector<Vector3>& points) {
-
-	Vector3 pos = SplinePosition(points, startIndex, t);
-
-	if (t >= 1) {
-		startIndex++;
-		t = 0;
-	}
-	else {
-		t += 0.01f;
-	}
 
 	return pos;
 }

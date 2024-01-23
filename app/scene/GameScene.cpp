@@ -8,7 +8,6 @@
 #include "SphereCollider.h"
 #include "CollisionManager.h"
 #include "GameSceneManager.h"
-#include "ClearConst.h"
 #include <cassert>
 #include <fstream>
 #include <sstream>
@@ -19,9 +18,7 @@ int GameScene::popEnergyCount = 0;
 const float GameScene::ALPHA_MAX = 1.0f;
 GameScene::GameScene() {}
 
-GameScene::~GameScene() {
-	delete player;
-}
+GameScene::~GameScene() {}
 
 ///-----変数の初期化-----///
 void GameScene::Initialize() {
@@ -200,27 +197,27 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	//クロスヘアを更新
 	GetCrosshair();
+	//ゲーム開始時(リセット時)
 	if (isStart == false) {
 		fadeAlpha = 0.0f;
 		fade.SetAlpha(fade, fadeAlpha);
 		gameTime = 150;
-		railCamera->GetView()->SetEye(Vector3(-1, 0.5f, 490.0f));
-		railCamera->GetView()->SetTarget(Vector3(0.0f, 0.5f, 495));
-		player->SetPosition({ 0,0.5f,495 });
-		player->SetRotation({ 0,90,0 });
-		Vector3 cursor = GetWorldToScreenPos(Vector3(-230, 85, 0), railCamera);
-		input->SetMousePos({ cursor.x,cursor.y });
+		railCamera->GetView()->SetEye(START_EYE);
+		railCamera->GetView()->SetTarget(START_PLAYER);
+		player->SetPosition(START_PLAYER);
+		player->SetRotation(ROTATE_FRONT);
+		//背景オブジェクトを一度だけ更新
 		for (auto& object : objects) {
 			object->Update();
 		}
 		isStart = true;
 	}
 	//メインゲーム開始時フェードアウト
-	if (fadeout.GetPosition().y < 1820) {
-		fadeout.SetPosition(fadeout.GetPosition() + Vector3(0, 80, 0));
+	if (fadeout.GetPosition().y < FADE_LIMIT) {
+		fadeout.SetPosition(fadeout.GetPosition() + FADE_DOWN);
 		fadeout.SpriteUpdate(fadeout, spriteCommon_);
 	}
-
+	//弾方向計算ベクトルを初期化
 	shotVec = { 0,0,0 };
 
 	//メインゲーム中
@@ -240,26 +237,22 @@ void GameScene::Update() {
 		player->Dead();
 		UIs->DeadUIPos();
 		railCamera->ViewUpdate();
-		if (player->GetDeathTimer() >= 100) {
+		if (player->GetDeathTimer() >= DEAD_TIME) {
 			UIs->ContinueText();
 
 			if (UIs->GetIsGameSceneReset() == true) {
 				Reset();
 				gameState = MAIN;
-				gameTime = 150;
-				railCamera->GetView()->SetEye(Vector3(-1, 0.5f, 490.0f));
-				railCamera->GetView()->SetTarget(Vector3(0.0f, 0.5f, 495));
-				player->SetPosition({ 0,0.5f,495 });
-				Vector3 cursor = GetWorldToScreenPos(Vector3(0, 0, 0), railCamera);
-				input->SetMousePos({ cursor.x,cursor.y });
+				gameTime = GAME_TIME_MAX;
+				isStart = false;
 				fadeAlpha = 0.0f;
 				fade.SetAlpha(fade, fadeAlpha);
 			}
 			if (UIs->GetIsGameOver() == true) {
-				fadeAlpha += 0.05f;
+				fadeAlpha += ADD_FADE;
 				fade.SetAlpha(fade, fadeAlpha);
 				fade.SpriteUpdate(fade, spriteCommon_);
-				if (fadeAlpha >= 1.0f) {
+				if (fadeAlpha >= ALPHA_MAX) {
 					GameSceneManager::GetInstance()->ChangeScene("OVER");
 				}
 			}
@@ -268,12 +261,10 @@ void GameScene::Update() {
 
 		//クリアシーンに遷移
 	case GameScene::CLEAR:
-
+		//ボス撃破
 		boss->SlainUpdate();
 
 		ClearUpdate();
-
-		railCamera->ViewUpdate();
 		break;
 
 	case GameScene::PAUSE:
@@ -286,13 +277,16 @@ void GameScene::Update() {
 		LockedClear();
 		gameState = CONTINUE;
 	}
+	//ダメージエフェクト
 	if (player->GetIsHit() == true) {
-		dmgAlpha += 0.05f;
+		dmgAlpha += ADD_FADE;
 		dmg.SetAlpha(dmg, dmgAlpha);
+		//画面シェイク
+		railCamera->ShakeCamera(SHAKE_MIN, SHAKE_MAX);
 	}
 	else {
 		if (dmgAlpha >= 0) {
-			dmgAlpha -= 0.05f;
+			dmgAlpha -= ADD_FADE;
 			dmg.SetAlpha(dmg, dmgAlpha);
 		}
 	}
@@ -353,7 +347,7 @@ void GameScene::Draw() {
 
 	if (gameState == BOSS) {
 		fade.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
-		if (boss->GetTimer() == 0) {
+		if (boss->GetTimer() < 0) {
 			//ボスのHP
 			bossHP.SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		}
@@ -364,7 +358,7 @@ void GameScene::Draw() {
 	if (isShowUI == true) {
 		UIs->Draw(dxCommon_->GetDevice(), dxCommon_->GetCommandList(),isBoss);
 	}
-	if (gameState == CONTINUE && player->GetDeathTimer() >= 100) {
+	if (gameState == CONTINUE && player->GetDeathTimer() >= DEAD_TIME) {
 		UIs->DrawContinue(dxCommon_->GetDevice(), dxCommon_->GetCommandList());
 	}
 	if (gameState == PAUSE) {
@@ -376,7 +370,7 @@ void GameScene::Draw() {
 
 	Sprite::PreDraw(dxCommon_->GetCommandList(), spriteCommon_);
 	if (isPlayable == true && gameState != CONTINUE && gameState != PAUSE) {
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < CROSSHAIR_MAX; i++) {
 			crosshair[i].SpriteDraw(dxCommon_->GetCommandList(), spriteCommon_, dxCommon_->GetDevice());
 		}
 	}
@@ -435,9 +429,6 @@ void GameScene::LoadStage() {
 	file.open("Resources/csv/stagePop.csv");
 	assert(file.is_open());
 
-	std::string num;
-	num = "1";
-
 	// １行ずつ読み込む
 	string line;
 	while (getline(file, line)) {
@@ -450,7 +441,7 @@ void GameScene::LoadStage() {
 		getline(line_stream, key, ' ');
 
 
-		// 先頭文字列がstならステージ
+		// 先頭文字列がstなら通常ステージ
 		if (key == "st") {
 			// X,Y,Z座標読み込み
 			Vector3 position{};
@@ -460,7 +451,7 @@ void GameScene::LoadStage() {
 			// 座標データに追加
 			points.emplace_back(position);
 		}
-		//先頭文字がboならボス
+		//先頭文字がboならボスステージ
 		if (key == "bo") {
 			// X,Y,Z座標読み込み
 			Vector3 position{};
@@ -474,7 +465,7 @@ void GameScene::LoadStage() {
 	// ファイルと閉じる
 	file.close();
 }
-
+//リセット時初期化
 void GameScene::Reset() {
 	delete player;
 	delete railCamera;
@@ -485,8 +476,8 @@ void GameScene::Reset() {
 	player = new Player;
 	player->PlayerInitialize();
 	player->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 0.7f));
-	player->SetPosition({ 0,0.5f,495 });
-	player->SetRotation({ 0,90,0 });
+	player->SetPosition(START_PLAYER);
+	player->SetRotation(ROTATE_FRONT);
 	player->ResetHP();
 	//boss
 	boss = new Boss;
@@ -519,9 +510,16 @@ void GameScene::Reset() {
 	isBoss = false;
 	dmgAlpha = 0.0f;
 }
-
+//解放
 void GameScene::Finalize()
 {
+	delete player;
+	delete railCamera;
+	delete enemy;
+	delete boss;
+	delete UIs;
+	delete sprite;
+	delete xmViewProjection;
 }
 
 void GameScene::LoadEnemy() {
@@ -545,9 +543,6 @@ void GameScene::LoadEnemy() {
 	file.open("Resources/csv/EnemyPop.csv");
 	assert(file.is_open());
 
-
-	std::string num;
-	num = "0";
 
 	// １行ずつ読み込む
 	string line;
@@ -579,24 +574,24 @@ void GameScene::LoadEnemy() {
 			{
 				line_stream >> t;
 				newEnemy->SetStagePoint(t);
-				position = spline.EnemyPosition(pointsL, t);
+				position = spline.LinePosition(pointsL, t);
 			}
 			else if (word.find("M") == 0)
 			{
 				line_stream >> t;
 				newEnemy->SetStagePoint(t);
-				position = spline.EnemyPosition(points, t);
+				position = spline.LinePosition(points, t);
 			}
 			else if (word.find("R") == 0)
 			{
 				line_stream >> t;
 				newEnemy->SetStagePoint(t);
-				position = spline.EnemyPosition(pointsR, t);
+				position = spline.LinePosition(pointsR, t);
 			}
 
 			// 座標データに追加
 			newEnemy->SetPosition(position);
-			newEnemy->SetScale({ 0.6f,0.6f,0.6f });
+			newEnemy->SetScale(ENEMY_SCALE);
 			//登録
 			enemys_.push_back(std::move(newEnemy));
 		}
@@ -609,12 +604,14 @@ void GameScene::SerchEnemy()
 {
 	Vector3 cur = input->GetMousePos();
 
+	//ロックオン判定
 	if (input->PushMouseRight()) {
+		//ボス
 		for (int i = 0; i < boss->GetPartsNum(); i++) {
-			Vector3 epos1 = GetWorldToScreenPos(boss->GetParts(i)->GetWorldPos(), railCamera);
+			Vector3 bpos = GetWorldToScreenPos(boss->GetParts(i)->GetWorldPos(), railCamera);
 			if (boss->GetIsInvisible() == false) {
-				if (pow((epos1.x - cur.x), 2) + pow((epos1.y - cur.y), 2) < pow(50, 2)) {
-					if (boss->GetParts(i)->GetIsLocked() == false && infos.size() < 10) {
+				if (pow((bpos.x - cur.x), 2) + pow((bpos.y - cur.y), 2) < pow(BOSS_RADIUS, 2)) {
+					if (boss->GetParts(i)->GetIsLocked() == false && infos.size() < INFOS_MAX) {
 						LockInfo info;
 						info.vec = boss->GetParts(i)->GetWorldPos();
 						info.obj = boss->GetParts(i);
@@ -625,11 +622,12 @@ void GameScene::SerchEnemy()
 			}
 		}
 
+		//雑魚敵
 		for (const std::unique_ptr<Enemy>& enemy_ : enemys_) {
-			Vector3 epos2 = GetWorldToScreenPos(enemy_->GetWorldPos(), railCamera);
+			Vector3 epos = GetWorldToScreenPos(enemy_->GetWorldPos(), railCamera);
 			Vector3 len = enemy_->GetWorldPos() - player->GetWorldPos();
-			if (pow((epos2.x - cur.x), 2) + pow((epos2.y - cur.y), 2) < pow(30, 2)) {
-				if (enemy_->GetIsLocked() == false && infos.size() < 10 && enemy_->GetIsParticle() == false) {
+			if (pow((epos.x - cur.x), 2) + pow((epos.y - cur.y), 2) < pow(ENEMY_RADIUS, 2)) {
+				if (enemy_->GetIsLocked() == false && infos.size() < INFOS_MAX && enemy_->GetIsParticle() == false) {
 					LockInfo info;
 					info.vec = enemy_->GetWorldPos();
 					info.obj = enemy_->GetPointer();
@@ -638,13 +636,13 @@ void GameScene::SerchEnemy()
 				}
 			}
 		}
-		if (cursorRotate < 0.01f) {
-			cursorRotate += 0.0005f;
+		if (cursorRotate < ROTATE_CURSOR_MAX) {
+			cursorRotate += ADD_ROTATE_CURSOR;
 		}
 	}
 	else {
-		if (cursorRotate > 0.002f) {
-			cursorRotate -= 0.0005f;
+		if (cursorRotate > ROTATE_CURSOR_MIN) {
+			cursorRotate -= ADD_ROTATE_CURSOR;
 		}
 	}
 	//ロックオン画像の更新
@@ -655,7 +653,7 @@ void GameScene::SerchEnemy()
 		lock[i].SpriteTransferVertexBuffer(lock[i], 1);
 	}
 }
-
+//ロックオン情報クリア
 void GameScene::LockedClear()
 {
 	if (player->GetIsShooted() == true) {
@@ -678,6 +676,7 @@ void GameScene::GetCrosshair()
 	//マウスカーソルの場所にクロスヘアを表示
 	if (gameState == MAIN) {
 		for (int i = 0; i < 4; i++) {
+			//距離を離して描画
 			if (i == 0) {
 				crosshair[i].SetPosition(mPos);
 			}
@@ -690,21 +689,23 @@ void GameScene::GetCrosshair()
 			else if (i == 3) {
 				crosshair[i].SetPosition(mPos - (mPos - GetWorldToScreenPos(player->GetWorldPos(), railCamera)) * 0.55f);
 			}
+			//回転の方向を交互に
 			if (i % 2 == 0) {
 				crosshair[i].SetRotation(crosshair[i].GetRotation() + cursorRotate);
 			}
 			else {
 				crosshair[i].SetRotation(crosshair[i].GetRotation() - cursorRotate);
 			}
-			if (crosshair[i].GetRotation() == 1.0f) {
+			if (crosshair[i].GetRotation() == ALPHA_MAX) {
 				crosshair[i].SetRotation(0.0f);
 			}
 			crosshair[i].SpriteTransferVertexBuffer(crosshair[i], 1);
 			crosshair[i].SpriteUpdate(crosshair[i], spriteCommon_);
 		}
 	}
+	//ボス戦中
 	else {
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < CROSSHAIR_MAX; i++) {
 			crosshair[i].SetPosition(mPos);
 			if (i % 2 == 0) {
 				crosshair[i].SetRotation(crosshair[i].GetRotation() + cursorRotate);
@@ -712,31 +713,13 @@ void GameScene::GetCrosshair()
 			else {
 				crosshair[i].SetRotation(crosshair[i].GetRotation() - cursorRotate);
 			}
-			if (crosshair[i].GetRotation() == 1.0f) {
+			if (crosshair[i].GetRotation() == ALPHA_MAX) {
 				crosshair[i].SetRotation(0.0f);
 			}
 			crosshair[i].SpriteTransferVertexBuffer(crosshair[i], 1);
 			crosshair[i].SpriteUpdate(crosshair[i], spriteCommon_);
 		}
 	}
-}
-
-void GameScene::PopEnergy(Vector3 pos_)
-{
-	//乱数生成装置
-	std::random_device seed_gen;
-	std::mt19937_64 engine(seed_gen());
-	std::uniform_real_distribution<float>dist(-1.5f, 1.5f);
-	std::uniform_real_distribution<float>dist2(-2.5f, 2.5f);
-	std::uniform_real_distribution<float>dist3(-1.5f, 1.5f);
-	//弾を生成し初期化
-	std::unique_ptr<Energy> newEnergy = std::make_unique<Energy>();
-
-	//単発													   
-	newEnergy->EnergyInitialize("panel");
-	newEnergy->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 2.0f));
-	newEnergy->SetPosition(pos_ + Vector3(dist(engine), dist2(engine), dist3(engine)));
-	energys_.push_back(std::move(newEnergy));
 }
 
 void GameScene::UIAlpha()
@@ -758,6 +741,7 @@ void GameScene::UIAlpha()
 
 Vector3 GameScene::GetScreenToWorldPos(Sprite& sprite_, RailCamera* rail)
 {
+	//カメラがnullなら+zで返す
 	if (rail == nullptr) {
 		return Vector3(0, 0, 1);
 	}
@@ -803,6 +787,7 @@ Vector3 GameScene::GetScreenToWorldPos(Sprite& sprite_, RailCamera* rail)
 
 Vector3 GameScene::GetWorldToScreenPos(Vector3 pos_, RailCamera* rail)
 {
+	//カメラがnullなら0で返す
 	if (rail == nullptr) {
 		return Vector3(0, 0, 0);
 	}
@@ -829,6 +814,7 @@ Vector3 GameScene::GetWorldToScreenPos(Vector3 pos_, RailCamera* rail)
 
 Vector2 GameScene::GetWorldToScreenScale(Object3d* obj_, RailCamera* rail)
 {
+	//カメラがnullなら0で返す
 	if (rail == nullptr) {
 		return Vector2(0, 0);
 	}
@@ -853,57 +839,54 @@ void GameScene::ClearUpdate()
 		Input::GetInstance()->IsClipCursor(false);
 	}
 
-	Vector3 parPos = { 0,0,0 };
-
+	   //クリア演出
 	if (boss->GetISlained() == true && isSceneEnd == false) {
+		//タイマーで進行(プレイヤー介入なし)
+			//ボス爆破
 		if (clearTimer < CLEARTIME_ONE) {
-			pm->Fire(particle, { parPos.x,parPos.y,parPos.z }, -1, 4.0f, 0, 20, { 18,0 });
+			pm->Fire(particle, { 0,0,0 }, PARTICLE_POS, BOSS_PARTICLE_VEL, 0, BOSS_PARTICLE_NUM, { BOSS_PARTICLE_SCALE,0 });
 		}
 		else if (clearTimer == CLEARTIME_TWO) {
-			Vector3 cameraPos = { -30, 65, -120 };
-			railCamera->GetView()->SetEye(cameraPos);
+			railCamera->GetView()->SetEye(CLEAR_CAMERA_POS_ONE);
 		}
 		else if (clearTimer > CLEARTIME_TWO && clearTimer < CLEARTIME_THREE) {
-			pm->Fire(particle, { parPos.x,parPos.y,parPos.z }, -1, 4.0f, 0, 20, { 18,0 });
+			pm->Fire(particle, { 0,0,0 }, PARTICLE_POS, BOSS_PARTICLE_VEL, 0, BOSS_PARTICLE_NUM, { BOSS_PARTICLE_SCALE,0 });
 		}
 		else if (clearTimer == CLEARTIME_FOUR) {
-			Vector3 cameraPos = { 30, 65, -120 };
-			railCamera->GetView()->SetEye(cameraPos);
+			railCamera->GetView()->SetEye(CLEAR_CAMERA_POS_TWO);
 		}
 		else if (clearTimer > CLEARTIME_FOUR && clearTimer < CLEARTIME_FIVE) {
-			pm->Fire(particle, { parPos.x,parPos.y,parPos.z }, -1, 4.0f, 0, 20, { 18,0 });
+			pm->Fire(particle, { 0,0,0 }, PARTICLE_POS, BOSS_PARTICLE_VEL, 0, BOSS_PARTICLE_NUM, { BOSS_PARTICLE_SCALE,0 });
 		}
+		//プレイヤーを映す
 		else if (clearTimer == CLEARTIME_SIX) {
-			Vector3 cameraPos = { 0, 75, -120 };
-			railCamera->GetView()->SetEye(cameraPos);
-			Vector3 position = { 3.8f, 49.0f, -128.0f };
-			player->SetPosition(position);
+			railCamera->GetView()->SetEye(CLEAR_CAMERA_POS_THREE);
+			player->SetPosition(CLEAR_PLAYER_POS);
 			player->ViewUpdate();
 			isShowEnergy = false;
 		}
+		//カメラを上に
 		else if (clearTimer > CLEARTIME_SIX && clearTimer < CLEARTIME_SEVEN) {
-			Vector3 move = { 0, -0.5f, 0 };
-			railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() + move);
+			railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() + CLOAR_CAMERA_MOVE);
 		}
+		//花火
 		else if (clearTimer > CLEARTIME_SEVEN) {
 			if (particleTimer < PARTICLENUM) {
 				if (particleTimer < PARTICLENUM_ONE) {
-					Vector3 cParPos = { 40,30,0 };
-					clearPM_01->Fire(clearParticle_01, { cParPos.x,cParPos.y,cParPos.z }, -1, 1.0f, 0, 30, { 3,0 });
+					clearPM_01->Fire(clearParticle_01, { BLUE_FIRE.x,BLUE_FIRE.y,BLUE_FIRE.z }, PARTICLE_POS, FIRE_PARTICLE_VEL, 0, FIRE_PARTICLE_NUM, { FIRE_PARTICLE_SCALE,0 });
 				}
 				else if (particleTimer < PARTICLENUM_TWO) {
-					Vector3 cParPos = { 0,30,0 };
-					clearPM_02->Fire(clearParticle_02, { cParPos.x,cParPos.y,cParPos.z }, -1, 1.0f, 0, 30, { 3,0 });
+					clearPM_02->Fire(clearParticle_02, { GREEN_FIRE.x,GREEN_FIRE.y,GREEN_FIRE.z }, PARTICLE_POS, FIRE_PARTICLE_VEL, 0, FIRE_PARTICLE_NUM, { FIRE_PARTICLE_SCALE,0 });
 				}
 				else if (particleTimer < PARTICLENUM_THREE) {
-					Vector3 cParPos = { -40,30,0 };
-					clearPM_03->Fire(clearParticle_03, { cParPos.x,cParPos.y,cParPos.z }, -1, 1.0f, 0, 30, { 3,0 });
+					clearPM_03->Fire(clearParticle_03, { RED_FIRE.x,RED_FIRE.y,RED_FIRE.z }, PARTICLE_POS, FIRE_PARTICLE_VEL, 0, FIRE_PARTICLE_NUM, { FIRE_PARTICLE_SCALE,0 });
 				}
 				particleTimer++;
 			}
 			else {
 				particleTimer = 0;
 			}
+			//クリック受付状態へ
 			if (clearTimer > CLEARTIME_EIGHT) {
 				isNext = true;
 			}
@@ -915,10 +898,11 @@ void GameScene::ClearUpdate()
 		clearPM_03->Update();
 		clearTimer++;
 
-
+		//クリック受付状態
 		if (isNext == true) {
 			UIs->CursorUpdate(false);
 			UIs->ClearUpdate();
+			//左クリックでつぎへ
 			if (Input::GetInstance()->TriggerMouseLeft()) {
 				isSceneEnd = true;
 				clearTimer = 0;
@@ -927,18 +911,19 @@ void GameScene::ClearUpdate()
 		}
 	}
 
+	//フェイドアウトしてタイトルへ
 	if (isSceneEnd == true) {
 		if (fadeAlpha < ALPHA_MAX) {
-			fadeAlpha += 0.05f;
+			fadeAlpha += ADD_FADE;
 			fade.SetAlpha(fade, fadeAlpha);
 		}
 		else {
 			if (clearTimer < FADENUM_ONE) {
-				thanksAlpha += 0.05f;
+				thanksAlpha += ADD_FADE;
 				thanks.SetAlpha(thanks, thanksAlpha);
 			}
 			else if (clearTimer > FADENUM_TWO) {
-				thanksAlpha -= 0.05f;
+				thanksAlpha -= ADD_FADE;
 				thanks.SetAlpha(thanks, thanksAlpha);
 			}
 			else{
@@ -947,8 +932,9 @@ void GameScene::ClearUpdate()
 			clearTimer++;
 		}
 	}
+	//カメラ更新
+	railCamera->ViewUpdate();
 }
-
 
 void GameScene::PauseUpdate() {
 	//カーソルを画面内固定を解除
@@ -958,39 +944,39 @@ void GameScene::PauseUpdate() {
 	if (isPause == true) {
 		UIs->PauseText();
 
-
+		//リセット
 		if (UIs->GetIsGameOver() == true) {
 			Reset();
 			gameState = MAIN;
-			gameTime = 75;
-			railCamera->GetView()->SetEye(Vector3(-1, 0.5f, 490.0f));
-			railCamera->GetView()->SetTarget(Vector3(0.0f, 0.5f, 495));
-			player->SetPosition({ 0,0.5f,495 });
-			Vector3 cursor = GetWorldToScreenPos(Vector3(0, 0, 0), railCamera);
-			input->SetMousePos({ cursor.x,cursor.y });
+			gameTime = GAME_TIME_RESET;
+			isStart = true;
 			fadeAlpha = 0.0f;
 			fade.SetAlpha(fade, fadeAlpha);
 		}
+		//タイトル
 		else if (UIs->GetIsGameSceneReset() == true) {
-			fadeAlpha += 0.05f;
+			fadeAlpha += ADD_FADE;
 			fade.SetAlpha(fade, fadeAlpha);
 			fade.SpriteUpdate(fade, spriteCommon_);
-			if (fadeAlpha >= 1.0f) {
+			if (fadeAlpha >= ALPHA_MAX) {
 				tips.SpriteUpdate(tips, spriteCommon_);
 				loading.SpriteUpdate(loading, spriteCommon_);
 				GameSceneManager::GetInstance()->ChangeScene("TITLE");
 			}
 		}
+		//ポーズとじる
 		else {
 			if (Input::GetInstance()->TriggerKey(DIK_ESCAPE)) {
 				isPause = false;
 			}
 		}
 	}
+	//ゲームシーンに戻る
 	else {
 		UIs->CloseText();
 
 		if (UIs->GetIsClose() == true) {
+			//もとのシーンへ
 			gameState = gameState_bak;
 		}
 	}
@@ -1003,12 +989,12 @@ void GameScene::BossUpdate() {
 	if (Input::GetInstance()->GetIsVailCursor() == false) {
 		Input::GetInstance()->IsClipCursor(true);
 	}
-
+	//ボス戦開始時
 	if (isbossStart == false) {
 		//playerを操作不可に
 		if (isPlayable == true) {
 			isPlayable = false;
-			railCamera->GetView()->SetEye(Vector3(-40, 55, -150));
+			railCamera->GetView()->SetEye(BOSS_START_EYE);
 			isShowUI = false;
 		}
 		//SPACEで演出スキップ
@@ -1018,31 +1004,31 @@ void GameScene::BossUpdate() {
 		}
 		//演出
 		railCamera->GetView()->SetTarget(boss->GetPosition());
-		
-		if (boss->GetTimer() == 0) {
-			player->SetAlpha(player->GetAlpha() - 0.025f);
+		//演出終了
+		if (boss->GetTimer() < 0) {
+			player->SetAlpha(player->GetAlpha() - SUB_PLAYER_ALPHA);
 			player->ViewUpdate();
-			railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() - Vector3(0.0f,0.05f,0.5f));
-			if (bossStartTime == 40) {
+			railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() - BOSS_CAMERA_FORCUS);
+			if (bossStartTime == BOSS_START_MAX) {
 				isbossStart = true;
 				railCamera->SetPlayer(player);
 				player->SetPosition({ 0,0,0 });
-				player->SetRotation({ 0,270,0 });
+				player->SetRotation(ROTATE_BACK);
 			}
 			bossStartTime++;
 		}
-		else if (boss->GetTimer() == 1) {
-			railCamera->GetView()->SetEye(Vector3(0, 53, -80));
-			player->SetPosition(Vector3(0, 50, -100));
-			player->SetRotation({ 0,90,0 });
+		else if (boss->GetTimer() == 0) {
+			railCamera->GetView()->SetEye(BOSS_SCENE_CAMERA);
+			player->SetPosition(BOSS_SCENE_PPOS);
+			player->SetRotation(ROTATE_FRONT);
 			player->ViewUpdate();
 			railCamera->GetView()->SetTarget(player->GetPosition());
 		}
-		else if (boss->GetTimer() == 75) {
-			railCamera->GetView()->SetEye(Vector3(-80, 55, -300));
+		else if (boss->GetTimer() == BOSS_TIME) {
+			railCamera->GetView()->SetEye(BOSS_POP_CAMERA);
 		}
-		else if (boss->GetTimer() < 75) {
-			railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() + Vector3(0.75f, 0.0f, 0.25f));
+		else if (boss->GetTimer() < BOSS_TIME) {
+			railCamera->GetView()->SetEye(railCamera->GetView()->GetEye() + BOSS_POP_MOVE);
 		}
 	}
 	else {
@@ -1051,8 +1037,8 @@ void GameScene::BossUpdate() {
 			railCamera->GetView()->SetEye(Vector3(0, 60, -95));
 			railCamera->GetView()->SetTarget(Vector3(0, 52, -200));
 			railCamera->GetCamera()->SetPosition(Vector3(0, 50, -100));
-			railCamera->GetCamera()->SetRotation(Vector3(0, 180, 0));
-			fadeAlpha = 1.0f;
+			/*railCamera->GetCamera()->SetRotation(Vector3(0, 180, 0));*/
+			fadeAlpha = ALPHA_MAX;
 			fade.SetAlpha(fade, fadeAlpha);
 			isPlayable = true;
 			isShowUI = true;
@@ -1097,44 +1083,23 @@ void GameScene::BossUpdate() {
 		//カメラ更新
 		if (railCamera->GetOnRail() == false) {
 			gameTime++;
-			if (gameTime == 150) {
+			if (gameTime == GAME_TIME_MAX) {
 				railCamera->SetOnRail(true);
 				gameTime = 0;
 			}
 		}
 		railCamera->Update(player, bossPoint);
 		railCamera->GetCamera()->SetPosition(railCamera->GetView()->GetEye());
-		railCamera->GetView()->SetTarget(Vector3(0, 52, -200));
+		railCamera->GetView()->SetTarget(BOSS_SCENE_TARGET);
 		//カメラ制御
-		if (bossPass == 0) {
-			if (railCamera->GetPasPoint() + 1.0f > 3.0f) {
-				railCamera->SetOnRail(false);
-				bossPass = 1;
-			}
-		}
-		else if (bossPass == 1) {
-			if (railCamera->GetPasPoint() + 1.0f > 5.0f) {
-				railCamera->SetOnRail(false);
-				bossPass = 2;
-			}
-		}
-		else if (bossPass == 2) {
-			if (railCamera->GetPasPoint() + 1.0f > 7.0f) {
-				railCamera->SetOnRail(false);
-				bossPass = 3;
-			}
-		}
-		else if (bossPass == 3) {
-			if (railCamera->GetPasPoint() + 1.0f >= 8.96f) {
-				railCamera->SetOnRail(false);
-				railCamera->RailReset();
-				bossPass = 0;
-			}
+		if (railCamera->GetPasPoint() + 1.0f > (BOSS_RAIL_CHECKPOINT + bossPass * 2)) {
+			railCamera->SetOnRail(false);
+			bossPass++;
 		}
 	}
 	//fadein
 	if (fadeAlpha > 0.0f) {
-		fadeAlpha -= 0.1f;
+		fadeAlpha -= SUB_FADE;
 		fade.SetAlpha(fade, fadeAlpha);
 	}
 	//ポーズ画面へ
@@ -1150,11 +1115,11 @@ void GameScene::BossUpdate() {
 		//playerを操作不可に
 		if (isPlayable == true) {
 			isPlayable = false;
-			Vector3 cameraPos = { 0, 65, -120 };
-			railCamera->GetView()->SetEye(cameraPos);
+			railCamera->GetView()->SetEye(TO_CLEAR_CAMERA);
 			railCamera->GetView()->SetTarget(boss->GetPosition());
 			isShowUI = false;
 		}
+		//怒りの親子関係を力ずくで解除
 		delete player;
 		player = new Player;
 		player->PlayerInitialize();
@@ -1165,10 +1130,6 @@ void GameScene::BossUpdate() {
 	UIs->Update(isPlayable, player);
 	//更新
 	boss->Update(player->GetWorldPos());
-	//ダメージをくらったときに画面シェイク
-	if (player->GetIsHit() == true) {
-		railCamera->ShakeCamera(-2.0f, 2.0f);
-	}
 }
 
 void GameScene::MainUpdate() {
@@ -1258,13 +1219,5 @@ void GameScene::MainUpdate() {
 		UIs->Update(isPlayable, player);
 		//更新
 		railCamera->Update(player, points);
-		//ダメージをくらったときに画面シェイク
-		if (player->GetIsHit() == true) {
-			railCamera->ShakeCamera(-0.2f, 0.2f);
-		}
 	}
-}
-
-void GameScene::BossStart() {
-
 }

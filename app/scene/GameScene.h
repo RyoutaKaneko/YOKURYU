@@ -28,6 +28,7 @@
 #include "energy.h"
 #include "GameBaseScene.h"
 #include "GameSceneUI.h"
+#include "GameSceneConst.h"
 
 
 class GameScene : public GameBaseScene {
@@ -88,11 +89,8 @@ public:
 	void GetCrosshair();
 
 	/// <summary>
-	/// エネルギー出現
+	/// UI
 	/// </summary>
-	/// <param name="pos_">座標</param>
-	static void PopEnergy(Vector3 pos_);
-
 	void UIAlpha();
 
 	/// <summary>
@@ -130,19 +128,14 @@ public:
 	void PauseUpdate();
 
 	/// <summary>
-	/// 
+	/// ボス戦処理
 	/// </summary>
 	void BossUpdate();
 
 	/// <summary>
-	/// 
+	/// メインゲーム処理
 	/// </summary>
 	void MainUpdate();
-
-	/// <summary>
-	///　ボス戦開始!
-	/// </summary>
-	void BossStart();
 
 private:
 	//base
@@ -155,6 +148,7 @@ private:
 	static const int CROSSHAIR_MAX = 4;
 	static const int LOCK_MAX = 10;
 	static const float ALPHA_MAX;
+	static const int INFOS_MAX = 10;
 
 	//スプライトのポインタ
 	Sprite* sprite = new Sprite;

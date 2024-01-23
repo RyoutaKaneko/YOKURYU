@@ -8,6 +8,13 @@
 
 using namespace DirectX;
 const float GameTitleScene::ALPHA_MAX = 1.0f;
+const float GameTitleScene::SUB_ALPHA = 0.025f;
+const float GameTitleScene::CIRCLE_ADD_ALPHA = 0.05f;
+const float GameTitleScene::CIRCLE_ADD_SCALE = 0.2f;
+const float GameTitleScene::OUTLINE_MAX = 1.04f;
+const float GameTitleScene::ADD_OUTLINE = 0.0015f;
+const float GameTitleScene::SUB_TITLEBACK = 0.15f;
+
 
 bool GameTitleScene::isEnd = false;
 
@@ -147,6 +154,14 @@ void GameTitleScene::Initialize()
 	models.insert(std::make_pair("stone", stoneModel));
 	//レベルエディタ読み込み
 	LoadObjFromLevelEditor("title");
+	floating = { 0.0f,0.01f,0.0f };
+	addScale = { 2.0f,2.0f }; 
+	fadeDown = { 0 ,80 , 0 };
+	cameraUp = { 0, 6.0f, 0 };
+	upforce = {0,1.6f,0};
+	playerUp = { 0, 0.015f, 0 };
+	playerDown = { 0, -0.005f, 0 };
+	Downforce = { 0, -0.02f, 0 };
 	gameTimer = 0;
 	isBackNum = 0;
 	onCursor = false;
@@ -163,6 +178,7 @@ void GameTitleScene::Initialize()
 	endTimer = 0;
 	isPushEsc = false;
 	isOpenEndText = false;
+	rotateCircle = 0.005f;
 }
 
 void GameTitleScene::Update()
@@ -177,25 +193,25 @@ void GameTitleScene::Update()
 	//マウス更新
 	Vector3 cur = Input::GetInstance()->GetMousePos();
 	//残像
-	for (int i = 8; i > 0; i--) {
+	for (int i = CURSOR_MAX - 1; i > 0; i--) {
 		cursor[i].SetPosition(cursor[i - 1].GetPosition());
 	}
 	cursor[0].SetPosition(cur);
 	circle.SetPosition(cur);
 	if (Input::GetInstance()->TriggerMouseLeft() == true) {
-		circleSize = 1.0f;
+		circleSize = CIRCLE_MIN;
 		circleAlpha = ALPHA_MAX;
 	}
-	else if (circleSize < 6.0f) {
-		circleSize += 0.2f;
-		circleAlpha -= 0.05f;
+	else if (circleSize < CIRCLE_MAX) {
+		circleSize += CIRCLE_ADD_SCALE;
+		circleAlpha -= CIRCLE_ADD_ALPHA;
 	}
 	else {
-		circleSize = 1.0f;
+		circleSize = CIRCLE_MIN;
 		circleAlpha = ALPHA_MAX;
 	}
-	circle.SetScale(Vector2(16 * circleSize, 16 * circleSize));
-	circle.SetRotation(circle.GetRotation() + 0.005f);
+	circle.SetScale(Vector2(CIRCLE_GRAPH_SCALE * circleSize, CIRCLE_GRAPH_SCALE * circleSize));
+	circle.SetRotation(circle.GetRotation() + rotateCircle);
 	circle.SetAlpha(circle, circleAlpha);
 	circle.SpriteTransferVertexBuffer(circle, 7);
 	circle.SpriteUpdate(circle, spriteCommon_);
@@ -207,17 +223,17 @@ void GameTitleScene::Update()
 	//タイトルふわっと描画
 	if (isNext == false) {
 		if (titleAlpha < ALPHA_MAX) {
-			titleAlpha += 0.05f;
+			titleAlpha += CIRCLE_ADD_ALPHA;
 			title.SetAlpha(title, titleAlpha);
 			title.SpriteTransferVertexBuffer(title, 0);
 			title.SpriteUpdate(title, spriteCommon_);
 		}
-		else if (titleAlpha >= ALPHA_MAX && fadeTimer < 15) {
+		else if (titleAlpha >= ALPHA_MAX && fadeTimer < FADE_TIME) {
 			fadeTimer++;
 		}
-		else if (fadeTimer == 15) {
+		else if (fadeTimer == FADE_TIME) {
 			if (blackAlpha >= 0.0f) {
-				blackAlpha -= 0.15f;
+				blackAlpha -= SUB_TITLEBACK;
 				black.SetAlpha(black, blackAlpha);
 				black.SpriteTransferVertexBuffer(black, 12);
 				black.SpriteUpdate(black, spriteCommon_);
@@ -227,14 +243,14 @@ void GameTitleScene::Update()
 			}
 		}
 
-
-		if (outlineSize < 1.04f) {
-			outlineSize += 0.0015f;
+		//つぎへのアウトライン
+		if (outlineSize < OUTLINE_MAX) {
+			outlineSize += ADD_OUTLINE;
 		}
 		else {
-			outlineSize = 1.0f;
+			outlineSize = CIRCLE_MIN;
 		}
-		clickOutline.SetScale(Vector2(312.0f * 1.2f, 52.0f * 1.34f) * outlineSize);
+		clickOutline.SetScale(clickEffect.GetScale() * outlineSize);
 		clickOutline.SpriteTransferVertexBuffer(clickOutline, 11);
 		clickOutline.SpriteUpdate(clickOutline, spriteCommon_);
 		//クリック判定
@@ -268,23 +284,21 @@ void GameTitleScene::Update()
 		for (auto& object : objects) {
 			object->Update();
 		}
-		if (gameTimer < 50) {
-			Vector3 move = { 0, 0.01f, 0 };
-			player->SetPosition(player->GetPosition() + move);
+		if (gameTimer < WAIT_TITLE_ONE) {
+			player->SetPosition(player->GetPosition() + floating);
 		}
-		else if (gameTimer < 100) {
-			Vector3 move = { 0, -0.01f, 0 };
-			player->SetPosition(player->GetPosition() + move);
+		else if (gameTimer < WAIT_TITLE_TWO) {
+			player->SetPosition(player->GetPosition() - floating);
 		}
 		gameTimer++;
-		if (gameTimer > 100) {
+		if (gameTimer > WAIT_TITLE_TWO) {
 			gameTimer = 0;
 		}
 	}
 	else {
 		//タイトルをすっと消す
 		if (titleAlpha > 0.0f) {
-			titleAlpha -= 0.025f;
+			titleAlpha -= SUB_ALPHA;
 			title.SetAlpha(title, titleAlpha);
 			title.SpriteTransferVertexBuffer(title, 0);
 			title.SpriteUpdate(title, spriteCommon_);
@@ -296,8 +310,8 @@ void GameTitleScene::Update()
 
 		}
 		if (clickEffectAlpha > 0) {
-			clickEffectAlpha -= 0.025f;
-			clickEffect.SetScale(clickEffect.GetScale() + Vector2(2.0f, 2.0f));
+			clickEffectAlpha -= SUB_ALPHA;
+			clickEffect.SetScale(clickEffect.GetScale() + addScale);
 			clickEffect.SpriteTransferVertexBuffer(clickEffect, 10);
 			clickEffect.SetAlpha(clickEffect, clickEffectAlpha);
 			click[1].SetAlpha(click[1], clickEffectAlpha);
@@ -305,21 +319,21 @@ void GameTitleScene::Update()
 		}
 		clickEffect.SpriteUpdate(clickEffect, spriteCommon_);
 		//シーン遷移
-		if (gameTimer < 10) {
-			player->SetPosition(player->GetPosition() + Vector3(0, 0.015f, 0));
+		if (gameTimer < NEXT_TIME_ONE) {
+			player->SetPosition(player->GetPosition() + playerUp);
 		}
-		else if (gameTimer < 25) {
-			player->SetPosition(player->GetPosition() + Vector3(0, -0.02f, 0));
+		else if (gameTimer < NEXT_TIME_TWO) {
+			player->SetPosition(player->GetPosition() + Downforce);
 		}
-		else if (gameTimer < 60) {
-			player->SetPosition(player->GetPosition() + Vector3(0, -0.005f, 0));
+		else if (gameTimer < NEXT_TIME_THREE) {
+			player->SetPosition(player->GetPosition() + playerDown);
 		}
-		else if (player->GetPosition().y < 60.0f) {
-			player->SetPosition(player->GetPosition() + Vector3(0, 1.6f, 0));
-			viewProjection->SetTarget(viewProjection->GetTarget() + Vector3(0, 6.0f, 0));
+		else if (player->GetPosition().y < PLAYER_LIMIT) {
+			player->SetPosition(player->GetPosition() + upforce);
+			viewProjection->SetTarget(viewProjection->GetTarget() + cameraUp);
 		}
 		else if (fade.GetPosition().y < 0) {
-			fade.SetPosition(fade.GetPosition() + Vector3(0, +80, 0));
+			fade.SetPosition(fade.GetPosition() +fadeDown);
 			fade.SpriteUpdate(fade, spriteCommon_);
 		}
 		else {
@@ -332,10 +346,10 @@ void GameTitleScene::Update()
 	}
 	//タイトル演出
 	if (gameTimer % 4 == 0) {
-		if (isBackNum < 2) {
+		if (isBackNum < TITLEBACK_MAX) {
 			isBackNum++;
 		}
-		else if (isBackNum == 2) {
+		else if (isBackNum == TITLEBACK_MAX) {
 			isBackNum = 0;
 		}
 	}
@@ -350,7 +364,7 @@ void GameTitleScene::Update()
 			isShowEnd = true;
 			isPushEsc = true;
 			isOpenEndText = true;
-			endTimer = 15;
+			endTimer = END_MAX;
 		}
 		if (isOpenEndText == true) {
 			UIs->EndText();

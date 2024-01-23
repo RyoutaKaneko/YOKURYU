@@ -182,5 +182,7 @@ private:
 	bool isGameOver;
 	float congratAlpha;
 	bool isClose;
+	Vector4 selectColor;
+	Vector4 anotherColor;
 };
 

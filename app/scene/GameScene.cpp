@@ -13,9 +13,6 @@
 #include <sstream>
 #include <map>
 
-std::list<std::unique_ptr<Energy>> GameScene::energys_;
-int GameScene::popEnergyCount = 0;
-const float GameScene::ALPHA_MAX = 1.0f;
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {}
@@ -186,7 +183,6 @@ void GameScene::Initialize() {
 	particleTimer = 0;
 	isNext = false;
 	isSceneEnd = false;
-	isShowEnergy = true;
 	isPause = false;
 	isbossStart = false;
 	bossStartTime = 0;
@@ -310,11 +306,6 @@ void GameScene::Draw() {
 	//敵キャラの描画
 	for (const std::unique_ptr<Enemy>& enemy_ : enemys_) {
 		enemy_->EnemyDraw(railCamera->GetView());
-	}
-	if (isShowEnergy == true) {
-		for (const std::unique_ptr<Energy>& energy : energys_) {
-			energy->Draw(railCamera->GetView());
-		}
 	}
 	//ボス
 	if (gameState == BOSS) {
@@ -501,7 +492,6 @@ void GameScene::Reset() {
 	bossPass = 0;
 	fadeAlpha = 1.0f;
 	fade.SetAlpha(fade, fadeAlpha);
-	popEnergyCount = 0;
 	//UI
 	UIs->ResetUIPos();
 	isShowUI = true;
@@ -863,7 +853,6 @@ void GameScene::ClearUpdate()
 			railCamera->GetView()->SetEye(CLEAR_CAMERA_POS_THREE);
 			player->SetPosition(CLEAR_PLAYER_POS);
 			player->ViewUpdate();
-			isShowEnergy = false;
 		}
 		//カメラを上に
 		else if (clearTimer > CLEARTIME_SIX && clearTimer < CLEARTIME_SEVEN) {
@@ -1037,7 +1026,6 @@ void GameScene::BossUpdate() {
 			railCamera->GetView()->SetEye(Vector3(0, 60, -95));
 			railCamera->GetView()->SetTarget(Vector3(0, 52, -200));
 			railCamera->GetCamera()->SetPosition(Vector3(0, 50, -100));
-			/*railCamera->GetCamera()->SetRotation(Vector3(0, 180, 0));*/
 			fadeAlpha = ALPHA_MAX;
 			fade.SetAlpha(fade, fadeAlpha);
 			isPlayable = true;
@@ -1161,13 +1149,13 @@ void GameScene::MainUpdate() {
 	if (gameTime == 0) {
 		//操作不可状態を解除
 		if (isPlayable == false) {
-			player->SetRotation({ 0,270,0 });
+			player->SetRotation(ROTATE_FRONT);
 			isPlayable = true;
 		}
 		/////デバック用(ボスまでスキップ)/////
-		if (input->TriggerKey(DIK_B)) {
+		/*if (input->TriggerKey(DIK_B)) {
 			railCamera->SetOnRail(false);
-		}
+		}*/
 		//boss戦へ
 		if (railCamera->GetOnRail() == false) {
 			if (isCheckPoint == false) {
@@ -1179,7 +1167,7 @@ void GameScene::MainUpdate() {
 				player = new Player;
 				player->PlayerInitialize();
 				player->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 0.7f));
-				player->SetAlpha(1.0f);
+				player->SetAlpha(ALPHA_MAX);
 				delete railCamera;
 				railCamera = new RailCamera;
 				railCamera->Initialize();
@@ -1201,9 +1189,6 @@ void GameScene::MainUpdate() {
 		if (isPlayable == true) {
 			SerchEnemy();
 			player->Update(shotVec, infos);
-			if (gameState == BOSS && railCamera->GetOnRail() == true) {
-				player->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
-			}
 			LockedClear();
 		}
 		//デスフラグの立った敵を削除

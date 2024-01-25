@@ -147,7 +147,6 @@ private:
 	//定数
 	static const int CROSSHAIR_MAX = 4;
 	static const int LOCK_MAX = 10;
-	static const float ALPHA_MAX;
 	static const int INFOS_MAX = 10;
 
 	//スプライトのポインタ
@@ -195,9 +194,6 @@ private:
 	
 	//enemy
 	std::list<std::unique_ptr<Enemy>> enemys_;
-	//energy
-	static std::list<std::unique_ptr<Energy>> energys_;
-	static int popEnergyCount;
 	//当たり判定
 	CollisionManager* collisionManager = nullptr;
 	//カメラ移動用レール
@@ -232,7 +228,6 @@ private:
 	int particleTimer;
 	bool isNext;
 	bool isSceneEnd;
-	bool isShowEnergy;
 	bool isPause;
 	bool isbossStart;
 	int bossStartTime;

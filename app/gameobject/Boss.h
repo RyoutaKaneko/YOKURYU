@@ -137,6 +137,8 @@ private:
 	static const int APPEAR_TIME = 75;
 	static const float MAX_ALPHA;
 	static const float ADD_ALPHA;
+	static const float SHADOW_Y;
+	static const float SHADOW_SCALE_AD;
 
 private:
 	//デスフラグ
@@ -160,10 +162,12 @@ private:
 
 	// モデル
 	Model* bossModel = nullptr;
+	Model* shadowModel = nullptr;
 	//弾
 	std::list<std::unique_ptr<BossBullet>> bullets_;
 	static const int PARTS_NUM = 5;
 	Object3d* parts[PARTS_NUM];
+	Object3d* shadow = nullptr;
 	Vector3 movePower = {0.5f,0.5f,0.5f};
 	Vector3 postmp;
 	Vector3 bossSkipPos;

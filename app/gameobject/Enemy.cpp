@@ -16,23 +16,33 @@ const float Enemy::MAX_ALPHA = 1.0f;
 const float Enemy::ATTACK_RANGE = 70.0f;
 const Vector3 Enemy::ADDSCALE = {0.5f,0.5f,0.5f};
 const float Enemy::POP_RANGE = 3.0f;
+const float Enemy::SHADOW_Y = -4.92f;
 
 //デストラクタ
 Enemy::~Enemy() {
 	delete enemyModel;
+	delete shadow;
+	delete shadowModel;
 }
 
 //初期化
 void Enemy::EnemyInitialize()
 {
 	Initialize();
+	shadow = new Object3d;
+	shadow->Initialize();
 	// OBJからモデルデータを読み込む
 	enemyModel = Model::LoadFromOBJ("enemy");
+	shadowModel = Model::LoadFromOBJ("panel");
+	shadowModel->LoadTexture("Resources/shadow.png");
+	shadow = Object3d::Create();
 	// 3Dオブジェクト生成
 	Create();
 	// オブジェクトにモデルをひも付ける
 	SetModel(enemyModel);
 	SetRotation({ 0,290,0 });
+	shadow->SetModel(shadowModel);
+	shadow->SetRotation({ 0,0,90 });
 	isDead_ = false;
 	isInvisible = true;
 	timer = 0;
@@ -146,6 +156,12 @@ void Enemy::Update(Vector3 velo, RailCamera* rail) {
 		bullets_.remove_if([](std::unique_ptr <EnemyBullet>& bullets_) {
 			return bullets_->IsDead();
 			});
+
+		//影
+		Vector3 spos = GetPosition();
+		shadow->SetPosition({ spos.x,spos.y - 5,spos.z });
+		shadow->Update();
+
 		//当たり判定更新
 		if (collider)
 		{
@@ -215,6 +231,7 @@ void Enemy::Attack() {
 void Enemy::EnemyDraw(ViewProjection* viewProjection_) {
 	if (isParticle == false) {
 		Draw(viewProjection_, alpha);
+		shadow->Draw(viewProjection_, alpha);
 	}
 	//弾描画
 	for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {

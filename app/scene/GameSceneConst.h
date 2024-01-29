@@ -25,6 +25,7 @@ static const float ENEMY_RADIUS = 30.0f;
 static const float ROTATE_CURSOR_MAX = 0.01f;
 static const float ROTATE_CURSOR_MIN = 0.002f;
 static const float ADD_ROTATE_CURSOR = 0.0005f;
+static const Vector3 START_SCENE_EYEMOVE = { 0.0f, 0.0f, 0.05f };
 
 //--BOSS--//
 static const Vector3 BOSS_START_EYE = { -40, 55, -150 };
@@ -40,6 +41,9 @@ static const float BOSS_RAIL_CHECKPOINT = 3.0f;
 static const float SUB_FADE = 0.1f;
 static const Vector3 TO_CLEAR_CAMERA = { 0, 65, -120 };
 static const Vector3 BOSS_SCENE_TARGET = { 0, 52, -200 };
+static const Vector3 BOSS_FIGHT_EYE = { 0, 60, -95 };
+static const Vector3 BOSS_FIGHT_TARGET = { 0, 52, -200 };
+static const Vector3 BOSS_FIGHT_PPOSITION = { 0, 50, -100 };
 
 //--CONTINUE--//
 static const int DEAD_TIME = 100;

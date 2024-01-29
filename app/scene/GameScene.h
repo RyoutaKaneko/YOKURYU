@@ -54,11 +54,6 @@ public:
 	void Draw();
 
 	/// <summary>
-	/// リセット
-	/// </summary>
-	void Reset();
-
-	/// <summary>
 	/// 終了
 	/// </summary>
 	void Finalize()override;
@@ -87,11 +82,6 @@ public:
 	/// クロスヘアを取得
 	/// </summary>
 	void GetCrosshair();
-
-	/// <summary>
-	/// UI
-	/// </summary>
-	void UIAlpha();
 
 	/// <summary>
 	/// スクリーン座標からワールド座標に
@@ -222,7 +212,6 @@ private:
 	GameState gameState;
 	GameState gameState_bak;
 	int bossPass;
-	bool isStart;
 	int clearTimer;
 	bool isShowUI;
 	int particleTimer;

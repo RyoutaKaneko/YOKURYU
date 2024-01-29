@@ -13,21 +13,33 @@
 
 const float Boss::MAX_ALPHA = 1.0f;
 const float Boss::ADD_ALPHA = 0.04f;
+const float Boss::SHADOW_Y = 4.92f;
+const float Boss::SHADOW_SCALE_AD = 22.0f;
 
 Boss::~Boss()
 {
 	delete bossModel;
+	delete shadow;
+	delete shadowModel;
 }
 
 void Boss::BossInitialize()
 {
 	Initialize();
+	shadow = new Object3d;
+	shadow->Initialize();
 	// OBJからモデルデータを読み込む
 	bossModel = Model::LoadFromOBJ("fighter");
+	shadowModel = Model::LoadFromOBJ("panel");
+	shadowModel->LoadTexture("Resources/shadow.png");
 	// 3Dオブジェクト生成
 	Create();
+	shadow->Create();
 	// オブジェクトにモデルをひも付ける
 	SetModel(bossModel);
+	shadow->SetModel(shadowModel);
+	shadow->SetRotation({ 0,0,90 });
+	shadow->SetScale({ 20,20,20 });
 	SetPosition({ -75,65,-200 });
 	SetScale({ 10,10,10 });
 	//パーツの初期化
@@ -102,6 +114,11 @@ void Boss::Update(Vector3 velo)
 	if (hp <= 0) {
 		isDead_ = true;
 	}
+	//影
+	Vector3 spos = GetPosition();
+	shadow->SetPosition({ spos.x + SHADOW_SCALE_AD,SHADOW_Y,spos.z - SHADOW_SCALE_AD });
+	shadow->Update();
+
 	//更新
 	GetWorldTransform().UpdateMatrix();
 	//当たり判定更新
@@ -161,10 +178,6 @@ void Boss::ChangeState()
 	//待機状態
 	if (state == WAIT) {
 		if (timeCount >= STATE_TIME) {
-			//乱数により行動を決定
-			/*int random = rand() % 1 + 1;*/
-			//抽選された行動
-			/*state = (State)random;*/
 			state = SHOT;
 			timeCount = 0;
 		}	
@@ -182,6 +195,7 @@ void Boss::ChangeState()
 void Boss::BossDraw(ViewProjection* viewProjection_)
 {
 	Draw(viewProjection_, bossAlpha);
+	shadow->Draw(viewProjection_, bossAlpha);
 	//弾描画
 	if (isSlained == false) {
 		for (std::unique_ptr<BossBullet>& bullet : bullets_) {

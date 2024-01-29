@@ -110,6 +110,7 @@ private:
 	static const int MOVE_TIME_TWO = 150;
 	static const int TIMECOUNT_MAX = 4;
 	static const float POP_RANGE;
+	static const float SHADOW_Y;
 
 private:
 
@@ -122,11 +123,12 @@ private:
 
 	//“G
 	std::list<std::unique_ptr<EnemyBullet>> bullets_;
-
 	std::list<std::unique_ptr<Energy>> deadParticles;
+	Object3d* shadow = nullptr;
 
 	// ƒ‚ƒfƒ‹
 	Model* enemyModel = nullptr;
+	Model* shadowModel = nullptr;
 	float alpha;
 
 	//”¼Œa

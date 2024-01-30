@@ -16,6 +16,7 @@ static const float FADE_LIMIT = 1820.0f;
 static const Vector3 FADE_DOWN = { 0.0f,80.0f,0.0f };
 static const float ALPHA_MAX = 1.0f;
 static const Vector3 ENEMY_SCALE = { 0.6f,0.6f,0.6f };
+static const float RATATE_MAX = 1.0f;
 
 //--MAIN--//
 static const float SHAKE_MAX = 2.0f;
@@ -86,3 +87,12 @@ static const float BOSS_PARTICLE_SCALE = 18.0f;
 static const float FIRE_PARTICLE_VEL = 1.0f;
 static const int FIRE_PARTICLE_NUM = 30;
 static const float FIRE_PARTICLE_SCALE = 3.0f;
+
+//--‚»‚Ì‘¼--//
+static const float PI = 3.141592f;
+static const float DEGREES = 180.0f;
+static const float PROJECTION_ANGLE = 45.0f;
+static const float PROJECTION_DISTANCE = 0.05f;
+static const float PROJECTION_NEAR = 0.1f;
+static const float PROJECTION_FAR = 200.0f;
+static const float INITIAL_SCALE = 64.0f;

@@ -262,16 +262,18 @@ void GameScene::Update() {
 		gameState = CONTINUE;
 	}
 	//ダメージエフェクト
-	if (player->GetIsHit() == true) {
-		dmgAlpha += ADD_FADE;
-		dmg.SetAlpha(dmg, dmgAlpha);
-		//画面シェイク
-		railCamera->ShakeCamera(SHAKE_MIN, SHAKE_MAX);
-	}
-	else {
-		if (dmgAlpha >= 0) {
-			dmgAlpha -= ADD_FADE;
+	if (gameState == MAIN || gameState == BOSS) {
+		if (player->GetIsHit() == true) {
+			dmgAlpha += ADD_FADE;
 			dmg.SetAlpha(dmg, dmgAlpha);
+			//画面シェイク
+			railCamera->ShakeCamera(SHAKE_MIN, SHAKE_MAX);
+		}
+		else {
+			if (dmgAlpha >= 0) {
+				dmgAlpha -= ADD_FADE;
+				dmg.SetAlpha(dmg, dmgAlpha);
+			}
 		}
 	}
 
@@ -544,8 +546,11 @@ void GameScene::SerchEnemy()
 	if (input->PushMouseRight()) {
 		//ボス
 		for (int i = 0; i < boss->GetPartsNum(); i++) {
+			//敵座標を座標変換
 			Vector3 bpos = GetWorldToScreenPos(boss->GetParts(i)->GetWorldPos(), railCamera);
+			//ボスが登場しているなら
 			if (boss->GetIsInvisible() == false) {
+				//2D座標上で判定を取る(円)
 				if (pow((bpos.x - cur.x), 2) + pow((bpos.y - cur.y), 2) < pow(BOSS_RADIUS, 2)) {
 					if (boss->GetParts(i)->GetIsLocked() == false && infos.size() < INFOS_MAX) {
 						LockInfo info;
@@ -560,8 +565,9 @@ void GameScene::SerchEnemy()
 
 		//雑魚敵
 		for (const std::unique_ptr<Enemy>& enemy_ : enemys_) {
+			//敵座標を座標変換
 			Vector3 epos = GetWorldToScreenPos(enemy_->GetWorldPos(), railCamera);
-			Vector3 len = enemy_->GetWorldPos() - player->GetWorldPos();
+			//2D座標上で判定を取る(円)
 			if (pow((epos.x - cur.x), 2) + pow((epos.y - cur.y), 2) < pow(ENEMY_RADIUS, 2)) {
 				if (enemy_->GetIsLocked() == false && infos.size() < INFOS_MAX && enemy_->GetIsParticle() == false) {
 					LockInfo info;
@@ -572,11 +578,12 @@ void GameScene::SerchEnemy()
 				}
 			}
 		}
-		//カーソル回転
+		//ロックオン中のカーソル回転
 		if (cursorRotate < ROTATE_CURSOR_MAX) {
 			cursorRotate += ADD_ROTATE_CURSOR;
 		}
 	}
+	//減速
 	else {
 		if (cursorRotate > ROTATE_CURSOR_MIN) {
 			cursorRotate -= ADD_ROTATE_CURSOR;
@@ -612,8 +619,8 @@ void GameScene::GetCrosshair()
 	Vector3 mPos = input->GetMousePos();
 	//マウスカーソルの場所にクロスヘアを表示
 	if (gameState == MAIN) {
-		for (int i = 0; i < 4; i++) {
-			//距離を離して描画
+		for (int i = 0; i < CROSSHAIR_MAX; i++) {
+			//クロスヘアを距離を離して描画
 			if (i == 0) {
 				crosshair[i].SetPosition(mPos);
 			}
@@ -633,7 +640,7 @@ void GameScene::GetCrosshair()
 			else {
 				crosshair[i].SetRotation(crosshair[i].GetRotation() - cursorRotate);
 			}
-			if (crosshair[i].GetRotation() == ALPHA_MAX) {
+			if (crosshair[i].GetRotation() == RATATE_MAX) {
 				crosshair[i].SetRotation(0.0f);
 			}
 			crosshair[i].SpriteTransferVertexBuffer(crosshair[i], 1);
@@ -667,16 +674,16 @@ Vector3 GameScene::GetScreenToWorldPos(Sprite& sprite_, RailCamera* rail)
 	}
 
 	//ビューポート行列生成
-	Matrix4 viewPort = viewPort.ViewPortMat(WinApp::window_width, WinApp::window_height, Vector2(0.0f, 0.0f));
+	Matrix4 viewPort = viewPort.ViewPortMat(WinApp::window_width, WinApp::window_height, { 0.0f, 0.0f });
 
 	//ビュープロジェクションビューポート合成行列
 	Matrix4 invViewPort = viewPort;
 	invViewPort.MakeInverse();
-	//プロジェクション行列//
-	float fovAngleY = 45.0f * (3.141592f / 180.0f);
+	//プロジェクション行列//	 
+	float fovAngleY = PROJECTION_ANGLE * (PI / DEGREES);
 	float aspectRatio = (float)WinApp::window_width / WinApp::window_height;
 	//プロジェクション行列生成
-	Matrix4 projection = projection.ProjectionMat(fovAngleY, aspectRatio, 0.1f, 200.0f);
+	Matrix4 projection = projection.ProjectionMat(fovAngleY, aspectRatio, PROJECTION_NEAR, PROJECTION_FAR);
 	Matrix4 invProjection = projection;
 	invProjection.MakeInverse();
 	//ビュー行列//
@@ -697,10 +704,8 @@ Vector3 GameScene::GetScreenToWorldPos(Sprite& sprite_, RailCamera* rail)
 	Vector3 mouseDirection = posFar - posNear;
 	mouseDirection = mouseDirection.normalize();
 	//カメラから照準オブジェクトの距離
-	const float kDistanceTestObject = 0.05f;
-
 	Vector3 pos = player->GetWorldPos();
-	Vector3 translate = (posFar - pos) * kDistanceTestObject;
+	Vector3 translate = (posFar - pos) * PROJECTION_DISTANCE;
 
 	return translate;
 }
@@ -715,15 +720,15 @@ Vector3 GameScene::GetWorldToScreenPos(Vector3 pos_, RailCamera* rail)
 	//ビュー行列//
 	Matrix4 view = railCamera->GetView()->GetMatView();
 	//プロジェクション行列//
-	float fovAngleY = 45.0f * (3.141592f / 180.0f);
+	float fovAngleY = PROJECTION_ANGLE * (PI / DEGREES);
 	float aspectRatio = (float)WinApp::window_width / WinApp::window_height;
 	//プロジェクション行列生成
-	Matrix4 projection = projection.ProjectionMat(fovAngleY, aspectRatio, 0.1f, 200.0f);
+	Matrix4 projection = projection.ProjectionMat(fovAngleY, aspectRatio, PROJECTION_NEAR, PROJECTION_FAR);
 	//ビューポート行列生成
-	Matrix4 viewPort = viewPort.ViewPortMat(WinApp::window_width, WinApp::window_height, Vector2(0.0f, 0.0f));
-
+	Matrix4 viewPort = viewPort.ViewPortMat(WinApp::window_width, WinApp::window_height, { 0.0f, 0.0f });
+	//行列をかけ合わせる
 	Matrix4 matVPV = view * projection * viewPort;
-
+	//w除算
 	Matrix4 mat;
 	Vector3 posScreen = pos_;																									  
 	posScreen = mat.transform(posScreen, matVPV);
@@ -743,9 +748,9 @@ Vector2 GameScene::GetWorldToScreenScale(Object3d* obj_, RailCamera* rail)
 	v.normalize();
 	float len = v.length();
 
-	float x = 64;
+	float x = INITIAL_SCALE;
 	x *= obj_->GetScale().x;
-	float y = 64;
+	float y = INITIAL_SCALE;
 	y *= obj_->GetScale().y;
 
 
@@ -910,11 +915,6 @@ void GameScene::BossUpdate() {
 			isPlayable = false;
 			railCamera->GetView()->SetEye(BOSS_START_EYE);
 			isShowUI = false;
-		}
-		//SPACEで演出スキップ
-		if (input->TriggerKey(DIK_SPACE) || input->TriggerMouseLeft() == true) {
-			boss->SkipMovie();
-			fadeAlpha = 0.0f;
 		}
 		//演出
 		railCamera->GetView()->SetTarget(boss->GetPosition());

@@ -100,14 +100,14 @@ private: // メンバ変数
 	Sprite black;
 	Sprite tips;
 	//UI
-	GameSceneUI* UIs = nullptr;
+	MyEngine::GameSceneUI* UIs = nullptr;
 
 	Model* skyModel = nullptr;
 	Model* seaModel = nullptr;
 	Model* block01Model = nullptr;
 	Model* block02Model = nullptr;
 	Model* stoneModel = nullptr;
-	Player* player = nullptr;
+	MyEngine::Player* player = nullptr;
 
 	Vector3 floating;
 	Vector3 cameraUp;

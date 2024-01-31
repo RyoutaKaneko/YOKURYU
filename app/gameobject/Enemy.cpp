@@ -10,23 +10,23 @@
 #include "SphereCollider.h"
 #include "GameScene.h"
 
-const float Enemy::MOVE_POWER = 0.05f;
-const float Enemy::UPDOWN_POWER = 0.005f;
-const float Enemy::MAX_ALPHA = 1.0f;
-const float Enemy::ATTACK_RANGE = 70.0f;
-const Vector3 Enemy::ADDSCALE = {0.5f,0.5f,0.5f};
-const float Enemy::POP_RANGE = 3.0f;
-const float Enemy::SHADOW_Y = -4.92f;
+const float MyEngine::Enemy::MOVE_POWER = 0.05f;
+const float MyEngine::Enemy::UPDOWN_POWER = 0.005f;
+const float MyEngine::Enemy::MAX_ALPHA = 1.0f;
+const float MyEngine::Enemy::ATTACK_RANGE = 70.0f;
+const Vector3 MyEngine::Enemy::ADDSCALE = {0.5f,0.5f,0.5f};
+const float MyEngine::Enemy::POP_RANGE = 3.0f;
+const float MyEngine::Enemy::SHADOW_Y = -4.92f;
 
 //デストラクタ
-Enemy::~Enemy() {
+MyEngine::Enemy::~Enemy() {
 	delete enemyModel;
 	delete shadow;
 	delete shadowModel;
 }
 
 //初期化
-void Enemy::EnemyInitialize()
+void MyEngine::Enemy::EnemyInitialize()
 {
 	Initialize();
 	shadow = new Object3d;
@@ -54,7 +54,7 @@ void Enemy::EnemyInitialize()
 	rotePower = { 0,2,0 };
 }
 
-void Enemy::Update(Vector3 velo, RailCamera* rail) {
+void MyEngine::Enemy::Update(const Vector3& velo, MyEngine::RailCamera* rail) {
 	//透明状態なら
 	if (isInvisible == true) {
 		//近づいたときに出現
@@ -141,19 +141,19 @@ void Enemy::Update(Vector3 velo, RailCamera* rail) {
 			deathTimer--;
 		}
 		//更新
-		for (std::unique_ptr<Energy>& particle : deadParticles) {
+		for (std::unique_ptr<MyEngine::Energy>& particle : deadParticles) {
 			particle->Update(rail->GetCamera()->GetRotation());
 		}
 		//パーティクルを削除
-		deadParticles.remove_if([](std::unique_ptr <Energy>& particle) {
+		deadParticles.remove_if([](std::unique_ptr <MyEngine::Energy>& particle) {
 			return particle->GetIsDead();
 			});
 		//弾の更新
-		for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
+		for (std::unique_ptr<MyEngine::EnemyBullet>& bullet : bullets_) {
 			bullet->Update(velo,isParticle);
 		}
 		//デスフラグの立った弾を削除
-		bullets_.remove_if([](std::unique_ptr <EnemyBullet>& bullets_) {
+		bullets_.remove_if([](std::unique_ptr <MyEngine::EnemyBullet>& bullets_) {
 			return bullets_->IsDead();
 			});
 
@@ -174,10 +174,10 @@ void Enemy::Update(Vector3 velo, RailCamera* rail) {
 	}
 }
 
-void Enemy::OnCollision([[maybe_unused]] const CollisionInfo& info)
+void MyEngine::Enemy::OnCollision([[maybe_unused]] const CollisionInfo& info)
 {
 	//衝突相手の名前
-	const char* str1 = "class PlayerBullet";
+	const char* str1 = "class MyEngine::PlayerBullet";
 
 	//相手がplayerの弾
 	if (strcmp(GetToCollName(), str1) == 0) {
@@ -189,24 +189,24 @@ void Enemy::OnCollision([[maybe_unused]] const CollisionInfo& info)
 	}
 }
 
-void Enemy::PopParticle()
+void MyEngine::Enemy::PopParticle()
 {
 	//弾を生成し初期化
 													   
 	for (int i = 0; i < 1; i++) {
-		std::unique_ptr<Energy> particle = std::make_unique<Energy>();
+		std::unique_ptr<MyEngine::Energy> particle = std::make_unique<MyEngine::Energy>();
 		particle->EnergyInitialize("dp");
 		particle->SetPosition(GetPosition());
 		deadParticles.push_back(std::move(particle));
 	}
 }
 
-void Enemy::Attack() {
+void MyEngine::Enemy::Attack() {
 
 		if (coolTime == 0) {
 			//弾を生成し初期化
 		//複数
-			std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
+			std::unique_ptr<MyEngine::EnemyBullet> newBullet = std::make_unique<MyEngine::EnemyBullet>();
 
 			//単発													   
 			newBullet->BulletInitialize();
@@ -228,16 +228,16 @@ void Enemy::Attack() {
 
 }
 
-void Enemy::EnemyDraw(ViewProjection* viewProjection_) {
+void MyEngine::Enemy::EnemyDraw(ViewProjection* viewProjection_) {
 	if (isParticle == false) {
 		Draw(viewProjection_, alpha);
 		shadow->Draw(viewProjection_, alpha);
 	}
 	//弾描画
-	for (std::unique_ptr<EnemyBullet>& bullet : bullets_) {
+	for (std::unique_ptr<MyEngine::EnemyBullet>& bullet : bullets_) {
 		bullet->Draw(viewProjection_);
 	}
-	for (std::unique_ptr<Energy>& particle : deadParticles) {
+	for (std::unique_ptr<MyEngine::Energy>& particle : deadParticles) {
 		particle->Draw(viewProjection_,0.8f);
 	}
 }

@@ -420,9 +420,6 @@
     <ClInclude Include="app\UI\GameSceneUI.h">
       <Filter>ヘッダー ファイル\Application\UI</Filter>
     </ClInclude>
-    <ClInclude Include="app\scene\ClearConst.h">
-      <Filter>ヘッダー ファイル\Application\scene</Filter>
-    </ClInclude>
     <ClInclude Include="engine\3d\light.h">
       <Filter>ヘッダー ファイル\Engine\3d</Filter>
     </ClInclude>

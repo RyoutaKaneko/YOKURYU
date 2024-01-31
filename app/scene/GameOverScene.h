@@ -68,7 +68,7 @@ private: // ƒƒ“ƒo•Ï”
 	Sprite textGH;
 	Object3d* sky = nullptr;
 	Model* skyModel = nullptr;
-	Player* player = nullptr;
+	MyEngine::Player* player = nullptr;
 	Object3d* stage = nullptr;
 	Model* stageModel = nullptr;
 	int gameTimer;

@@ -10,24 +10,24 @@
 #include "SphereCollider.h"
 #include"Input.h"
 
-const float Player::ADD_ALPHA = 0.02f;
-const float Player::SLANTING_POWER = 0.03f;
-const float Player::FLOAT_POWER = 0.005f;
-const float Player::MOVE_POWER = 0.08f;
-const float Player::ADD_Y_VEC = 0.03f;
-const float Player::SUB_Y_VEC = -0.3f;
-const float Player::CAMERA_LEN_X = 2.5f;
-const float Player::CAMERA_LEN_Y_MAX = 2.0f;
-const float Player::CAMERA_LEN_Y_MIN = -1.5f;
-const float Player::CAMERA_LEN_Z = -1.6f;
+const float MyEngine::Player::ADD_ALPHA = 0.02f;
+const float MyEngine::Player::SLANTING_POWER = 0.03f;
+const float MyEngine::Player::FLOAT_POWER = 0.005f;
+const float MyEngine::Player::MOVE_POWER = 0.08f;
+const float MyEngine::Player::ADD_Y_VEC = 0.03f;
+const float MyEngine::Player::SUB_Y_VEC = -0.3f;
+const float MyEngine::Player::CAMERA_LEN_X = 2.5f;
+const float MyEngine::Player::CAMERA_LEN_Y_MAX = 2.0f;
+const float MyEngine::Player::CAMERA_LEN_Y_MIN = -1.5f;
+const float MyEngine::Player::CAMERA_LEN_Z = -1.6f;
 
 //ÉfÉXÉgÉâÉNÉ^
-Player::~Player() {
+MyEngine::Player::~Player() {
 	delete playerModel;
 }
 
 //èâä˙âª
-bool Player::PlayerInitialize() {
+bool MyEngine::Player::PlayerInitialize() {
 	if (!Object3d::Initialize()) {
 		return false;
 	}
@@ -79,7 +79,6 @@ bool Player::PlayerInitialize() {
 	isShooted = false;
 	hitTime = 0;
 	alpha = 1.0f;
-	energy = 0;
 	pos_ = { 0,0,0 };
 	rot_ = { 0,0,0 };
 	healthState = FINE;
@@ -92,7 +91,7 @@ bool Player::PlayerInitialize() {
 	return true;
 }
 
-void Player::Update(Vector3 vec, std::vector<LockInfo>& info)
+void MyEngine::Player::Update(const Vector3& vec,const std::vector<LockInfo>& info)
 {
 	if (isShooted == true) {
 		isShooted = false;
@@ -103,14 +102,14 @@ void Player::Update(Vector3 vec, std::vector<LockInfo>& info)
 	LockAttack(info);
 	Attack(vec);
 	//playeríe
-	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
+	for (std::unique_ptr<MyEngine::PlayerBullet>& bullet : bullets_) {
 		if (bullet->GetIsHoming() == true) {
 			bullet->HomingVec();
 		}
 		bullet->Update();
 	}
 	//ÉfÉXÉtÉâÉOÇÃóßÇ¡ÇΩìGÇçÌèú
-	bullets_.remove_if([](std::unique_ptr < PlayerBullet>& bullets_) {
+	bullets_.remove_if([](std::unique_ptr <MyEngine::PlayerBullet>& bullets_) {
 		return bullets_->IsDead();
 		});
 
@@ -151,7 +150,7 @@ void Player::Update(Vector3 vec, std::vector<LockInfo>& info)
 	}
 }
 
-void Player::Move()
+void MyEngine::Player::Move()
 {
 	move = { 0,0,0 };
 
@@ -220,7 +219,7 @@ void Player::Move()
 	pTimer++;
 }
 
-void Player::WingMove()
+void MyEngine::Player::WingMove()
 {
 	//âHÇÃìÆÇ´
 	if (wingR->GetRotation().x < -WING_ROTATE_MAX) {
@@ -241,13 +240,13 @@ void Player::WingMove()
 	wingL->SetRotation(wingL->GetRotation() + Vector3(wingLRotate, 0, 0));
 }
 
-void Player::Attack(Vector3 velo) {
+void MyEngine::Player::Attack(const Vector3& velo) {
 	
 	if (Input::GetInstance()->PushMouseLeft()) {
 		if (coolTime == 0) {
 			//íeÇê∂ê¨Çµèâä˙âª
 		//ï°êî
-			std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
+			std::unique_ptr<MyEngine::PlayerBullet> newBullet = std::make_unique<MyEngine::PlayerBullet>();
 
 			//íPî≠
 			newBullet->BulletInitialize(velo + Vector3(0,0.05f,0));
@@ -270,12 +269,12 @@ void Player::Attack(Vector3 velo) {
 	}
 }
 
-void Player::LockAttack(std::vector<LockInfo>& info)
+void MyEngine::Player::LockAttack(const std::vector<LockInfo>& info)
 {
 	if (Input::GetInstance()->LeftMouseRight() == true) {
 		for (int i = 0; i < info.size(); i++) {
 			//íeÇê∂ê¨Çµèâä˙âª
-			std::unique_ptr<PlayerBullet> newBullet = std::make_unique<PlayerBullet>();
+			std::unique_ptr<MyEngine::PlayerBullet> newBullet = std::make_unique<MyEngine::PlayerBullet>();
 			Vector3 shotVec = (info[i].vec - GetWorldPos());
 			//íPî≠
 			newBullet->BulletInitialize(shotVec);
@@ -293,7 +292,7 @@ void Player::LockAttack(std::vector<LockInfo>& info)
 	}
 }
 
-void Player::PlayerDraw(ViewProjection* viewProjection_) {
+void MyEngine::Player::PlayerDraw(ViewProjection* viewProjection_) {
 	if (hitTime % HIT_TIME == 0) {
 		Draw(viewProjection_,alpha);
 		wingR->Draw(viewProjection_, alpha);
@@ -302,12 +301,12 @@ void Player::PlayerDraw(ViewProjection* viewProjection_) {
 		eye->Draw(viewProjection_, alpha);
 	}
 	//íeï`âÊ
-	for (std::unique_ptr<PlayerBullet>& bullet : bullets_) {
+	for (std::unique_ptr<MyEngine::PlayerBullet>& bullet : bullets_) {
 		bullet->Draw(viewProjection_);
 	}
 }
 
-void Player::DrawDead(ViewProjection* viewProjection_)
+void MyEngine::Player::DrawDead(ViewProjection* viewProjection_)
 {
 	Draw(viewProjection_);
 	fang->Draw(viewProjection_);
@@ -315,13 +314,13 @@ void Player::DrawDead(ViewProjection* viewProjection_)
 	wingL->Draw(viewProjection_);
 }
 
-void Player::BackRail()
+void MyEngine::Player::BackRail()
 {
 	SetPosition(pos_);
 	SetRotation(rot_);
 }
 
-void Player::ViewUpdate()
+void MyEngine::Player::ViewUpdate()
 {
 	if (healthState != DIE) {
 		WingMove();
@@ -333,11 +332,11 @@ void Player::ViewUpdate()
 	wingL->Update();
 }
 
-void Player::OnCollision([[maybe_unused]] const CollisionInfo& info)
+void MyEngine::Player::OnCollision([[maybe_unused]] const CollisionInfo& info)
 {
 	//è’ìÀëäéËÇÃñºëO
-	const char* str1 = "class EnemyBullet";
-	const char* str2 = "class BossBullet";
+	const char* str1 = "class MyEngine::EnemyBullet";
+	const char* str2 = "class MyEngine::BossBullet";
 	//ëäéËÇ™enemyÇÃíe
 	if (strcmp(GetToCollName(), str1) == 0) {
 		if (isHit == false) {
@@ -354,7 +353,7 @@ void Player::OnCollision([[maybe_unused]] const CollisionInfo& info)
 	}
 }
 
-void Player::Dead()
+void MyEngine::Player::Dead()
 {
 	Vector3 addVelo = { 0.0f,0.0f,0.0f };
 
@@ -397,7 +396,7 @@ void Player::Dead()
 	wingL->Update();
 }
 
-void Player::ResetHP() {
+void MyEngine::Player::ResetHP() {
 	hp = HP_MAX;
 	healthState = FINE;
 }

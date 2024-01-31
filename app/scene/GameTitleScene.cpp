@@ -124,12 +124,12 @@ void GameTitleScene::Initialize()
 	tips.LoadTexture(spriteCommon_, 13, L"Resources/tips.png", dxCommon_->GetDevice());
 
 	//UI初期化
-	UIs = new GameSceneUI();
+	UIs = new MyEngine::GameSceneUI();
 	UIs->Initialize(dxCommon_->GetDevice());
 
 
 	//player
-	player = new Player;
+	player = new MyEngine::Player;
 	player->PlayerInitialize();
 	player->SetPosition({ 0.0f,34.0f,288.0f });
 	player->SetRotation({ 0,70,0 });

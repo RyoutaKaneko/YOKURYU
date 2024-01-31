@@ -47,7 +47,7 @@ void GameOverScene::Initialize()
 	stage->SetScale(Vector3(1.5f, 1.5f, 1.5f));
 
 	//player
-	player = new Player;
+	player = new MyEngine::Player;
 	player->PlayerInitialize();
 	player->SetPosition({ 0.0f,-1.0f,-1.0f });
 	player->SetRotation({ 20,80,90 });

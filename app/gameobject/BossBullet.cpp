@@ -7,7 +7,7 @@
 #include "BossBullet.h"
 #include "BaseCollider.h"
 
-void BossBullet::BulletInitialize()
+void MyEngine::BossBullet::BulletInitialize()
 {
 	Initialize();
 
@@ -25,7 +25,7 @@ void BossBullet::BulletInitialize()
 	correction = 0.5f;
 }
 
-void BossBullet::Update(const Vector3& playerPos_)
+void MyEngine::BossBullet::Update(const Vector3& playerPos_)
 {
 	//移動ベクトルを計算
 	velocity = playerPos_ - GetPosition();
@@ -65,11 +65,11 @@ void BossBullet::Update(const Vector3& playerPos_)
 	}
 }
 
-void BossBullet::OnCollision([[maybe_unused]] const CollisionInfo& info)
+void MyEngine::BossBullet::OnCollision([[maybe_unused]] const CollisionInfo& info)
 {
 	//衝突相手の名前
-	const char* str1 = "class Player";
-	const char* str2 = "class PlayerBullet";
+	const char* str1 = "class MyEngine::Player";
+	const char* str2 = "class MyEngine::PlayerBullet";
 
 	//相手がplayer
 	if (strcmp(GetToCollName(), str1) == 0) {

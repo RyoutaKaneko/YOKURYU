@@ -13,151 +13,153 @@
 #include "Spline.h"
 #include "Player.h"
 
-class RailCamera {
-public:
-	//インスタンス
-	RailCamera();
-	~RailCamera();
+namespace MyEngine {
+	class RailCamera {
+	public:
+		//インスタンス
+		RailCamera();
+		~RailCamera();
 
-	/// <summary>
-	///  初期化
-	/// </summary>
-	/// <param name="player_">プレイヤー</param>
-	void Initialize();
-	
-	/// <summary>
-	/// 更新
-	/// </summary>
-	/// <param name="player_">プレイヤー</param>
-	/// <param name="point">レールカメラ通過点</param>
-	void Update(Player* player_, std::vector<Vector3>& point);
+		/// <summary>
+		///  初期化
+		/// </summary>
+		/// <param name="player_">プレイヤー</param>
+		void Initialize();
 
-	/// <summary>
-	/// カメラのみ更新
-	/// </summary>
-	void ViewUpdate();
+		/// <summary>
+		/// 更新
+		/// </summary>
+		/// <param name="player_">プレイヤー</param>
+		/// <param name="point">レールカメラ通過点</param>
+		void Update(Player* player_, std::vector<Vector3>& point);
 
-	/// <summary>
-	/// 画面シェイク
-	/// </summary>
-	/// <param name="x">xの乱数</param>
-	/// <param name="y">yの乱数</param>
-	void ShakeCamera(float x, float y);
+		/// <summary>
+		/// カメラのみ更新
+		/// </summary>
+		void ViewUpdate();
 
-	/// <summary>
-	/// 
-	/// </summary>
-	void TitleR();
+		/// <summary>
+		/// 画面シェイク
+		/// </summary>
+		/// <param name="x">xの乱数</param>
+		/// <param name="y">yの乱数</param>
+		void ShakeCamera(float x, float y);
 
-	/// <summary>
-	/// カメラリセット
-	/// </summary>
-	void RailReset();
+		/// <summary>
+		/// 
+		/// </summary>
+		void TitleR();
 
-	/// <summary>
-	/// プレイヤーをレールにセット
-	/// </summary>
-	/// <param name="player_">プレイヤー</param>
-	void SetPlayer(Player* player_);
-	/// <summary>
-	/// 視点をセット
-	/// </summary>
-	/// <param name="view">カメラ</param>
-	void SetEye(Vector3 view);
+		/// <summary>
+		/// カメラリセット
+		/// </summary>
+		void RailReset();
 
-	/// <summary>
-	/// 注視点をセット
-	/// </summary>
-	/// <param name="target">注視点</param>
-	void SetTarget(Vector3 target);
+		/// <summary>
+		/// プレイヤーをレールにセット
+		/// </summary>
+		/// <param name="player_">プレイヤー</param>
+		void SetPlayer(Player* player_);
+		/// <summary>
+		/// 視点をセット
+		/// </summary>
+		/// <param name="view">カメラ</param>
+		void SetEye(const Vector3& view);
 
-	/// <summary>
-	///  レール上かどうか
-	/// </summary>
-	/// <param name="onrail">レール上フラグ</param>
-	void SetOnRail(bool onrail) { OnRail = onrail; }
+		/// <summary>
+		/// 注視点をセット
+		/// </summary>
+		/// <param name="target">注視点</param>
+		void SetTarget(const Vector3& target);
 
-	/// <summary>
-	/// Y成分を0にした正面ベクトルを取得
-	/// </summary>
-	/// <param name="a"></param>
-	/// <param name="b"></param>
-	void GetVec(Vector3 a, Vector3 b);
+		/// <summary>
+		///  レール上かどうか
+		/// </summary>
+		/// <param name="onrail">レール上フラグ</param>
+		void SetOnRail(bool onrail) { OnRail = onrail; }
 
-	/// <summary>
-	/// viewProjection取得
-	/// </summary>
-	/// <returns></returns>
-	ViewProjection* GetView() { return viewProjection; }
+		/// <summary>
+		/// Y成分を0にした正面ベクトルを取得
+		/// </summary>
+		/// <param name="a"></param>
+		/// <param name="b"></param>
+		void GetVec(const Vector3& a, const Vector3& b);
 
-	/// <summary>
-	///  レールの最後まで行ったかどうか
-	/// </summary>
-	/// <returns></returns>
-	bool GetIsEnd() { return isEnd; }
+		/// <summary>
+		/// viewProjection取得
+		/// </summary>
+		/// <returns></returns>
+		ViewProjection* GetView() { return viewProjection; }
 
-	/// <summary>
-	/// レール上かどうかを取得
-	/// </summary>
-	/// <returns></returns>
-	bool GetOnRail() { return OnRail; }
+		/// <summary>
+		///  レールの最後まで行ったかどうか
+		/// </summary>
+		/// <returns></returns>
+		bool GetIsEnd() { return isEnd; }
 
-	/// <summary>
-	/// 正面ベクトルを取得
-	/// </summary>
-	/// <returns></returns>
-	Vector3 GetFrontVec() { return frontVec; }
+		/// <summary>
+		/// レール上かどうかを取得
+		/// </summary>
+		/// <returns></returns>
+		bool GetOnRail() { return OnRail; }
 
-	/// <summary>
-	/// レールカメラオブジェクトを取得
-	/// </summary>
-	/// <returns></returns>
-	Object3d* GetCamera() { return camera; }
+		/// <summary>
+		/// 正面ベクトルを取得
+		/// </summary>
+		/// <returns></returns>
+		Vector3 GetFrontVec() { return frontVec; }
 
-	/// <summary>
-	/// レールカメラオブジェクトの座標を取得
-	/// </summary>
-	/// <returns></returns>
-	Vector3 GetCameraPos() { return camera->GetWorldTransform().GetPosition(); }
+		/// <summary>
+		/// レールカメラオブジェクトを取得
+		/// </summary>
+		/// <returns></returns>
+		Object3d* GetCamera() { return camera; }
 
-	/// <summary>
-	/// 通過点を取得
-	/// </summary>
-	/// <returns></returns>
-	float GetPasPoint() { return splineCam.GetT(); }
-private:
-	static const float PI;
-	static const float DEGREES;
-	static const float DELAY;
-	static const float ADD_DELAY;
+		/// <summary>
+		/// レールカメラオブジェクトの座標を取得
+		/// </summary>
+		/// <returns></returns>
+		Vector3 GetCameraPos() { return camera->GetWorldTransform().GetPosition(); }
 
-private:
-	Input* input_ = nullptr;
-	ViewProjection* viewProjection = nullptr;
-	Object3d* camera = nullptr;
-	Input* input = nullptr;
+		/// <summary>
+		/// 通過点を取得
+		/// </summary>
+		/// <returns></returns>
+		float GetPasPoint() { return splineCam.GetT(); }
+	private:
+		static const float PI;
+		static const float DEGREES;
+		static const float DELAY;
+		static const float ADD_DELAY;
 
-	//スプライン
-	Spline spline_;
-	Spline splineCam;
+	private:
+		Input* input_ = nullptr;
+		ViewProjection* viewProjection = nullptr;
+		Object3d* camera = nullptr;
+		Input* input = nullptr;
 
-	Vector3 rightVec = { 0, 0, 0 };
-	Vector3 leftVec = { 0, 0, 0 };
-	Vector3 frontVec = { 0,0,0 };
-	Vector3 oldCamera = { 0,0,0 };
+		//スプライン
+		Spline spline_;
+		Spline splineCam;
 
-	//カメラディレイ
-	Vector3 playerMoveVel;
-	Vector3 cameraDelay;
+		Vector3 rightVec = { 0, 0, 0 };
+		Vector3 leftVec = { 0, 0, 0 };
+		Vector3 frontVec = { 0,0,0 };
+		Vector3 oldCamera = { 0,0,0 };
 
-	//tmp
-	Vector3 eyeTmp{};
-	Vector3 targetTmp{};
-	Vector3 up;
+		//カメラディレイ
+		Vector3 playerMoveVel;
+		Vector3 cameraDelay;
 
-	bool isEnd;
-	bool OnRail;
-	float targetVel;
-	float cameraVel;
-};
+		//tmp
+		Vector3 eyeTmp{};
+		Vector3 targetTmp{};
+		Vector3 up;
+
+		bool isEnd;
+		bool OnRail;
+		float targetVel;
+		float cameraVel;
+	};
+}
 

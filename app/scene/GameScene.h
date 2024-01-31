@@ -89,7 +89,7 @@ public:
 	/// <param name="sprite_">スプライト</param>
 	/// <param name="rail">レールカメラ</param>
 	/// <returns></returns>
-	Vector3 GetScreenToWorldPos(Sprite& sprite_, RailCamera* rail);
+	Vector3 GetScreenToWorldPos(const Sprite& sprite_, MyEngine::RailCamera* rail);
 
 	/// <summary>
 	/// ワールド座標からスクリーン座標に
@@ -97,7 +97,7 @@ public:
 	/// <param name="pos_">座標</param>
 	/// <param name="rail">レールカメラ</param>
 	/// <returns></returns>
-	Vector3 GetWorldToScreenPos(Vector3 pos_, RailCamera* rail);
+	Vector3 GetWorldToScreenPos(const Vector3& pos_, MyEngine::RailCamera* rail);
 
 	/// <summary>
 	/// ワールド座標のオブジェクトに合わせてスクリーン座標のスプライトのスケールを取得
@@ -105,7 +105,7 @@ public:
 	/// <param name="obj">オブジェクト</param>
 	/// <param name="rail">レールカメラ</param>
 	/// <returns></returns>
-	Vector2 GetWorldToScreenScale(Object3d* obj, RailCamera* rail);
+	Vector2 GetWorldToScreenScale(Object3d* obj, MyEngine::RailCamera* rail);
 
 	/// <summary>
 	///  クリア更新
@@ -142,7 +142,7 @@ private:
 	//スプライトのポインタ
 	Sprite* sprite = new Sprite;
 	SpriteCommon spriteCommon_;
-	Sprite crosshair[CROSSHAIR_MAX];
+	std::array <Sprite, CROSSHAIR_MAX> crosshair;
 	Sprite lock[LOCK_MAX];
 	Sprite fade;
 	float fadeAlpha;
@@ -155,21 +155,20 @@ private:
 	Sprite dmg;
 	float dmgAlpha;
 	//UI
-	GameSceneUI* UIs = nullptr;
+	MyEngine::GameSceneUI* UIs = nullptr;
 	//オブジェクトのポインタ
 	//3Dオブジェクト生成
-	Player* player = nullptr;
-	Enemy* enemy = nullptr;
+	MyEngine::Player* player = nullptr;
 	Model* skyModel = nullptr;
 	Model* seaModel = nullptr;
 	Model* block01Model = nullptr;
 	Model* block02Model = nullptr;
 	Model* stoneModel = nullptr;
-	Boss* boss = nullptr;
+	MyEngine::Boss* boss = nullptr;
 	//カメラ
 	ViewProjection* viewProjection = nullptr;
 	XMViewProjection* xmViewProjection = nullptr;
-	RailCamera* railCamera = nullptr;
+	MyEngine::RailCamera* railCamera = nullptr;
 	Vector3 cameraTmpPos;
 	Vector3 cameraTmpRot;
 	//パーティクル
@@ -183,7 +182,7 @@ private:
 	ParticleManager* clearPM_03 = nullptr;
 	
 	//enemy
-	std::list<std::unique_ptr<Enemy>> enemys_;
+	std::list<std::unique_ptr<MyEngine::Enemy>> enemys_;
 	//当たり判定
 	CollisionManager* collisionManager = nullptr;
 	//カメラ移動用レール
@@ -192,14 +191,12 @@ private:
 	std::vector<Vector3> pointsR;
 	std::vector<Vector3> bossPoint{};
 	//ステージ
-	int stageNum = 0;
 	bool isCheckPoint = false;
 	bool isPlayable = false;
 	//ロックオン情報
 	std::vector<LockInfo> infos;
 	int gameTime;
 	float cursorRotate;
-	Vector3 shotVec;
 	//ゲームステータス
 	enum GameState {
 		MAIN,

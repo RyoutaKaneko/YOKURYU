@@ -27,7 +27,7 @@ void GameScene::Initialize() {
 	collisionManager = CollisionManager::GetInstance();
 
 	//player
-	player = new Player;
+	player = new MyEngine::Player;
 	player->PlayerInitialize();
 	player->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 0.7f));
 	player->SetRotation(ROTATE_FRONT);
@@ -47,7 +47,7 @@ void GameScene::Initialize() {
 	LoadObjFromLevelEditor("scene");
 
 	//レールカメラ
-	railCamera = new RailCamera;
+	railCamera = new MyEngine::RailCamera;
 	railCamera->Initialize();
 	railCamera->SetPlayer(player);
 	railCamera->GetView()->SetEye(START_EYE);
@@ -63,7 +63,7 @@ void GameScene::Initialize() {
 	spriteCommon_ = sprite->SpriteCommonCreate(dxCommon_->GetDevice());
 
 	//クロスヘアの画像
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < crosshair.size(); i++) {
 		crosshair[i].LoadTexture(spriteCommon_, 0, L"Resources/crosshair.png", dxCommon_->GetDevice());
 		crosshair[i].SpriteCreate(dxCommon_->GetDevice(), 0, Vector2(0.5f, 0.5f), false, false);
 		crosshair[i].SetPosition(Vector3(1100, 0, 0));
@@ -134,7 +134,7 @@ void GameScene::Initialize() {
 	
 
 	//UI初期化
-	UIs = new GameSceneUI();
+	UIs = new MyEngine::GameSceneUI();
 	UIs->Initialize(dxCommon_->GetDevice());
 
 	//パーティクル初期化
@@ -161,7 +161,7 @@ void GameScene::Initialize() {
 	clearPM_03->SetXMViewProjection(xmViewProjection);
 
 	//boss
-	boss = new Boss;
+	boss = new MyEngine::Boss;
 	boss->BossInitialize();
 	boss->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 10.0f));
 
@@ -172,7 +172,6 @@ void GameScene::Initialize() {
 
 
 	//スプライン制御点の読み込み
-	stageNum = 1;
 	LoadStage();
 	LoadEnemy();
 	//変数
@@ -185,7 +184,6 @@ void GameScene::Initialize() {
 	bossPass = 0;
 	cameraTmpPos = { 0,0,0 };
 	cameraTmpRot = { 0,0,0 };
-	shotVec = { 0,0,0 };
 	clearTimer = 0;
 	isShowUI = true;
 	particleTimer = 0;
@@ -206,8 +204,6 @@ void GameScene::Update() {
 		fadeout.SetPosition(fadeout.GetPosition() + FADE_DOWN);
 		fadeout.SpriteUpdate(fadeout, spriteCommon_);
 	}
-	//弾方向計算ベクトルを初期化
-	shotVec = { 0,0,0 };
 
 	//メインゲーム中
 	switch (gameState)
@@ -294,7 +290,7 @@ void GameScene::Draw() {
 		object->Draw(railCamera->GetView());
 	}
 	//敵キャラの描画
-	for (const std::unique_ptr<Enemy>& enemy_ : enemys_) {
+	for (const std::unique_ptr<MyEngine::Enemy>& enemy_ : enemys_) {
 		enemy_->EnemyDraw(railCamera->GetView());
 	}
 	//ボス
@@ -451,7 +447,6 @@ void GameScene::Finalize()
 {
 	delete player;
 	delete railCamera;
-	delete enemy;
 	delete boss;
 	delete UIs;
 	delete sprite;
@@ -497,7 +492,7 @@ void GameScene::LoadEnemy() {
 		// 先頭文字列がｖなら頂点座標
 		if (key == "ea") {
 			//敵の生成
-			std::unique_ptr<Enemy> newEnemy = std::make_unique<Enemy>();
+			std::unique_ptr<MyEngine::Enemy> newEnemy = std::make_unique<MyEngine::Enemy>();
 			//敵の初期化
 			newEnemy->EnemyInitialize();
 			////コライダーの追加
@@ -564,7 +559,7 @@ void GameScene::SerchEnemy()
 		}
 
 		//雑魚敵
-		for (const std::unique_ptr<Enemy>& enemy_ : enemys_) {
+		for (const std::unique_ptr<MyEngine::Enemy>& enemy_ : enemys_) {
 			//敵座標を座標変換
 			Vector3 epos = GetWorldToScreenPos(enemy_->GetWorldPos(), railCamera);
 			//2D座標上で判定を取る(円)
@@ -605,7 +600,7 @@ void GameScene::LockedClear()
 			boss->SetIsLocked(false);
 		}
 
-		for (const std::unique_ptr<Enemy>& enemy_ : enemys_) {
+		for (const std::unique_ptr<MyEngine::Enemy>& enemy_ : enemys_) {
 			if (enemy_->GetIsLocked() == true) {
 				enemy_->SetIsLocked(false);
 			}
@@ -619,7 +614,7 @@ void GameScene::GetCrosshair()
 	Vector3 mPos = input->GetMousePos();
 	//マウスカーソルの場所にクロスヘアを表示
 	if (gameState == MAIN) {
-		for (int i = 0; i < CROSSHAIR_MAX; i++) {
+		for (int i = 0; i < crosshair.size(); i++) {
 			//クロスヘアを距離を離して描画
 			if (i == 0) {
 				crosshair[i].SetPosition(mPos);
@@ -665,8 +660,8 @@ void GameScene::GetCrosshair()
 		}
 	}
 }
-
-Vector3 GameScene::GetScreenToWorldPos(Sprite& sprite_, RailCamera* rail)
+//3D座標を2D座標にして返す
+Vector3 GameScene::GetScreenToWorldPos(const Sprite& sprite_, MyEngine::RailCamera* rail)
 {
 	//カメラがnullなら+zで返す
 	if (rail == nullptr) {
@@ -710,7 +705,8 @@ Vector3 GameScene::GetScreenToWorldPos(Sprite& sprite_, RailCamera* rail)
 	return translate;
 }
 
-Vector3 GameScene::GetWorldToScreenPos(Vector3 pos_, RailCamera* rail)
+//2D座標を3D座標(スクリーン)にして返す
+Vector3 GameScene::GetWorldToScreenPos(const Vector3& pos_, MyEngine::RailCamera* rail)
 {
 	//カメラがnullなら0で返す
 	if (rail == nullptr) {
@@ -737,7 +733,7 @@ Vector3 GameScene::GetWorldToScreenPos(Vector3 pos_, RailCamera* rail)
 	return posScreen;
 }
 
-Vector2 GameScene::GetWorldToScreenScale(Object3d* obj_, RailCamera* rail)
+Vector2 GameScene::GetWorldToScreenScale(Object3d* obj_, MyEngine::RailCamera* rail)
 {
 	//カメラがnullなら0で返す
 	if (rail == nullptr) {
@@ -983,10 +979,11 @@ void GameScene::BossUpdate() {
 		bossHP.SpriteTransferVertexBuffer(bossHP, 6);
 		bossHP.SpriteUpdate(bossHP, spriteCommon_);
 		//player更新(カメラの前)
-		if (input->PushMouseLeft()) {
-			shotVec = GetScreenToWorldPos(crosshair[0], railCamera);
-		}
 		if (isPlayable == true) {
+			Vector3 shotVec;
+			if (input->PushMouseLeft()) {
+				shotVec = GetScreenToWorldPos(crosshair[0], railCamera);
+			}
 			SerchEnemy();
 			player->Update(shotVec, infos);
 			player->SetAlpha(0.0f);
@@ -1034,7 +1031,7 @@ void GameScene::BossUpdate() {
 		}
 		//怒りの親子関係を力ずくで解除
 		delete player;
-		player = new Player;
+		player = new MyEngine::Player;
 		player->PlayerInitialize();
 		gameState = CLEAR;
 	}
@@ -1088,12 +1085,12 @@ void GameScene::MainUpdate() {
 				gameState = BOSS;
 				delete player;
 				//player
-				player = new Player;
+				player = new MyEngine::Player;
 				player->PlayerInitialize();
 				player->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 0.7f));
 				player->SetAlpha(ALPHA_MAX);
 				delete railCamera;
-				railCamera = new RailCamera;
+				railCamera = new MyEngine::RailCamera;
 				railCamera->Initialize();
 				isBoss = true;
 			}
@@ -1107,20 +1104,21 @@ void GameScene::MainUpdate() {
 		}
 
 		//player更新(カメラの前)
-		if (input->PushMouseLeft()) {
-			shotVec = GetScreenToWorldPos(crosshair[0], railCamera);
-		}
 		if (isPlayable == true) {
+			Vector3 shotVec;
+			if (input->PushMouseLeft()) {
+				shotVec = GetScreenToWorldPos(crosshair[0], railCamera);
+			}
 			SerchEnemy();
 			player->Update(shotVec, infos);
 			LockedClear();
 		}
 		//デスフラグの立った敵を削除
-		enemys_.remove_if([](std::unique_ptr < Enemy>& enemy_) {
+		enemys_.remove_if([](std::unique_ptr <MyEngine::Enemy>& enemy_) {
 			return enemy_->GetIsDead();
 			});
 		//敵キャラの更新
-		for (const std::unique_ptr<Enemy>& enemy_ : enemys_) {
+		for (const std::unique_ptr<MyEngine::Enemy>& enemy_ : enemys_) {
 			enemy_->Update(player->GetWorldPos(), railCamera);
 		}
 		//UI表示

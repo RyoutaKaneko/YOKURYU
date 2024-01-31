@@ -7,7 +7,7 @@
 #include "EnemyBullet.h"
 #include "BaseCollider.h"
 
-void EnemyBullet::BulletInitialize() {
+void MyEngine::EnemyBullet::BulletInitialize() {
 
 	Initialize();
 
@@ -22,7 +22,7 @@ void EnemyBullet::BulletInitialize() {
 	bulletTime = 0;
 }
 
-void EnemyBullet::Update(const Vector3& playerPos_,bool isDead) {
+void MyEngine::EnemyBullet::Update(const Vector3& playerPos_,bool isDead) {
 
 	if (bulletTime < HOMING_TIME) {
 		velocity = (playerPos_ - GetPosition());
@@ -49,11 +49,11 @@ void EnemyBullet::Update(const Vector3& playerPos_,bool isDead) {
 	}
 }
 
-void EnemyBullet::OnCollision([[maybe_unused]] const CollisionInfo& info)
+void MyEngine::EnemyBullet::OnCollision([[maybe_unused]] const CollisionInfo& info)
 {
 	//Õ“Ë‘ŠŽè‚Ì–¼‘O
-	const char* str1 = "class Player";
-	const char* str2 = "class PlayerBullet";
+	const char* str1 = "class MyEngine::Player";
+	const char* str2 = "class MyEngine::PlayerBullet";
 
 	//‘ŠŽè‚ªplayer
 	if (strcmp(GetToCollName(), str1) == 0) {

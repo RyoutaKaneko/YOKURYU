@@ -9,11 +9,11 @@
 #include "BaseCollider.h"
 #include "SphereCollider.h"
 
-const Vector3 Energy::ROTATE = { 0,90,0 };
-const Vector3 Energy::SUB_SCALE = { 0.01f, 0.01f, 0.01f };
-const float Energy::MIN_SCALE = 0.01f;
+const Vector3 MyEngine::Energy::ROTATE = { 0,90,0 };
+const Vector3 MyEngine::Energy::SUB_SCALE = { 0.01f, 0.01f, 0.01f };
+const float MyEngine::Energy::MIN_SCALE = 0.01f;
 
-void Energy::EnergyInitialize(const std::string &model_)
+void MyEngine::Energy::EnergyInitialize(const std::string &model_)
 {
 	Initialize();
 	// OBJからモデルデータを読み込む
@@ -31,7 +31,7 @@ void Energy::EnergyInitialize(const std::string &model_)
 	randomNum = { dist(engine), dist2(engine), dist2(engine) };
 }
 
-void Energy::Update(Vector3 rot)
+void MyEngine::Energy::Update(const Vector3& rot)
 {
 	//乱数生成装置
 

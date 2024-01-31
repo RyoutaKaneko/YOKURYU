@@ -11,19 +11,19 @@
 #include "stdlib.h"
 #include "GameScene.h"
 
-const float Boss::MAX_ALPHA = 1.0f;
-const float Boss::ADD_ALPHA = 0.04f;
-const float Boss::SHADOW_Y = 4.92f;
-const float Boss::SHADOW_SCALE_AD = 22.0f;
+const float MyEngine::Boss::MAX_ALPHA = 1.0f;
+const float MyEngine::Boss::ADD_ALPHA = 0.04f;
+const float MyEngine::Boss::SHADOW_Y = 4.92f;
+const float MyEngine::Boss::SHADOW_SCALE_AD = 22.0f;
 
-Boss::~Boss()
+MyEngine::Boss::~Boss()
 {
 	delete bossModel;
 	delete shadow;
 	delete shadowModel;
 }
 
-void Boss::BossInitialize()
+void MyEngine::Boss::BossInitialize()
 {
 	Initialize();
 	shadow = new Object3d;
@@ -73,7 +73,7 @@ void Boss::BossInitialize()
 	srand((unsigned int)time(NULL));
 }
 
-void Boss::Update(Vector3 velo)
+void MyEngine::Boss::Update(const Vector3& velo)
 {
 	//登場時
 	if (appearTimer >= 0) {
@@ -93,11 +93,11 @@ void Boss::Update(Vector3 velo)
 	}
 
 	//弾があるなら更新
-	for (std::unique_ptr<BossBullet>& bullet : bullets_) {
+	for (std::unique_ptr<MyEngine::BossBullet>& bullet : bullets_) {
 		bullet->Update(velo);
 	}
 	//デスフラグの立った敵を削除
-	bullets_.remove_if([](std::unique_ptr <BossBullet>& bullets_) {
+	bullets_.remove_if([](std::unique_ptr <MyEngine::BossBullet>& bullets_) {
 		return bullets_->IsDead();
 		});
 	
@@ -132,7 +132,7 @@ void Boss::Update(Vector3 velo)
 	}
 }
 
-void Boss::Pop()
+void MyEngine::Boss::Pop()
 {
 	if (isInvisible == true) {
 		isInvisible = false;
@@ -140,10 +140,10 @@ void Boss::Pop()
 	appearTimer = POP_TIME_MAX;
 }
 
-void Boss::Attack()
+void MyEngine::Boss::Attack()
 {
 	//弾を生成し初期化
-	std::unique_ptr<BossBullet> newBullet = std::make_unique<BossBullet>();
+	std::unique_ptr<MyEngine::BossBullet> newBullet = std::make_unique<MyEngine::BossBullet>();
 
 	//単発													   
 	newBullet->BulletInitialize();
@@ -156,7 +156,7 @@ void Boss::Attack()
 	bullets_.push_back(std::move(newBullet));
 }
 
-void Boss::Move()
+void MyEngine::Boss::Move()
 {
 	//ボス登場後
 	if (isInvisible == false) {
@@ -173,7 +173,7 @@ void Boss::Move()
 	}
 }
 
-void Boss::ChangeState()
+void MyEngine::Boss::ChangeState()
 {
 	//待機状態
 	if (state == WAIT) {
@@ -192,22 +192,22 @@ void Boss::ChangeState()
 	}
 }
 
-void Boss::BossDraw(ViewProjection* viewProjection_)
+void MyEngine::Boss::BossDraw(ViewProjection* viewProjection_)
 {
 	Draw(viewProjection_, bossAlpha);
 	shadow->Draw(viewProjection_, bossAlpha);
 	//弾描画
 	if (isSlained == false) {
-		for (std::unique_ptr<BossBullet>& bullet : bullets_) {
+		for (std::unique_ptr<MyEngine::BossBullet>& bullet : bullets_) {
 			bullet->Draw(viewProjection_);
 		}
 	}
 }
 
-void Boss::OnCollision([[maybe_unused]] const CollisionInfo& info)
+void MyEngine::Boss::OnCollision([[maybe_unused]] const CollisionInfo& info)
 {
 	//衝突相手の名前
-	const char* str1 = "class PlayerBullet";
+	const char* str1 = "class MyEngine::PlayerBullet";
 
 	//相手がplayerの弾
 	if (strcmp(GetToCollName(), str1) == 0) {
@@ -225,14 +225,14 @@ void Boss::OnCollision([[maybe_unused]] const CollisionInfo& info)
 	}
 }
 
-void Boss::SkipMovie()
+void MyEngine::Boss::SkipMovie()
 {
 	appearTimer = 0;
 	SetPosition(bossSkipPos);
 	bossAlpha = MAX_ALPHA;
 }
 
-void Boss::SlainUpdate()
+void MyEngine::Boss::SlainUpdate()
 {
 	//乱数生成装置
 	std::random_device seed_gen;

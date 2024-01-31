@@ -7,9 +7,9 @@
 #include "PlayerBullet.h"
 #include "BaseCollider.h"
 
-const float PlayerBullet::correction = 0.25f;
+const float MyEngine::PlayerBullet::correction = 0.25f;
 
-void PlayerBullet::BulletInitialize(const Vector3& velocity) {
+void MyEngine::PlayerBullet::BulletInitialize(const Vector3& velocity) {
 
 	Initialize();
 
@@ -25,7 +25,7 @@ void PlayerBullet::BulletInitialize(const Vector3& velocity) {
 	velocity_ = velocity;
 }
 
-void PlayerBullet::Update() {
+void MyEngine::PlayerBullet::Update() {
 
 	SetPosition(GetPosition() + velocity_);
 
@@ -43,7 +43,7 @@ void PlayerBullet::Update() {
 
 }
 
-void PlayerBullet::HomingVec()
+void MyEngine::PlayerBullet::HomingVec()
 {
 	//ロックオン先に飛んでいく
 	if (isHoming == true) {
@@ -52,12 +52,12 @@ void PlayerBullet::HomingVec()
 	}
 }
 
-void PlayerBullet::OnCollision([[maybe_unused]] const CollisionInfo& info)
+void MyEngine::PlayerBullet::OnCollision([[maybe_unused]] const CollisionInfo& info)
 {
 	//衝突相手の名前
-	const char* str1 = "class Enemy";
-	const char* str2 = "class Boss";
-	const char* str3 = "class BossBullet";
+	const char* str1 = "class MyEngine::Enemy";
+	const char* str2 = "class MyEngine::Boss";
+	const char* str3 = "class MyEngine::BossBullet";
 
 	//相手がenemy
 	if (strcmp(GetToCollName(), str1) == 0) {

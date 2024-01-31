@@ -1,9 +1,9 @@
 #include "GameSceneUI.h"
 
-const Vector2 GameSceneUI::SELECT_CONTINUE_SCALE(196,64);
-const Vector2 GameSceneUI::SELECT_PAUSE_SCALE(272, 64);
+const Vector2 MyEngine::GameSceneUI::SELECT_CONTINUE_SCALE(196,64);
+const Vector2 MyEngine::GameSceneUI::SELECT_PAUSE_SCALE(272, 64);
 
-void GameSceneUI::Initialize(ID3D12Device* device)
+void MyEngine::GameSceneUI::Initialize(ID3D12Device* device)
 {
 	// スプライトの初期化
 // スプライト
@@ -208,7 +208,7 @@ void GameSceneUI::Initialize(ID3D12Device* device)
 	anotherColor = { 0.8f, 0.8f, 0.8f, 1.0f };
 }
 
-void GameSceneUI::ShowUI()
+void MyEngine::GameSceneUI::ShowUI()
 {
 	esc.SetPosition(esc.GetPosition() + Vector3(0, +8, 0));
 	esc.SpriteUpdate(esc, spriteCommon_);
@@ -226,7 +226,7 @@ void GameSceneUI::ShowUI()
 	lockUI.SpriteUpdate(lockUI, spriteCommon_);
 }
 
-void GameSceneUI::Update(bool isPlayable_, Player* player)
+void MyEngine::GameSceneUI::Update(bool isPlayable_, MyEngine::Player* player)
 {
 	isPlayable = isPlayable_;
 
@@ -300,7 +300,7 @@ void GameSceneUI::Update(bool isPlayable_, Player* player)
 	}
 }
 
-void GameSceneUI::Draw(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, bool isBoss)
+void MyEngine::GameSceneUI::Draw(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, bool isBoss)
 {
 	// スプライト描画前処理
 	Sprite::PreDraw(cmdList, spriteCommon_);
@@ -326,7 +326,7 @@ void GameSceneUI::Draw(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList,
 	Sprite::PostDraw();
 }
 
-void GameSceneUI::SetHPAlpha(bool isCollision)
+void MyEngine::GameSceneUI::SetHPAlpha(bool isCollision)
 {
 	if (isCollision == true) {
 		if (frameAlpha > 0.6f) {
@@ -346,7 +346,7 @@ void GameSceneUI::SetHPAlpha(bool isCollision)
 	}
 }
 
-void GameSceneUI::ResetUIPos()
+void MyEngine::GameSceneUI::ResetUIPos()
 {
 	//esc
 	esc.SetPosition(Vector3(64, -152, 0));
@@ -397,7 +397,7 @@ void GameSceneUI::ResetUIPos()
 
 }
 
-void GameSceneUI::SkipUIPos()
+void MyEngine::GameSceneUI::SkipUIPos()
 {
 	//esc
 	esc.SetPosition(Vector3(64, 40, 0));
@@ -419,7 +419,7 @@ void GameSceneUI::SkipUIPos()
 	lockIcon.SpriteUpdate(lockIcon, spriteCommon_);
 }
 
-void GameSceneUI::DeadUIPos()
+void MyEngine::GameSceneUI::DeadUIPos()
 {
 	hpFrame.SetPosition(hpFrame.GetPosition() + Vector3(-2.0f, +8.0f, 0.0f));
 	hpFrame.SpriteUpdate(hpFrame, spriteCommon_);
@@ -440,7 +440,7 @@ void GameSceneUI::DeadUIPos()
 	lockUI.SpriteUpdate(lockUI, spriteCommon_);
 }
 
-void GameSceneUI::ContinueText()
+void MyEngine::GameSceneUI::ContinueText()
 {
 	if (isClose == true) {
 		isClose = false;
@@ -538,7 +538,7 @@ void GameSceneUI::ContinueText()
 	continueTextbox.SpriteUpdate(continueTextbox, spriteCommon_);
 }
 
-void GameSceneUI::DrawContinue(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList)
+void MyEngine::GameSceneUI::DrawContinue(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList)
 {
 	// スプライト描画前処理
 	Sprite::PreDraw(cmdList, spriteCommon_);
@@ -561,7 +561,7 @@ void GameSceneUI::DrawContinue(ID3D12Device* device, ID3D12GraphicsCommandList* 
 	Sprite::PostDraw();
 }
 
-void GameSceneUI::DrawClear(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList)
+void MyEngine::GameSceneUI::DrawClear(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList)
 {
 	// スプライト描画前処理
 	Sprite::PreDraw(cmdList, spriteCommon_);
@@ -577,7 +577,7 @@ void GameSceneUI::DrawClear(ID3D12Device* device, ID3D12GraphicsCommandList* cmd
 	Sprite::PostDraw();
 }
 
-void GameSceneUI::CursorUpdate(bool isCont) {
+void MyEngine::GameSceneUI::CursorUpdate(bool isCont) {
 	Vector3 cur = Input::GetInstance()->GetMousePos();
 	Vector3 move = cur - cursorPosBak;
 
@@ -622,7 +622,7 @@ void GameSceneUI::CursorUpdate(bool isCont) {
 	cursorPosBak = cursorPos;
 }
 
-void GameSceneUI::ClearUpdate()
+void MyEngine::GameSceneUI::ClearUpdate()
 {
 	if (congratAlpha < ALPHA_MAX) {
 		congratAlpha += 0.05f;
@@ -632,7 +632,7 @@ void GameSceneUI::ClearUpdate()
 	}
 }
 
-void GameSceneUI::EndText() {
+void MyEngine::GameSceneUI::EndText() {
 	if (isClose == true) {
 		isClose = false;
 	}
@@ -734,7 +734,7 @@ void GameSceneUI::EndText() {
 	continueTextbox.SpriteUpdate(continueTextbox, spriteCommon_);
 }
 
-void GameSceneUI::DrawEnd(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList) {
+void MyEngine::GameSceneUI::DrawEnd(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList) {
 	// スプライト描画前処理
 	Sprite::PreDraw(cmdList, spriteCommon_);
 			  
@@ -756,7 +756,7 @@ void GameSceneUI::DrawEnd(ID3D12Device* device, ID3D12GraphicsCommandList* cmdLi
 	Sprite::PostDraw();
 }
 
-void GameSceneUI::CloseText() {
+void MyEngine::GameSceneUI::CloseText() {
 	if (isGameOver == true) {
 		isGameOver = false;
 	}
@@ -785,7 +785,7 @@ void GameSceneUI::CloseText() {
 
 }
 
-void GameSceneUI::PauseText() {
+void MyEngine::GameSceneUI::PauseText() {
 	if (isClose == true) {
 		isClose = false;
 	}
@@ -884,7 +884,7 @@ void GameSceneUI::PauseText() {
 	contSelect.SpriteUpdate(contSelect, spriteCommon_);
 }
 //ポーズ画面描画
-void GameSceneUI::DrawPause(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList) {
+void MyEngine::GameSceneUI::DrawPause(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList) {
 	// スプライト描画前処理
 	Sprite::PreDraw(cmdList, spriteCommon_);
 	pauseBack.SpriteDraw(cmdList, spriteCommon_, device);

@@ -13,57 +13,59 @@
 #include <cassert>
 #include "Object3d.h"
 
-class BossBullet : public Object3d
-{
-public:
-	///< summary>
-	///初期化
-	///</summary>
-	void BulletInitialize();
+namespace MyEngine {
+	class BossBullet : public Object3d
+	{
+	public:
+		///< summary>
+		///初期化
+		///</summary>
+		void BulletInitialize();
 
-	///< summary>
-	///初期化
-	///</summary>
-	void Update(const Vector3& playerPos_);
-
-
-	/// <summary>
-	/// 衝突を検出したら呼び出されるコールバック関数
-	/// </summary>
-	/// <param name="info">衝突情報</param>
-	void OnCollision(const CollisionInfo& info) override;
+		///< summary>
+		///初期化
+		///</summary>
+		void Update(const Vector3& playerPos_);
 
 
-public:
-	/// <summary>
-	/// 弾存在フラグ
-	/// </summary>
-	/// <returns></returns>
-	bool IsDead() const { return isDead_; }
+		/// <summary>
+		/// 衝突を検出したら呼び出されるコールバック関数
+		/// </summary>
+		/// <param name="info">衝突情報</param>
+		void OnCollision(const CollisionInfo& info) override;
 
 
-private:
-	static const int HIT_TIME = 10;
-	static const int BULLET_HP_MAX = 3;
+	public:
+		/// <summary>
+		/// 弾存在フラグ
+		/// </summary>
+		/// <returns></returns>
+		bool IsDead() const { return isDead_; }
 
 
-private:
-	//モデル
-	Model* bulletModel = nullptr;
+	private:
+		static const int HIT_TIME = 10;
+		static const int BULLET_HP_MAX = 3;
 
-	//速度
-	Vector3 playerPos;
-	Vector3 velocity;
 
-	//寿命
-	static const int32_t kLifeTime = 60 * 8;
-	//デスタイマー
-	int32_t deathTimer_ = kLifeTime;
-	//デスフラグ
-	int hp;
-	int hitTime;
-	bool isHit;
-	bool isDead_ = false;
-	float correction;
+	private:
+		//モデル
+		Model* bulletModel = nullptr;
 
-};
+		//速度
+		Vector3 playerPos;
+		Vector3 velocity;
+
+		//寿命
+		static const int32_t kLifeTime = 60 * 8;
+		//デスタイマー
+		int32_t deathTimer_ = kLifeTime;
+		//デスフラグ
+		int hp;
+		int hitTime;
+		bool isHit;
+		bool isDead_ = false;
+		float correction;
+
+	};
+}

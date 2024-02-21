@@ -65,6 +65,12 @@ namespace MyEngine {
 		/// <param name="obj"></param>
 		void SetLock(Object3d* obj) { lockObj = obj; }
 
+		/// <summary>
+		/// ホーミング時のplayerの座標セット
+		/// </summary>
+		/// <param name="playerPos_"></param>
+		void SetPlayerPos(const Vector3& playerPos_) { playerPos = playerPos_; }
+
 		//定数
 	private:
 		static const float correction;
@@ -84,5 +90,9 @@ namespace MyEngine {
 		bool isDead_ = false;
 		bool isHoming = false;
 		Object3d* lockObj = nullptr;
+		//ホーミング時のplayerの座標
+		Vector3 playerPos;
+		//ホーミング時の射出ベクトル
+		Vector3 lockVec;
 	};
 }

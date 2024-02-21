@@ -27,7 +27,6 @@ namespace MyEngine {
 		///</summary>
 		void Update(const Vector3& playerPos_, bool isDead);
 
-
 		/// <summary>
 		/// 衝突を検出したら呼び出されるコールバック関数
 		/// </summary>

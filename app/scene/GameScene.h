@@ -180,7 +180,7 @@ private:
 	ParticleManager* clearPM_02 = nullptr;
 	Particle* clearParticle_03 = nullptr;
 	ParticleManager* clearPM_03 = nullptr;
-	
+
 	//enemy
 	std::list<std::unique_ptr<MyEngine::Enemy>> enemys_;
 	//当たり判定
@@ -190,6 +190,7 @@ private:
 	std::vector<Vector3> pointsL;
 	std::vector<Vector3> pointsR;
 	std::vector<Vector3> bossPoint{};
+	std::vector < std::vector<Vector3> > lockPoints{};
 	//ステージ
 	bool isCheckPoint = false;
 	bool isPlayable = false;

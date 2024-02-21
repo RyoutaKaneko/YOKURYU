@@ -103,6 +103,11 @@ namespace MyEngine {
 		/// </summary>
 		void Dead();
 
+		/// <summary>
+		/// 方向ベクトル取得
+		/// </summary>
+		void GetVec(const Vector3& x_, const Vector3& y_);
+
 
 		/////getter/////
 
@@ -263,10 +268,13 @@ namespace MyEngine {
 		Vector3 rot_;
 		Vector3 move;
 		Vector3 dMove;
+		Vector3 leftVec;
+		Vector3 rightVec;
 		Health healthState;
 		Vector3 addCameraLen;
 		int deathTimer;
 		float wingRRotate;
 		float wingLRotate;
+		bool shotRight;
 	};
 }

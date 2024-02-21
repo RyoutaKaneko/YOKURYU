@@ -45,6 +45,40 @@ const Vector3 Vector3::lerp(const Vector3& start, const Vector3& end, const floa
 	return start * (1.0f - t) + end * t;
 }
 
+Vector3 Vector3::Slerp(const Vector3& v1, const Vector3& v2, float t)
+{
+	//内積を求める
+	float dot = Vector3::dot(v1, v2);
+	//1.0fを超えないように補正を掛ける
+	dot = std::min(1.0f,t);
+	//アークコサインでΘの角度を求める
+	float theta = std::acos(dot);
+	//Θの角度からsinΘの角度を求める
+	float sinTheta = std::sin(theta);
+	//サイン(1-t)を求める						 
+	float sinThetaFrom = std::sin((1 - t) * theta);
+	//サインΘtを求める
+	float sinThetaTo = std::sin(t * theta);
+	//球面線形補完したベクトル							  
+	Vector3 normCompVec = sinThetaFrom / sinTheta * v1 + sinThetaTo / sinTheta * v2;
+	//ゼロ除算を防ぐ
+	if (sinTheta < 1.0e-5) {
+		normCompVec = v1;
+	}
+	else {
+		//球面線形補完したベクトル
+		normCompVec = (sinThetaFrom * v1 + sinThetaTo * v2) / sinTheta;
+	}
+	//補完ベクトルの長さを求める
+	float length1 = v1.length();
+	float length2 = v2.length();
+	//lerpで補完ベクトルの長さを求める
+	float length = length1 * (1.0f - t) + length2 * t;
+
+	//長さを反映
+	return length * normCompVec;
+}
+
 Vector3 Vector3::operator+()const
 {
 	return *this;

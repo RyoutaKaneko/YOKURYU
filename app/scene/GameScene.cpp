@@ -606,6 +606,7 @@ void GameScene::LockedClear()
 			}
 		}
 		infos.clear();
+		lockPoints.clear();
 	}
 }
 

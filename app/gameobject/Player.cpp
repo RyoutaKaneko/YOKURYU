@@ -87,6 +87,7 @@ bool MyEngine::Player::PlayerInitialize() {
 	wingRRotate = -2.0f;
 	wingLRotate = 2.0f;
 	addCameraLen = { 0,0,0.1f };
+	shotRight = true;
 
 	return true;
 }
@@ -273,11 +274,28 @@ void MyEngine::Player::LockAttack(const std::vector<LockInfo>& info)
 {
 	if (Input::GetInstance()->LeftMouseRight() == true) {
 		for (int i = 0; i < info.size(); i++) {
+			//乱数生成装置
+			std::random_device seed_gen;
+			std::mt19937_64 engine(seed_gen());
+			std::uniform_real_distribution<float>dist(-2.0f, 2.0f);
+			Vector3 randomVec = { dist(engine), dist(engine), dist(engine) };
+			GetVec(GetWorldPos(), info[i].vec);
+			Vector3 lockVec;
+			//右
+			if (shotRight == true) {
+				lockVec = rightVec;
+				shotRight = false;
+			}
+			//左
+			else{
+				lockVec = leftVec;
+				shotRight = true;
+			}
+			lockVec += randomVec;
 			//弾を生成し初期化
 			std::unique_ptr<MyEngine::PlayerBullet> newBullet = std::make_unique<MyEngine::PlayerBullet>();
-			Vector3 shotVec = (info[i].vec - GetWorldPos());
 			//単発
-			newBullet->BulletInitialize(shotVec);
+			newBullet->BulletInitialize(lockVec);
 			newBullet->SetCollider(new SphereCollider());
 
 			//弾の登録
@@ -286,6 +304,7 @@ void MyEngine::Player::LockAttack(const std::vector<LockInfo>& info)
 			newBullet->SetScale({ 0.3f,0.3f,0.3f });
 			newBullet->SetLock(info[i].obj);
 			newBullet->SetisHoming(true);
+			newBullet->SetPlayerPos(GetWorldPos());
 			bullets_.push_back(std::move(newBullet));
 		}
 		isShooted = true;
@@ -399,4 +418,22 @@ void MyEngine::Player::Dead()
 void MyEngine::Player::ResetHP() {
 	hp = HP_MAX;
 	healthState = FINE;
+}
+
+//方向ベクトルを取得
+void MyEngine::Player::GetVec(const Vector3& x_, const Vector3& y_) {
+	Vector3 yTmpVec = { 0, 1, 0 };
+	Vector3 frontTmp = { 0, 0, 0 };
+
+	//Y軸仮ベクトル
+	yTmpVec.normalize();
+	//正面仮ベクトル
+	frontTmp = y_ - x_;
+	frontTmp.normalize();
+	//右ベクトル
+	rightVec = yTmpVec.cross(frontTmp);
+	rightVec.normalize();
+	//左ベクトル
+	leftVec = frontTmp.cross(yTmpVec);
+	leftVec.normalize();
 }

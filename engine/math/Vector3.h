@@ -61,6 +61,15 @@ public:
 	/// <returns></returns>
 	static const Vector3 lerp(const Vector3& start, const Vector3& end, const float t);
 
+	/// <summary>
+	/// 球面線形補完
+	/// </summary>
+	/// <param name="v1"></param>
+	/// <param name="v2"></param>
+	/// <param name="t"></param>
+	/// <returns></returns>
+	Vector3 Slerp(const Vector3& v1, const Vector3& v2, float t);
+
 	//甲項演算子オーバーロード
 	Vector3 operator+() const;
 	Vector3 operator-() const;

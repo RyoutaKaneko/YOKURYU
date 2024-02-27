@@ -278,7 +278,7 @@ void MyEngine::Player::LockAttack(const std::vector<LockInfo>& info)
 			std::random_device seed_gen;
 			std::mt19937_64 engine(seed_gen());
 			std::uniform_real_distribution<float>dist(-2.0f, 2.0f);
-			Vector3 randomVec = { dist(engine), dist(engine), dist(engine) };
+			Vector3 randomVec = { 0, dist(engine), 0 };
 			GetVec(GetWorldPos(), info[i].vec);
 			Vector3 lockVec;
 			//‰E
@@ -299,7 +299,7 @@ void MyEngine::Player::LockAttack(const std::vector<LockInfo>& info)
 			newBullet->SetCollider(new SphereCollider());
 
 			//’e‚Ì“o˜^
-		   //•¡”
+		    //•¡”
 			newBullet->SetPosition(GetWorldPos());
 			newBullet->SetScale({ 0.3f,0.3f,0.3f });
 			newBullet->SetLock(info[i].obj);

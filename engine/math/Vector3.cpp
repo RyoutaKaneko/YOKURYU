@@ -50,7 +50,7 @@ Vector3 Vector3::Slerp(const Vector3& v1, const Vector3& v2, float t)
 	//内積を求める
 	float dot = Vector3::dot(v1, v2);
 	//1.0fを超えないように補正を掛ける
-	dot = std::min(1.0f,t);
+	dot = std::min(1.0f, dot);
 	//アークコサインでΘの角度を求める
 	float theta = std::acos(dot);
 	//Θの角度からsinΘの角度を求める

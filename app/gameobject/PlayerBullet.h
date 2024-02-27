@@ -74,6 +74,7 @@ namespace MyEngine {
 		//定数
 	private:
 		static const float correction;
+		static const int HOMING_TIME;
 
 	private:
 		//モデル
@@ -89,10 +90,11 @@ namespace MyEngine {
 		//デスフラグ
 		bool isDead_ = false;
 		bool isHoming = false;
+		int homingTime;
 		Object3d* lockObj = nullptr;
 		//ホーミング時のplayerの座標
 		Vector3 playerPos;
-		//ホーミング時の射出ベクトル
-		Vector3 lockVec;
+		//ホーミング時の計算座標
+		Vector3 lockPos;
 	};
 }

@@ -7,7 +7,8 @@
 #include "PlayerBullet.h"
 #include "BaseCollider.h"
 
-const float MyEngine::PlayerBullet::correction = 0.25f;
+const float MyEngine::PlayerBullet::correction = 0.0001f;
+const int MyEngine::PlayerBullet::HOMING_TIME = 10;
 
 void MyEngine::PlayerBullet::BulletInitialize(const Vector3& velocity) {
 
@@ -23,10 +24,12 @@ void MyEngine::PlayerBullet::BulletInitialize(const Vector3& velocity) {
 
 	//引数で受け取った速度をメンバ変数に代入
 	velocity_ = velocity;
+	homingTime = 0;
 }
 
 void MyEngine::PlayerBullet::Update() {
 
+	//更新
 	SetPosition(GetPosition() + velocity_);
 
 	GetWorldTransform().UpdateMatrix();
@@ -47,8 +50,24 @@ void MyEngine::PlayerBullet::HomingVec()
 {
 	//ロックオン先に飛んでいく
 	if (isHoming == true) {
-		velocity_ = lockObj->GetWorldPos() - GetPosition();
-		velocity_ = velocity_ * correction;
+		if (homingTime < HOMING_TIME) {
+			homingTime++;
+			if (homingTime == HOMING_TIME) {
+				lockPos = GetWorldPos();
+			}
+		}
+		else if(homingTime >= HOMING_TIME) {
+			//v1,v2を求める
+			Vector3 v1 = lockObj->GetWorldPos() - playerPos;
+			v1 = v1.normalize();
+			Vector3 v2 = lockPos - playerPos;
+			v2 = v2.normalize();
+			Vector3 v3 = GetPosition() - lockPos;
+			v3 = v3.normalize();
+			float t = v3.length();
+			//球面線形補完する
+			velocity_ = Vector3::Slerp(v1, v2, t);
+		}
 	}
 }
 
@@ -78,5 +97,4 @@ void MyEngine::PlayerBullet::OnCollision([[maybe_unused]] const CollisionInfo& i
 			isDead_ = true;
 		}
 	}
-
 }

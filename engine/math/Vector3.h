@@ -68,7 +68,7 @@ public:
 	/// <param name="v2"></param>
 	/// <param name="t"></param>
 	/// <returns></returns>
-	Vector3 Slerp(const Vector3& v1, const Vector3& v2, float t);
+	static Vector3 Slerp(const Vector3& v1, const Vector3& v2, float t);
 
 	//甲項演算子オーバーロード
 	Vector3 operator+() const;

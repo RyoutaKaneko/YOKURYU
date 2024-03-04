@@ -58,15 +58,11 @@ void MyEngine::PlayerBullet::HomingVec()
 		}
 		else if(homingTime >= HOMING_TIME) {
 			//v1,v2ÇãÅÇﬂÇÈ
-			Vector3 v1 = lockObj->GetWorldPos() - playerPos;
-			v1 = v1.normalize();
-			Vector3 v2 = lockPos - playerPos;
-			v2 = v2.normalize();
-			Vector3 v3 = GetPosition() - lockPos;
-			v3 = v3.normalize();
-			float t = v3.length();
+			Vector3 toPlayer = lockObj->GetWorldPos() - GetPosition();
+			toPlayer = toPlayer.normalize();
+			float t = 0.1f;
 			//ãÖñ ê¸å`ï‚äÆÇ∑ÇÈ
-			velocity_ = Vector3::Slerp(v1, v2, t);
+			velocity_ = Vector3::Slerp(velocity_, toPlayer, t);
 		}
 	}
 }

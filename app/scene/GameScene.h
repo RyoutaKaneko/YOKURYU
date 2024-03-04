@@ -143,7 +143,7 @@ private:
 	Sprite* sprite = new Sprite;
 	SpriteCommon spriteCommon_;
 	std::array <Sprite, CROSSHAIR_MAX> crosshair;
-	Sprite lock[LOCK_MAX];
+	std::array <Sprite, LOCK_MAX> lock;
 	Sprite fade;
 	float fadeAlpha;
 	Sprite bossHP;

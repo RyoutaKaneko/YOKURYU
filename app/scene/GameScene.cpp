@@ -72,7 +72,7 @@ void GameScene::Initialize() {
 		crosshair[i].SpriteUpdate(crosshair[i], spriteCommon_);
 	}
 
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < lock.size(); i++) {
 		lock[i].LoadTexture(spriteCommon_, 1, L"Resources/crosshair.png", dxCommon_->GetDevice());
 		lock[i].SpriteCreate(dxCommon_->GetDevice(), 1, Vector2(0.0f, 0.0f), false, false);
 		lock[i].SetScale(Vector2(128 * 1, 128 * 1));
@@ -636,7 +636,7 @@ void GameScene::GetCrosshair()
 			else {
 				crosshair[i].SetRotation(crosshair[i].GetRotation() - cursorRotate);
 			}
-			if (crosshair[i].GetRotation() == RATATE_MAX) {
+			if (crosshair[i].GetRotation() == ROTATE_MAX) {
 				crosshair[i].SetRotation(0.0f);
 			}
 			crosshair[i].SpriteTransferVertexBuffer(crosshair[i], 1);

@@ -16,7 +16,7 @@ static const float FADE_LIMIT = 1820.0f;
 static const Vector3 FADE_DOWN = { 0.0f,80.0f,0.0f };
 static const float ALPHA_MAX = 1.0f;
 static const Vector3 ENEMY_SCALE = { 0.6f,0.6f,0.6f };
-static const float RATATE_MAX = 1.0f;
+static const float ROTATE_MAX = 1.0f;
 
 //--MAIN--//
 static const float SHAKE_MAX = 2.0f;

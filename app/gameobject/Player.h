@@ -258,6 +258,7 @@ namespace MyEngine {
 		//HP
 		float hp;
 		int coolTime = 0;
+		int lockCool = 0;
 		float len = 6;
 		int pTimer = 0;
 		bool isHit;

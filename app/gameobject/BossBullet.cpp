@@ -79,13 +79,15 @@ void MyEngine::BossBullet::OnCollision([[maybe_unused]] const CollisionInfo& inf
 	}
 	//‘ŠŽè‚ªplayer‚Ì’e
 	if (strcmp(GetToCollName(), str2) == 0) {
-		if (hitTime == 0) {
-			if (hp <= 0) {
-				isDead_ = true;
-			}
-			else {
-				hp--;
-				hitTime = HIT_TIME;
+		if (info.object->GetIsLocked() == false) {
+			if (hitTime == 0) {
+				if (hp <= 0) {
+					isDead_ = true;
+				}
+				else {
+					hp--;
+					hitTime = HIT_TIME;
+				}
 			}
 		}
 	}

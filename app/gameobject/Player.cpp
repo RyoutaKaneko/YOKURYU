@@ -24,6 +24,15 @@ const float MyEngine::Player::CAMERA_LEN_Z = -1.6f;
 //デストラクタ
 MyEngine::Player::~Player() {
 	delete playerModel;
+	delete particle;
+	delete fang;
+	delete eye;
+	delete wingR;
+	delete wingL;
+	delete fangModel;
+	delete eyeModel;
+	delete wingRModel;
+	delete wingLModel;
 }
 
 //初期化
@@ -66,10 +75,10 @@ bool MyEngine::Player::PlayerInitialize() {
 	eye->GetWorldTransform().SetParent3d(&GetWorldTransform());
 	wingR->SetModel(wingRModel);
 	wingR->GetWorldTransform().SetParent3d(&GetWorldTransform());
-	wingR->SetPosition({-0.5f,-0.2f,0});
+	wingR->SetPosition({ -0.5f,-0.2f,0 });
 	wingL->SetModel(wingLModel);
 	wingL->GetWorldTransform().SetParent3d(&GetWorldTransform());
-	wingL->SetPosition({-0.5f,-0.2f,0.2f});
+	wingL->SetPosition({ -0.5f,-0.2f,0.2f });
 
 	hp = HP_MAX;
 	coolTime = 0;
@@ -92,10 +101,12 @@ bool MyEngine::Player::PlayerInitialize() {
 	return true;
 }
 
-void MyEngine::Player::Update(const Vector3& vec,const std::vector<LockInfo>& info)
+void MyEngine::Player::Update(const Vector3& vec, const std::vector<LockInfo>& info)
 {
-	if (isShooted == true) {
-		isShooted = false;
+	if (Input::GetInstance()->LeftMouseRight() == true) {
+		if (info.size() > 0 && isShooted == false) {
+			isShooted = true;
+		}
 	}
 
 
@@ -134,6 +145,10 @@ void MyEngine::Player::Update(const Vector3& vec,const std::vector<LockInfo>& in
 		}
 	}
 	WingMove();
+	//ロックオン解除
+	if (info.size() == 0) {
+		isShooted = false;
+	}
 
 	//更新
 	GetWorldTransform().UpdateMatrix();
@@ -242,7 +257,7 @@ void MyEngine::Player::WingMove()
 }
 
 void MyEngine::Player::Attack(const Vector3& velo) {
-	
+
 	if (Input::GetInstance()->PushMouseLeft()) {
 		if (coolTime == 0) {
 			//弾を生成し初期化
@@ -250,7 +265,7 @@ void MyEngine::Player::Attack(const Vector3& velo) {
 			std::unique_ptr<MyEngine::PlayerBullet> newBullet = std::make_unique<MyEngine::PlayerBullet>();
 
 			//単発
-			newBullet->BulletInitialize(velo + Vector3(0,0.05f,0));
+			newBullet->BulletInitialize(velo + Vector3(0, 0.05f, 0));
 			newBullet->SetCollider(new SphereCollider());
 
 			//弾の登録
@@ -272,14 +287,14 @@ void MyEngine::Player::Attack(const Vector3& velo) {
 
 void MyEngine::Player::LockAttack(const std::vector<LockInfo>& info)
 {
-	if (Input::GetInstance()->LeftMouseRight() == true) {
-		for (int i = 0; i < info.size(); i++) {
+	if (lockCool == 0) {
+		if (isShooted == true && info.size() > 0) {
 			//乱数生成装置
 			std::random_device seed_gen;
 			std::mt19937_64 engine(seed_gen());
-			std::uniform_real_distribution<float>dist(-2.0f, 2.0f);
+			std::uniform_real_distribution<float>dist(-1.0f, 1.0f);
 			Vector3 randomVec = { 0, dist(engine), 0 };
-			GetVec(GetWorldPos(), info[i].vec);
+			GetVec(GetWorldPos(), info.front().vec);
 			Vector3 lockVec;
 			//右
 			if (shotRight == true) {
@@ -287,7 +302,7 @@ void MyEngine::Player::LockAttack(const std::vector<LockInfo>& info)
 				shotRight = false;
 			}
 			//左
-			else{
+			else {
 				lockVec = leftVec;
 				shotRight = true;
 			}
@@ -299,21 +314,26 @@ void MyEngine::Player::LockAttack(const std::vector<LockInfo>& info)
 			newBullet->SetCollider(new SphereCollider());
 
 			//弾の登録
-		    //複数
+			//複数
 			newBullet->SetPosition(GetWorldPos());
 			newBullet->SetScale({ 0.3f,0.3f,0.3f });
-			newBullet->SetLock(info[i].obj);
+			newBullet->SetLock(info.front().obj);
 			newBullet->SetisHoming(true);
+			newBullet->SetIsLocked(true);
 			newBullet->SetPlayerPos(GetWorldPos());
 			bullets_.push_back(std::move(newBullet));
+			//クールタイムを設定
+			lockCool = 5;
 		}
-		isShooted = true;
+	}
+	else if(lockCool > 0) {
+		lockCool--;
 	}
 }
 
 void MyEngine::Player::PlayerDraw(ViewProjection* viewProjection_) {
 	if (hitTime % HIT_TIME == 0) {
-		Draw(viewProjection_,alpha);
+		Draw(viewProjection_, alpha);
 		wingR->Draw(viewProjection_, alpha);
 		wingL->Draw(viewProjection_, alpha);
 		fang->Draw(viewProjection_, alpha);
@@ -359,14 +379,14 @@ void MyEngine::Player::OnCollision([[maybe_unused]] const CollisionInfo& info)
 	//相手がenemyの弾
 	if (strcmp(GetToCollName(), str1) == 0) {
 		if (isHit == false) {
-			hp-=ENEMY_DAMAGE;
+			hp -= ENEMY_DAMAGE;
 			isHit = true;
 		}
 	}
 	//相手がbossの弾
 	if (strcmp(GetToCollName(), str2) == 0) {
 		if (isHit == false) {
-			hp-=BOSS_DAMAGE;
+			hp -= BOSS_DAMAGE;
 			isHit = true;
 		}
 	}
@@ -387,7 +407,7 @@ void MyEngine::Player::Dead()
 			healthState = WEEKNESS;
 		}
 		//4/1で瀕死
-		else if (hp<= DYING_NUM && healthState == WEEKNESS) {
+		else if (hp <= DYING_NUM && healthState == WEEKNESS) {
 			healthState = DYING;
 		}
 		else if (hp <= DIE_NUM && healthState == DYING) {

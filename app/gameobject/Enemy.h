@@ -94,11 +94,11 @@ namespace MyEngine {
 		/// </summary>
 		void PopParticle();
 
-		bool GetIsParticle() { return isParticle; }
+		bool GetIsHit() { return isHit; }
 
 		//íËêî
 	private:
-		static const int DEATH_TIMER = 60;
+		static const int DEATH_TIMER = 50;
 		static const float MOVE_POWER;
 		static const float UPDOWN_POWER;
 		static const float MAX_ALPHA;

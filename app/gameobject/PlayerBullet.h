@@ -75,6 +75,7 @@ namespace MyEngine {
 	private:
 		static const float correction;
 		static const int HOMING_TIME;
+		static const float ADD_ACCEL;
 
 	private:
 		//モデル
@@ -91,6 +92,7 @@ namespace MyEngine {
 		bool isDead_ = false;
 		bool isHoming = false;
 		int homingTime;
+		float accel;
 		Object3d* lockObj = nullptr;
 		//ホーミング時のplayerの座標
 		Vector3 playerPos;

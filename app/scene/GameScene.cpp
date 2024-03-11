@@ -254,7 +254,7 @@ void GameScene::Update() {
 	//////////////共通更新///////////////////
 	//gameover
 	if (player->GetHP() <= 0) {
-		LockedClear();
+		infos.clear();
 		gameState = CONTINUE;
 	}
 	//ダメージエフェクト
@@ -268,7 +268,7 @@ void GameScene::Update() {
 		else {
 			if (dmgAlpha >= 0) {
 				dmgAlpha -= ADD_FADE;
-				dmg.SetAlpha(dmg, dmgAlpha);
+				dmg.SetAlpha(dmg, dmgAlpha);  
 			}
 		}
 	}
@@ -458,15 +458,6 @@ void GameScene::LoadEnemy() {
 	Spline spline;
 	spline.Initialize();
 
-	pointsL = points;
-	pointsR = points;
-
-	for (int i = 0; i < points.size(); i++)
-	{
-		pointsL[i] += Vector3(-2, 0, 0);
-		pointsR[i] += Vector3(2, 0, 0);
-	}
-
 	enemys_.clear();
 
 	//ファイルを開く
@@ -486,9 +477,6 @@ void GameScene::LoadEnemy() {
 		string key;
 		getline(line_stream, key, ' ');
 
-		string word;
-		getline(line_stream, word, ' ');
-
 		// 先頭文字列がｖなら頂点座標
 		if (key == "ea") {
 			//敵の生成
@@ -499,31 +487,18 @@ void GameScene::LoadEnemy() {
 			newEnemy->SetCollider(new SphereCollider());
 			// X,Y,Z座標読み込み
 			Vector3 position{};
+			Vector3 addpos{};
 			float t;
-			//左
-			if (word.find("L") == 0)
-			{
-				line_stream >> t;
-				newEnemy->SetStagePoint(t);
-				position = spline.LinePosition(pointsL, t);
-			}
-			//真ん中
-			else if (word.find("M") == 0)
-			{									  
-				line_stream >> t;
-				newEnemy->SetStagePoint(t);
-				position = spline.LinePosition(points, t);
-			}
-			//右
-			else if (word.find("R") == 0)
-			{
-				line_stream >> t;
-				newEnemy->SetStagePoint(t);
-				position = spline.LinePosition(pointsR, t);
-			}
+
+			line_stream >> t;
+			line_stream >> addpos.x;
+			line_stream >> addpos.y;
+			line_stream >> addpos.z;
+			newEnemy->SetStagePoint(t);
+			position = spline.LinePosition(points, t);
 
 			// 座標データに追加
-			newEnemy->SetPosition(position);
+			newEnemy->SetPosition(position + addpos);
 			newEnemy->SetScale(ENEMY_SCALE);
 			//登録
 			enemys_.push_back(std::move(newEnemy));
@@ -564,7 +539,7 @@ void GameScene::SerchEnemy()
 			Vector3 epos = GetWorldToScreenPos(enemy_->GetWorldPos(), railCamera);
 			//2D座標上で判定を取る(円)
 			if (pow((epos.x - cur.x), 2) + pow((epos.y - cur.y), 2) < pow(ENEMY_RADIUS, 2)) {
-				if (enemy_->GetIsLocked() == false && infos.size() < INFOS_MAX && enemy_->GetIsParticle() == false) {
+				if (enemy_->GetIsLocked() == false && infos.size() < INFOS_MAX && enemy_->GetIsInvisible() == false) {
 					LockInfo info;
 					info.vec = enemy_->GetWorldPos();
 					info.obj = enemy_->GetPointer();
@@ -596,18 +571,9 @@ void GameScene::SerchEnemy()
 void GameScene::LockedClear()
 {
 	if (player->GetIsShooted() == true) {
-		if (boss->GetIsLocked() == true) {
-			boss->SetIsLocked(false);
-		}
-
-		for (const std::unique_ptr<MyEngine::Enemy>& enemy_ : enemys_) {
-			if (enemy_->GetIsLocked() == true) {
-				enemy_->SetIsLocked(false);
-			}
-		}
-		infos.clear();
-		lockPoints.clear();
+		infos.erase(infos.begin());
 	}
+	
 }
 
 void GameScene::GetCrosshair()

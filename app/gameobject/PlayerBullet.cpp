@@ -8,7 +8,8 @@
 #include "BaseCollider.h"
 
 const float MyEngine::PlayerBullet::correction = 0.0001f;
-const int MyEngine::PlayerBullet::HOMING_TIME = 10;
+const float MyEngine::PlayerBullet::ADD_ACCEL = 0.2f;
+const int MyEngine::PlayerBullet::HOMING_TIME = 5;
 
 void MyEngine::PlayerBullet::BulletInitialize(const Vector3& velocity) {
 
@@ -25,6 +26,7 @@ void MyEngine::PlayerBullet::BulletInitialize(const Vector3& velocity) {
 	//引数で受け取った速度をメンバ変数に代入
 	velocity_ = velocity;
 	homingTime = 0;
+	accel = 1.4f;
 }
 
 void MyEngine::PlayerBullet::Update() {
@@ -60,9 +62,10 @@ void MyEngine::PlayerBullet::HomingVec()
 			//v1,v2を求める
 			Vector3 toPlayer = lockObj->GetWorldPos() - GetPosition();
 			toPlayer = toPlayer.normalize();
-			float t = 0.1f;
+			velocity_ = velocity_.normalize();
+			float t = 0.5f;
 			//球面線形補完する
-			velocity_ = Vector3::Slerp(velocity_, toPlayer, t);
+			velocity_ = Vector3::Slerp(velocity_, toPlayer, t) * accel;
 		}
 	}
 }
@@ -76,8 +79,17 @@ void MyEngine::PlayerBullet::OnCollision([[maybe_unused]] const CollisionInfo& i
 
 	//相手がenemy
 	if (strcmp(GetToCollName(), str1) == 0) {
-		if (isDead_ == false) {
-			isDead_ = true;
+		if (isHoming == false) {
+			if (isDead_ == false) {
+				isDead_ = true;
+			}
+		}
+		else {
+			if (info.object == lockObj) {
+				if (isDead_ == false) {
+					isDead_ = true;
+				}
+			}
 		}
 	}
 
@@ -89,8 +101,10 @@ void MyEngine::PlayerBullet::OnCollision([[maybe_unused]] const CollisionInfo& i
 	}
 	//相手がボスの弾
 	if (strcmp(GetToCollName(), str3) == 0) {
-		if (isDead_ == false) {
-			isDead_ = true;
+		if (isHoming == false) {
+			if (isDead_ == false) {
+				isDead_ = true;
+			}
 		}
 	}
 }

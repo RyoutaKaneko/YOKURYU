@@ -19,8 +19,8 @@ static const Vector3 ENEMY_SCALE = { 0.6f,0.6f,0.6f };
 static const float ROTATE_MAX = 1.0f;
 
 //--MAIN--//
-static const float SHAKE_MAX = 2.0f;
-static const float SHAKE_MIN = -2.0f;
+static const float SHAKE_MAX = 1.0f;
+static const float SHAKE_MIN = -1.0f;
 static const float BOSS_RADIUS = 50.0f;
 static const float ENEMY_RADIUS = 30.0f;
 static const float ROTATE_CURSOR_MAX = 0.01f;

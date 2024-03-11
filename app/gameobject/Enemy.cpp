@@ -14,7 +14,7 @@ const float MyEngine::Enemy::MOVE_POWER = 0.05f;
 const float MyEngine::Enemy::UPDOWN_POWER = 0.005f;
 const float MyEngine::Enemy::MAX_ALPHA = 1.0f;
 const float MyEngine::Enemy::ATTACK_RANGE = 70.0f;
-const Vector3 MyEngine::Enemy::ADDSCALE = {0.5f,0.5f,0.5f};
+const Vector3 MyEngine::Enemy::ADDSCALE = { 0.5f,0.5f,0.5f };
 const float MyEngine::Enemy::POP_RANGE = 3.0f;
 const float MyEngine::Enemy::SHADOW_Y = -4.92f;
 
@@ -45,6 +45,7 @@ void MyEngine::Enemy::EnemyInitialize()
 	shadow->SetRotation({ 0,0,90 });
 	isDead_ = false;
 	isInvisible = true;
+	isLocked = false;
 	timer = 0;
 	isAttack = false;
 	timeCount = 0;
@@ -59,7 +60,7 @@ void MyEngine::Enemy::Update(const Vector3& velo, MyEngine::RailCamera* rail) {
 	if (isInvisible == true) {
 		//近づいたときに出現
 		float len = stagePoint - rail->GetPasPoint() + 1.0f;
- 		if (len < POP_RANGE) {
+		if (len < POP_RANGE) {
 			isInvisible = false;
 		}
 	}
@@ -150,7 +151,7 @@ void MyEngine::Enemy::Update(const Vector3& velo, MyEngine::RailCamera* rail) {
 			});
 		//弾の更新
 		for (std::unique_ptr<MyEngine::EnemyBullet>& bullet : bullets_) {
-			bullet->Update(velo,isParticle);
+			bullet->Update(velo, isParticle);
 		}
 		//デスフラグの立った弾を削除
 		bullets_.remove_if([](std::unique_ptr <MyEngine::EnemyBullet>& bullets_) {
@@ -159,7 +160,7 @@ void MyEngine::Enemy::Update(const Vector3& velo, MyEngine::RailCamera* rail) {
 
 		//影
 		Vector3 spos = GetPosition();
-		shadow->SetPosition({ spos.x,spos.y - 5,spos.z });
+		shadow->SetPosition({ spos.x,-5,spos.z });
 		shadow->Update();
 
 		//当たり判定更新
@@ -192,39 +193,37 @@ void MyEngine::Enemy::OnCollision([[maybe_unused]] const CollisionInfo& info)
 void MyEngine::Enemy::PopParticle()
 {
 	//弾を生成し初期化
-													   
-	for (int i = 0; i < 1; i++) {
-		std::unique_ptr<MyEngine::Energy> particle = std::make_unique<MyEngine::Energy>();
-		particle->EnergyInitialize("dp");
-		particle->SetPosition(GetPosition());
-		deadParticles.push_back(std::move(particle));
-	}
+	std::unique_ptr<MyEngine::Energy> particle = std::make_unique<MyEngine::Energy>();
+	particle->EnergyInitialize("dp");
+	particle->SetPosition(GetPosition());
+	deadParticles.push_back(std::move(particle));
+
 }
 
 void MyEngine::Enemy::Attack() {
 
-		if (coolTime == 0) {
-			//弾を生成し初期化
-		//複数
-			std::unique_ptr<MyEngine::EnemyBullet> newBullet = std::make_unique<MyEngine::EnemyBullet>();
+	if (coolTime == 0) {
+		//弾を生成し初期化
+	//複数
+		std::unique_ptr<MyEngine::EnemyBullet> newBullet = std::make_unique<MyEngine::EnemyBullet>();
 
-			//単発													   
-			newBullet->BulletInitialize();
-			newBullet->SetCollider(new SphereCollider(Vector3{0,0,0},0.5f));
+		//単発													   
+		newBullet->BulletInitialize();
+		newBullet->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 0.5f));
 
-			//弾の登録										 
-		   //複数
-			newBullet->SetPosition(GetPosition());
-			newBullet->SetScale({ 0.3f,0.3f,0.3f });
-			bullets_.push_back(std::move(newBullet));
+		//弾の登録										 
+	   //複数
+		newBullet->SetPosition(GetPosition());
+		newBullet->SetScale({ 0.3f,0.3f,0.3f });
+		bullets_.push_back(std::move(newBullet));
 
 
-			//クールタイムを設定
-			coolTime = COOLTIME_MAX;
-		}
-		else if (coolTime > 0) {
-			coolTime--;
-		}
+		//クールタイムを設定
+		coolTime = COOLTIME_MAX;
+	}
+	else if (coolTime > 0) {
+		coolTime--;
+	}
 
 }
 
@@ -238,6 +237,6 @@ void MyEngine::Enemy::EnemyDraw(ViewProjection* viewProjection_) {
 		bullet->Draw(viewProjection_);
 	}
 	for (std::unique_ptr<MyEngine::Energy>& particle : deadParticles) {
-		particle->Draw(viewProjection_,0.8f);
+		particle->Draw(viewProjection_, 0.8f);
 	}
 }

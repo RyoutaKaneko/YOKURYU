@@ -86,6 +86,7 @@ bool MyEngine::Player::PlayerInitialize() {
 	pTimer = 0;
 	isHit = false;
 	isShooted = false;
+	isReqClear = false;
 	hitTime = 0;
 	alpha = 1.0f;
 	pos_ = { 0,0,0 };
@@ -103,6 +104,9 @@ bool MyEngine::Player::PlayerInitialize() {
 
 void MyEngine::Player::Update(const Vector3& vec, const std::vector<LockInfo>& info)
 {
+	if (isReqClear == true) {
+		isReqClear = false;
+	}
 	if (Input::GetInstance()->LeftMouseRight() == true) {
 		if (info.size() > 0 && isShooted == false) {
 			isShooted = true;
@@ -323,7 +327,11 @@ void MyEngine::Player::LockAttack(const std::vector<LockInfo>& info)
 			newBullet->SetPlayerPos(GetWorldPos());
 			bullets_.push_back(std::move(newBullet));
 			//クールタイムを設定
-			lockCool = 5;
+			lockCool = 3;
+			//info削除リクエスト
+			if (isReqClear == false) {
+				isReqClear = true;
+			}
 		}
 	}
 	else if(lockCool > 0) {

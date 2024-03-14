@@ -127,7 +127,7 @@ namespace MyEngine {
 		/// 攻撃したかどうか
 		/// </summary>
 		/// <returns></returns>
-		bool GetIsShooted() { return isShooted; }
+		bool GetIsReqClear() { return isReqClear; }
 
 		/// <summary>
 		/// カメラとの距離
@@ -263,6 +263,7 @@ namespace MyEngine {
 		int pTimer = 0;
 		bool isHit;
 		bool isShooted;
+		bool isReqClear;
 		int hitTime;
 		float alpha;
 		Vector3 pos_;

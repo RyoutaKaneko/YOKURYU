@@ -570,7 +570,7 @@ void GameScene::SerchEnemy()
 //ロックオン情報クリア
 void GameScene::LockedClear()
 {
-	if (player->GetIsShooted() == true) {
+	if (player->GetIsReqClear() == true) {
 		infos.erase(infos.begin());
 	}
 	

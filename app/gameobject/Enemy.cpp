@@ -56,6 +56,10 @@ void MyEngine::Enemy::EnemyInitialize()
 }
 
 void MyEngine::Enemy::Update(const Vector3& velo, MyEngine::RailCamera* rail) {
+	//player‚ğ’Ê‚è‰z‚µ‚½‚çÁ‚¦‚é
+	if (stagePoint < rail->GetPasPoint() + 1.1f) {
+		isDead_ = true;
+	}
 	//“§–¾ó‘Ô‚È‚ç
 	if (isInvisible == true) {
 		//‹ß‚Ã‚¢‚½‚Æ‚«‚ÉoŒ»

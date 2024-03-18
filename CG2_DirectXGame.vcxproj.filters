@@ -228,6 +228,9 @@
     <ClCompile Include="engine\3d\light.cpp">
       <Filter>ソースファイル\Engine\3d</Filter>
     </ClCompile>
+    <ClCompile Include="BombEnemy.cpp">
+      <Filter>ソースファイル\Application\gameobject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -425,6 +428,9 @@
     </ClInclude>
     <ClInclude Include="app\scene\GameSceneConst.h">
       <Filter>ヘッダー ファイル\Application\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="BombEnemy.h">
+      <Filter>ヘッダー ファイル\Application\gameobject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

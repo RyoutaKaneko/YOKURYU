@@ -119,6 +119,7 @@
     <ClCompile Include="app\scene\GameScene.cpp" />
     <ClCompile Include="app\scene\GameTitleScene.cpp" />
     <ClCompile Include="app\UI\GameSceneUI.cpp" />
+    <ClCompile Include="BombEnemy.cpp" />
     <ClCompile Include="engine\3d\light.cpp" />
     <ClCompile Include="engine\base\DirectXCommon.cpp" />
     <ClCompile Include="engine\base\FPSFixed.cpp" />
@@ -239,6 +240,7 @@
     <ClInclude Include="app\scene\GameSceneConst.h" />
     <ClInclude Include="app\scene\GameTitleScene.h" />
     <ClInclude Include="app\UI\GameSceneUI.h" />
+    <ClInclude Include="BombEnemy.h" />
     <ClInclude Include="engine\3d\light.h" />
     <ClInclude Include="engine\base\DirectXCommon.h" />
     <ClInclude Include="engine\base\FPSFixed.h" />

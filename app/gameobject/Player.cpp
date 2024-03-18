@@ -300,14 +300,16 @@ void MyEngine::Player::LockAttack(const std::vector<LockInfo>& info)
 			Vector3 randomVec = { 0, dist(engine), 0 };
 			GetVec(GetWorldPos(), info.front().vec);
 			Vector3 lockVec;
+			Vector3 frontVec = rightVec.cross({0,1,0});
+			frontVec.normalize();
 			//右
 			if (shotRight == true) {
-				lockVec = rightVec;
+				lockVec = lockVec.Slerp(frontVec, rightVec, 0.3f);
 				shotRight = false;
 			}
 			//左
 			else {
-				lockVec = leftVec;
+				lockVec = lockVec.Slerp(frontVec, leftVec, 0.3f);
 				shotRight = true;
 			}
 			lockVec += randomVec;
@@ -327,7 +329,7 @@ void MyEngine::Player::LockAttack(const std::vector<LockInfo>& info)
 			newBullet->SetPlayerPos(GetWorldPos());
 			bullets_.push_back(std::move(newBullet));
 			//クールタイムを設定
-			lockCool = 3;
+			lockCool = HIT_TIME;
 			//info削除リクエスト
 			if (isReqClear == false) {
 				isReqClear = true;

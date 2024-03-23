@@ -278,5 +278,6 @@ namespace MyEngine {
 		float wingRRotate;
 		float wingLRotate;
 		bool shotRight;
+		bool isOncoll;
 	};
 }

@@ -293,6 +293,9 @@ void GameScene::Draw() {
 	for (const std::unique_ptr<MyEngine::Enemy>& enemy_ : enemys_) {
 		enemy_->EnemyDraw(railCamera->GetView());
 	}
+	for (const std::unique_ptr<MyEngine::BombEnemy>& bombEnemy_ : bombEnemys_) {
+		bombEnemy_->BombDraw(railCamera->GetView());
+	}
 	//ボス
 	if (gameState == BOSS) {
 		boss->BossDraw(railCamera->GetView());
@@ -459,6 +462,7 @@ void GameScene::LoadEnemy() {
 	spline.Initialize();
 
 	enemys_.clear();
+	bombEnemys_.clear();
 
 	//ファイルを開く
 	std::ifstream file;
@@ -477,7 +481,7 @@ void GameScene::LoadEnemy() {
 		string key;
 		getline(line_stream, key, ' ');
 
-		// 先頭文字列がｖなら頂点座標
+		// 先頭文字列がeaなら通常敵
 		if (key == "ea") {
 			//敵の生成
 			std::unique_ptr<MyEngine::Enemy> newEnemy = std::make_unique<MyEngine::Enemy>();
@@ -502,6 +506,33 @@ void GameScene::LoadEnemy() {
 			newEnemy->SetScale(ENEMY_SCALE);
 			//登録
 			enemys_.push_back(std::move(newEnemy));
+		}
+
+		// 先頭文字列がebなら突進してくる敵
+		if (key == "eb") {
+			//敵の生成
+			std::unique_ptr<MyEngine::BombEnemy> newEnemy = std::make_unique<MyEngine::BombEnemy>();
+			//敵の初期化
+			newEnemy->BombInitialize();
+			////コライダーの追加
+			newEnemy->SetCollider(new SphereCollider(Vector3{ 0,0,0 }, 2.0f));
+			// X,Y,Z座標読み込み
+			Vector3 position{};
+			Vector3 addpos{};
+			float t;
+
+			line_stream >> t;
+			line_stream >> addpos.x;
+			line_stream >> addpos.y;
+			line_stream >> addpos.z;
+			newEnemy->SetStagePoint(t);
+			position = spline.LinePosition(points, t);
+
+			// 座標データに追加
+			newEnemy->SetPosition(position + addpos);
+			newEnemy->SetScale(ENEMY_SCALE);
+			//登録
+			bombEnemys_.push_back(std::move(newEnemy));
 		}
 	}
 	// ファイルと閉じる
@@ -548,6 +579,22 @@ void GameScene::SerchEnemy()
 				}
 			}
 		}
+		//突進してくる敵
+		for (const std::unique_ptr<MyEngine::BombEnemy>& bombEnemy_ : bombEnemys_) {
+			//敵座標を座標変換
+			Vector3 epos = GetWorldToScreenPos(bombEnemy_->GetWorldPos(), railCamera);
+			//2D座標上で判定を取る(円)
+			if (pow((epos.x - cur.x), 2) + pow((epos.y - cur.y), 2) < pow(ENEMY_RADIUS, 2)) {
+				if (bombEnemy_->GetIsLocked() == false && infos.size() < INFOS_MAX && bombEnemy_->GetIsInvisible() == false) {
+					LockInfo info;
+					info.vec = bombEnemy_->GetWorldPos();
+					info.obj = bombEnemy_->GetPointer();
+					infos.push_back(info);
+					bombEnemy_->SetIsLocked(true);
+				}
+			}
+		}
+
 		//ロックオン中のカーソル回転
 		if (cursorRotate < ROTATE_CURSOR_MAX) {
 			cursorRotate += ADD_ROTATE_CURSOR;
@@ -1087,6 +1134,14 @@ void GameScene::MainUpdate() {
 		//敵キャラの更新
 		for (const std::unique_ptr<MyEngine::Enemy>& enemy_ : enemys_) {
 			enemy_->Update(player->GetWorldPos(), railCamera);
+		}
+		//デスフラグの立った敵を削除
+		bombEnemys_.remove_if([](std::unique_ptr <MyEngine::BombEnemy>& bombEnemy_) {
+			return bombEnemy_->GetIsDead();
+			});
+		//敵キャラの更新
+		for (const std::unique_ptr<MyEngine::BombEnemy>& bombEnemy_ : bombEnemys_) {
+			bombEnemy_->BombUpdate(player->GetWorldPos(), railCamera);
 		}
 		//UI表示
 		UIs->Update(isPlayable, player);

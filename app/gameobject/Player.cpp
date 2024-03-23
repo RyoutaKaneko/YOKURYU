@@ -98,6 +98,7 @@ bool MyEngine::Player::PlayerInitialize() {
 	wingLRotate = 2.0f;
 	addCameraLen = { 0,0,0.1f };
 	shotRight = true;
+	isOncoll = false;
 
 	return true;
 }
@@ -216,6 +217,9 @@ void MyEngine::Player::Move()
 	}
 	else {
 		pTimer = 0;
+		if (isOncoll == false) {
+			isOncoll = true;
+		}
 	}
 
 	//ƒJƒƒ‰‚Æ‚Ì‹——£Š´’²®
@@ -386,6 +390,7 @@ void MyEngine::Player::OnCollision([[maybe_unused]] const CollisionInfo& info)
 	//Õ“Ë‘Šè‚Ì–¼‘O
 	const char* str1 = "class MyEngine::EnemyBullet";
 	const char* str2 = "class MyEngine::BossBullet";
+	const char* str3 = "class MyEngine::BombEnemy";
 	//‘Šè‚ªenemy‚Ì’e
 	if (strcmp(GetToCollName(), str1) == 0) {
 		if (isHit == false) {
@@ -398,6 +403,15 @@ void MyEngine::Player::OnCollision([[maybe_unused]] const CollisionInfo& info)
 		if (isHit == false) {
 			hp -= BOSS_DAMAGE;
 			isHit = true;
+		}
+	}
+	//‘Šè‚ª“Ëi‚µ‚Ä‚­‚é“G
+	if (isOncoll == true) {
+		if (strcmp(GetToCollName(), str3) == 0) {
+			if (isHit == false) {
+				hp -= ENEMY_DAMAGE;
+				isHit = true;
+			}
 		}
 	}
 }

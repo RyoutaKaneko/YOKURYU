@@ -97,7 +97,7 @@ namespace MyEngine {
 		bool GetIsHit() { return isHit; }
 
 		//定数
-	private:
+	protected:
 		static const int DEATH_TIMER = 50;
 		static const float MOVE_POWER;
 		static const float UPDOWN_POWER;
@@ -113,7 +113,7 @@ namespace MyEngine {
 		static const float POP_RANGE;
 		static const float SHADOW_Y;
 
-	private:
+	protected:
 
 		//デスフラグ
 		bool isDead_ = false;

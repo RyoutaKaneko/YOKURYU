@@ -107,6 +107,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="app\camera\RailCamera.cpp" />
+    <ClCompile Include="app\gameobject\BombEnemy.cpp" />
     <ClCompile Include="app\gameobject\Boss.cpp" />
     <ClCompile Include="app\gameobject\BossBullet.cpp" />
     <ClCompile Include="app\gameobject\Enemy.cpp" />
@@ -119,7 +120,6 @@
     <ClCompile Include="app\scene\GameScene.cpp" />
     <ClCompile Include="app\scene\GameTitleScene.cpp" />
     <ClCompile Include="app\UI\GameSceneUI.cpp" />
-    <ClCompile Include="BombEnemy.cpp" />
     <ClCompile Include="engine\3d\light.cpp" />
     <ClCompile Include="engine\base\DirectXCommon.cpp" />
     <ClCompile Include="engine\base\FPSFixed.cpp" />
@@ -227,6 +227,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app\camera\RailCamera.h" />
+    <ClInclude Include="app\gameobject\BombEnemy.h" />
     <ClInclude Include="app\gameobject\Boss.h" />
     <ClInclude Include="app\gameobject\BossBullet.h" />
     <ClInclude Include="app\gameobject\Enemy.h" />
@@ -240,7 +241,6 @@
     <ClInclude Include="app\scene\GameSceneConst.h" />
     <ClInclude Include="app\scene\GameTitleScene.h" />
     <ClInclude Include="app\UI\GameSceneUI.h" />
-    <ClInclude Include="BombEnemy.h" />
     <ClInclude Include="engine\3d\light.h" />
     <ClInclude Include="engine\base\DirectXCommon.h" />
     <ClInclude Include="engine\base\FPSFixed.h" />

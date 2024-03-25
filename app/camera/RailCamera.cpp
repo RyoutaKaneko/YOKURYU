@@ -35,8 +35,8 @@ void MyEngine::RailCamera::Initialize() {
 	OnRail = true;
 	playerMoveVel = { 0,0,0 };
 	cameraDelay = { 0,0,0 };
-	targetVel = 0.001f;
-	cameraVel = 0.0001f;
+	targetVel = 0.003f;
+	cameraVel = 0.002f;
 	up = { 1,-1,1 };
 }
 

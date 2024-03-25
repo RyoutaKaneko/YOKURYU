@@ -293,6 +293,7 @@ void MyEngine::Player::Attack(const Vector3& velo) {
 	}
 }
 
+//ロックオン弾生成
 void MyEngine::Player::LockAttack(const std::vector<LockInfo>& info)
 {
 	if (lockCool == 0) {
@@ -359,6 +360,7 @@ void MyEngine::Player::PlayerDraw(ViewProjection* viewProjection_) {
 	}
 }
 
+//ゲームオーバー時描画
 void MyEngine::Player::DrawDead(ViewProjection* viewProjection_)
 {
 	Draw(viewProjection_);
@@ -373,6 +375,7 @@ void MyEngine::Player::BackRail()
 	SetRotation(rot_);
 }
 
+//見た目だけ更新
 void MyEngine::Player::ViewUpdate()
 {
 	if (healthState != DIE) {

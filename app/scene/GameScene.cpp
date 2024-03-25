@@ -1087,10 +1087,6 @@ void GameScene::MainUpdate() {
 			player->SetRotation(ROTATE_BACK);
 			isPlayable = true;
 		}
-		///デバック用(ボスまでスキップ)/////
-		if (input->TriggerKey(DIK_B)) {
-			railCamera->SetOnRail(false);
-		}
 		//boss戦へ
 		if (railCamera->GetOnRail() == false) {
 			if (isCheckPoint == false) {

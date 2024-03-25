@@ -8,7 +8,9 @@
 
 MyEngine::BombEnemy::~BombEnemy()
 {
-
+	delete shadow;
+	delete shadowModel;
+	delete enemyModel;
 }
 
 void MyEngine::BombEnemy::BombInitialize()
@@ -18,7 +20,7 @@ void MyEngine::BombEnemy::BombInitialize()
 	shadow->Initialize();
 	// OBJからモデルデータを読み込む
 	enemyModel = Model::LoadFromOBJ("enemy");
-	enemyModel->LoadTexture("Resources/benemy.png");
+	enemyModel->LoadTexture("Resources/enemy/benemy.png");
 	shadowModel = Model::LoadFromOBJ("panel");
 	shadowModel->LoadTexture("Resources/shadow.png");
 	shadow = Object3d::Create();

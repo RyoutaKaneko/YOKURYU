@@ -228,7 +228,7 @@
     <ClCompile Include="engine\3d\light.cpp">
       <Filter>ソースファイル\Engine\3d</Filter>
     </ClCompile>
-    <ClCompile Include="BombEnemy.cpp">
+    <ClCompile Include="app\gameobject\BombEnemy.cpp">
       <Filter>ソースファイル\Application\gameobject</Filter>
     </ClCompile>
   </ItemGroup>
@@ -429,7 +429,7 @@
     <ClInclude Include="app\scene\GameSceneConst.h">
       <Filter>ヘッダー ファイル\Application\scene</Filter>
     </ClInclude>
-    <ClInclude Include="BombEnemy.h">
+    <ClInclude Include="app\gameobject\BombEnemy.h">
       <Filter>ヘッダー ファイル\Application\gameobject</Filter>
     </ClInclude>
   </ItemGroup>

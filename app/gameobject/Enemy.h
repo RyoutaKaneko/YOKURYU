@@ -94,6 +94,7 @@ namespace MyEngine {
 		/// </summary>
 		void PopParticle();
 
+		//ƒqƒbƒg”»’è
 		bool GetIsHit() { return isHit; }
 
 		//’è”

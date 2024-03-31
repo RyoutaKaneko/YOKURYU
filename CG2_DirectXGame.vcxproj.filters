@@ -76,9 +76,6 @@
     <Filter Include="ヘッダー ファイル\Application\scene">
       <UniqueIdentifier>{16cb9844-964a-4341-a31d-35c417ef618d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソースファイル\Application\gameobject">
-      <UniqueIdentifier>{c551a089-2b3b-4d03-847b-e8bd672051c9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソースファイル\Application\camera">
       <UniqueIdentifier>{7d18152a-fd2c-4a4a-971e-1d4ca6510ac9}</UniqueIdentifier>
     </Filter>
@@ -99,6 +96,9 @@
     </Filter>
     <Filter Include="ソースファイル\Application\UI">
       <UniqueIdentifier>{3069da23-4c17-4dc8-b971-95084f2b6e9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\Application\gameobject">
+      <UniqueIdentifier>{c551a089-2b3b-4d03-847b-e8bd672051c9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -229,6 +229,9 @@
       <Filter>ソースファイル\Engine\3d</Filter>
     </ClCompile>
     <ClCompile Include="app\gameobject\BombEnemy.cpp">
+      <Filter>ソースファイル\Application\gameobject</Filter>
+    </ClCompile>
+    <ClCompile Include="app\gameobject\BigEnemy.cpp">
       <Filter>ソースファイル\Application\gameobject</Filter>
     </ClCompile>
   </ItemGroup>
@@ -430,6 +433,9 @@
       <Filter>ヘッダー ファイル\Application\scene</Filter>
     </ClInclude>
     <ClInclude Include="app\gameobject\BombEnemy.h">
+      <Filter>ヘッダー ファイル\Application\gameobject</Filter>
+    </ClInclude>
+    <ClInclude Include="app\gameobject\BigEnemy.h">
       <Filter>ヘッダー ファイル\Application\gameobject</Filter>
     </ClInclude>
   </ItemGroup>

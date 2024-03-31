@@ -77,6 +77,7 @@ void MyEngine::PlayerBullet::OnCollision([[maybe_unused]] const CollisionInfo& i
 	const char* str2 = "class MyEngine::Boss";
 	const char* str3 = "class MyEngine::BossBullet";
 	const char* str4 = "class MyEngine::BombEnemy";
+	const char* str5 = "class MyEngine::BigEnemy";
 
 	//‘Šè‚ªenemy
 	if (strcmp(GetToCollName(), str1) == 0) {
@@ -110,6 +111,22 @@ void MyEngine::PlayerBullet::OnCollision([[maybe_unused]] const CollisionInfo& i
 	}
 	//‘Šè‚ª“Ëi‚µ‚Ä‚­‚é“G
 	if (strcmp(GetToCollName(), str4) == 0) {
+		if (isHoming == false) {
+			if (isDead_ == false) {
+				isDead_ = true;
+			}
+		}
+		else {
+			if (info.object == lockObj) {
+				if (isDead_ == false) {
+					isDead_ = true;
+				}
+			}
+		}
+	}
+
+	//‚Å‚©“G
+	if (strcmp(GetToCollName(), str5) == 0) {
 		if (isHoming == false) {
 			if (isDead_ == false) {
 				isDead_ = true;

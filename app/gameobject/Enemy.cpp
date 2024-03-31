@@ -20,7 +20,6 @@ const float MyEngine::Enemy::SHADOW_Y = -4.92f;
 
 //デストラクタ
 MyEngine::Enemy::~Enemy() {
-	delete enemyModel;
 	delete shadow;
 	delete shadowModel;
 }
@@ -53,6 +52,7 @@ void MyEngine::Enemy::EnemyInitialize()
 	deathTimer = DEATH_TIMER;
 	isHit = false;
 	rotePower = { 0,2,0 };
+	movePower = 0.0f;
 }
 
 void MyEngine::Enemy::Update(const Vector3& velo, MyEngine::RailCamera* rail) {
@@ -93,13 +93,24 @@ void MyEngine::Enemy::Update(const Vector3& velo, MyEngine::RailCamera* rail) {
 
 		//ふわふわ浮く
 		if (timer < MOVE_TIME_ONE) {
-			SetPosition(GetPosition() + Vector3(moveX, UPDOWN_POWER, 0));
+			if (movePower != 0) {
+				SetPosition(GetPosition() + Vector3(movePower + movePower, UPDOWN_POWER, 0));
+			}
+			else {
+				SetPosition(GetPosition() + Vector3(moveX + movePower, UPDOWN_POWER, 0));
+			}
 		}
 		else if (timer < MOVE_TIME_TWO) {
-			SetPosition(GetPosition() + Vector3(moveX, -UPDOWN_POWER, 0));
+			if (movePower != 0) {
+				SetPosition(GetPosition() + Vector3(movePower + movePower, UPDOWN_POWER, 0));
+			}
+			else {
+				SetPosition(GetPosition() + Vector3(moveX + movePower, -UPDOWN_POWER, 0));
+			}
 		}
 		else {
 			timer = 0;
+			movePower = 0.0f;
 			if (timeCount == TIMECOUNT_MAX) {
 				timeCount = 0;
 			}
@@ -161,6 +172,14 @@ void MyEngine::Enemy::Update(const Vector3& velo, MyEngine::RailCamera* rail) {
 		bullets_.remove_if([](std::unique_ptr <MyEngine::EnemyBullet>& bullets_) {
 			return bullets_->IsDead();
 			});
+
+		if (movePower > 0) {
+			movePower -= 0.1f;
+		}
+		else if (movePower < 0) {
+			movePower += 0.1f;
+		}
+		else {};
 
 		//影
 		Vector3 spos = GetPosition();

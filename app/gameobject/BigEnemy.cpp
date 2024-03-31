@@ -1,23 +1,23 @@
 /**
- * @file BombEnemy.h
- * @brief 突っ込んできて爆発する敵クラス
+ * @file BigEnemy.h
+ * @brief でか敵クラス
  * @author カネコ_リョウタ
  */
 
-#include "BombEnemy.h"
+#include "BigEnemy.h"
 
-MyEngine::BombEnemy::~BombEnemy()
+MyEngine::BigEnemy::~BigEnemy()
 {
 }
 
-void MyEngine::BombEnemy::BombInitialize()
+void MyEngine::BigEnemy::BigInitialize()
 {
 	Initialize();
 	shadow = new Object3d;
 	shadow->Initialize();
 	// OBJからモデルデータを読み込む
 	enemyModel = Model::LoadFromOBJ("enemy");
-	enemyModel->LoadTexture("Resources/enemy/benemy.png");
+	enemyModel->LoadTexture("Resources/enemy/genemy.png");
 	shadowModel = Model::LoadFromOBJ("panel");
 	shadowModel->LoadTexture("Resources/shadow.png");
 	shadow = Object3d::Create();
@@ -26,6 +26,7 @@ void MyEngine::BombEnemy::BombInitialize()
 	// オブジェクトにモデルをひも付ける
 	SetModel(enemyModel);
 	SetRotation({ 0,290,0 });
+	SetScale({ 2,2,2 });
 	shadow->SetModel(shadowModel);
 	shadow->SetRotation({ 0,0,90 });
 	isDead_ = false;
@@ -38,19 +39,20 @@ void MyEngine::BombEnemy::BombInitialize()
 	deathTimer = DEATH_TIMER;
 	isHit = false;
 	rotePower = { 0,2,0 };
+	popReq = false;
 }
 
-void MyEngine::BombEnemy::BombUpdate(const Vector3& pPos, MyEngine::RailCamera* rail)
+void MyEngine::BigEnemy::BigUpdate(const Vector3& pPos, MyEngine::RailCamera* rail)
 {
 	//playerを通り越したら消える
-	if (stagePoint < rail->GetPasPoint() + 1.1f) {
+	if (stagePoint < rail->GetPasPoint() + 0.8f) {
 		isDead_ = true;
 	}
 	//透明状態なら
 	if (isInvisible == true) {
 		//近づいたときに出現
 		float len = stagePoint - rail->GetPasPoint() + 1.0f;
-		if (len < 2.5f) {
+		if (len < POP_RANGE) {
 			isInvisible = false;
 		}
 	}
@@ -63,15 +65,39 @@ void MyEngine::BombEnemy::BombUpdate(const Vector3& pPos, MyEngine::RailCamera* 
 		//とりあえず回してみる
 		SetRotation(GetRotation() + rotePower);
 
-		//出現後
-		if (popTime < 40) {
-			SetPosition(GetPosition() + Vector3(0, 0.2f, 0));
-			popTime++;
+		//ふわふわ浮く
+		if (timer < MOVE_TIME_ONE) {
+			SetPosition(GetPosition() + Vector3(0, UPDOWN_POWER, 0));
+		}
+		else if (timer < MOVE_TIME_TWO) {
+			SetPosition(GetPosition() + Vector3(0, -UPDOWN_POWER, 0));
 		}
 		else {
-			BombAttack(pPos);
+			timer = 0;
+			if (timeCount == TIMECOUNT_MAX) {
+				timeCount = 0;
+			}
+			else {
+				timeCount++;
+			}
 		}
-
+		//playerが敵を追い越したら攻撃しない
+		if (stagePoint < rail->GetPasPoint() + 1.0f) {
+			if (isAttack == true) {
+				isAttack = false;
+			}
+		}
+		//攻撃
+		if (isAttack == false && isParticle == false) {
+			Vector3 playerVec = pPos - GetPosition();
+			float len = playerVec.length();
+			if (len < ATTACK_RANGE) {
+				isAttack = true;
+			}
+		}
+		else {
+			Attack();
+		}
 		//死亡時演出
 		if (isHit == true) {
 			//破裂させる
@@ -80,7 +106,10 @@ void MyEngine::BombEnemy::BombUpdate(const Vector3& pPos, MyEngine::RailCamera* 
 				alpha -= subAlpha;
 			}
 			else {
-				isParticle = true;
+				if (isParticle == false) {
+					isParticle = true;
+					popReq = true;
+				}
 			}
 		}
 		if (isParticle == true) {
@@ -101,6 +130,14 @@ void MyEngine::BombEnemy::BombUpdate(const Vector3& pPos, MyEngine::RailCamera* 
 		deadParticles.remove_if([](std::unique_ptr <MyEngine::Energy>& particle) {
 			return particle->GetIsDead();
 			});
+		//弾の更新
+		for (std::unique_ptr<MyEngine::EnemyBullet>& bullet : bullets_) {
+			bullet->Update(pPos, isParticle);
+		}
+		//デスフラグの立った弾を削除
+		bullets_.remove_if([](std::unique_ptr <MyEngine::EnemyBullet>& bullets) {
+			return bullets->IsDead();
+			});
 
 		//影
 		Vector3 spos = GetPosition();
@@ -110,7 +147,7 @@ void MyEngine::BombEnemy::BombUpdate(const Vector3& pPos, MyEngine::RailCamera* 
 		//当たり判定更新
 		if (collider)
 		{
-			if (isInvisible == false && isParticle == false) {
+			if (isParticle == false) {
 				collider->Update();
 			}
 		}
@@ -119,7 +156,7 @@ void MyEngine::BombEnemy::BombUpdate(const Vector3& pPos, MyEngine::RailCamera* 
 	}
 }
 
-void MyEngine::BombEnemy::BombDraw(ViewProjection* viewProjection_)
+void MyEngine::BigEnemy::BigDraw(ViewProjection* viewProjection_)
 {
 	if (isParticle == false) {
 		Draw(viewProjection_, alpha);
@@ -130,34 +167,16 @@ void MyEngine::BombEnemy::BombDraw(ViewProjection* viewProjection_)
 	}
 }
 
-void MyEngine::BombEnemy::BombAttack(const Vector3& pPos)
-{
-	Vector3 attackVelo = pPos - GetPosition();
-	attackVelo = attackVelo.normalize();
-	attackVelo *= 0.5f;
-	SetPosition(GetPosition() + attackVelo);
-}
-
-void MyEngine::BombEnemy::OnCollision([[maybe_unused]] const CollisionInfo& info)
+void MyEngine::BigEnemy::OnCollision([[maybe_unused]] const CollisionInfo& info)
 {
 	//衝突相手の名前
 	const char* str1 = "class MyEngine::PlayerBullet";
-	const char* str2 = "class MyEngine::Player";
 
 	//相手がplayerの弾
 	if (strcmp(GetToCollName(), str1) == 0) {
 		if (isInvisible == false) {
 			if (isHit == false) {
 				isHit = true;
-			}
-		}
-	}
-
-	//相手がplayer
-	if (strcmp(GetToCollName(), str2) == 0) {
-		if (isInvisible == false) {
-			if (isDead_ == false) {
-				isDead_ = true;
 			}
 		}
 	}

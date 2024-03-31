@@ -107,6 +107,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="app\camera\RailCamera.cpp" />
+    <ClCompile Include="app\gameobject\BigEnemy.cpp" />
     <ClCompile Include="app\gameobject\BombEnemy.cpp" />
     <ClCompile Include="app\gameobject\Boss.cpp" />
     <ClCompile Include="app\gameobject\BossBullet.cpp" />
@@ -227,6 +228,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app\camera\RailCamera.h" />
+    <ClInclude Include="app\gameobject\BigEnemy.h" />
     <ClInclude Include="app\gameobject\BombEnemy.h" />
     <ClInclude Include="app\gameobject\Boss.h" />
     <ClInclude Include="app\gameobject\BossBullet.h" />

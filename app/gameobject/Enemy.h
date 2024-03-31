@@ -66,6 +66,12 @@ namespace MyEngine {
 		void SetStagePoint(float pos_) { stagePoint = pos_; }
 
 		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="movePow"></param>
+		void SetMovePow(float movePow) { movePower = movePow; }
+
+		/// <summary>
 		/// èoåªà íuÇéÊìæ
 		/// </summary>
 		/// <returns></returns>
@@ -141,6 +147,7 @@ namespace MyEngine {
 		int deathTimer;
 		float subAlpha = 0.2f;
 		Vector3 rotePower;
+		float movePower;
 
 		bool isAttack;
 		int timeCount;

@@ -30,6 +30,7 @@
 #include "GameSceneUI.h"
 #include "GameSceneConst.h"
 #include "BombEnemy.h"
+#include "BigEnemy.h"
 
 
 class GameScene : public GameBaseScene {
@@ -185,6 +186,7 @@ private:
 	//enemy
 	std::list<std::unique_ptr<MyEngine::Enemy>> enemys_;
 	std::list<std::unique_ptr<MyEngine::BombEnemy>> bombEnemys_;
+	std::list<std::unique_ptr<MyEngine::BigEnemy>> bigEnemys_;
 	//“–‚½‚è”»’è
 	CollisionManager* collisionManager = nullptr;
 	//ƒJƒƒ‰ˆÚ“®—pƒŒ[ƒ‹
